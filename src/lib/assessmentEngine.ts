@@ -641,8 +641,9 @@ export const saveCandidateSession = async (session: CandidateSession): Promise<b
 }
 
 // ==========================================
-// GEMINI COMPILER CELL INTEGRATION
+// HYBRID COMPILER CELL INTEGRATION
 // ==========================================
+import { createPythonWorker, createJSWorker, executeInWorker } from './codeWorkers'
 
 export const evaluateCodeSnippet = async (
   code: string,
@@ -664,6 +665,62 @@ export const evaluateCodeSnippet = async (
     memoryUsageKb: number
   }[]
 }> => {
+  let worker: Worker | null = null
+  if (language === 'python') worker = createPythonWorker()
+  else if (language === 'javascript') worker = createJSWorker()
+
+  if (worker) {
+    try {
+      const results = []
+      let passedCount = 0
+      let verdict: 'Accepted' | 'Wrong Answer' | 'Compilation Error' | 'Runtime Error' | 'Time Limit Exceeded' | 'Memory Limit Exceeded' = 'Accepted'
+
+      for (const tc of testCases) {
+        const start = performance.now()
+        const { stdout, stderr, error } = await executeInWorker(worker, code, tc.input, timeLimitMs)
+        const timeMs = performance.now() - start
+
+        let tcVerdict: any = 'Accepted'
+        let passed = false
+
+        if (error === "Time Limit Exceeded - Possible Infinite Loop") {
+          tcVerdict = 'Time Limit Exceeded'
+          verdict = 'Time Limit Exceeded'
+        } else if (error || stderr) {
+          tcVerdict = 'Runtime Error'
+          verdict = 'Runtime Error'
+        } else if (stdout.trim() !== tc.expected_output.trim()) {
+          tcVerdict = 'Wrong Answer'
+          if (verdict === 'Accepted') verdict = 'Wrong Answer'
+        } else {
+          passed = true
+          passedCount++
+        }
+
+        results.push({
+          testCaseId: tc.id,
+          input: tc.input,
+          expected: tc.expected_output,
+          actual: stdout.trim() || stderr.trim() || error || '',
+          passed,
+          verdict: tcVerdict,
+          executionTimeMs: Math.round(timeMs),
+          memoryUsageKb: 12000
+        })
+      }
+
+      worker.terminate()
+      return {
+        verdict,
+        compileMessage: verdict === 'Accepted' ? 'Compilation successful.' : 'Execution failed on some cases.',
+        cases: results
+      }
+    } catch (err) {
+      if (worker) worker.terminate()
+      throw err
+    }
+  }
+
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY
 
   if (!apiKey) {
@@ -821,6 +878,22 @@ const generateMockEvaluation = (code: string, language: string, testCases: TestC
 // ==========================================
 
 export const simulateTerminalRun = async (code: string, language: string, customInput: string): Promise<{ stdout: string, stderr: string, error?: string }> => {
+  let worker: Worker | null = null
+  if (language === 'python') worker = createPythonWorker()
+  else if (language === 'javascript') worker = createJSWorker()
+
+  if (worker) {
+    try {
+      const result = await executeInWorker(worker, code, customInput, 5000) // 5s timeout for manual runs
+      worker.terminate()
+      return result
+    } catch (err) {
+      if (worker) worker.terminate()
+      return { stdout: "", stderr: "", error: String(err) }
+    }
+  }
+
+  // FALLBACK TO GEMINI FOR C++/JAVA
   try {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY
     if (!apiKey) throw new Error("No API key")

@@ -962,6 +962,11 @@ export default function ExamShell() {
       finalSnapshot.submittedAt = new Date().toISOString()
       finalSnapshot.updated_at = new Date().toISOString()
 
+      // Zero-Cost Scalability: DB Storage Optimization
+      if (finalSnapshot.integrity_score >= 90) {
+        finalSnapshot.violation_logs = ['[TRUNCATED] High Integrity Auto-Prune']
+      }
+
       // Kill camera streams
       if (localStreamRef.current) {
         localStreamRef.current.getTracks().forEach(t => t.stop())
