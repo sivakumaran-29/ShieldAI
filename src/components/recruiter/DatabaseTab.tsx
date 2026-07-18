@@ -262,7 +262,7 @@ export default function DatabaseTab() {
             />
           </div>
 
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
             {departments.map(dept => {
               const deptUsers = filteredCandidates.filter(c => c.department === dept)
               if (deptUsers.length === 0 && searchQuery) return null
