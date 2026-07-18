@@ -16,6 +16,7 @@ import {
 import { useAuthStore } from '../../store/authStore'
 import { getIceServers } from '../../lib/webrtcConfig'
 import { supabase } from '../../lib/supabaseClient'
+import { useSettingsStore } from '../../store/settingsStore'
 
 const StreamVideo = ({ stream }: { stream: MediaStream | null }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -107,6 +108,9 @@ export default function ExamShell() {
   const [showWarningModal, setShowWarningModal] = useState(false)
   const [warningModalText, setWarningModalText] = useState('')
   const [localStream, setLocalStream] = useState<MediaStream | null>(null)
+  
+  // Platform Settings
+  const settings = useSettingsStore()
 
   const hasMcqGlobal = questions.some(q => q.type === 'mcq')
   const hasCodingGlobal = questions.some(q => q.type !== 'mcq')
@@ -462,7 +466,7 @@ export default function ExamShell() {
   // COMPUTER VISION OPTICAL PROCTOR LOOP
   // ==========================================
   useEffect(() => {
-    if (loading) return
+    if (loading || !settings.requireCamera) return
     let streamInstance: MediaStream | null = null
     let animationFrameId: number
 
@@ -605,8 +609,10 @@ export default function ExamShell() {
       triggerWarningModal('Restricted: Mouse context menu is disabled.')
     }
 
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    window.addEventListener('blur', handleWindowBlur)
+    if (settings.requireTabFocus) {
+      document.addEventListener('visibilitychange', handleVisibilityChange)
+      window.addEventListener('blur', handleWindowBlur)
+    }
     document.addEventListener('fullscreenchange', handleFullscreenChange)
     window.addEventListener('keydown', handleKeyDown)
     document.addEventListener('copy', handleCopy)
@@ -614,8 +620,10 @@ export default function ExamShell() {
     document.addEventListener('contextmenu', handleContextMenu)
 
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-      window.removeEventListener('blur', handleWindowBlur)
+      if (settings.requireTabFocus) {
+        document.removeEventListener('visibilitychange', handleVisibilityChange)
+        window.removeEventListener('blur', handleWindowBlur)
+      }
       document.removeEventListener('fullscreenchange', handleFullscreenChange)
       window.removeEventListener('keydown', handleKeyDown)
       document.removeEventListener('copy', handleCopy)
@@ -859,8 +867,8 @@ export default function ExamShell() {
         codeToSubmit,
         language,
         activeQuestion.test_cases,
-        activeQuestion.time_limit,
-        activeQuestion.memory_limit
+        settings.maxExecutionTime,
+        settings.maxMemoryLimit
       )
 
       let passedCasesWeight = 0
@@ -1332,9 +1340,9 @@ export default function ExamShell() {
                   onChange={(e) => setLanguage(e.target.value)} 
                   className="border border-white/5 bg-background text-foreground rounded text-xs px-2 py-1 font-semibold outline-none cursor-pointer"
                 >
-                  {assessment.allowed_languages.includes('python') && <option value="python">Python 3.10</option>}
-                  {assessment.allowed_languages.includes('javascript') && <option value="javascript">JavaScript (ES6)</option>}
-                  {assessment.allowed_languages.includes('java') && <option value="java">Java (JDK 17)</option>}
+                  {assessment.allowed_languages.includes('python') && settings.allowedLangs.includes('python') && <option value="python">Python 3.10</option>}
+                  {assessment.allowed_languages.includes('javascript') && settings.allowedLangs.includes('javascript') && <option value="javascript">JavaScript (ES6)</option>}
+                  {assessment.allowed_languages.includes('java') && settings.allowedLangs.includes('java') && <option value="java">Java (JDK 17)</option>}
                 </select>
               </div>
             </div>

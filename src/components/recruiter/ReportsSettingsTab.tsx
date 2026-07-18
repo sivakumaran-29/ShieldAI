@@ -8,6 +8,7 @@ import {
 import { Assessment, fetchCandidateSessions, fetchQuestions } from '../../lib/assessmentEngine'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
+import { useSettingsStore } from '../../store/settingsStore'
 
 interface ReportsSettingsTabProps {
   defaultSection: 'reports' | 'settings' | 'logs'
@@ -19,11 +20,15 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
   const [isRefreshingLogs, setIsRefreshingLogs] = useState(false)
   const [logsSearch, setLogsSearch] = useState('')
 
-  // Settings states
-  const [integrityThreshold, setIntegrityThreshold] = useState(75)
-  const [proctorCamera, setProctorCamera] = useState(true)
-  const [proctorTabs, setProctorTabs] = useState(true)
-  const [allowedLangs, setAllowedLangs] = useState(['python', 'javascript'])
+  const settings = useSettingsStore()
+  
+  // Settings states (initialized from global store)
+  const [integrityThreshold, setIntegrityThreshold] = useState(settings.integrityThreshold)
+  const [proctorCamera, setProctorCamera] = useState(settings.requireCamera)
+  const [proctorTabs, setProctorTabs] = useState(settings.requireTabFocus)
+  const [allowedLangs, setAllowedLangs] = useState(settings.allowedLangs)
+  const [maxExecutionTime, setMaxExecutionTime] = useState(settings.maxExecutionTime)
+  const [maxMemoryLimit, setMaxMemoryLimit] = useState(settings.maxMemoryLimit)
   const [saveSuccess, setSaveSuccess] = useState(false)
   const [exportExamId, setExportExamId] = useState<string>('')
   const [isExporting, setIsExporting] = useState(false)
@@ -73,6 +78,14 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
 
   const handleSaveSettings = (e: React.FormEvent) => {
     e.preventDefault()
+    settings.updateSettings({
+      integrityThreshold,
+      requireCamera: proctorCamera,
+      requireTabFocus: proctorTabs,
+      allowedLangs,
+      maxExecutionTime,
+      maxMemoryLimit
+    })
     setSaveSuccess(true)
     setTimeout(() => setSaveSuccess(false), 2000)
   }
@@ -690,6 +703,42 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                           />
                         </label>
                       ))}
+                    </div>
+
+                    <div className="mt-8 pt-6 border-t border-white/5 space-y-4">
+                      <span className="text-[9px] font-mono sys-text-body uppercase tracking-widest block mb-2">SANDBOX LIMITS</span>
+                      
+                      <div className="space-y-2">
+                        <div className="flex justify-between select-none">
+                          <span className="sys-text-body font-bold">Max Execution Time</span>
+                          <span className="text-white font-mono font-bold">{maxExecutionTime}ms</span>
+                        </div>
+                        <input 
+                          type="range" 
+                          min={500} 
+                          max={10000}
+                          step={100}
+                          value={maxExecutionTime}
+                          onChange={e => setMaxExecutionTime(Number(e.target.value))}
+                          className="w-full h-1 sys-card rounded-lg appearance-none cursor-pointer accent-[#5B8CFF]"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2 pt-4">
+                        <div className="flex justify-between select-none">
+                          <span className="sys-text-body font-bold">Max Memory Allocation</span>
+                          <span className="text-white font-mono font-bold">{maxMemoryLimit}MB</span>
+                        </div>
+                        <input 
+                          type="range" 
+                          min={64} 
+                          max={1024}
+                          step={32}
+                          value={maxMemoryLimit}
+                          onChange={e => setMaxMemoryLimit(Number(e.target.value))}
+                          className="w-full h-1 sys-card rounded-lg appearance-none cursor-pointer accent-[#5B8CFF]"
+                        />
+                      </div>
                     </div>
                   </div>
                 )}
