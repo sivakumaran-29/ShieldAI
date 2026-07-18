@@ -363,37 +363,25 @@ export default function ExamShell() {
     
     // Add current codes structure
     questions.forEach(q => {
-      if (q.type === 'mcq') {
-        if (!submissionRecords[q.id]) {
-          submissionRecords[q.id] = {
-            code: '',
-            language: 'mcq',
-            status: 'Not Attempted',
-            cases_passed: 0,
-            total_cases: 1,
-            score: 0,
-            execution_time: 0,
-            memory_usage: 0
-          }
+      const qCode = q.type === 'mcq' 
+        ? (submissionRecords[q.id]?.code || '') 
+        : (codeMap[q.id]?.[language] || codeTemplates[language])
+        
+      if (!submissionRecords[q.id]) {
+        submissionRecords[q.id] = {
+          code: qCode,
+          language: q.type === 'mcq' ? 'mcq' : language,
+          status: 'Not Attempted',
+          cases_passed: 0,
+          total_cases: q.test_cases?.length || 1,
+          score: 0,
+          execution_time: 0,
+          memory_usage: 0
         }
       } else {
-        const qCode = codeMap[q.id]?.[language] || codeTemplates[language]
-        if (!submissionRecords[q.id]) {
-          submissionRecords[q.id] = {
-            code: qCode,
-            language: language,
-            status: 'Not Attempted',
-            cases_passed: 0,
-            total_cases: q.test_cases?.length || 0,
-            score: 0,
-            execution_time: 0,
-            memory_usage: 0
-          }
-        } else {
-          // Just update code contents
-          submissionRecords[q.id].code = qCode
-          submissionRecords[q.id].language = language
-        }
+        // Update code contents (which preserves the MCQ text because qCode equals the existing text)
+        submissionRecords[q.id].code = qCode
+        submissionRecords[q.id].language = q.type === 'mcq' ? 'mcq' : language
       }
     })
 
@@ -816,13 +804,14 @@ export default function ExamShell() {
   
   const handleMcqSelect = (index: number) => {
     if (!activeQuestion || activeQuestion.type !== 'mcq') return
-    // Save selection temporarily to submissions with code = selectedIndex
+    const selectedText = activeQuestion.mcq_options?.[index] || String(index)
+    // Save selection temporarily to submissions with code = selectedText
     setCurrentSession(prev => {
       if (!prev) return null
       const nextSubmissions = {
         ...(prev.submissions || {}),
         [activeQuestion.id]: {
-          code: String(index),
+          code: selectedText,
           language: 'mcq',
           status: (index === activeQuestion.mcq_correct_index ? 'Accepted' : 'Wrong Answer') as 'Accepted' | 'Wrong Answer',
           cases_passed: index === activeQuestion.mcq_correct_index ? 1 : 0,
@@ -1368,7 +1357,7 @@ export default function ExamShell() {
                     <div className="grid grid-cols-1 gap-4 mt-8">
                       {activeQuestion.mcq_options?.map((opt, idx) => {
                         const selectedVal = currentSession?.submissions?.[activeQuestion.id]?.code
-                        const isSelected = selectedVal === String(idx)
+                        const isSelected = selectedVal === opt || selectedVal === String(idx)
                         return (
                           <button
                             key={idx}

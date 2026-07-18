@@ -101,14 +101,16 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
 
           questionsList.forEach(q => {
             const sub = s.submissions?.[q.id]
-            if (sub && sub.code !== undefined && q.mcq_options) {
-              const optionIndex = parseInt(sub.code, 10)
-              const optionText = !isNaN(optionIndex) && q.mcq_options[optionIndex] 
-                ? q.mcq_options[optionIndex] 
-                : 'Not Attempted'
-              row.push(`"${optionText.replace(/"/g, '""')}"`)
+            if (sub && sub.code) {
+              // Legacy fallback just in case the db holds a raw index like "0"
+              let textToPrint = sub.code
+              const asInt = parseInt(textToPrint, 10)
+              if (!isNaN(asInt) && String(asInt) === textToPrint && q.mcq_options && q.mcq_options[asInt]) {
+                textToPrint = q.mcq_options[asInt]
+              }
+              row.push(`"${textToPrint.replace(/"/g, '""')}"`)
             } else {
-              row.push('""')
+              row.push('"Not Attempted"')
             }
           })
           
