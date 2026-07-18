@@ -411,8 +411,12 @@ export default function ExamShell() {
         localStreamRef.current = streamInstance
         if (videoRef.current) {
           videoRef.current.srcObject = streamInstance
+          
+          // Try playing immediately to avoid waiting for metadata event which sometimes drops on certain browsers
+          videoRef.current.play().catch(e => console.warn('Immediate video play prevented:', e))
+          
           videoRef.current.onloadedmetadata = () => {
-            videoRef.current?.play().catch(e => console.warn('Video play prevented:', e))
+            videoRef.current?.play().catch(e => console.warn('Video play prevented on metadata load:', e))
             processFrame()
           }
         }
