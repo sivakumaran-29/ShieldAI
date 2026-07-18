@@ -201,7 +201,7 @@ export default function ExamShell() {
         // Load Session credentials
         const name = localStorage.getItem('candidate_name') || user.name || 'Candidate'
         const email = localStorage.getItem('candidate_email') || user.email || 'student@school.edu'
-        const roll = localStorage.getItem('candidate_roll') || ''
+        const roll = email.split('@')[0].toUpperCase()
 
         // Check if there is an existing session
         const sessions = await fetchCandidateSessions(examId)

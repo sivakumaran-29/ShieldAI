@@ -550,7 +550,7 @@ export const fetchCandidateSessions = async (assessmentId?: string, studentId?: 
 
         const name = details.enteredDetails?.name || row.profiles?.name || 'Candidate Model'
         const email = details.enteredDetails?.email || row.profiles?.email || 'student@school.edu'
-        const rollNumber = details.enteredDetails?.rollNumber || ''
+        const rollNumber = email.split('@')[0].toUpperCase()
 
         return {
           id: row.id.toString(),
