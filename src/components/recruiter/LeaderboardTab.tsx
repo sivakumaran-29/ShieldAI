@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { 
-  Search, FileSpreadsheet, Eye, X, User, Code2, Activity
+  Search, FileSpreadsheet, X, User, Code2, Activity, ChevronRight
 } from 'lucide-react'
 import { CandidateSession, fetchCandidateSessions, Assessment } from '../../lib/assessmentEngine'
 
@@ -150,35 +150,35 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
 
       {/* Bento grid metric summary cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 select-none">
-        <div className="bento-card p-5 flex flex-col justify-between min-h-28">
-          <span className="text-[8px] font-mono font-bold sys-text-body uppercase tracking-widest">Invited Cohort</span>
-          <div>
-            <div className="text-3xl font-extrabold text-white font-number">{totalInvited}</div>
-            <span className="text-[9px] sys-text-body font-mono mt-0.5 block">Candidates registered</span>
+        <div className="bg-[rgba(28,28,30,0.3)] backdrop-blur-[24px] border border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-32 shadow-xl hover:shadow-[0_0_30px_rgba(255,255,255,0.03)] hover:border-white/10 transition-all duration-300">
+          <span className="text-[11px] font-heading font-semibold text-white/60 uppercase tracking-widest">Invited Cohort</span>
+          <div className="mt-4">
+            <div className="text-4xl font-extrabold text-white font-number">{totalInvited}</div>
+            <span className="text-xs sys-text-body font-sans mt-1 block">Candidates registered</span>
           </div>
         </div>
 
-        <div className="bento-card p-5 flex flex-col justify-between min-h-28">
-          <span className="text-[8px] font-mono font-bold sys-text-body uppercase tracking-widest">Completions</span>
-          <div>
-            <div className="text-3xl font-extrabold text-white font-number">{completions.length}</div>
-            <span className="text-[9px] sys-text-body font-mono mt-0.5 block">Submissions logged</span>
+        <div className="bg-[rgba(28,28,30,0.3)] backdrop-blur-[24px] border border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-32 shadow-xl hover:shadow-[0_0_30px_rgba(255,255,255,0.03)] hover:border-white/10 transition-all duration-300">
+          <span className="text-[11px] font-heading font-semibold text-white/60 uppercase tracking-widest">Completions</span>
+          <div className="mt-4">
+            <div className="text-4xl font-extrabold text-white font-number">{completions.length}</div>
+            <span className="text-xs sys-text-body font-sans mt-1 block">Submissions logged</span>
           </div>
         </div>
 
-        <div className="bento-card p-5 flex flex-col justify-between min-h-28">
-          <span className="text-[8px] font-mono font-bold sys-text-body uppercase tracking-widest">Average Score</span>
-          <div>
-            <div className="text-3xl font-extrabold text-white font-number">{avgScore}%</div>
-            <span className="text-[9px] sys-text-body font-mono mt-0.5 block">Compiler marks avg</span>
+        <div className="bg-[rgba(28,28,30,0.3)] backdrop-blur-[24px] border border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-32 shadow-xl hover:shadow-[0_0_30px_rgba(255,255,255,0.03)] hover:border-white/10 transition-all duration-300">
+          <span className="text-[11px] font-heading font-semibold text-white/60 uppercase tracking-widest">Average Score</span>
+          <div className="mt-4">
+            <div className="text-4xl font-extrabold text-white font-number">{avgScore}%</div>
+            <span className="text-xs sys-text-body font-sans mt-1 block">Compiler marks avg</span>
           </div>
         </div>
 
-        <div className="bento-card p-5 flex flex-col justify-between min-h-28">
-          <span className="text-[8px] font-mono font-bold sys-text-body uppercase tracking-widest">Pass Rate</span>
-          <div>
-            <div className="text-3xl font-extrabold text-[#34D399] font-number">{passRate}%</div>
-            <span className="text-[9px] sys-text-body font-mono mt-0.5 block">Above {passThreshold}% passing marks</span>
+        <div className="bg-[rgba(28,28,30,0.3)] backdrop-blur-[24px] border border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-32 shadow-xl hover:shadow-[0_0_30px_rgba(255,255,255,0.03)] hover:border-white/10 transition-all duration-300">
+          <span className="text-[11px] font-heading font-semibold text-white/60 uppercase tracking-widest">Pass Rate</span>
+          <div className="mt-4">
+            <div className="text-4xl font-extrabold text-[#34D399] font-number">{passRate}%</div>
+            <span className="text-xs sys-text-body font-sans mt-1 block">Above {passThreshold}% passing marks</span>
           </div>
         </div>
       </div>
@@ -188,7 +188,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
         
         {/* Table controls */}
         <div className="flex flex-wrap justify-between items-center gap-4 select-none">
-          <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest">// COHORT EVALUATION LEADERBOARD</span>
+          <span className="text-[12px] font-heading font-bold text-[#5B8CFF] uppercase tracking-wider">// COHORT ANALYTICS & LEADERBOARD</span>
           
           <div className="flex items-center gap-2 max-w-sm w-full sys-bg/40 border border-white/5 rounded-xl px-3 py-1.5">
             <Search className="w-3.5 h-3.5 sys-text-body" />
@@ -202,20 +202,21 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="border-b border-white/5 sys-text-body font-mono text-[9px] uppercase tracking-wider select-none">
-                <th className="py-3 px-4">Rank</th>
-                <th className="py-3 px-4">Candidate Profile</th>
-                <th className="py-3 px-4">Roll Number</th>
-                <th className="py-3 px-4">Compiler Marks</th>
-                <th className="py-3 px-4">Integrity Auditing</th>
-                <th className="py-3 px-4">Timeline status</th>
-                <th className="py-3 px-4 text-right">Details</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border/60">
+        <div className="overflow-x-auto pb-4">
+          <div className="border border-white/5 rounded-2xl overflow-hidden bg-[rgba(28,28,30,0.2)]">
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider border-b border-white/5 select-none">
+                  <th className="py-4 px-5">Rank</th>
+                  <th className="py-4 px-5">Candidate Profile</th>
+                  <th className="py-4 px-5">Roll Number</th>
+                  <th className="py-4 px-5">Compiler Marks</th>
+                  <th className="py-4 px-5">Integrity Auditing</th>
+                  <th className="py-4 px-5">Timeline status</th>
+                  <th className="py-4 px-5 text-right">Details</th>
+                </tr>
+              </thead>
+            <tbody className="divide-y divide-white/[0.02]">
               {filteredRanks.map(s => {
                 const isPassed = s.score >= passThreshold
                 const isComp = s.status === 'submitted'
@@ -223,53 +224,53 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                 return (
                   <tr 
                     key={s.id} 
-                    className="hover:sys-bg/20 transition duration-150"
+                    className="hover:bg-white/[0.02] transition duration-150 group/row"
                   >
-                    <td className="py-3.5 px-4 font-mono font-bold sys-text-body">#{s.rank}</td>
-                    <td className="py-3.5 px-4">
+                    <td className="py-4 px-5 font-mono font-bold text-white">#{s.rank}</td>
+                    <td className="py-4 px-5">
                       <div className="flex flex-col">
-                        <span className="font-bold text-white">{s.name}</span>
-                        <span className="text-[10px] sys-text-body font-mono mt-0.5">{s.email}</span>
+                        <span className="font-semibold text-white font-heading truncate max-w-[160px]">{s.name}</span>
+                        <span className="text-[11px] sys-text-body font-sans mt-0.5">{s.email}</span>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-mono font-bold sys-text-body uppercase">{s.roll_number || 'N/A'}</td>
-                    <td className="py-3.5 px-4">
+                    <td className="py-4 px-5 font-mono font-semibold sys-text-body uppercase">{s.roll_number || 'N/A'}</td>
+                    <td className="py-4 px-5">
                       {isComp ? (
                         <div className="flex items-center gap-1.5">
                           <span className={`font-mono font-bold text-sm ${isPassed ? 'text-[#34D399]' : 'text-[#F87171]'}`}>{s.score}%</span>
-                          <span className={`text-[8.5px] px-1.5 py-0.2 rounded font-bold ${isPassed ? 'bg-[#34D399]/15 text-[#34D399]' : 'bg-[#F87171]/15 text-[#F87171]'}`}>
+                          <span className={`text-[9px] px-2 py-0.5 rounded font-bold ${isPassed ? 'bg-[#34D399]/15 text-[#34D399]' : 'bg-[#F87171]/15 text-[#F87171]'}`}>
                             {isPassed ? 'Passed' : 'Failed'}
                           </span>
                         </div>
                       ) : (
-                        <span className="sys-text-body font-mono font-bold">Unattempted</span>
+                        <span className="sys-text-body font-sans font-semibold">Unattempted</span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4">
+                    <td className="py-4 px-5">
                       <div className="flex items-center gap-2">
-                        <span className={`font-mono font-bold ${s.integrity_score < 75 ? 'text-[#F87171]' : 'sys-text-primary'}`}>
+                        <span className={`font-mono font-bold ${s.integrity_score < 75 ? 'text-[#F87171]' : 'text-white'}`}>
                           {s.integrity_score}%
                         </span>
                         <span className="text-[8px] sys-text-body font-mono font-semibold">({s.violationsCount} warnings)</span>
                       </div>
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className={`px-2 py-0.5 rounded text-[8.5px] font-mono font-bold uppercase tracking-wider ${
-                        s.status === 'submitted' ? 'bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/35' : 
-                        s.status === 'testing' ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border border-[#5B8CFF]/35 animate-pulse' :
-                        'sys-card sys-text-body'
+                      <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider ${
+                        s.status === 'submitted' ? 'bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/20' : 
+                        s.status === 'testing' ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border border-[#5B8CFF]/20 animate-pulse' :
+                        'bg-white/5 text-white/40 border border-white/5'
                       }`}>
                         {s.status}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 text-right">
+                    <td className="py-4 px-5 text-right">
                       <Button 
                         onClick={() => setSelectedSession(s)}
                         variant="ghost" 
                         size="sm"
-                        className="h-8 px-3 hover:sys-card sys-text-body hover:text-white rounded-xl transition cursor-pointer flex items-center gap-1.5 ml-auto"
+                        className="h-8 px-3 hover:bg-white/5 text-white/60 hover:text-white rounded-lg cursor-pointer transition-colors"
                       >
-                        <Eye className="w-3.5 h-3.5" /> Inspect
+                        <ChevronRight className="w-4 h-4 mr-1" /> View Profile
                       </Button>
                     </td>
                   </tr>
@@ -278,13 +279,14 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
 
               {filteredRanks.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center sys-text-body font-mono text-xs">
+                  <td colSpan={7} className="py-8 text-center text-white/30 font-mono text-xs">
                     No matching records found in student database ranks.
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
+          </div>
         </div>
 
       </div>

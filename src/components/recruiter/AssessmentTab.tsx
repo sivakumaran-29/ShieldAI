@@ -190,28 +190,28 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
             <span className="text-[11px] font-heading font-semibold sys-text-body uppercase tracking-wider block mb-4">Active Assessment Tracks</span>
             
             <div className="overflow-x-auto pb-4">
-              <table className="w-full text-left border-collapse text-xs">
-                <thead>
-                  <tr className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider">
-                    <th className="py-4 px-5 rounded-l-2xl border-y border-l border-white/5">Evaluation Title</th>
-                    <th className="py-4 px-5 border-y border-white/5">Duration</th>
-                    <th className="py-4 px-5 border-y border-white/5">Allowed Languages</th>
-                    <th className="py-4 px-5 border-y border-white/5">Status</th>
-                    <th className="py-4 px-5 rounded-r-2xl border-y border-r border-white/5 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/[0.02]">
-                  <tr className="h-3"></tr> {/* Spacer after header */}
-                  {assessments.map((a, index) => (
+              <div className="border border-white/5 rounded-2xl overflow-hidden bg-[rgba(28,28,30,0.2)]">
+                <table className="w-full text-left text-xs">
+                  <thead>
+                    <tr className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider border-b border-white/5">
+                      <th className="py-4 px-5">Evaluation Title</th>
+                      <th className="py-4 px-5">Duration</th>
+                      <th className="py-4 px-5">Allowed Languages</th>
+                      <th className="py-4 px-5">Status</th>
+                      <th className="py-4 px-5 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/[0.02]">
+                  {assessments.map((a) => (
                     <tr 
                       key={a.id} 
                       onClick={() => onSelectInspector?.(a)}
-                      className="hover:bg-white/[0.02] cursor-pointer transition duration-200"
+                      className="hover:bg-white/[0.02] cursor-pointer transition duration-200 group/row"
                     >
-                      <td className={`py-4 px-5 font-semibold text-white font-heading max-w-sm truncate ${index === 0 ? 'rounded-tl-2xl' : ''} ${index === assessments.length - 1 ? 'rounded-bl-2xl' : ''} border-l border-white/5 ${index === 0 ? 'border-t' : ''} ${index === assessments.length - 1 ? 'border-b' : ''}`}>{a.title}</td>
-                      <td className={`py-4 px-5 sys-text-body font-sans ${index === 0 ? 'border-t border-white/5' : ''} ${index === assessments.length - 1 ? 'border-b border-white/5' : ''}`}>{a.duration} mins</td>
-                      <td className={`py-4 px-5 sys-text-body uppercase font-sans font-medium ${index === 0 ? 'border-t border-white/5' : ''} ${index === assessments.length - 1 ? 'border-b border-white/5' : ''}`}>{a.allowed_languages.join(', ')}</td>
-                      <td className={`py-4 px-5 ${index === 0 ? 'border-t border-white/5' : ''} ${index === assessments.length - 1 ? 'border-b border-white/5' : ''}`}>
+                      <td className="py-4 px-5 font-semibold text-white font-heading max-w-sm truncate">{a.title}</td>
+                      <td className="py-4 px-5 sys-text-body font-sans">{a.duration} mins</td>
+                      <td className="py-4 px-5 sys-text-body uppercase font-sans font-medium">{a.allowed_languages.join(', ')}</td>
+                      <td className="py-4 px-5">
                         <span className={`px-2 py-1 rounded text-[8px] font-mono font-bold uppercase tracking-wider ${
                           a.status === 'Published' 
                             ? 'bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/35' 
@@ -220,7 +220,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                           {a.status}
                         </span>
                       </td>
-                      <td className={`py-4 px-5 text-right ${index === 0 ? 'rounded-tr-2xl' : ''} ${index === assessments.length - 1 ? 'rounded-br-2xl' : ''} border-r border-white/5 ${index === 0 ? 'border-t' : ''} ${index === assessments.length - 1 ? 'border-b' : ''}`} onClick={e => e.stopPropagation()}>
+                      <td className="py-4 px-5 text-right" onClick={e => e.stopPropagation()}>
                         <div className="flex justify-end gap-1.5">
                           <Button 
                             onClick={() => onSelectAssessment(a)}
@@ -272,6 +272,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                   )}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
 
