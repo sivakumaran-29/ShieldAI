@@ -81,36 +81,71 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
 
       const sessions = await fetchCandidateSessions(exportExamId)
 
-      let csvContent = "Candidate Name,Roll Number,Email,Status,Integrity Score,Total Score,"
-      questionsList.forEach(q => {
-        csvContent += `"${q.title} - Score","${q.title} - ${type === 'mcq' ? 'Answer' : 'Code'}",`
-      })
-      csvContent += "\n"
-
-      sessions.forEach(s => {
-        const row = [
-          `"${s.name || ''}"`,
-          `"${s.roll_number || ''}"`,
-          `"${s.email || ''}"`,
-          `"${s.status || ''}"`,
-          `"${s.integrity_score ?? 100}"`,
-          `"${s.score || 0}"`
-        ]
-
+      let csvContent = ""
+      
+      if (type === 'mcq') {
+        csvContent = "Candidate Name,Roll Number,Email,Status,"
         questionsList.forEach(q => {
-          const sub = s.submissions?.[q.id]
-          if (sub) {
-            row.push(`"${sub.score ?? 0}"`)
-            const safeCode = (sub.code || '').replace(/"/g, '""')
-            row.push(`"${safeCode}"`)
-          } else {
-            row.push('"0"')
-            row.push('""')
-          }
+          const qHeading = q.description || q.title || 'Question'
+          csvContent += `"${qHeading.replace(/"/g, '""')}",`
         })
-        
-        csvContent += row.join(",") + "\n"
-      })
+        csvContent += "\n"
+
+        sessions.forEach(s => {
+          const row = [
+            `"${s.name || ''}"`,
+            `"${s.roll_number || ''}"`,
+            `"${s.email || ''}"`,
+            `"${s.status || ''}"`
+          ]
+
+          questionsList.forEach(q => {
+            const sub = s.submissions?.[q.id]
+            if (sub && sub.code !== undefined && q.mcq_options) {
+              const optionIndex = parseInt(sub.code, 10)
+              const optionText = !isNaN(optionIndex) && q.mcq_options[optionIndex] 
+                ? q.mcq_options[optionIndex] 
+                : 'Not Attempted'
+              row.push(`"${optionText.replace(/"/g, '""')}"`)
+            } else {
+              row.push('""')
+            }
+          })
+          
+          csvContent += row.join(",") + "\n"
+        })
+      } else {
+        csvContent = "Candidate Name,Roll Number,Email,Status,Integrity Score,Total Score,"
+        questionsList.forEach(q => {
+          csvContent += `"${q.title} - Score","${q.title} - Code",`
+        })
+        csvContent += "\n"
+
+        sessions.forEach(s => {
+          const row = [
+            `"${s.name || ''}"`,
+            `"${s.roll_number || ''}"`,
+            `"${s.email || ''}"`,
+            `"${s.status || ''}"`,
+            `"${s.integrity_score ?? 100}"`,
+            `"${s.score || 0}"`
+          ]
+
+          questionsList.forEach(q => {
+            const sub = s.submissions?.[q.id]
+            if (sub) {
+              row.push(`"${sub.score ?? 0}"`)
+              const safeCode = (sub.code || '').replace(/"/g, '""')
+              row.push(`"${safeCode}"`)
+            } else {
+              row.push('"0"')
+              row.push('""')
+            }
+          })
+          
+          csvContent += row.join(",") + "\n"
+        })
+      }
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
       const url = URL.createObjectURL(blob)
