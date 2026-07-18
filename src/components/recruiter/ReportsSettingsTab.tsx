@@ -6,6 +6,8 @@ import {
   Sliders, Database, Cpu, RefreshCw, Terminal as TermIcon, Settings as GearIcon, Shield, Search
 } from 'lucide-react'
 import { Assessment, fetchCandidateSessions, fetchQuestions } from '../../lib/assessmentEngine'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 
 interface ReportsSettingsTabProps {
   defaultSection: 'reports' | 'settings' | 'logs'
@@ -25,6 +27,8 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
   const [saveSuccess, setSaveSuccess] = useState(false)
   const [exportExamId, setExportExamId] = useState<string>('')
   const [isExporting, setIsExporting] = useState(false)
+  const [pdfExportExamId, setPdfExportExamId] = useState<string>('')
+  const [isExportingPDF, setIsExportingPDF] = useState(false)
 
   // Sub-settings categories for macOS settings panel
   const [settingsCategory, setSettingsCategory] = useState<'general' | 'proctor' | 'compilers'>('general')
@@ -61,6 +65,81 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
     e.preventDefault()
     setSaveSuccess(true)
     setTimeout(() => setSaveSuccess(false), 2000)
+  }
+
+  const handleDownloadPDF = async () => {
+    if (!pdfExportExamId) return
+    setIsExportingPDF(true)
+    try {
+      const assessment = assessments.find(a => a.id === pdfExportExamId)
+      const sessions = await fetchCandidateSessions(pdfExportExamId)
+      
+      const doc = new jsPDF()
+      
+      // Header
+      doc.setFontSize(18)
+      doc.text('Cohort Integrity Summary', 14, 22)
+      
+      doc.setFontSize(11)
+      doc.setTextColor(100)
+      doc.text(`Assessment: ${assessment?.title || 'Unknown'}`, 14, 30)
+      doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 36)
+
+      // Metrics
+      const totalCandidates = sessions.length
+      const avgScore = totalCandidates > 0 ? Math.round(sessions.reduce((acc, s) => acc + (s.score || 0), 0) / totalCandidates) : 0
+      const avgIntegrity = totalCandidates > 0 ? Math.round(sessions.reduce((acc, s) => acc + (s.integrity_score ?? 100), 0) / totalCandidates) : 0
+      
+      doc.setFontSize(12)
+      doc.setTextColor(0)
+      doc.text('Cohort Metrics', 14, 48)
+      doc.setFontSize(10)
+      doc.setTextColor(80)
+      doc.text(`Total Candidates: ${totalCandidates}`, 14, 55)
+      doc.text(`Average Score: ${avgScore}%`, 14, 61)
+      doc.text(`Average Integrity Rating: ${avgIntegrity}%`, 14, 67)
+
+      // High Risk Candidates
+      const highRisk = sessions.filter(s => (s.integrity_score ?? 100) < 70).sort((a,b) => (a.integrity_score ?? 100) - (b.integrity_score ?? 100))
+      let startY = 75
+
+      if (highRisk.length > 0) {
+        doc.setFontSize(12)
+        doc.setTextColor(220, 38, 38)
+        doc.text('High-Risk Candidates (Flagged for Review)', 14, startY + 8)
+        
+        autoTable(doc, {
+          startY: startY + 12,
+          head: [['Roll Number', 'Name', 'Integrity', 'Score']],
+          body: highRisk.map(s => [s.roll_number || 'N/A', s.name || 'Unknown', `${s.integrity_score ?? 100}%`, `${s.score ?? 0}%`]),
+          headStyles: { fillColor: [220, 38, 38] },
+          theme: 'grid'
+        })
+        startY = (doc as any).lastAutoTable.finalY + 10
+      } else {
+        startY += 10
+      }
+
+      // Full Roster
+      doc.setFontSize(12)
+      doc.setTextColor(0)
+      doc.text('Full Candidate Roster', 14, startY + 8)
+
+      autoTable(doc, {
+        startY: startY + 12,
+        head: [['Roll Number', 'Name', 'Status', 'Integrity', 'Score']],
+        body: sessions.map(s => [s.roll_number || 'N/A', s.name || 'Unknown', s.status || 'not started', `${s.integrity_score ?? 100}%`, `${s.score ?? 0}%`]),
+        headStyles: { fillColor: [91, 140, 255] },
+        theme: 'grid'
+      })
+
+      doc.save(`Cohort_Integrity_${pdfExportExamId}.pdf`)
+    } catch (err) {
+      console.error(err)
+      alert("Failed to generate PDF.")
+    } finally {
+      setIsExportingPDF(false)
+    }
   }
 
   const handleExportCSV = async (type: 'mcq' | 'coding') => {
@@ -248,9 +327,24 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                 Full list details of all registered candidates, overall integrity rating indices, compiler scores, and timing parameters.
               </p>
             </div>
-            <div className="pt-4 border-t border-white/5 flex justify-end">
-              <Button className="bg-[#5B8CFF] hover:bg-[#3b71f3] text-white rounded-xl text-xs h-9 px-4 flex items-center gap-1.5 shadow-md">
-                <Download className="w-3.5 h-3.5" /> Download PDF
+            <div className="pt-4 border-t border-white/5 flex flex-col gap-2">
+              <select 
+                value={pdfExportExamId} 
+                onChange={e => setPdfExportExamId(e.target.value)}
+                className="border border-white/5 bg-[rgba(28,28,30,0.72)] text-foreground rounded-xl text-xs px-3 py-1.5 outline-none cursor-pointer w-full focus:border-[#5B8CFF]/50"
+              >
+                {assessments.length === 0 && <option value="">No Assessments</option>}
+                <option value="" disabled>Select Assessment</option>
+                {assessments.map(a => (
+                  <option key={a.id} value={a.id}>{a.title}</option>
+                ))}
+              </select>
+              <Button 
+                onClick={handleDownloadPDF}
+                disabled={isExportingPDF || !pdfExportExamId}
+                className="bg-[#5B8CFF] hover:bg-[#3b71f3] text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md w-full disabled:opacity-50"
+              >
+                <Download className="w-3.5 h-3.5" /> {isExportingPDF ? 'Generating...' : 'Download PDF'}
               </Button>
             </div>
           </Card>
