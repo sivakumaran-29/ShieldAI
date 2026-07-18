@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { 
   FileText, Download, Check, Save,
-  Sliders, Database, Cpu, RefreshCw, Terminal as TermIcon, Settings as GearIcon, Shield, Search
+  Database, Cpu, RefreshCw, Terminal as TermIcon, Settings as GearIcon, Shield, Search
 } from 'lucide-react'
 import { Assessment, fetchCandidateSessions, fetchQuestions } from '../../lib/assessmentEngine'
 import jsPDF from 'jspdf'
@@ -29,13 +29,16 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
   const [isExporting, setIsExporting] = useState(false)
   const [pdfExportExamId, setPdfExportExamId] = useState<string>('')
   const [isExportingPDF, setIsExportingPDF] = useState(false)
+  const [pdfQuestionBankExamId, setPdfQuestionBankExamId] = useState<string>('')
+  const [isExportingQuestionBank, setIsExportingQuestionBank] = useState(false)
 
   useEffect(() => {
     if (assessments.length > 0) {
       if (!exportExamId) setExportExamId(assessments[assessments.length - 1].id)
       if (!pdfExportExamId) setPdfExportExamId(assessments[assessments.length - 1].id)
+      if (!pdfQuestionBankExamId) setPdfQuestionBankExamId(assessments[assessments.length - 1].id)
     }
-  }, [assessments, exportExamId, pdfExportExamId])
+  }, [assessments, exportExamId, pdfExportExamId, pdfQuestionBankExamId])
 
   // Sub-settings categories for macOS settings panel
   const [settingsCategory, setSettingsCategory] = useState<'general' | 'proctor' | 'compilers'>('general')
@@ -146,6 +149,135 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
       alert("Failed to generate PDF.")
     } finally {
       setIsExportingPDF(false)
+    }
+  }
+
+  const handleDownloadQuestionBankPDF = async () => {
+    if (!pdfQuestionBankExamId) return
+    setIsExportingQuestionBank(true)
+    try {
+      const assessment = assessments.find(a => a.id === pdfQuestionBankExamId)
+      const questionsList = await fetchQuestions(pdfQuestionBankExamId)
+      
+      const doc = new jsPDF()
+      
+      // Header
+      doc.setFontSize(18)
+      doc.text('Assessment Question Bank', 14, 22)
+      
+      doc.setFontSize(11)
+      doc.setTextColor(100)
+      doc.text(`Assessment: ${assessment?.title || 'Unknown'}`, 14, 30)
+      doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 36)
+
+      let startY = 48
+      
+      const mcqs = questionsList.filter(q => q.type === 'mcq')
+      if (mcqs.length > 0) {
+        doc.setFontSize(14)
+        doc.setTextColor(0)
+        doc.text(`Multiple Choice Questions (${mcqs.length})`, 14, startY)
+        startY += 8
+        
+        mcqs.forEach((q, idx) => {
+          if (startY > 260) { doc.addPage(); startY = 20; }
+          
+          doc.setFontSize(11)
+          doc.setTextColor(0)
+          const titleLines = doc.splitTextToSize(`${idx + 1}. ${q.description || q.title || 'Question'}`, 180)
+          doc.text(titleLines, 14, startY)
+          startY += (titleLines.length * 6)
+          
+          doc.setFontSize(9)
+          doc.setTextColor(100)
+          doc.text(`[ Marks: +${q.mcq_marks ?? 1} | Negative: -${q.mcq_negative_marks ?? 0} ]`, 18, startY)
+          startY += 6
+          
+          q.mcq_options?.forEach((opt, oIdx) => {
+             if (startY > 275) { doc.addPage(); startY = 20; }
+             const isCorrect = oIdx === q.mcq_correct_index
+             if (isCorrect) doc.setTextColor(20, 160, 20)
+             else doc.setTextColor(80)
+             
+             doc.text(`${String.fromCharCode(65 + oIdx)}. ${opt} ${isCorrect ? '(Correct Answer)' : ''}`, 18, startY)
+             startY += 5
+          })
+          startY += 6
+        })
+      }
+
+      const codings = questionsList.filter(q => q.type !== 'mcq')
+      if (codings.length > 0) {
+        if (startY > 240) { doc.addPage(); startY = 20; } else { startY += 10; }
+        
+        doc.setFontSize(14)
+        doc.setTextColor(0)
+        doc.text(`Coding Challenges (${codings.length})`, 14, startY)
+        startY += 8
+        
+        codings.forEach((q, idx) => {
+          if (startY > 250) { doc.addPage(); startY = 20; }
+          
+          doc.setFontSize(12)
+          doc.setTextColor(0)
+          doc.text(`Challenge ${idx + 1}: ${q.title || 'Coding Question'}`, 14, startY)
+          startY += 6
+          
+          doc.setFontSize(10)
+          doc.setTextColor(80)
+          const descLines = doc.splitTextToSize(q.description || '', 180)
+          doc.text(descLines, 14, startY)
+          startY += (descLines.length * 5) + 4
+          
+          if (q.input_format) {
+            if (startY > 270) { doc.addPage(); startY = 20; }
+            doc.setFontSize(9)
+            doc.setTextColor(0)
+            doc.text("Input Format:", 14, startY)
+            startY += 4
+            doc.setTextColor(100)
+            const inputLines = doc.splitTextToSize(q.input_format, 180)
+            doc.text(inputLines, 14, startY)
+            startY += (inputLines.length * 4) + 4
+          }
+          
+          if (q.constraints) {
+            if (startY > 270) { doc.addPage(); startY = 20; }
+            doc.setFontSize(9)
+            doc.setTextColor(0)
+            doc.text("Constraints:", 14, startY)
+            startY += 4
+            doc.setTextColor(100)
+            const conLines = doc.splitTextToSize(q.constraints, 180)
+            doc.text(conLines, 14, startY)
+            startY += (conLines.length * 4) + 4
+          }
+          
+          if (q.test_cases && q.test_cases.length > 0) {
+            if (startY > 260) { doc.addPage(); startY = 20; }
+            doc.setFontSize(10)
+            doc.setTextColor(0)
+            doc.text(`Test Cases (${q.test_cases.length})`, 14, startY)
+            startY += 6
+            
+            autoTable(doc, {
+              startY: startY,
+              head: [['Type', 'Input', 'Expected Output']],
+              body: q.test_cases.map(tc => [!tc.is_public ? 'Hidden' : 'Public', tc.input || '', tc.expected_output || '']),
+              theme: 'grid',
+              headStyles: { fillColor: [91, 140, 255] }
+            })
+            startY = (doc as any).lastAutoTable.finalY + 10
+          }
+        })
+      }
+
+      doc.save(`Question_Bank_${pdfQuestionBankExamId}.pdf`)
+    } catch (err) {
+      console.error(err)
+      alert("Failed to generate PDF.")
+    } finally {
+      setIsExportingQuestionBank(false)
     }
   }
 
@@ -400,16 +532,30 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
           <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
             <div className="space-y-3">
               <div className="p-2 bg-[#A855F7]/10 rounded-xl w-10">
-                <Sliders className="w-5 h-5 text-[#A855F7]" strokeWidth={1.5} />
+                <FileText className="w-5 h-5 text-[#A855F7]" strokeWidth={1.5} />
               </div>
-              <h4 className="font-bold text-xs text-white font-heading">Generative Threat Report</h4>
+              <h4 className="font-bold text-xs text-white font-heading">Assessment Question Bank</h4>
               <p className="text-[10.5px] sys-text-body leading-relaxed font-sans">
-                Gemini security overview details covering tab changes, webcam warning flags, and compiler plagiarism scores.
+                Export a beautifully formatted PDF containing all MCQs with answers, and coding challenges with complete constraints and test cases.
               </p>
             </div>
-            <div className="pt-4 border-t border-white/5 flex justify-end">
-              <Button className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition">
-                <Download className="w-3.5 h-3.5" /> Query AI Report
+            <div className="pt-4 border-t border-white/5 flex flex-col gap-2">
+              <select 
+                value={pdfQuestionBankExamId} 
+                onChange={e => setPdfQuestionBankExamId(e.target.value)}
+                className="border border-white/5 bg-[rgba(28,28,30,0.72)] text-foreground rounded-xl text-xs px-3 py-1.5 outline-none cursor-pointer w-full focus:border-[#5B8CFF]/50"
+              >
+                {assessments.length === 0 && <option value="">No Assessments</option>}
+                {assessments.map(a => (
+                  <option key={a.id} value={a.id}>{a.title}</option>
+                ))}
+              </select>
+              <Button 
+                onClick={handleDownloadQuestionBankPDF}
+                disabled={isExportingQuestionBank || !pdfQuestionBankExamId}
+                className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
+              >
+                <Download className="w-3.5 h-3.5" /> {isExportingQuestionBank ? 'Generating...' : 'Download PDF'}
               </Button>
             </div>
           </Card>
