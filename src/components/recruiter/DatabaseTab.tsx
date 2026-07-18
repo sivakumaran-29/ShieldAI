@@ -271,7 +271,7 @@ export default function DatabaseTab() {
               const deptBatches = Array.from(new Set(deptUsers.map(u => u.batch))).sort()
 
               return (
-                <Card key={dept} className="bg-[rgba(28,28,30,0.3)] backdrop-blur-[24px] border-white/5 rounded-[24px] overflow-hidden shadow-2xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] hover:border-white/10">
+                <Card key={dept} className={`bg-[rgba(28,28,30,0.3)] backdrop-blur-[24px] border-white/5 rounded-[24px] overflow-hidden shadow-2xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] hover:border-white/10 ${isDeptExpanded ? 'col-span-1 md:col-span-2 lg:col-span-4' : ''}`}>
                   <div 
                     onClick={() => toggleDept(dept)}
                     className="p-5 bg-transparent hover:bg-white/[0.02] cursor-pointer flex items-center justify-between transition-colors duration-300 group"

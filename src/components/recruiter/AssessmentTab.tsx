@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { 
@@ -6,7 +6,7 @@ import {
   Sparkles, Sliders, Trash2
 } from 'lucide-react'
 import { Assessment, saveAssessment, deleteAssessment, duplicateAssessment } from '../../lib/assessmentEngine'
-
+import { supabaseAdmin } from '../../lib/supabaseAdmin'
 
 interface AssessmentTabProps {
   assessments: Assessment[]
@@ -34,7 +34,40 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
   }
 
+  const [availableDepartments, setAvailableDepartments] = useState<string[]>([])
+  const [availableBatches, setAvailableBatches] = useState<string[]>([])
 
+  useEffect(() => {
+    const fetchTargets = async () => {
+      try {
+        let allUsers: any[] = []
+        let page = 1
+        while (true) {
+          const { data } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 1000 })
+          if (!data?.users || data.users.length === 0) break
+          allUsers = allUsers.concat(data.users)
+          page++
+        }
+        
+        const batches = new Set<string>()
+        const depts = new Set<string>()
+        
+        allUsers.forEach(u => {
+          const b = u.user_metadata?.batch
+          if (b) {
+            batches.add(b)
+            depts.add(b.split('_')[0])
+          }
+        })
+        
+        setAvailableBatches(Array.from(batches).sort())
+        setAvailableDepartments(Array.from(depts).sort())
+      } catch (err) {
+        console.error('Failed to fetch batches', err)
+      }
+    }
+    fetchTargets()
+  }, [])
 
   const handleOpenCreateForm = () => {
     setIsEditing(true)
@@ -388,25 +421,18 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                     onChange={e => setTargetBatch(e.target.value)}
                     className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
                   >
-                    <option value="ALL">All Candidates (Global Host)</option>
                     <optgroup label="Entire Departments">
-                      <option value="DEPT_CSE">CSE Department (All Batches)</option>
-                      <option value="DEPT_ECE">ECE Department (All Batches)</option>
-                      <option value="DEPT_EEE">EEE Department (All Batches)</option>
-                      <option value="DEPT_MECH">MECH Department (All Batches)</option>
+                      {availableDepartments.map(d => (
+                        <option key={`DEPT_${d}`} value={`DEPT_${d}`}>{d} Department (All Batches)</option>
+                      ))}
                     </optgroup>
                     <optgroup label="Specific Batches">
-                      <option value="CSE_A">CSE A</option>
-                      <option value="CSE_B">CSE B</option>
-                      <option value="CSE_C">CSE C</option>
-                      <option value="CSE_D">CSE D</option>
-                      <option value="ECE_A">ECE A</option>
-                      <option value="ECE_B">ECE B</option>
-                      <option value="ECE_C">ECE C</option>
-                      <option value="EEE_A">EEE A</option>
-                      <option value="EEE_B">EEE B</option>
-                      <option value="MECH_A">MECH A</option>
-                      <option value="MECH_B">MECH B</option>
+                      {availableBatches.map(b => (
+                        <option key={b} value={b}>Batch {b}</option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="Global">
+                      <option value="ALL">All Candidates (Global)</option>
                     </optgroup>
                   </select>
                 </div>
