@@ -45,7 +45,7 @@ export default function MonitorTab({ assessments }: MonitorTabProps) {
     <div className="space-y-6 animate-fade-in select-none">
       
       {/* Tab Header bar */}
-      <div className="flex flex-wrap justify-between items-center gap-4 select-none border-b border-border pb-4">
+      <div className="flex flex-wrap justify-between items-center gap-4 select-none border-b border-white/5 pb-4">
         <div className="flex items-center gap-3">
           <Activity className="w-5 h-5 text-[#5B8CFF] animate-pulse" strokeWidth={1.5} />
           <div>
@@ -58,7 +58,7 @@ export default function MonitorTab({ assessments }: MonitorTabProps) {
           <select 
             value={filterExamId} 
             onChange={e => setFilterExamId(e.target.value)}
-            className="border border-border bg-[#0a0a0a] text-foreground rounded-xl text-xs px-3 py-1.5 font-semibold outline-none cursor-pointer focus:border-[#5B8CFF]/50"
+            className="border border-white/5 bg-[#0a0a0a] text-foreground rounded-xl text-xs px-3 py-1.5 font-semibold outline-none cursor-pointer focus:border-[#5B8CFF]/50"
           >
             <option value="all">All Assessments</option>
             {assessments.map(a => (
@@ -70,7 +70,7 @@ export default function MonitorTab({ assessments }: MonitorTabProps) {
             onClick={loadActiveTakers} 
             disabled={isRefreshing}
             variant="outline" 
-            className="border-border sys-bg/20 h-8 text-[11px] font-bold sys-text-body hover:text-white cursor-pointer rounded-xl transition"
+            className="border-white/5 sys-bg/20 h-8 text-[11px] font-bold sys-text-body hover:text-white cursor-pointer rounded-xl transition"
           >
             <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${isRefreshing ? 'animate-spin' : ''}`} strokeWidth={1.5} /> Sync channels
           </Button>
@@ -95,7 +95,7 @@ export default function MonitorTab({ assessments }: MonitorTabProps) {
         })}
 
         {sessions.length === 0 && (
-          <div className="col-span-full text-center p-12 sys-bg/20 border border-border rounded-2xl text-xs font-mono sys-text-body select-none">
+          <div className="col-span-full text-center p-12 sys-bg/20 border border-white/5 rounded-2xl text-xs font-mono sys-text-body select-none">
             No candidates are currently solving coding challenges.
           </div>
         )}

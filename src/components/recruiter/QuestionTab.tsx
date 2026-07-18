@@ -193,7 +193,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
             onClick={onBack}
             variant="ghost" 
             size="sm" 
-            className="h-9 px-3 hover:bg-[#1c1c1e]/40 border border-border sys-text-body hover:text-white rounded-xl cursor-pointer"
+            className="h-9 px-3 hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/40 border border-white/5 sys-text-body hover:text-white rounded-xl cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
           </Button>
@@ -211,10 +211,10 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
               <Plus className="w-4 h-4" strokeWidth={1.5} /> Add Challenge
             </Button>
             {showTypeDropdown && (
-              <div className="absolute right-0 top-full mt-2 w-56 bg-[#0a0a0a] border border-border rounded-xl shadow-2xl overflow-hidden z-50 flex flex-col">
+              <div className="absolute right-0 top-full mt-2 w-56 bg-[#0a0a0a] border border-white/5 rounded-xl shadow-2xl overflow-hidden z-50 flex flex-col">
                 <button 
                   onClick={() => { setShowTypeDropdown(false); handleOpenCreateForm('mcq'); }} 
-                  className="text-left px-4 py-3.5 text-xs text-white hover:sys-card border-b border-border font-bold transition"
+                  className="text-left px-4 py-3.5 text-xs text-white hover:sys-card border-b border-white/5 font-bold transition"
                 >
                   Create Multiple Choice
                 </button>
@@ -237,7 +237,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
             <h3 className="text-sm font-bold text-white mb-4 border-b border-transparent pb-2">Part 1: Multiple Choice Questions</h3>
             <div className="flex flex-col gap-4">
               {questions.filter(q => q.type === 'mcq').map((q) => (
-                <Card key={q.id} className="bg-[#0a0a0a]/80 border-border p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between min-h-48 hover:border-[#5B8CFF]/20 transition duration-300">
+                <Card key={q.id} className="bg-[#0a0a0a]/80 border-white/5 p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between min-h-48 hover:border-[#5B8CFF]/20 transition duration-300">
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <span className={`px-2 py-0.5 rounded border text-[8px] font-mono font-bold uppercase tracking-wider ${
@@ -275,7 +275,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
 
                     <div className="flex flex-wrap gap-1 pt-2">
                       {q.tags?.map((t, idx) => (
-                        <span key={idx} className="bg-background border border-border sys-text-body font-mono text-[8px] px-2 py-0.5 rounded-lg uppercase">
+                        <span key={idx} className="bg-background border border-white/5 sys-text-body font-mono text-[8px] px-2 py-0.5 rounded-lg uppercase">
                           {t}
                         </span>
                       ))}
@@ -285,7 +285,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
               ))}
 
               {questions.filter(q => q.type === 'mcq').length === 0 && (
-                <div className="p-8 text-center border border-dashed border-border rounded-2xl bg-[#0a0a0a]/20 sys-text-body text-xs font-mono select-none">
+                <div className="p-8 text-center border border-dashed border-white/5 rounded-2xl bg-[#0a0a0a]/20 sys-text-body text-xs font-mono select-none">
                   No Multiple Choice questions added yet.
                 </div>
               )}
@@ -297,7 +297,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
             <h3 className="text-sm font-bold text-white mb-4 border-b border-transparent pb-2">Part 2: Coding Challenges</h3>
             <div className="flex flex-col gap-4">
               {questions.filter(q => q.type !== 'mcq').map((q) => (
-                <Card key={q.id} className="bg-[#0a0a0a]/80 border-border p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between min-h-48 hover:border-[#5B8CFF]/20 transition duration-300">
+                <Card key={q.id} className="bg-[#0a0a0a]/80 border-white/5 p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between min-h-48 hover:border-[#5B8CFF]/20 transition duration-300">
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <span className={`px-2 py-0.5 rounded border text-[8px] font-mono font-bold uppercase tracking-wider ${
@@ -335,14 +335,14 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
 
                     <div className="flex flex-wrap gap-1 pt-2">
                       {q.tags?.map((t, idx) => (
-                        <span key={idx} className="bg-background border border-border sys-text-body font-mono text-[8px] px-2 py-0.5 rounded-lg uppercase">
+                        <span key={idx} className="bg-background border border-white/5 sys-text-body font-mono text-[8px] px-2 py-0.5 rounded-lg uppercase">
                           {t}
                         </span>
                       ))}
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center pt-4 border-t border-border/60 text-[9px] font-mono sys-text-body mt-4 select-none">
+                  <div className="flex justify-between items-center pt-4 border-t border-white/5/60 text-[9px] font-mono sys-text-body mt-4 select-none">
                     <span>Time Limit: {q.time_limit}ms</span>
                     <span>Test Cases: {q.test_cases?.length || 0}</span>
                   </div>
@@ -350,7 +350,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
               ))}
 
               {questions.filter(q => q.type !== 'mcq').length === 0 && (
-                <div className="p-8 text-center border border-dashed border-border rounded-2xl bg-[#0a0a0a]/20 sys-text-body text-xs font-mono select-none">
+                <div className="p-8 text-center border border-dashed border-white/5 rounded-2xl bg-[#0a0a0a]/20 sys-text-body text-xs font-mono select-none">
                   No coding challenges added yet.
                 </div>
               )}
@@ -359,7 +359,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
         </div>
       ) : (
         /* Edit Challenge Form */
-        <Card className="bg-[#0a0a0a]/90 border-border p-8 rounded-2xl relative overflow-hidden animate-fade-in shadow-2xl">
+        <Card className="bg-[#0a0a0a]/90 border-white/5 p-8 rounded-2xl relative overflow-hidden animate-fade-in shadow-2xl">
           <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-[#5B8CFF]" />
           
           <h3 className="text-sm font-bold text-white mb-6 font-heading flex items-center gap-2">
@@ -379,7 +379,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                       type="text" 
                       value={title} 
                       onChange={e => setTitle(e.target.value)}
-                      className="sys-bg border border-border text-white rounded-xl p-3 text-sm font-bold focus:outline-none focus:border-[#5B8CFF]/50" 
+                      className="sys-bg border border-white/5 text-white rounded-xl p-3 text-sm font-bold focus:outline-none focus:border-[#5B8CFF]/50" 
                       placeholder="e.g. Reverse Linked List"
                       required
                     />
@@ -392,14 +392,14 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                     <button
                       type="button"
                       onClick={() => setQuestionType('coding')}
-                      className={`flex-1 py-2 text-xs font-bold rounded-lg border transition ${questionType === 'coding' ? 'bg-[#5B8CFF]/20 border-[#5B8CFF] text-[#5B8CFF]' : 'sys-bg border-border sys-text-body hover:text-white'}`}
+                      className={`flex-1 py-2 text-xs font-bold rounded-lg border transition ${questionType === 'coding' ? 'bg-[#5B8CFF]/20 border-[#5B8CFF] text-[#5B8CFF]' : 'sys-bg border-white/5 sys-text-body hover:text-white'}`}
                     >
                       Coding Challenge
                     </button>
                     <button
                       type="button"
                       onClick={() => setQuestionType('mcq')}
-                      className={`flex-1 py-2 text-xs font-bold rounded-lg border transition ${questionType === 'mcq' ? 'bg-[#5B8CFF]/20 border-[#5B8CFF] text-[#5B8CFF]' : 'sys-bg border-border sys-text-body hover:text-white'}`}
+                      className={`flex-1 py-2 text-xs font-bold rounded-lg border transition ${questionType === 'mcq' ? 'bg-[#5B8CFF]/20 border-[#5B8CFF] text-[#5B8CFF]' : 'sys-bg border-white/5 sys-text-body hover:text-white'}`}
                     >
                       Multiple Choice
                     </button>
@@ -413,7 +413,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                       <textarea 
                         value={description} 
                         onChange={e => setDescription(e.target.value)}
-                        className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24 font-sans leading-relaxed" 
+                        className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24 font-sans leading-relaxed" 
                         placeholder="Describe problem goals, parameters and context..."
                         required
                       />
@@ -421,9 +421,9 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
 
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Tags (Press Enter)</label>
-                      <div className="flex flex-wrap gap-1.5 p-2 sys-bg border border-border rounded-xl min-h-11 items-center">
+                      <div className="flex flex-wrap gap-1.5 p-2 sys-bg border border-white/5 rounded-xl min-h-11 items-center">
                         {tags.map((t, idx) => (
-                          <span key={idx} className="sys-card border border-border sys-text-primary font-mono text-[8px] px-2 py-0.5 rounded-lg uppercase flex items-center gap-1">
+                          <span key={idx} className="sys-card border border-white/5 sys-text-primary font-mono text-[8px] px-2 py-0.5 rounded-lg uppercase flex items-center gap-1">
                             {t}
                             <button type="button" onClick={() => handleRemoveTag(t)} className="sys-text-body hover:text-white focus:outline-none">
                               <X className="w-2.5 h-2.5" />
@@ -452,7 +452,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                     <select 
                       value={difficulty} 
                       onChange={e => setDifficulty(e.target.value as any)}
-                      className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
+                      className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
                     >
                       <option value="Easy">Easy</option>
                       <option value="Medium">Medium</option>
@@ -467,7 +467,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                         type="number" 
                         value={timeLimit} 
                         onChange={e => setTimeLimit(Number(e.target.value))}
-                        className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                        className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                         min={100}
                         max={10000}
                         required
@@ -483,7 +483,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                       type="text" 
                       value={explanation} 
                       onChange={e => setExplanation(e.target.value)}
-                      className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
                       placeholder="Optional details..."
                     />
                   </div>
@@ -495,7 +495,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                         type="number" 
                         value={memoryLimit} 
                         onChange={e => setMemoryLimit(Number(e.target.value))}
-                        className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                        className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                         min={16}
                         max={1024}
                         required
@@ -513,7 +513,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                           type="text" 
                           value={inputFormat} 
                           onChange={e => setInputFormat(e.target.value)}
-                          className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
+                          className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
                           placeholder="e.g. Standard input integers"
                         />
                       </div>
@@ -523,7 +523,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                           type="text" 
                           value={outputFormat} 
                           onChange={e => setOutputFormat(e.target.value)}
-                          className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
+                          className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
                           placeholder="e.g. Result stdout string"
                         />
                       </div>
@@ -535,7 +535,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                         <textarea 
                           value={sampleInput} 
                           onChange={e => setSampleInput(e.target.value)}
-                          className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50 min-h-16"
+                          className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50 min-h-16"
                           placeholder="Sample input data..."
                         />
                       </div>
@@ -544,7 +544,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                         <textarea 
                           value={sampleOutput} 
                           onChange={e => setSampleOutput(e.target.value)}
-                          className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50 min-h-16"
+                          className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50 min-h-16"
                           placeholder="Expected output data..."
                         />
                       </div>
@@ -561,13 +561,13 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                   <textarea 
                     value={constraints} 
                     onChange={e => setConstraints(e.target.value)}
-                    className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-20 font-mono" 
+                    className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-20 font-mono" 
                     placeholder="• 1 <= nums.length <= 10^5"
                   />
                 </div>
 
                 {/* Test Cases Editor section */}
-                <div className="pt-6 border-t border-border">
+                <div className="pt-6 border-t border-white/5">
                   <div className="flex justify-between items-center mb-4">
                 <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest flex items-center gap-1.5">
                   <Terminal className="w-4 h-4" strokeWidth={1.5} /> Test Cases Matrix
@@ -577,7 +577,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                   onClick={handleAddTestCase}
                   variant="outline" 
                   size="sm"
-                  className="border-border sys-bg/20 sys-text-body hover:text-white h-7 px-3 text-[9px] font-bold rounded-xl cursor-pointer"
+                  className="border-white/5 sys-bg/20 sys-text-body hover:text-white h-7 px-3 text-[9px] font-bold rounded-xl cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" strokeWidth={1.5} /> Add Test Case
                 </Button>
@@ -585,14 +585,14 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
 
               <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
                 {testCases.map((tc) => (
-                  <div key={tc.id} className="p-4 sys-bg/40 border border-border rounded-xl grid grid-cols-1 md:grid-cols-11 gap-4 items-center animate-fade-in select-none">
+                  <div key={tc.id} className="p-4 sys-bg/40 border border-white/5 rounded-xl grid grid-cols-1 md:grid-cols-11 gap-4 items-center animate-fade-in select-none">
                     
                     <div className="md:col-span-4 flex flex-col gap-1.5">
                       <label className="text-[8px] font-mono uppercase sys-text-body tracking-wider">Input Parameter</label>
                       <textarea 
                         value={tc.input} 
                         onChange={e => handleTestCaseChange(tc.id, 'input', e.target.value)}
-                        className="sys-bg border border-border text-white rounded-lg p-2 text-xs font-mono outline-none min-h-12 focus:border-[#5B8CFF]/40"
+                        className="sys-bg border border-white/5 text-white rounded-lg p-2 text-xs font-mono outline-none min-h-12 focus:border-[#5B8CFF]/40"
                         placeholder="stdin inputs..."
                       />
                     </div>
@@ -602,7 +602,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                       <textarea 
                         value={tc.expected_output} 
                         onChange={e => handleTestCaseChange(tc.id, 'expected_output', e.target.value)}
-                        className="sys-bg border border-border text-white rounded-lg p-2 text-xs font-mono outline-none min-h-12 focus:border-[#5B8CFF]/40"
+                        className="sys-bg border border-white/5 text-white rounded-lg p-2 text-xs font-mono outline-none min-h-12 focus:border-[#5B8CFF]/40"
                         placeholder="stdout output..."
                       />
                     </div>
@@ -613,7 +613,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                           type="checkbox" 
                           checked={tc.is_public}
                           onChange={e => handleTestCaseChange(tc.id, 'is_public', e.target.checked)}
-                          className="w-3.5 h-3.5 rounded border-border text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer"
+                          className="w-3.5 h-3.5 rounded border-white/5 text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer"
                         />
                         <span>Visible Sample</span>
                       </label>
@@ -624,7 +624,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                           type="number" 
                           value={tc.weight}
                           onChange={e => handleTestCaseChange(tc.id, 'weight', Number(e.target.value))}
-                          className="w-14 sys-bg border border-border text-white text-[10px] rounded p-1 text-center font-mono outline-none"
+                          className="w-14 sys-bg border border-white/5 text-white text-[10px] rounded p-1 text-center font-mono outline-none"
                           min={0}
                         />
                       </div>
@@ -648,15 +648,15 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
               </div>
               </>
             ) : (
-              <div className="pt-6 border-t border-border mt-6">
+              <div className="pt-6 border-t border-white/5 mt-6">
                 <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest flex items-center gap-1.5 mb-4">
                   Multiple Choice Options Matrix
                 </span>
                 
                 <div className="space-y-3">
                   {mcqOptions.map((opt, idx) => (
-                    <div key={idx} className="flex items-center gap-4 sys-bg/40 p-4 border border-border rounded-xl">
-                      <div className="flex items-center justify-center w-8 h-8 rounded-lg sys-card border border-border sys-text-body font-bold font-mono text-[10px]">
+                    <div key={idx} className="flex items-center gap-4 sys-bg/40 p-4 border border-white/5 rounded-xl">
+                      <div className="flex items-center justify-center w-8 h-8 rounded-lg sys-card border border-white/5 sys-text-body font-bold font-mono text-[10px]">
                         {String.fromCharCode(65 + idx)}
                       </div>
                       <input 
@@ -667,7 +667,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                           newOps[idx] = e.target.value
                           setMcqOptions(newOps)
                         }}
-                        className="flex-1 sys-bg border border-border text-white rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
+                        className="flex-1 sys-bg border border-white/5 text-white rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
                         placeholder={`Option ${String.fromCharCode(65 + idx)} text...`}
                       />
                       <label className="flex items-center gap-2 text-[10px] font-semibold cursor-pointer select-none sys-text-body hover:text-white shrink-0 ml-4">
@@ -687,12 +687,12 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
             )}
 
             {/* Form actions */}
-            <div className="flex justify-end gap-3 pt-6 border-t border-border">
+            <div className="flex justify-end gap-3 pt-6 border-t border-white/5">
               <Button 
                 type="button" 
                 onClick={() => setIsEditing(false)}
                 variant="outline"
-                className="border-border sys-bg/20 sys-text-body hover:text-white rounded-xl text-xs h-10 px-6 cursor-pointer"
+                className="border-white/5 sys-bg/20 sys-text-body hover:text-white rounded-xl text-xs h-10 px-6 cursor-pointer"
               >
                 Cancel
               </Button>

@@ -300,7 +300,7 @@ export default function CandidateDashboard() {
       <div className="grain-overlay opacity-30" />
 
       {/* ================= LEFT SIDEBAR ================= */}
-      <aside className="w-64 h-screen bg-[#0a0a0a]/70 -2xl border-r border-transparent flex flex-col justify-between p-6 shrink-0 z-30 select-none shadow-2xl">
+      <aside className="w-64 h-screen bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-r border-white/5 flex flex-col justify-between p-6 shrink-0 z-30 select-none shadow-2xl">
         <div className="space-y-8">
           
           {/* Header Brand & Theme Toggle */}
@@ -320,7 +320,7 @@ export default function CandidateDashboard() {
                 disabled={isSyncing}
                 variant="ghost"
                 size="icon"
-                className="w-7 h-7 rounded-lg sys-text-body hover:text-white hover:hover:bg-[#1c1c1e]/80 transition"
+                className="w-7 h-7 rounded-lg sys-text-body hover:text-white hover:hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 transition"
                 title="Sync Assessments"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-[#5B8CFF]' : ''}`} />
@@ -333,7 +333,7 @@ export default function CandidateDashboard() {
           <nav className="flex flex-col gap-2">
             <button 
               onClick={() => setActiveTab('overview')}
-              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'overview' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-[#1c1c1e]/80 border border-transparent'}`}
+              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'overview' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 border border-transparent'}`}
             >
               <div className="flex items-center gap-2.5">
                 <Home className="w-4 h-4" strokeWidth={1.5} />
@@ -344,7 +344,7 @@ export default function CandidateDashboard() {
 
             <button 
               onClick={() => setActiveTab('lobby')}
-              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'lobby' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-[#1c1c1e]/80 border border-transparent'}`}
+              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'lobby' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 border border-transparent'}`}
             >
               <div className="flex items-center gap-2.5">
                 <LayoutGrid className="w-4 h-4" strokeWidth={1.5} />
@@ -355,7 +355,7 @@ export default function CandidateDashboard() {
 
             <button 
               onClick={() => setActiveTab('history')}
-              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'history' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-[#1c1c1e]/80 border border-transparent'}`}
+              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'history' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 border border-transparent'}`}
             >
               <div className="flex items-center gap-2.5">
                 <History className="w-4 h-4" strokeWidth={1.5} />
@@ -588,7 +588,7 @@ export default function CandidateDashboard() {
                         <BookOpen className="w-5 h-5 text-[#5B8CFF]" strokeWidth={2} /> Assessment Preparation
                       </CardTitle>
                       <CardDescription className="text-xs sys-text-body mt-2">
-                        You are launching: <span className="text-white font-bold hover:bg-[#1c1c1e]/80 px-2 py-1 rounded-md ml-1">{selectedAssessment.title}</span>
+                        You are launching: <span className="text-white font-bold hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 px-2 py-1 rounded-md ml-1">{selectedAssessment.title}</span>
                       </CardDescription>
                     </CardHeader>
                     
@@ -700,10 +700,10 @@ export default function CandidateDashboard() {
                         <div className="space-y-1.5">
                           <p className="sys-text-body font-bold font-mono text-[9px] uppercase tracking-widest mb-2">Evaluation Window Scheduling limits</p>
                           <p className="sys-text-body flex items-center gap-2">
-                            <span className="w-12 sys-text-body">Starts:</span> <span className="text-white font-semibold font-mono hover:bg-[#1c1c1e]/80 px-2 py-0.5 rounded">{new Date(selectedAssessment.start_time).toLocaleString()}</span>
+                            <span className="w-12 sys-text-body">Starts:</span> <span className="text-white font-semibold font-mono hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 px-2 py-0.5 rounded">{new Date(selectedAssessment.start_time).toLocaleString()}</span>
                           </p>
                           <p className="sys-text-body flex items-center gap-2">
-                            <span className="w-12 sys-text-body">Ends:</span> <span className="text-white font-semibold font-mono hover:bg-[#1c1c1e]/80 px-2 py-0.5 rounded">{new Date(selectedAssessment.end_time).toLocaleString()}</span>
+                            <span className="w-12 sys-text-body">Ends:</span> <span className="text-white font-semibold font-mono hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 px-2 py-0.5 rounded">{new Date(selectedAssessment.end_time).toLocaleString()}</span>
                           </p>
                         </div>
                         <div className="text-right">
@@ -812,7 +812,7 @@ export default function CandidateDashboard() {
                               <div className="flex items-center gap-2">
                                 <div className="w-16 h-1.5 sys-card rounded-full overflow-hidden">
                                   <div 
-                                    className={`h-full rounded-full ${session.integrity_score >= 80 ? 'bg-[#5B8CFF]' : session.integrity_score >= 50 ? 'bg-[#1c1c1e]' : 'bg-[#1c1c1e]'}`}
+                                    className={`h-full rounded-full ${session.integrity_score >= 80 ? 'bg-[#5B8CFF]' : session.integrity_score >= 50 ? 'bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]' : 'bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]'}`}
                                     style={{ width: `${session.integrity_score || 0}%` }}
                                   />
                                 </div>

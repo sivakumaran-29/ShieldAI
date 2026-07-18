@@ -179,7 +179,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
       {!isEditing ? (
         <div className="space-y-8">
           
-          <div className="bento-card p-8 flex flex-col items-center justify-center text-center space-y-4 border-dashed border-2 border-border/50 bg-[#0a0a0a]/50 mb-8">
+          <div className="bento-card p-8 flex flex-col items-center justify-center text-center space-y-4 border-dashed border-2 border-white/5/50 bg-[#0a0a0a]/50 mb-8">
             <div className="p-4 bg-[#5B8CFF]/10 rounded-full mb-2">
               <Sparkles className="w-8 h-8 text-[#5B8CFF]" strokeWidth={1.5} />
             </div>
@@ -202,7 +202,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="border-b border-border sys-text-body font-mono text-[9px] uppercase tracking-wider">
+                  <tr className="border-b border-white/5 sys-text-body font-mono text-[9px] uppercase tracking-wider">
                     <th className="py-3 px-4">Evaluation Title</th>
                     <th className="py-3 px-4">Duration</th>
                     <th className="py-3 px-4">Allowed Languages</th>
@@ -296,7 +296,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
         </div>
       ) : (
         /* Glass-morphic Edit / Create Form overlay */
-        <Card className="bg-[#0a0a0a]/90 border-border p-8 rounded-2xl relative overflow-hidden animate-fade-in shadow-2xl">
+        <Card className="bg-[#0a0a0a]/90 border-white/5 p-8 rounded-2xl relative overflow-hidden animate-fade-in shadow-2xl">
           <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-[#5B8CFF]" />
           
           <h3 className="text-sm font-bold text-white mb-6 font-heading flex items-center gap-2">
@@ -315,7 +315,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                     type="text" 
                     value={title} 
                     onChange={e => setTitle(e.target.value)}
-                    className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50" 
+                    className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50" 
                     placeholder="e.g. Software Engineer Evaluation"
                     required
                   />
@@ -326,7 +326,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                   <textarea 
                     value={description} 
                     onChange={e => setDescription(e.target.value)}
-                    className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24" 
+                    className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24" 
                     placeholder="Provide overview details..."
                   />
                 </div>
@@ -336,7 +336,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                   <textarea 
                     value={instructions} 
                     onChange={e => setInstructions(e.target.value)}
-                    className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24" 
+                    className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24" 
                     placeholder="Rules for the proctored sandbox..."
                   />
                 </div>
@@ -352,7 +352,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                       type="number" 
                       value={duration} 
                       onChange={e => setDuration(Number(e.target.value))}
-                      className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                       min={1}
                       required
                     />
@@ -363,7 +363,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                       type="number" 
                       value={passingScore} 
                       onChange={e => setPassingScore(Number(e.target.value))}
-                      className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                       min={0}
                       max={100}
                       required
@@ -378,7 +378,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                       type="datetime-local" 
                       value={startTime} 
                       onChange={e => setStartTime(e.target.value)}
-                      className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                       required
                     />
                   </div>
@@ -388,7 +388,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                       type="datetime-local" 
                       value={endTime} 
                       onChange={e => setEndTime(e.target.value)}
-                      className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                       required
                     />
                   </div>
@@ -403,7 +403,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                           type="checkbox" 
                           checked={languages.includes(lang)}
                           onChange={() => toggleLanguage(lang)}
-                          className="w-4 h-4 rounded border-border text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer"
+                          className="w-4 h-4 rounded border-white/5 text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer"
                         />
                         <span className="text-xs uppercase sys-text-body font-mono">{lang === 'javascript' ? 'JS (ES6)' : lang}</span>
                       </label>
@@ -416,7 +416,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                   <select 
                     value={status} 
                     onChange={e => setStatus(e.target.value as any)}
-                    className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
+                    className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
                   >
                     <option value="Draft">Draft</option>
                     <option value="Published">Published</option>
@@ -429,7 +429,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                   <select 
                     value={targetBatch} 
                     onChange={e => setTargetBatch(e.target.value)}
-                    className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
+                    className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
                   >
                     <optgroup label="Entire Departments">
                       {availableDepartments.map(d => (
@@ -451,12 +451,12 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
             </div>
 
             {/* Form actions */}
-            <div className="flex justify-end gap-3 pt-6 border-t border-border">
+            <div className="flex justify-end gap-3 pt-6 border-t border-white/5">
               <Button 
                 type="button" 
                 onClick={() => setIsEditing(false)}
                 variant="outline"
-                className="border-border sys-bg/20 sys-text-body hover:text-white rounded-xl text-xs h-10 px-6 cursor-pointer"
+                className="border-white/5 sys-bg/20 sys-text-body hover:text-white rounded-xl text-xs h-10 px-6 cursor-pointer"
               >
                 Cancel
               </Button>

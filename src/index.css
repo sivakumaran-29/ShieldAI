@@ -41,7 +41,7 @@
     @apply text-[15px] font-semibold text-white tracking-tight;
   }
   .sys-text-body {
-    @apply text-[15px] text-[#86868b] font-medium leading-relaxed;
+    @apply text-[15px] text-[#B8B8BC] font-medium leading-relaxed;
   }
   .sys-text-primary {
     @apply text-white font-medium;
@@ -55,13 +55,13 @@
 
   /* 2. CARD & SURFACE SYSTEM */
   .sys-card {
-    @apply bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-6 transition-all duration-300 shadow-sm;
+    @apply bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 rounded-[24px] p-6 transition-all duration-300 shadow-sm;
   }
   .sys-card-interactive {
-    @apply bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-6 transition-all duration-300 shadow-sm cursor-pointer hover:border-[#5B8CFF]/50 hover:bg-[#1c1c1e]/80 active:scale-[0.99];
+    @apply bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 rounded-[24px] p-6 transition-all duration-300 shadow-sm cursor-pointer hover:border-white/10 hover:bg-[rgba(28,28,30,0.9)] hover:-translate-y-0.5 active:scale-[0.99];
   }
   .sys-panel {
-    @apply bg-[#000000]/40 backdrop-blur-3xl border border-[#ffffff0a];
+    @apply bg-[rgba(0,0,0,0.4)] backdrop-blur-[24px] border border-white/5 rounded-[28px];
   }
   .sys-bg {
     @apply bg-[#000000];
@@ -69,26 +69,26 @@
 
   /* 3. INPUT SYSTEM */
   .sys-input-group {
-    @apply bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-4 flex flex-col focus-within:border-[#5B8CFF] focus-within:ring-1 focus-within:ring-[#5B8CFF] transition-all;
+    @apply bg-[rgba(28,28,30,0.72)] border border-white/5 rounded-[20px] p-4 flex flex-col focus-within:border-[#5B8CFF] focus-within:ring-1 focus-within:ring-[#5B8CFF] transition-all;
   }
   .sys-input {
-    @apply w-full bg-transparent border-0 p-0 text-[15px] text-white focus:outline-none focus:ring-0 placeholder:text-[#48484a] font-medium;
+    @apply w-full bg-transparent border-0 p-0 text-[15px] text-white focus:outline-none focus:ring-0 placeholder:text-[#A1A1AA] font-medium;
   }
 
   /* 4. BUTTON SYSTEM */
   .sys-btn-primary {
-    @apply bg-[#f5f5f7] hover:bg-white text-black font-semibold h-[52px] px-6 rounded-2xl cursor-pointer transition-all duration-300 disabled:opacity-50 text-[14px] shadow-lg active:scale-[0.98] select-none inline-flex items-center justify-center gap-2;
+    @apply bg-[#f5f5f7] hover:bg-white text-black font-semibold h-[52px] px-6 rounded-[20px] cursor-pointer transition-all duration-300 disabled:opacity-50 text-[14px] shadow-lg hover:shadow-xl active:scale-[0.98] select-none inline-flex items-center justify-center gap-2;
   }
   .sys-btn-secondary {
-    @apply bg-[#1c1c1e] hover:bg-[#2c2c2e] border border-[#38383a] text-white font-medium h-[52px] px-6 rounded-2xl cursor-pointer transition-all duration-300 disabled:opacity-50 text-[14px] active:scale-[0.98] select-none inline-flex items-center justify-center gap-2;
+    @apply bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] hover:bg-[rgba(28,28,30,0.9)] border border-white/5 text-white font-medium h-[52px] px-6 rounded-[20px] cursor-pointer transition-all duration-300 disabled:opacity-50 text-[14px] active:scale-[0.98] select-none inline-flex items-center justify-center gap-2;
   }
   .sys-btn-icon {
-    @apply p-2 bg-[#1c1c1e] rounded-xl border border-[#38383a] hover:bg-[#2c2c2e] transition-colors cursor-pointer text-[#86868b] hover:text-white active:scale-[0.95];
+    @apply p-2 bg-[rgba(28,28,30,0.72)] rounded-[18px] border border-white/5 hover:bg-[rgba(28,28,30,0.9)] transition-all cursor-pointer text-[#86868b] hover:text-white active:scale-[0.95];
   }
 
   /* 5. BADGE SYSTEM */
   .sys-badge {
-    @apply inline-flex items-center gap-2 px-3 py-1 bg-[#1c1c1e] border border-[#38383a] text-[10px] font-semibold tracking-widest uppercase text-white rounded-full select-none;
+    @apply inline-flex items-center gap-2 px-3 py-1 bg-[rgba(28,28,30,0.72)] border border-white/5 text-[10px] font-semibold tracking-widest uppercase text-white rounded-full select-none;
   }
 
   /* 6. TABLE SYSTEM */
@@ -96,10 +96,10 @@
     @apply w-full text-left text-sm text-[#f5f5f7];
   }
   .sys-table-header {
-    @apply text-[10px] font-semibold tracking-widest uppercase text-[#86868b] border-b border-[#38383a] bg-[#1c1c1e]/50 backdrop-blur-md;
+    @apply text-[10px] font-semibold tracking-widest uppercase text-[#86868b] border-b border-white/5 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px];
   }
   .sys-table-row {
-    @apply border-b border-[#38383a]/50 hover:bg-[#1c1c1e]/30 transition-colors;
+    @apply border-b border-white/5 hover:bg-white/[0.03] transition-colors;
   }
   .sys-table-cell {
     @apply px-4 py-4;

@@ -72,7 +72,7 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
     <div className="space-y-6 select-none">
       
       {/* Header Info */}
-      <div className="flex items-center justify-between select-none border-b border-border pb-4">
+      <div className="flex items-center justify-between select-none border-b border-white/5 pb-4">
         <div>
           <h2 className="text-[10px] font-mono font-bold tracking-widest text-[#5B8CFF] uppercase">
             // {activeSub === 'reports' ? 'COMPLIANCE AUDIT REPORTS' : activeSub === 'settings' ? 'GLOBAL PLATFORM CONFIG' : 'TELEMETRY NETWORK LOGS'}
@@ -92,7 +92,7 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
             onClick={handleRefreshLogs} 
             disabled={isRefreshingLogs}
             variant="outline" 
-            className="border-border sys-bg/20 h-8 text-[11px] font-bold sys-text-body hover:text-white rounded-xl transition cursor-pointer"
+            className="border-white/5 sys-bg/20 h-8 text-[11px] font-bold sys-text-body hover:text-white rounded-xl transition cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${isRefreshingLogs ? 'animate-spin' : ''}`} strokeWidth={1.5} /> Update terminal
           </Button>
@@ -103,7 +103,7 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
       {activeSub === 'reports' && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           
-          <Card className="bg-[#0a0a0a]/85 border-border p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
+          <Card className="bg-[#0a0a0a]/85 border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
             <div className="space-y-3">
               <div className="p-2 bg-[#5B8CFF]/10 rounded-xl w-10">
                 <FileText className="w-5 h-5 text-[#5B8CFF]" strokeWidth={1.5} />
@@ -113,14 +113,14 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
                 Full list details of all registered candidates, overall integrity rating indices, compiler scores, and timing parameters.
               </p>
             </div>
-            <div className="pt-4 border-t border-border flex justify-end">
+            <div className="pt-4 border-t border-white/5 flex justify-end">
               <Button className="bg-[#5B8CFF] hover:bg-[#3b71f3] text-white rounded-xl text-xs h-9 px-4 flex items-center gap-1.5 shadow-md">
                 <Download className="w-3.5 h-3.5" /> Download PDF
               </Button>
             </div>
           </Card>
 
-          <Card className="bg-[#0a0a0a]/85 border-border p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
+          <Card className="bg-[#0a0a0a]/85 border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
             <div className="space-y-3">
               <div className="p-2 bg-[#14B8A6]/10 rounded-xl w-10">
                 <Database className="w-5 h-5 text-[#14B8A6]" strokeWidth={1.5} />
@@ -130,14 +130,14 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
                 Compile spreadsheet row listings containing student identifiers, active socket connection logs, and compiler test-case details.
               </p>
             </div>
-            <div className="pt-4 border-t border-border flex justify-end">
-              <Button className="sys-bg hover:sys-card border border-border sys-text-body hover:text-white rounded-xl text-xs h-9 px-4 flex items-center gap-1.5 transition">
+            <div className="pt-4 border-t border-white/5 flex justify-end">
+              <Button className="sys-bg hover:sys-card border border-white/5 sys-text-body hover:text-white rounded-xl text-xs h-9 px-4 flex items-center gap-1.5 transition">
                 <Download className="w-3.5 h-3.5" /> Export Data Sheet
               </Button>
             </div>
           </Card>
 
-          <Card className="bg-[#0a0a0a]/85 border-border p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
+          <Card className="bg-[#0a0a0a]/85 border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
             <div className="space-y-3">
               <div className="p-2 bg-[#A855F7]/10 rounded-xl w-10">
                 <Sliders className="w-5 h-5 text-[#A855F7]" strokeWidth={1.5} />
@@ -147,8 +147,8 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
                 Gemini security overview details covering tab changes, webcam warning flags, and compiler plagiarism scores.
               </p>
             </div>
-            <div className="pt-4 border-t border-border flex justify-end">
-              <Button className="sys-bg hover:sys-card border border-border sys-text-body hover:text-white rounded-xl text-xs h-9 px-4 flex items-center gap-1.5 transition">
+            <div className="pt-4 border-t border-white/5 flex justify-end">
+              <Button className="sys-bg hover:sys-card border border-white/5 sys-text-body hover:text-white rounded-xl text-xs h-9 px-4 flex items-center gap-1.5 transition">
                 <Download className="w-3.5 h-3.5" /> Query AI Report
               </Button>
             </div>
@@ -159,10 +159,10 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
 
       {/* ================= SETTINGS SECTION (macOS PANELS STYLE) ================= */}
       {activeSub === 'settings' && (
-        <Card className="bg-[#0a0a0a]/85 border-border rounded-2xl overflow-hidden shadow-xl grid grid-cols-1 md:grid-cols-12 min-h-[350px]">
+        <Card className="bg-[#0a0a0a]/85 border-white/5 rounded-2xl overflow-hidden shadow-xl grid grid-cols-1 md:grid-cols-12 min-h-[350px]">
           
           {/* macOS settings sub sidebar (3 cols) */}
-          <div className="md:col-span-3 sys-bg/20 border-r border-border p-4 flex flex-col gap-1.5">
+          <div className="md:col-span-3 sys-bg/20 border-r border-white/5 p-4 flex flex-col gap-1.5">
             <button 
               onClick={() => setSettingsCategory('general')}
               className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center gap-2.5 transition ${
@@ -203,7 +203,7 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
                   <div className="space-y-4 animate-fade-in">
                     <span className="text-[9px] font-mono sys-text-body uppercase tracking-widest block mb-2">GENERAL CONFIGURATIONS</span>
                     
-                    <div className="p-4 sys-bg/40 border border-border rounded-xl flex items-center justify-between">
+                    <div className="p-4 sys-bg/40 border border-white/5 rounded-xl flex items-center justify-between">
                       <div className="space-y-0.5">
                         <span className="text-xs font-bold sys-text-primary block">Workspace Identifier Node</span>
                         <span className="text-[10px] sys-text-body font-sans">Active recruitment cluster location.</span>
@@ -238,7 +238,7 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
 
                     {/* Checkbox toggle params */}
                     <div className="space-y-3 pt-2">
-                      <label className="flex items-center justify-between p-3.5 sys-bg/40 border border-border rounded-xl cursor-pointer select-none">
+                      <label className="flex items-center justify-between p-3.5 sys-bg/40 border border-white/5 rounded-xl cursor-pointer select-none">
                         <div className="space-y-0.5 pr-4">
                           <span className="text-xs font-bold sys-text-primary block">Hardware Camera Verification</span>
                           <span className="text-[10px] sys-text-body font-sans">Require active WebRTC camera monitoring feeds.</span>
@@ -247,11 +247,11 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
                           type="checkbox" 
                           checked={proctorCamera} 
                           onChange={e => setProctorCamera(e.target.checked)}
-                          className="w-4 h-4 rounded border-border text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer" 
+                          className="w-4 h-4 rounded border-white/5 text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer" 
                         />
                       </label>
 
-                      <label className="flex items-center justify-between p-3.5 sys-bg/40 border border-border rounded-xl cursor-pointer select-none">
+                      <label className="flex items-center justify-between p-3.5 sys-bg/40 border border-white/5 rounded-xl cursor-pointer select-none">
                         <div className="space-y-0.5 pr-4">
                           <span className="text-xs font-bold sys-text-primary block">Strict Tab-Switch Blocking</span>
                           <span className="text-[10px] sys-text-body font-sans">Log violations immediately when user loses focus of exam browser.</span>
@@ -260,7 +260,7 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
                           type="checkbox" 
                           checked={proctorTabs} 
                           onChange={e => setProctorTabs(e.target.checked)}
-                          className="w-4 h-4 rounded border-border text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer" 
+                          className="w-4 h-4 rounded border-white/5 text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer" 
                         />
                       </label>
                     </div>
@@ -274,13 +274,13 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
                     
                     <div className="space-y-3">
                       {['python', 'javascript', 'java'].map(lang => (
-                        <label key={lang} className="flex items-center justify-between p-3 sys-bg/40 border border-border rounded-xl cursor-pointer select-none">
+                        <label key={lang} className="flex items-center justify-between p-3 sys-bg/40 border border-white/5 rounded-xl cursor-pointer select-none">
                           <span className="text-xs uppercase font-mono font-bold sys-text-primary">{lang}</span>
                           <input 
                             type="checkbox" 
                             checked={allowedLangs.includes(lang)}
                             onChange={() => handleToggleLang(lang)}
-                            className="w-4 h-4 rounded border-border text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer"
+                            className="w-4 h-4 rounded border-white/5 text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer"
                           />
                         </label>
                       ))}
@@ -290,7 +290,7 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
               </div>
 
               {/* Form submit actions */}
-              <div className="pt-6 border-t border-border flex justify-end items-center gap-3">
+              <div className="pt-6 border-t border-white/5 flex justify-end items-center gap-3">
                 {saveSuccess && (
                   <span className="text-xs text-[#34D399] font-semibold flex items-center gap-1">
                     <Check className="w-3.5 h-3.5" /> Settings Saved
@@ -313,16 +313,16 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
 
       {/* ================= LOGS SECTION (HIGH FIDELITY TERMINAL) ================= */}
       {activeSub === 'logs' && (
-        <Card className="bg-[#000000] border-border rounded-2xl overflow-hidden shadow-2xl flex flex-col min-h-[380px]">
+        <Card className="bg-[#000000] border-white/5 rounded-2xl overflow-hidden shadow-2xl flex flex-col min-h-[380px]">
           
           {/* Terminal header controls */}
-          <div className="bg-[#0a0a0a]/80 border-b border-border px-4 py-2.5 flex justify-between items-center select-none text-[10px]">
+          <div className="bg-[#0a0a0a]/80 border-b border-white/5 px-4 py-2.5 flex justify-between items-center select-none text-[10px]">
             <span className="flex items-center sys-text-body font-mono font-bold">
               <TermIcon className="w-4.5 h-4.5 mr-2 sys-text-body" /> SYSTEM MONITOR TERMINAL
             </span>
 
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5 p-1 px-3 sys-bg border border-border rounded-xl">
+              <div className="flex items-center gap-1.5 p-1 px-3 sys-bg border border-white/5 rounded-xl">
                 <Search className="w-3.5 h-3.5 sys-text-body" />
                 <input 
                   type="text" 

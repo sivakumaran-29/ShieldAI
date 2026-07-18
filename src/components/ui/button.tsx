@@ -11,7 +11,7 @@ const buttonVariants = cva(
         default: "sys-btn-primary",
         outline: "sys-btn-secondary",
         secondary: "sys-btn-secondary",
-        ghost: "hover:bg-[#1c1c1e] text-white transition-colors rounded-2xl",
+        ghost: "hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] text-white transition-colors rounded-2xl",
         destructive: "sys-btn-secondary border-[#F87171]/50 text-[#F87171] hover:bg-[#F87171]/10",
         link: "text-white underline-offset-4 hover:underline",
       },

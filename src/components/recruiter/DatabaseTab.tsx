@@ -221,7 +221,7 @@ export default function DatabaseTab() {
     <div className="space-y-8 select-none animate-fade-in pb-20">
       
       {/* Header */}
-      <div className="flex justify-between items-center border-b border-border pb-4">
+      <div className="flex justify-between items-center border-b border-white/5 pb-4">
         <div>
           <h2 className="text-[10px] font-mono font-bold tracking-widest text-[#5B8CFF] uppercase">
             // CANDIDATE DATABASE REGISTRY
@@ -258,7 +258,7 @@ export default function DatabaseTab() {
               placeholder="Search candidate roll or email..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full sys-bg/50 border border-border text-white text-xs rounded-xl pl-9 pr-4 py-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition"
+              className="w-full sys-bg/50 border border-white/5 text-white text-xs rounded-xl pl-9 pr-4 py-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition"
             />
           </div>
 
@@ -271,7 +271,7 @@ export default function DatabaseTab() {
               const deptBatches = Array.from(new Set(deptUsers.map(u => u.batch))).sort()
 
               return (
-                <Card key={dept} className="bg-[#0a0a0a]/90 border-border rounded-2xl overflow-hidden shadow-sm">
+                <Card key={dept} className="bg-[#0a0a0a]/90 border-white/5 rounded-2xl overflow-hidden shadow-sm">
                   <div 
                     onClick={() => toggleDept(dept)}
                     className="p-4 sys-bg hover:sys-bg/80 cursor-pointer flex items-center justify-between transition group"
@@ -299,13 +299,13 @@ export default function DatabaseTab() {
                   </div>
 
                   {isDeptExpanded && (
-                    <div className="border-t border-border/50 bg-[#0a0a0a]/50 p-4 space-y-4">
+                    <div className="border-t border-white/5/50 bg-[#0a0a0a]/50 p-4 space-y-4">
                       {deptBatches.map(batchName => {
                         const batchUsers = deptUsers.filter(c => c.batch === batchName)
                         const isBatchExpanded = expandedBatches[batchName]
 
                         return (
-                          <div key={batchName} className="border border-border/50 rounded-xl overflow-hidden sys-bg/30">
+                          <div key={batchName} className="border border-white/5/50 rounded-xl overflow-hidden sys-bg/30">
                             <div 
                               onClick={() => toggleBatch(batchName)}
                               className="p-3 hover:sys-card/40 cursor-pointer flex items-center justify-between transition group/batch"
@@ -330,7 +330,7 @@ export default function DatabaseTab() {
                             </div>
 
                             {isBatchExpanded && (
-                              <div className="border-t border-border/50">
+                              <div className="border-t border-white/5/50">
                                 <table className="w-full text-left text-xs">
                                   <thead>
                                     <tr className="sys-bg/80 sys-text-body font-mono text-[9px] uppercase tracking-wider">
@@ -382,8 +382,8 @@ export default function DatabaseTab() {
       {/* CREATE BATCH MODAL */}
       {isCreating && (
         <div className="fixed inset-0 bg-black/80  z-[9999] flex items-center justify-center p-4">
-          <Card className="w-full max-w-md bg-[#0a0a0a] border-border rounded-2xl overflow-hidden shadow-2xl animate-fade-in">
-            <div className="p-4 border-b border-border flex justify-between items-center sys-bg/40">
+          <Card className="w-full max-w-md bg-[#0a0a0a] border-white/5 rounded-2xl overflow-hidden shadow-2xl animate-fade-in">
+            <div className="p-4 border-b border-white/5 flex justify-between items-center sys-bg/40">
               <h3 className="font-bold text-sm text-white font-heading flex items-center gap-2">
                 <Database className="w-4 h-4 text-[#5B8CFF]" /> Add New Batch
               </h3>
@@ -396,7 +396,7 @@ export default function DatabaseTab() {
                   type="text" 
                   value={newBatchName}
                   onChange={e => setNewBatchName(e.target.value)}
-                  className="w-full bg-[#1c1c1e] border border-border text-white text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-bold"
+                  className="w-full bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-bold"
                   required
                 />
               </div>
@@ -408,7 +408,7 @@ export default function DatabaseTab() {
                     type="text" 
                     value={startRoll}
                     onChange={e => setStartRoll(e.target.value)}
-                    className="w-full bg-[#1c1c1e] border border-border text-white text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-mono"
+                    className="w-full bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-mono"
                     required
                   />
                 </div>
@@ -418,7 +418,7 @@ export default function DatabaseTab() {
                     type="text" 
                     value={endRoll}
                     onChange={e => setEndRoll(e.target.value)}
-                    className="w-full bg-[#1c1c1e] border border-border text-white text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-mono"
+                    className="w-full bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-mono"
                     required
                   />
                 </div>
@@ -430,7 +430,7 @@ export default function DatabaseTab() {
                   type="text" 
                   value={emailSuffix}
                   onChange={e => setEmailSuffix(e.target.value)}
-                  className="w-full bg-[#1c1c1e] border border-border text-white text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-mono"
+                  className="w-full bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-mono"
                   required
                 />
               </div>

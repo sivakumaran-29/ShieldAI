@@ -207,7 +207,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
         {/* Left Console area (8 cols) */}
         <div className="md:col-span-8 space-y-6">
           {!activeGeneratorType ? (
-            <div className="border border-dashed border-border bg-[#0a0a0a]/30 rounded-2xl p-12 flex flex-col items-center justify-center text-center space-y-4 shadow-inner min-h-64">
+            <div className="border border-dashed border-white/5 bg-[#0a0a0a]/30 rounded-2xl p-12 flex flex-col items-center justify-center text-center space-y-4 shadow-inner min-h-64">
               <div className="w-12 h-12 sys-card rounded-full flex items-center justify-center mb-2 border border-transparent">
                 <Terminal className="w-5 h-5 sys-text-body" />
               </div>
@@ -223,10 +223,10 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                   <Plus className="w-4 h-4" strokeWidth={2} /> Create Challenge with AI
                 </Button>
                 {showTypeDropdown && (
-                  <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-56 bg-[#0a0a0a] border border-border rounded-xl shadow-2xl overflow-hidden z-50 flex flex-col animate-fade-in">
+                  <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-56 bg-[#0a0a0a] border border-white/5 rounded-xl shadow-2xl overflow-hidden z-50 flex flex-col animate-fade-in">
                     <button 
                       onClick={() => { setShowTypeDropdown(false); setActiveGeneratorType('mcq'); }} 
-                      className="text-left px-4 py-3.5 text-xs text-white hover:sys-card border-b border-border font-bold transition"
+                      className="text-left px-4 py-3.5 text-xs text-white hover:sys-card border-b border-white/5 font-bold transition"
                     >
                       Multiple Choice
                     </button>
@@ -241,11 +241,11 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
               </div>
             </div>
           ) : (
-            <Card className="bg-[#0a0a0a]/80 border-border p-6 rounded-2xl relative overflow-hidden shadow-xl animate-fade-in">
+            <Card className="bg-[#0a0a0a]/80 border-white/5 p-6 rounded-2xl relative overflow-hidden shadow-xl animate-fade-in">
               <div className="absolute top-0 left-0 right-0 h-[2px] sys-bg" />
               
               <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-border pb-3">
+                <div className="flex items-center justify-between border-b border-white/5 pb-3">
                   <div className="flex items-center gap-2 text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest">
                     <Terminal className="w-4 h-4 text-[#5B8CFF]" /> {activeGeneratorType === 'mcq' ? 'MCQ' : 'CODING'} PROMPT CONSOLE
                   </div>
@@ -260,7 +260,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                     <button 
                       key={idx}
                       onClick={() => setPrompt(p.prompt)}
-                      className="px-3 py-1.5 sys-bg border border-border rounded-xl sys-text-body hover:text-white text-[10px] font-mono transition cursor-pointer"
+                      className="px-3 py-1.5 sys-bg border border-white/5 rounded-xl sys-text-body hover:text-white text-[10px] font-mono transition cursor-pointer"
                     >
                       + {p.title}
                     </button>
@@ -272,7 +272,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                   <textarea 
                     value={prompt}
                     onChange={e => setPrompt(e.target.value)}
-                    className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24 font-sans leading-relaxed"
+                    className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24 font-sans leading-relaxed"
                     placeholder="e.g. Find the maximum sum of a non-adjacent subarray..."
                   />
                 </div>
@@ -282,7 +282,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                   <select 
                     value={difficulty} 
                     onChange={e => setDifficulty(e.target.value as any)}
-                    className="sys-bg border border-border text-white rounded-xl p-3.5 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
+                    className="sys-bg border border-white/5 text-white rounded-xl p-3.5 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
                   >
                     <option value="Easy">Easy</option>
                     <option value="Medium">Medium</option>
@@ -293,7 +293,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                 {activeGeneratorType === 'mcq' && (
                 <div className="flex flex-col gap-1.5 pt-2">
                   <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">PDF Source Context (Optional)</label>
-                  <label className="border border-dashed border-border rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-[#5B8CFF]/50 hover:sys-card/50 transition sys-bg min-h-16">
+                  <label className="border border-dashed border-white/5 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-[#5B8CFF]/50 hover:sys-card/50 transition sys-bg min-h-16">
                     <span className="text-[10px] sys-text-body font-mono text-center">
                       {pdfName ? `Attached Document: ${pdfName}` : 'Upload PDF Document to extract MCQ context'}
                     </span>
@@ -327,7 +327,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
 
           {/* Status Message block */}
           {statusMsg && !errorMsg && (
-            <div className="p-4 sys-bg border border-border rounded-xl text-xs font-mono sys-text-body flex items-center gap-2">
+            <div className="p-4 sys-bg border border-white/5 rounded-xl text-xs font-mono sys-text-body flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#14B8A6] animate-ping" />
               <span>{statusMsg}</span>
             </div>
@@ -343,7 +343,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
 
         {/* Right Info area (4 cols) */}
         <div className="md:col-span-4">
-          <div className="p-5 bg-[#0a0a0a]/40 border border-border rounded-2xl space-y-4">
+          <div className="p-5 bg-[#0a0a0a]/40 border border-white/5 rounded-2xl space-y-4">
             <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest block">How it works</span>
             <div className="text-[11px] sys-text-body space-y-3 leading-relaxed">
               <p>ShieldAI leverages advanced LLM engines to create programming challenges dynamically.</p>
@@ -357,11 +357,11 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
 
       {/* Generated draft preview cards */}
       {generatedQuestions.length > 0 && (
-        <div className="space-y-4 pt-6 border-t border-border animate-fade-in select-none">
+        <div className="space-y-4 pt-6 border-t border-white/5 animate-fade-in select-none">
           <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest block">AI DRAFT PREVIEW PROPOSAL</span>
 
           {generatedQuestions.map((q, idx) => (
-            <Card key={idx} className="bg-[#0a0a0a]/80 border-border p-6 rounded-2xl relative overflow-hidden space-y-6">
+            <Card key={idx} className="bg-[#0a0a0a]/80 border-white/5 p-6 rounded-2xl relative overflow-hidden space-y-6">
               <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#5B8CFF]" />
               
               <div className="flex justify-between items-start">
@@ -373,7 +373,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                     <input 
                       value={q.title} 
                       onChange={e => handleUpdateDraft(q.id, 'title', e.target.value)} 
-                      className="bg-[#1c1c1e] border border-border text-white mt-2 p-1.5 rounded-lg w-full font-bold text-sm focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white mt-2 p-1.5 rounded-lg w-full font-bold text-sm focus:outline-none focus:border-[#5B8CFF]/50"
                     />
                   ) : (
                     <h3 className="font-bold text-sm text-white font-heading mt-2">{q.title}</h3>
@@ -404,7 +404,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                     <textarea 
                       value={q.description} 
                       onChange={e => handleUpdateDraft(q.id, 'description', e.target.value)} 
-                      className="bg-[#1c1c1e] border border-border text-white mt-1 p-2 rounded-lg w-full h-24 text-xs font-sans focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white mt-1 p-2 rounded-lg w-full h-24 text-xs font-sans focus:outline-none focus:border-[#5B8CFF]/50"
                     />
                   ) : (
                     <p className="sys-text-body font-sans leading-relaxed">{q.description}</p>
@@ -416,7 +416,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                     <span className="text-[9px] font-mono sys-text-body uppercase block">Multiple Choice Options</span>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {q.mcq_options?.map((opt, optIdx) => (
-                        <div key={optIdx} className={`p-3 rounded-xl border text-[10px] ${q.mcq_correct_index === optIdx ? 'bg-[#34D399]/10 border-[#34D399]/30 text-[#34D399]' : 'sys-bg/40 border-border sys-text-body'}`}>
+                        <div key={optIdx} className={`p-3 rounded-xl border text-[10px] ${q.mcq_correct_index === optIdx ? 'bg-[#34D399]/10 border-[#34D399]/30 text-[#34D399]' : 'sys-bg/40 border-white/5 sys-text-body'}`}>
                           <div className="font-bold mb-1">Option {String.fromCharCode(65 + optIdx)} {q.mcq_correct_index === optIdx && '(Correct)'}</div>
                           {editingDraftId === q.id ? (
                             <input 
@@ -426,7 +426,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                                 newOpts[optIdx] = e.target.value
                                 handleUpdateDraft(q.id, 'mcq_options', newOpts as any)
                               }}
-                              className="bg-[#1c1c1e] border border-border text-white p-1.5 rounded w-full focus:outline-none focus:border-[#5B8CFF]/50"
+                              className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white p-1.5 rounded w-full focus:outline-none focus:border-[#5B8CFF]/50"
                             />
                           ) : (
                             <div>{opt}</div>
@@ -442,7 +442,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                           min="0" max="3"
                           value={q.mcq_correct_index ?? 0}
                           onChange={e => handleUpdateDraft(q.id, 'mcq_correct_index', Number(e.target.value) as any)}
-                          className="bg-[#1c1c1e] border border-border text-white p-1.5 rounded w-20 focus:outline-none focus:border-[#5B8CFF]/50 text-xs"
+                          className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white p-1.5 rounded w-20 focus:outline-none focus:border-[#5B8CFF]/50 text-xs"
                         />
                       </div>
                     )}
@@ -450,25 +450,25 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                 ) : (
                   <>
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="p-3 sys-bg rounded-xl border border-border">
+                      <div className="p-3 sys-bg rounded-xl border border-white/5">
                         <span className="text-[8px] font-mono sys-text-body uppercase">Constraints</span>
                         {editingDraftId === q.id ? (
                           <textarea 
                             value={q.constraints} 
                             onChange={e => handleUpdateDraft(q.id, 'constraints', e.target.value)} 
-                            className="bg-[#1c1c1e] border border-border text-white mt-1 p-2 rounded-lg w-full h-16 text-[10px] font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                            className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white mt-1 p-2 rounded-lg w-full h-16 text-[10px] font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                           />
                         ) : (
                           <pre className="text-[10px] sys-text-body font-mono mt-1 whitespace-pre-wrap">{q.constraints}</pre>
                         )}
                       </div>
-                      <div className="p-3 sys-bg rounded-xl border border-border">
+                      <div className="p-3 sys-bg rounded-xl border border-white/5">
                         <span className="text-[8px] font-mono sys-text-body uppercase">Explanation</span>
                         {editingDraftId === q.id ? (
                           <textarea 
                             value={q.explanation} 
                             onChange={e => handleUpdateDraft(q.id, 'explanation', e.target.value)} 
-                            className="bg-[#1c1c1e] border border-border text-white mt-1 p-2 rounded-lg w-full h-16 text-[10px] font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                            className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white mt-1 p-2 rounded-lg w-full h-16 text-[10px] font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                           />
                         ) : (
                           <p className="text-[10px] sys-text-body mt-1 italic">{q.explanation}</p>
@@ -480,8 +480,8 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                       <span className="text-[9px] font-mono sys-text-body uppercase block">Generated Test Cases Matrix</span>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         {q.test_cases?.map((tc, tcIdx) => (
-                          <div key={tcIdx} className="p-3 sys-bg/40 border border-border rounded-xl font-mono text-[9px] sys-text-body">
-                            <div className="flex justify-between items-center pb-1 border-b border-border/40 mb-1.5">
+                          <div key={tcIdx} className="p-3 sys-bg/40 border border-white/5 rounded-xl font-mono text-[9px] sys-text-body">
+                            <div className="flex justify-between items-center pb-1 border-b border-white/5/40 mb-1.5">
                               <span className="font-bold">Case #{tcIdx + 1}</span>
                               <span className="text-[8px] sys-card px-1 rounded">{tc.is_public ? 'Public' : 'Hidden'}</span>
                             </div>
