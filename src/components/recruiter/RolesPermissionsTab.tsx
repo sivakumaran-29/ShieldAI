@@ -81,7 +81,7 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
         <h2 className="text-[10px] font-mono font-bold tracking-widest text-[#5B8CFF] uppercase">
           {defaultSection === 'roles' ? '// SECURITY ROLES CONFIGURATION' : '// PERMISSION ACCESS CONTROL'}
         </h2>
-        <span className="text-[10px] text-zinc-500 font-mono mt-1 block">Manage administrator roles, clearance levels, and security permission grids</span>
+        <span className="text-[10px] sys-text-body font-mono mt-1 block">Manage administrator roles, clearance levels, and security permission grids</span>
       </div>
 
       {defaultSection === 'roles' ? (
@@ -90,7 +90,7 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
           
           {/* Roles list */}
           <div className="lg:col-span-5 space-y-4">
-            <span className="text-[9px] font-mono font-bold text-zinc-500 uppercase tracking-widest block select-none">Active Admin Profiles</span>
+            <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest block select-none">Active Admin Profiles</span>
             <div className="space-y-3">
               {roles.map(r => (
                 <Card 
@@ -99,7 +99,7 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
                   className={`border transition-all duration-300 rounded-2xl cursor-pointer p-4 relative overflow-hidden shadow-none ${
                     selectedRoleKey === r.key 
                       ? 'bg-card border-[#5B8CFF]/40' 
-                      : 'bg-[#0a0a0a]/20 border-border hover:border-zinc-800'
+                      : 'bg-[#0a0a0a]/20 border-border hover:border-transparent'
                   }`}
                 >
                   <div 
@@ -109,11 +109,11 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="font-bold text-xs text-white font-heading">{r.name}</span>
-                      <span className="text-[9px] font-mono text-zinc-500 flex items-center gap-1">
+                      <span className="text-[9px] font-mono sys-text-body flex items-center gap-1">
                         <Users className="w-3 h-3" /> {r.usersCount} users
                       </span>
                     </div>
-                    <p className="text-[10.5px] text-zinc-500 leading-relaxed font-sans line-clamp-2">{r.description}</p>
+                    <p className="text-[10.5px] sys-text-body leading-relaxed font-sans line-clamp-2">{r.description}</p>
                   </div>
                 </Card>
               ))}
@@ -127,20 +127,20 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
               
               <div className="flex justify-between items-start select-none">
                 <div>
-                  <span className="text-[9px] font-mono font-bold text-zinc-550 uppercase tracking-widest block">Clearance Settings</span>
+                  <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest block">Clearance Settings</span>
                   <h3 className="font-bold text-sm text-white font-heading mt-2 flex items-center gap-2">
                     <Shield className="w-4 h-4" style={{ color: activeRole.color }} /> {activeRole.name}
                   </h3>
                 </div>
 
-                <span className="px-2.5 py-0.5 rounded-xl border text-[9px] font-mono font-bold uppercase tracking-wider bg-zinc-950 border-border text-zinc-400">
+                <span className="px-2.5 py-0.5 rounded-xl border text-[9px] font-mono font-bold uppercase tracking-wider sys-bg border-border sys-text-body">
                   cleared profile
                 </span>
               </div>
 
               {/* Permissions list */}
               <div className="space-y-4 pt-4 border-t border-border/60">
-                <span className="text-[9px] font-mono font-bold text-zinc-550 uppercase tracking-widest block mb-2">Mapped Permissions Checklist</span>
+                <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest block mb-2">Mapped Permissions Checklist</span>
                 
                 <div className="space-y-3">
                   {PERMISSION_DEFINITIONS.map(p => {
@@ -149,17 +149,17 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
                       <div 
                         key={p.key}
                         onClick={() => handleTogglePermission(activeRole.key, p.key)}
-                        className="p-3 bg-zinc-950/40 border border-border rounded-xl flex items-center justify-between hover:border-zinc-800 transition cursor-pointer select-none"
+                        className="p-3 sys-bg/40 border border-border rounded-xl flex items-center justify-between hover:border-transparent transition cursor-pointer select-none"
                       >
                         <div className="space-y-0.5 pr-4">
-                          <span className="text-xs font-bold text-zinc-200 block">{p.name}</span>
-                          <span className="text-[10px] text-zinc-500 font-sans leading-normal">{p.desc}</span>
+                          <span className="text-xs font-bold sys-text-primary block">{p.name}</span>
+                          <span className="text-[10px] sys-text-body font-sans leading-normal">{p.desc}</span>
                         </div>
 
                         <div className={`w-5 h-5 rounded border transition flex items-center justify-center ${
                           hasPerm 
                             ? 'bg-[#34D399] border-[#34D399] text-white' 
-                            : 'border-border bg-zinc-950 text-transparent'
+                            : 'border-border sys-bg text-transparent'
                         }`}>
                           <Check className="w-3.5 h-3.5" strokeWidth={2.5} />
                         </div>
@@ -176,15 +176,15 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
       ) : (
         /* PERMISSIONS MATRIX SECTION */
         <Card className="bg-[#0a0a0a]/80 border-border p-6 rounded-2xl relative overflow-hidden shadow-xl">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#5B8CFF] to-[#14B8A6]" />
+          <div className="absolute top-0 left-0 right-0 h-[2px] sys-bg" />
           
           <div className="space-y-4">
-            <span className="text-[9px] font-mono font-bold text-zinc-550 uppercase tracking-widest block select-none">// SYSTEM ACCESS CAPABILITY MATRIX</span>
+            <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest block select-none">// SYSTEM ACCESS CAPABILITY MATRIX</span>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs select-none">
                 <thead>
-                  <tr className="border-b border-border text-zinc-500 font-mono text-[9px] uppercase tracking-wider">
+                  <tr className="border-b border-border sys-text-body font-mono text-[9px] uppercase tracking-wider">
                     <th className="py-3 px-4">Permission Node</th>
                     {roles.map(r => (
                       <th key={r.key} className="py-3 px-4 text-center">{r.name}</th>
@@ -193,11 +193,11 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
                 </thead>
                 <tbody className="divide-y divide-border/60">
                   {PERMISSION_DEFINITIONS.map(p => (
-                    <tr key={p.key} className="hover:bg-zinc-950/20 transition duration-150">
+                    <tr key={p.key} className="hover:sys-bg/20 transition duration-150">
                       <td className="py-3.5 px-4">
                         <div className="flex flex-col">
                           <span className="font-bold text-white">{p.name}</span>
-                          <span className="text-[10px] text-zinc-555 mt-0.5">{p.desc}</span>
+                          <span className="text-[10px] sys-text-body mt-0.5">{p.desc}</span>
                         </div>
                       </td>
                       {roles.map(r => {
@@ -211,7 +211,7 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
                               <div className={`w-5 h-5 rounded border transition flex items-center justify-center ${
                                 hasPerm 
                                   ? 'bg-[#34D399] border-[#34D399] text-white' 
-                                  : 'border-border bg-zinc-950 text-transparent hover:border-zinc-800'
+                                  : 'border-border sys-bg text-transparent hover:border-transparent'
                               }`}>
                                 <Check className="w-3.5 h-3.5" strokeWidth={2.5} />
                               </div>

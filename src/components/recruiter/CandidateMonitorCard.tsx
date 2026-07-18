@@ -141,21 +141,21 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
 
         {connectionStatus !== 'connected' && (
           <div className="flex flex-col items-center gap-2.5 z-20 text-center p-4 select-none">
-            <div className="p-3.5 rounded-full border border-border bg-zinc-950">
+            <div className="p-3.5 rounded-full border border-border sys-bg">
               {connectionStatus === 'connecting' ? (
-                <Video className="w-8 h-8 text-zinc-600 animate-pulse" strokeWidth={1.5} />
+                <Video className="w-8 h-8 sys-text-body animate-pulse" strokeWidth={1.5} />
               ) : (
-                <VideoOff className="w-8 h-8 text-zinc-700" strokeWidth={1.5} />
+                <VideoOff className="w-8 h-8 sys-text-body" strokeWidth={1.5} />
               )}
             </div>
-            <span className="text-[9px] font-mono text-zinc-550 uppercase tracking-widest">
+            <span className="text-[9px] font-mono sys-text-body uppercase tracking-widest">
               {connectionStatus === 'connecting' ? 'Establishing Stream...' : 'Camera Feed Offline'}
             </span>
           </div>
         )}
 
         {/* Secure scan lines box corners */}
-        <div className="absolute inset-3 border border-white/5 pointer-events-none z-30">
+        <div className="absolute inset-3 border border-transparent pointer-events-none z-30">
           <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-white/20" />
           <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-white/20" />
           <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-white/20" />
@@ -164,8 +164,8 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
 
         {/* Score & Stream status badges */}
         <div className="absolute top-3 left-3 z-30 flex items-center gap-1.5 select-none font-mono">
-          <span className="px-2 py-0.5 rounded text-[8px] font-bold uppercase flex items-center gap-1 bg-zinc-950 border border-border text-zinc-300">
-            <span className={`w-1.5 h-1.5 rounded-full ${connectionStatus === 'connected' ? 'bg-[#34D399] animate-ping' : 'bg-zinc-750'}`} />
+          <span className="px-2 py-0.5 rounded text-[8px] font-bold uppercase flex items-center gap-1 sys-bg border border-border sys-text-primary">
+            <span className={`w-1.5 h-1.5 rounded-full ${connectionStatus === 'connected' ? 'bg-[#34D399] animate-ping' : 'sys-card'}`} />
             {connectionStatus === 'connected' ? 'Live Stream' : 'Live Channel'}
           </span>
         </div>
@@ -174,7 +174,7 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
           <span className={`px-2 py-0.5 rounded border text-[9px] font-mono font-bold ${
             isCritical 
               ? 'bg-[#F87171]/20 text-[#F87171] border-[#F87171]/35' 
-              : 'bg-zinc-950 text-zinc-300 border-border'
+              : 'sys-bg sys-text-primary border-border'
           }`}>
             INTEGRITY: {s.integrity_score}%
           </span>
@@ -185,26 +185,26 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
       <div className="p-4 space-y-4 flex-1 flex flex-col justify-between">
         <div className="select-none">
           <h4 className="font-bold text-xs text-foreground font-heading">{s.name}</h4>
-          <div className="text-[9px] text-zinc-550 font-mono mt-1 uppercase tracking-wider font-bold">Roll: {s.roll_number || 'N/A'}</div>
+          <div className="text-[9px] sys-text-body font-mono mt-1 uppercase tracking-wider font-bold">Roll: {s.roll_number || 'N/A'}</div>
         </div>
 
         {/* Live infractions */}
         <div className="flex gap-4 text-[9px] border-t border-border pt-3 select-none">
           <div className="space-y-0.5">
-            <span className="text-zinc-600 block uppercase tracking-wider font-mono font-bold">Infractions</span>
-            <span className={`font-mono font-bold ${isCritical ? 'text-[#F87171] font-bold' : 'text-zinc-400'}`}>{violationCount} warning(s)</span>
+            <span className="sys-text-body block uppercase tracking-wider font-mono font-bold">Infractions</span>
+            <span className={`font-mono font-bold ${isCritical ? 'text-[#F87171] font-bold' : 'sys-text-body'}`}>{violationCount} warning(s)</span>
           </div>
           <div className="space-y-0.5 border-l border-border pl-4">
-            <span className="text-zinc-600 block uppercase tracking-wider font-mono font-bold">Exam Status</span>
+            <span className="sys-text-body block uppercase tracking-wider font-mono font-bold">Exam Status</span>
             <span className="font-mono text-foreground font-bold capitalize">{s.status}...</span>
           </div>
         </div>
 
         {/* Terminal warning timeline */}
-        <div className="bg-black/65 border border-border rounded-xl p-2.5 font-mono text-[8px] text-zinc-500 space-y-1.5 select-text overflow-y-auto max-h-16">
-          <span className="text-[7.5px] uppercase font-bold text-zinc-650 tracking-widest block select-none border-b border-zinc-900 pb-1 mb-1">// Infraction logs</span>
+        <div className="bg-black/65 border border-border rounded-xl p-2.5 font-mono text-[8px] sys-text-body space-y-1.5 select-text overflow-y-auto max-h-16">
+          <span className="text-[7.5px] uppercase font-bold sys-text-body tracking-widest block select-none border-b border-[#38383a] pb-1 mb-1">// Infraction logs</span>
           {(s.violation_logs || []).slice(-3).map((log, idx) => (
-            <div key={idx} className={log.includes('ALERT') || log.includes('lost') || log.includes('switch') ? 'text-white bg-[#F87171]/15 px-1 rounded border border-[#F87171]/25' : 'text-zinc-600'}>
+            <div key={idx} className={log.includes('ALERT') || log.includes('lost') || log.includes('switch') ? 'text-white bg-[#F87171]/15 px-1 rounded border border-[#F87171]/25' : 'sys-text-body'}>
               {log}
             </div>
           ))}

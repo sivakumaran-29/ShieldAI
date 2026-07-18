@@ -962,7 +962,7 @@ export default function ExamShell() {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center text-white font-mono text-xs">
         <div className="flex flex-col items-center gap-3">
-          <RefreshCw className="w-6 h-6 animate-spin text-zinc-400" />
+          <RefreshCw className="w-6 h-6 animate-spin sys-text-body" />
           <span>Synchronizing Assessment Environment...</span>
         </div>
       </div>
@@ -981,9 +981,9 @@ export default function ExamShell() {
       
       <div className="flex-1 flex flex-col z-10 relative">
       {/* EXAM PANEL HEADER */}
-      <header className="px-6 py-3 flex items-center justify-between sticky top-0 z-50 border-b border-border bg-card/65 backdrop-blur-xl">
+      <header className="px-6 py-3 flex items-center justify-between sticky top-0 z-50 border-b border-border bg-card/65 ">
         <div className="flex items-center space-x-3 select-none">
-          <div className="p-1 px-2 border rounded bg-zinc-950/65 border-zinc-800 text-white flex items-center gap-1.5 font-bold tracking-tight text-[10px] font-mono">
+          <div className="p-1 px-2 border rounded sys-bg/65 border-transparent text-white flex items-center gap-1.5 font-bold tracking-tight text-[10px] font-mono">
             <Lock className="w-3.5 h-3.5 animate-pulse" strokeWidth={1.5} /> Protected Environment
           </div>
           <span className="font-bold text-xs tracking-wider uppercase font-mono text-muted hidden md:inline-block">
@@ -993,7 +993,7 @@ export default function ExamShell() {
 
         {/* TIMER ALERT */}
         {timerAlert && (
-          <div className="hidden lg:flex items-center gap-2 p-1.5 px-3 bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-200 font-mono text-[9px] font-bold tracking-wide animate-pulse">
+          <div className="hidden lg:flex items-center gap-2 p-1.5 px-3 sys-card border border-transparent rounded-xl sys-text-primary font-mono text-[9px] font-bold tracking-wide animate-pulse">
             <AlertTriangle className="w-4 h-4 text-white shrink-0" strokeWidth={1.5} /> {timerAlert}
           </div>
         )}
@@ -1002,8 +1002,8 @@ export default function ExamShell() {
           {/* INTEGRITY SCALE */}
           <div className={`flex items-center space-x-2 border px-2.5 py-1 rounded ${
             integrityScore > 75 
-              ? 'bg-zinc-950 border-zinc-800 text-zinc-200' 
-              : 'bg-zinc-900 border-zinc-700 text-white animate-pulse'
+              ? 'sys-bg border-transparent sys-text-primary' 
+              : 'sys-card border-transparent text-white animate-pulse'
           }`}>
             <Activity className="w-4 h-4" strokeWidth={1.5} />
             <span className="text-[10px] font-mono font-bold">INTEGRITY: {integrityScore}%</span>
@@ -1012,8 +1012,8 @@ export default function ExamShell() {
           {/* TIMER */}
           <div className={`p-1.5 px-3 border rounded text-xs font-mono font-bold ${
             timeLeft < 300 
-              ? 'bg-zinc-900 border-zinc-700 text-white animate-pulse' 
-              : 'bg-zinc-950 border-zinc-800 text-white'
+              ? 'sys-card border-transparent text-white animate-pulse' 
+              : 'sys-bg border-transparent text-white'
           }`}>
             <Clock className="w-3.5 h-3.5 inline mr-1.5" strokeWidth={1.5} />
             {formatTimerString(timeLeft)}
@@ -1024,7 +1024,7 @@ export default function ExamShell() {
             disabled={isSyncing}
             variant="outline"
             size="icon"
-            className="w-8 h-8 rounded-lg bg-zinc-950 border-zinc-800 text-zinc-400 hover:text-white transition shadow-sm"
+            className="w-8 h-8 rounded-lg sys-bg border-transparent sys-text-body hover:text-white transition shadow-sm"
             title="Sync Latest Changes"
           >
             <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-[#5B8CFF]' : ''}`} />
@@ -1055,22 +1055,22 @@ export default function ExamShell() {
         <main className="flex-1 overflow-y-auto p-12 flex flex-col items-center justify-center animate-fade-in relative z-10">
           <div className="max-w-2xl w-full text-center space-y-6">
             <h1 className="text-3xl font-extrabold text-white tracking-tight">Assessment Overview</h1>
-            <p className="text-zinc-400 text-sm font-mono">Select a section to begin. Once a section is submitted, you cannot return to it.</p>
+            <p className="sys-text-body text-sm font-mono">Select a section to begin. Once a section is submitted, you cannot return to it.</p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
               {/* Part 1: MCQ */}
               <div className={`p-8 border rounded-2xl flex flex-col items-center text-center transition ${
                 currentSession?.completedParts?.includes('mcq') 
-                  ? 'bg-zinc-950/50 border-zinc-800 opacity-60' 
+                  ? 'sys-bg/50 border-transparent opacity-60' 
                   : 'bg-card/60 border-border hover:border-[#5B8CFF]/50 shadow-xl hover:-translate-y-1'
               }`}>
-                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4 border border-zinc-800">
+                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4 border border-transparent">
                   <span className="font-mono font-bold text-[#14B8A6]">P1</span>
                 </div>
                 <h3 className="text-lg font-bold text-white mb-2">Multiple Choice</h3>
-                <p className="text-xs text-zinc-500 mb-6 flex-1">Core conceptual knowledge and scenario analysis.</p>
+                <p className="text-xs sys-text-body mb-6 flex-1">Core conceptual knowledge and scenario analysis.</p>
                 {currentSession?.completedParts?.includes('mcq') ? (
-                  <Button disabled className="w-full bg-zinc-900 text-zinc-500 font-bold">SUBMITTED</Button>
+                  <Button disabled className="w-full sys-card sys-text-body font-bold">SUBMITTED</Button>
                 ) : (
                   <Button onClick={() => handleStartPart('mcq')} className="w-full bg-[#5B8CFF] hover:bg-[#3b71f3] text-white font-bold cursor-pointer transition">
                     START SECTION
@@ -1081,16 +1081,16 @@ export default function ExamShell() {
               {/* Part 2: Coding */}
               <div className={`p-8 border rounded-2xl flex flex-col items-center text-center transition ${
                 currentSession?.completedParts?.includes('coding') 
-                  ? 'bg-zinc-950/50 border-zinc-800 opacity-60' 
+                  ? 'sys-bg/50 border-transparent opacity-60' 
                   : 'bg-card/60 border-border hover:border-[#5B8CFF]/50 shadow-xl hover:-translate-y-1'
               }`}>
-                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4 border border-zinc-800">
+                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4 border border-transparent">
                   <span className="font-mono font-bold text-[#5B8CFF]">P2</span>
                 </div>
                 <h3 className="text-lg font-bold text-white mb-2">Coding Challenges</h3>
-                <p className="text-xs text-zinc-500 mb-6 flex-1">Algorithmic problem solving and secure logic implementation.</p>
+                <p className="text-xs sys-text-body mb-6 flex-1">Algorithmic problem solving and secure logic implementation.</p>
                 {currentSession?.completedParts?.includes('coding') ? (
-                  <Button disabled className="w-full bg-zinc-900 text-zinc-500 font-bold">SUBMITTED</Button>
+                  <Button disabled className="w-full sys-card sys-text-body font-bold">SUBMITTED</Button>
                 ) : (
                   <Button onClick={() => handleStartPart('coding')} className="w-full bg-[#5B8CFF] hover:bg-[#3b71f3] text-white font-bold cursor-pointer transition">
                     START SECTION
@@ -1123,7 +1123,7 @@ export default function ExamShell() {
                 size="sm" 
                 disabled={selectedQIndex === 0} 
                 onClick={() => setSelectedQIndex(p => p - 1)}
-                className="h-7 px-2 border border-border bg-card/45 hover:bg-zinc-900"
+                className="h-7 px-2 border border-border bg-card/45 hover:sys-card"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
               </Button>
@@ -1135,7 +1135,7 @@ export default function ExamShell() {
                 size="sm" 
                 disabled={selectedQIndex === filteredQuestions.length - 1} 
                 onClick={() => setSelectedQIndex(p => p + 1)}
-                className="h-7 px-2 border border-border bg-card/45 hover:bg-zinc-900"
+                className="h-7 px-2 border border-border bg-card/45 hover:sys-card"
               >
                 <ChevronRight className="w-3.5 h-3.5" />
               </Button>
@@ -1157,7 +1157,7 @@ export default function ExamShell() {
                       DIFFICULTY: {activeQuestion.difficulty}
                     </span>
                     <h1 className="text-base font-extrabold tracking-tight mt-2.5 flex items-center gap-1.5 text-foreground">
-                      <CornerDownRight className="w-4 h-4 text-zinc-500" strokeWidth={1.5} /> {activeQuestion.title}
+                      <CornerDownRight className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> {activeQuestion.title}
                     </h1>
                   </div>
 
@@ -1177,7 +1177,7 @@ export default function ExamShell() {
                       const isMarked = reviewMarked[q.id]
                       const isActive = selectedQIndex === idx
                       
-                      let btnColor = 'bg-zinc-900 text-zinc-500 border-border hover:bg-zinc-800' // Unanswered default
+                      let btnColor = 'sys-card sys-text-body border-border hover:sys-card' // Unanswered default
                       if (isActive) btnColor = 'bg-foreground text-background border-foreground shadow-[0_0_10px_rgba(255,255,255,0.2)]'
                       else if (isMarked) btnColor = 'bg-yellow-500/10 text-yellow-500 border-yellow-500/30'
                       else if (isAnswered) btnColor = 'bg-[#5B8CFF]/15 text-[#5B8CFF] border-[#5B8CFF]/30'
@@ -1193,11 +1193,11 @@ export default function ExamShell() {
                       )
                     })}
                   </div>
-                  <div className="flex flex-wrap gap-x-4 gap-y-2 mt-2 pt-2 border-t border-border/50 text-[9px] font-mono text-zinc-500">
+                  <div className="flex flex-wrap gap-x-4 gap-y-2 mt-2 pt-2 border-t border-border/50 text-[9px] font-mono sys-text-body">
                     <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded bg-foreground"></div> Current</div>
                     <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded bg-[#5B8CFF]/60"></div> Answered</div>
                     <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded bg-yellow-500/60"></div> Review</div>
-                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded bg-zinc-800"></div> Unanswered</div>
+                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded sys-card"></div> Unanswered</div>
                   </div>
                 </div>
               )}
@@ -1216,35 +1216,35 @@ export default function ExamShell() {
                   {/* Constraints */}
                   <div className="p-4 rounded-xl border bg-card/40 border-border">
                     <h4 className="text-[9px] font-mono font-bold text-foreground uppercase tracking-widest mb-1.5">Constraints</h4>
-                    <pre className="text-xs leading-relaxed font-mono whitespace-pre-wrap text-zinc-500">{activeQuestion.constraints}</pre>
+                    <pre className="text-xs leading-relaxed font-mono whitespace-pre-wrap sys-text-body">{activeQuestion.constraints}</pre>
                   </div>
 
                   {/* Format specs */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="p-3.5 rounded-xl border bg-card/40 border-border">
                       <h4 className="text-[9px] font-mono font-bold text-muted uppercase tracking-wider mb-1">Input Format</h4>
-                      <p className="text-[11px] text-zinc-500">{activeQuestion.input_format}</p>
+                      <p className="text-[11px] sys-text-body">{activeQuestion.input_format}</p>
                     </div>
                     <div className="p-3.5 rounded-xl border bg-card/40 border-border">
                       <h4 className="text-[9px] font-mono font-bold text-muted uppercase tracking-wider mb-1">Output Format</h4>
-                      <p className="text-[11px] text-zinc-500">{activeQuestion.output_format}</p>
+                      <p className="text-[11px] sys-text-body">{activeQuestion.output_format}</p>
                     </div>
                   </div>
 
                   {/* Samples */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
                     <div className="space-y-1.5 flex flex-col">
-                      <span className="text-[9px] font-mono font-bold text-zinc-500 uppercase tracking-wider px-1">Sample Input</span>
+                      <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-wider px-1">Sample Input</span>
                       <pre className="bg-background p-3 rounded border border-border text-[11px] font-mono text-muted min-h-16 whitespace-pre-wrap">{activeQuestion.sample_input}</pre>
                     </div>
                     <div className="space-y-1.5 flex flex-col">
-                      <span className="text-[9px] font-mono font-bold text-zinc-500 uppercase tracking-wider px-1">Sample Output</span>
+                      <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-wider px-1">Sample Output</span>
                       <pre className="bg-background p-3 rounded border border-border text-[11px] font-mono text-foreground min-h-16 whitespace-pre-wrap">{activeQuestion.sample_output}</pre>
                     </div>
                   </div>
 
                   {activeQuestion.explanation && (
-                    <div className="text-[11px] text-zinc-500 leading-normal italic bg-background border border-border p-3 rounded-xl">
+                    <div className="text-[11px] sys-text-body leading-normal italic bg-background border border-border p-3 rounded-xl">
                       <strong>Explanation:</strong> {activeQuestion.explanation}
                     </div>
                   )}
@@ -1252,7 +1252,7 @@ export default function ExamShell() {
               )}
             </div>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-xs font-mono text-zinc-650">
+            <div className="flex-1 flex items-center justify-center text-xs font-mono sys-text-body">
               No questions linked to assessment lobby.
             </div>
           )}
@@ -1268,14 +1268,14 @@ export default function ExamShell() {
                 </div>
               )}
               
-              <div className="w-full h-28 relative overflow-hidden flex items-center justify-center bg-zinc-900 rounded-lg">
+              <div className="w-full h-28 relative overflow-hidden flex items-center justify-center sys-card rounded-lg">
                 <div id="candidate-video-container" className="absolute inset-0 w-full h-full z-[100]">
                   {localStream && <StreamVideo stream={localStream} />}
                   <video id="candidate-video" className="hidden" playsInline muted autoPlay />
                 </div>
                 <canvas ref={canvasRef} width="160" height="120" className="hidden" />
                 
-                <div className="absolute inset-0 border border-zinc-500/20 pointer-events-none z-20">
+                <div className="absolute inset-0 border border-[#38383a] pointer-events-none z-20">
                   <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t border-l border-white/60" />
                   <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t border-r border-white/60" />
                   <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b border-l border-white/60" />
@@ -1286,12 +1286,12 @@ export default function ExamShell() {
 
             {/* Telemetry timeline logs */}
             <Card className="bg-black border-border flex flex-col shadow-none overflow-hidden h-28 rounded-xl">
-              <div className="bg-background border-b border-border px-2.5 py-1.5 text-[8.5px] uppercase font-bold text-zinc-500 tracking-wider">
+              <div className="bg-background border-b border-border px-2.5 py-1.5 text-[8.5px] uppercase font-bold sys-text-body tracking-wider">
                 Telemetry Log
               </div>
-              <div className="p-2 font-mono text-[9px] space-y-1.5 overflow-y-auto flex-1 text-zinc-500 max-h-[80px]">
+              <div className="p-2 font-mono text-[9px] space-y-1.5 overflow-y-auto flex-1 sys-text-body max-h-[80px]">
                 {proctorLogs.slice(-20).map((log, idx) => (
-                  <div key={idx} className={log.includes('ALERT') ? 'text-white font-bold bg-[#EF4444]/15 border border-[#EF4444]/30 px-1 rounded' : 'text-zinc-500'}>
+                  <div key={idx} className={log.includes('ALERT') ? 'text-white font-bold bg-[#EF4444]/15 border border-[#EF4444]/30 px-1 rounded' : 'sys-text-body'}>
                     {log}
                   </div>
                 ))}
@@ -1307,7 +1307,7 @@ export default function ExamShell() {
           {activeQuestion?.type !== 'mcq' && (
             <div className="px-4 py-2 flex items-center justify-between border-b border-border bg-card">
               <span className="text-[10px] font-mono font-bold text-muted flex items-center gap-1.5 uppercase select-none">
-                <Terminal className="w-3.5 h-3.5 text-zinc-400" strokeWidth={1.5} /> Compiler Workspace Node
+                <Terminal className="w-3.5 h-3.5 sys-text-body" strokeWidth={1.5} /> Compiler Workspace Node
               </span>
               <div className="flex items-center gap-2 select-none">
                 <select 
@@ -1337,7 +1337,7 @@ export default function ExamShell() {
                       </span>
                     </div>
                     
-                    <div className="text-[15px] leading-relaxed text-zinc-300 font-sans whitespace-pre-wrap mb-8">
+                    <div className="text-[15px] leading-relaxed sys-text-primary font-sans whitespace-pre-wrap mb-8">
                       {activeQuestion.description}
                     </div>
 
@@ -1352,15 +1352,15 @@ export default function ExamShell() {
                             className={`flex items-center text-left p-4 rounded-xl border transition-all duration-200 ${
                               isSelected 
                                 ? 'bg-[#5B8CFF]/10 border-[#5B8CFF] shadow-[0_0_15px_rgba(91,140,255,0.15)]' 
-                                : 'bg-zinc-900 border-border hover:border-zinc-700 hover:bg-zinc-800'
+                                : 'sys-card border-border hover:border-transparent hover:sys-card'
                             }`}
                           >
                             <div className={`flex items-center justify-center w-8 h-8 rounded-lg mr-4 font-bold font-mono text-[10px] ${
-                              isSelected ? 'bg-[#5B8CFF] text-white' : 'bg-black text-zinc-500 border border-border'
+                              isSelected ? 'bg-[#5B8CFF] text-white' : 'bg-black sys-text-body border border-border'
                             }`}>
                               {String.fromCharCode(65 + idx)}
                             </div>
-                            <span className={`text-[15px] font-sans ${isSelected ? 'text-white font-semibold' : 'text-zinc-300'}`}>
+                            <span className={`text-[15px] font-sans ${isSelected ? 'text-white font-semibold' : 'sys-text-primary'}`}>
                               {opt}
                             </span>
                           </button>
@@ -1375,14 +1375,14 @@ export default function ExamShell() {
                       <Button 
                         onClick={handleClearResponse}
                         variant="outline"
-                        className="h-10 px-5 text-xs font-mono font-bold bg-background text-zinc-400 border-border hover:bg-zinc-900 hover:text-white uppercase tracking-widest"
+                        className="h-10 px-5 text-xs font-mono font-bold bg-background sys-text-body border-border hover:sys-card hover:text-white uppercase tracking-widest"
                       >
                         Clear Response
                       </Button>
                       <Button 
                         onClick={() => setReviewMarked(prev => ({ ...prev, [activeQuestion.id]: !prev[activeQuestion.id] }))}
                         variant="outline"
-                        className={`h-10 px-5 text-xs font-mono font-bold uppercase tracking-widest transition ${reviewMarked[activeQuestion.id] ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30' : 'bg-background text-zinc-400 border-border hover:bg-zinc-900 hover:text-white'}`}
+                        className={`h-10 px-5 text-xs font-mono font-bold uppercase tracking-widest transition ${reviewMarked[activeQuestion.id] ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30' : 'bg-background sys-text-body border-border hover:sys-card hover:text-white'}`}
                       >
                         {reviewMarked[activeQuestion.id] ? 'Unmark Review' : 'Mark for Review'}
                       </Button>
@@ -1393,7 +1393,7 @@ export default function ExamShell() {
                         onClick={() => setSelectedQIndex(p => p - 1)}
                         disabled={selectedQIndex === 0}
                         variant="outline"
-                        className="h-10 px-5 text-xs font-mono font-bold bg-background text-zinc-400 border-border hover:bg-zinc-900 hover:text-white uppercase tracking-widest disabled:opacity-30"
+                        className="h-10 px-5 text-xs font-mono font-bold bg-background sys-text-body border-border hover:sys-card hover:text-white uppercase tracking-widest disabled:opacity-30"
                       >
                         Previous
                       </Button>
@@ -1427,7 +1427,7 @@ export default function ExamShell() {
                 />
               )
             ) : (
-              <div className="h-full flex items-center justify-center text-xs font-mono text-zinc-650 bg-black">
+              <div className="h-full flex items-center justify-center text-xs font-mono sys-text-body bg-black">
                 Load a problem set to begin typing code...
               </div>
             )}
@@ -1441,13 +1441,13 @@ export default function ExamShell() {
                 <div className="flex items-center gap-4">
                   <button 
                     onClick={() => setTerminalTab('console')}
-                    className={`flex items-center uppercase font-mono tracking-wider font-bold text-[9px] pb-1 border-b-2 transition ${terminalTab === 'console' ? 'text-[#14B8A6] border-[#14B8A6]' : 'text-zinc-500 border-transparent hover:text-zinc-400'}`}
+                    className={`flex items-center uppercase font-mono tracking-wider font-bold text-[9px] pb-1 border-b-2 transition ${terminalTab === 'console' ? 'text-[#14B8A6] border-[#14B8A6]' : 'sys-text-body border-transparent hover:sys-text-body'}`}
                   >
                     <Terminal className="w-3.5 h-3.5 mr-2" strokeWidth={1.5} /> Console Output
                   </button>
                   <button 
                     onClick={() => setTerminalTab('testcases')}
-                    className={`flex items-center uppercase font-mono tracking-wider font-bold text-[9px] pb-1 border-b-2 transition ${terminalTab === 'testcases' ? 'text-[#14B8A6] border-[#14B8A6]' : 'text-zinc-500 border-transparent hover:text-zinc-400'}`}
+                    className={`flex items-center uppercase font-mono tracking-wider font-bold text-[9px] pb-1 border-b-2 transition ${terminalTab === 'testcases' ? 'text-[#14B8A6] border-[#14B8A6]' : 'sys-text-body border-transparent hover:sys-text-body'}`}
                   >
                     Custom Test Case Input
                   </button>
@@ -1457,7 +1457,7 @@ export default function ExamShell() {
                     onClick={handleResetCode} 
                     variant="outline" 
                     size="sm"
-                    className="h-6 text-[9px] font-bold font-mono border border-border bg-background hover:bg-zinc-900 px-2.5 rounded text-muted hover:text-foreground"
+                    className="h-6 text-[9px] font-bold font-mono border border-border bg-background hover:sys-card px-2.5 rounded text-muted hover:text-foreground"
                   >
                     <RefreshCw className="w-3 h-3 mr-1" strokeWidth={1.5} /> RESET TEMPLATE
                   </Button>
@@ -1465,14 +1465,14 @@ export default function ExamShell() {
                     onClick={() => setConsoleOutput('Execution console reports cleared.')} 
                   variant="outline" 
                   size="sm"
-                  className="h-6 text-[9px] font-bold font-mono border border-border bg-background hover:bg-zinc-900 px-2.5 rounded text-muted hover:text-foreground"
+                  className="h-6 text-[9px] font-bold font-mono border border-border bg-background hover:sys-card px-2.5 rounded text-muted hover:text-foreground"
                 >
                   <Trash2 className="w-3.5 h-3.5 mr-1" strokeWidth={1.5} /> CLEAR OUTPUT
                 </Button>
                 <Button 
                   onClick={handleRunCode} 
                   disabled={isRunning || isSubmitting} 
-                  className="bg-zinc-900/60 hover:bg-zinc-800 text-[#14B8A6] border border-[#14B8A6]/35 font-bold h-6 px-3 text-[9px] font-mono tracking-wider active:scale-95 transition rounded-xl cursor-pointer"
+                  className="sys-card hover:sys-card text-[#14B8A6] border border-[#14B8A6]/35 font-bold h-6 px-3 text-[9px] font-mono tracking-wider active:scale-95 transition rounded-xl cursor-pointer"
                 >
                   {isRunning ? 'RUNNING...' : 'RUN CODE'}
                 </Button>
@@ -1491,32 +1491,32 @@ export default function ExamShell() {
               
               {terminalTab === 'testcases' && (
                 <div className="w-64 border-r border-border p-3 bg-black flex flex-col">
-                  <span className="text-[9px] font-mono text-zinc-500 uppercase mb-2 font-bold tracking-widest">Custom STDIN Input</span>
+                  <span className="text-[9px] font-mono sys-text-body uppercase mb-2 font-bold tracking-widest">Custom STDIN Input</span>
                   <textarea 
                     value={customInput}
                     onChange={(e) => setCustomInput(e.target.value)}
-                    className="flex-1 bg-zinc-950 border border-zinc-800 rounded p-2 text-[10px] font-mono text-zinc-300 focus:outline-none focus:border-[#5B8CFF]/50 resize-none"
+                    className="flex-1 sys-bg border border-transparent rounded p-2 text-[10px] font-mono sys-text-primary focus:outline-none focus:border-[#5B8CFF]/50 resize-none"
                     placeholder="Enter custom input for 'Run Code' here..."
                   />
                 </div>
               )}
 
-              <pre className="flex-1 p-4 font-mono text-[10px] text-zinc-450 overflow-y-auto whitespace-pre-wrap leading-relaxed select-text bg-black/10">
+              <pre className="flex-1 p-4 font-mono text-[10px] sys-text-body overflow-y-auto whitespace-pre-wrap leading-relaxed select-text bg-black/10">
                 {consoleOutput}
               </pre>
 
               {/* Case Verdict Sidebar */}
               {testResults && (
-                <div className="w-64 border-l border-zinc-900 p-3 bg-[#050507]/60 overflow-y-auto max-h-full space-y-2 select-none">
-                  <div className="text-[9px] font-mono font-bold text-zinc-500 uppercase tracking-widest border-b border-zinc-900 pb-1 flex items-center justify-between">
+                <div className="w-64 border-l border-[#38383a] p-3 bg-[#050507]/60 overflow-y-auto max-h-full space-y-2 select-none">
+                  <div className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest border-b border-[#38383a] pb-1 flex items-center justify-between">
                     <span>{testResults.isSubmit ? 'Final Verdict' : 'Run Verdict'}</span>
                     <span className={`px-1.5 py-0.5 rounded text-[8px] font-extrabold ${
-                      testResults.verdict === 'Accepted' ? 'bg-zinc-900 border border-zinc-800 text-white' : 'bg-zinc-950 border border-zinc-900 text-zinc-500 animate-pulse'
+                      testResults.verdict === 'Accepted' ? 'sys-card border border-transparent text-white' : 'sys-bg border border-[#38383a] sys-text-body animate-pulse'
                     }`}>{testResults.verdict}</span>
                   </div>
 
                   {testResults.isSubmit && (
-                    <div className="text-[10px] text-zinc-500 space-y-0.5 border-t border-zinc-900/60 pt-1.5">
+                    <div className="text-[10px] sys-text-body space-y-0.5 border-t border-[#38383a] pt-1.5">
                       <div>Score Obtained: <span className="text-white font-bold font-mono">{testResults.score}%</span></div>
                       <div>Passed Cases: <span className="text-white font-bold font-mono">{testResults.passedCount} / {testResults.totalCount}</span></div>
                     </div>
@@ -1526,16 +1526,16 @@ export default function ExamShell() {
                     {testResults.cases?.map((c: any, index: number) => (
                       <div key={index} className="p-2 bg-background border border-border rounded text-[9px] flex flex-col space-y-1 font-mono">
                         <div className="flex justify-between items-center">
-                          <span className="text-zinc-500 font-bold">Case #{index + 1}</span>
+                          <span className="sys-text-body font-bold">Case #{index + 1}</span>
                           <span className={`px-1 rounded text-[8px] font-bold ${
-                            c.passed ? 'bg-zinc-900 text-white border border-zinc-800' : 'bg-black text-zinc-600 border border-zinc-900'
+                            c.passed ? 'sys-card text-white border border-transparent' : 'bg-black sys-text-body border border-[#38383a]'
                           }`}>
                             {c.verdict}
                           </span>
                         </div>
-                        <div className="text-zinc-500 truncate max-w-full">Input: {c.input?.replace(/\n/g, ' ')}</div>
-                        <div className="text-zinc-500 truncate max-w-full">Expected: {c.expected}</div>
-                        <div className="text-zinc-400 truncate max-w-full font-bold">Actual: {c.actual || '(None)'}</div>
+                        <div className="sys-text-body truncate max-w-full">Input: {c.input?.replace(/\n/g, ' ')}</div>
+                        <div className="sys-text-body truncate max-w-full">Expected: {c.expected}</div>
+                        <div className="sys-text-body truncate max-w-full font-bold">Actual: {c.actual || '(None)'}</div>
                       </div>
                     ))}
                   </div>
@@ -1552,7 +1552,7 @@ export default function ExamShell() {
  
       {/* WARNING POPUP SCREEN */}
       {showWarningModal && (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-[9000] p-4">
+        <div className="fixed inset-0 bg-black/90  flex items-center justify-center z-[9000] p-4">
           <Card className="w-full max-w-md bg-card border border-border p-6 text-center shadow-none relative rounded-2xl">
             <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#EF4444]" />
             <AlertTriangle className="w-12 h-12 text-[#EF4444] mx-auto mb-4 animate-bounce" strokeWidth={1.5} />
@@ -1567,7 +1567,7 @@ export default function ExamShell() {
               >
                 Re-enter Secure Fullscreen Mode
               </Button>
-              <p className="text-[10px] text-zinc-500 font-mono mt-2 select-none">
+              <p className="text-[10px] sys-text-body font-mono mt-2 select-none">
                 Multiple infractions will negatively affect your overall assessment score metrics.
               </p>
             </div>

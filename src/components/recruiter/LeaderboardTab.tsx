@@ -110,7 +110,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
 
   if (loading) {
     return (
-      <div className="p-12 text-center text-xs font-mono text-zinc-550 animate-pulse select-none">
+      <div className="p-12 text-center text-xs font-mono sys-text-body animate-pulse select-none">
         Querying cohort statistics and integrity rankings...
       </div>
     )
@@ -123,7 +123,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
       <div className="flex flex-wrap justify-between items-center gap-4 border-b border-border pb-4">
         <div>
           <h2 className="text-[10px] font-mono font-bold tracking-widest text-[#5B8CFF] uppercase">// COHORT ANALYTICS & LEADERBOARD</h2>
-          <span className="text-[10px] text-zinc-500 font-mono mt-1 block">Inspect student performance, compiler scores, and sandboxed infraction timelines</span>
+          <span className="text-[10px] sys-text-body font-mono mt-1 block">Inspect student performance, compiler scores, and sandboxed infraction timelines</span>
         </div>
 
         <div className="flex items-center gap-3">
@@ -141,7 +141,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
           <Button 
             onClick={handleExportCSV}
             variant="outline" 
-            className="border-border bg-zinc-950/20 h-9 text-xs font-bold text-zinc-400 hover:text-white cursor-pointer rounded-xl transition flex items-center gap-1.5"
+            className="border-border sys-bg/20 h-9 text-xs font-bold sys-text-body hover:text-white cursor-pointer rounded-xl transition flex items-center gap-1.5"
           >
             <FileSpreadsheet className="w-4 h-4" /> Export CSV
           </Button>
@@ -151,34 +151,34 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
       {/* Bento grid metric summary cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 select-none">
         <div className="bento-card p-5 flex flex-col justify-between min-h-28">
-          <span className="text-[8px] font-mono font-bold text-zinc-550 uppercase tracking-widest">Invited Cohort</span>
+          <span className="text-[8px] font-mono font-bold sys-text-body uppercase tracking-widest">Invited Cohort</span>
           <div>
             <div className="text-3xl font-extrabold text-white font-number">{totalInvited}</div>
-            <span className="text-[9px] text-zinc-500 font-mono mt-0.5 block">Candidates registered</span>
+            <span className="text-[9px] sys-text-body font-mono mt-0.5 block">Candidates registered</span>
           </div>
         </div>
 
         <div className="bento-card p-5 flex flex-col justify-between min-h-28">
-          <span className="text-[8px] font-mono font-bold text-zinc-550 uppercase tracking-widest">Completions</span>
+          <span className="text-[8px] font-mono font-bold sys-text-body uppercase tracking-widest">Completions</span>
           <div>
             <div className="text-3xl font-extrabold text-white font-number">{completions.length}</div>
-            <span className="text-[9px] text-zinc-500 font-mono mt-0.5 block">Submissions logged</span>
+            <span className="text-[9px] sys-text-body font-mono mt-0.5 block">Submissions logged</span>
           </div>
         </div>
 
         <div className="bento-card p-5 flex flex-col justify-between min-h-28">
-          <span className="text-[8px] font-mono font-bold text-zinc-550 uppercase tracking-widest">Average Score</span>
+          <span className="text-[8px] font-mono font-bold sys-text-body uppercase tracking-widest">Average Score</span>
           <div>
             <div className="text-3xl font-extrabold text-white font-number">{avgScore}%</div>
-            <span className="text-[9px] text-zinc-500 font-mono mt-0.5 block">Compiler marks avg</span>
+            <span className="text-[9px] sys-text-body font-mono mt-0.5 block">Compiler marks avg</span>
           </div>
         </div>
 
         <div className="bento-card p-5 flex flex-col justify-between min-h-28">
-          <span className="text-[8px] font-mono font-bold text-zinc-550 uppercase tracking-widest">Pass Rate</span>
+          <span className="text-[8px] font-mono font-bold sys-text-body uppercase tracking-widest">Pass Rate</span>
           <div>
             <div className="text-3xl font-extrabold text-[#34D399] font-number">{passRate}%</div>
-            <span className="text-[9px] text-zinc-500 font-mono mt-0.5 block">Above {passThreshold}% passing marks</span>
+            <span className="text-[9px] sys-text-body font-mono mt-0.5 block">Above {passThreshold}% passing marks</span>
           </div>
         </div>
       </div>
@@ -188,16 +188,16 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
         
         {/* Table controls */}
         <div className="flex flex-wrap justify-between items-center gap-4 select-none">
-          <span className="text-[9px] font-mono font-bold text-zinc-550 uppercase tracking-widest">// COHORT EVALUATION LEADERBOARD</span>
+          <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest">// COHORT EVALUATION LEADERBOARD</span>
           
-          <div className="flex items-center gap-2 max-w-sm w-full bg-zinc-950/40 border border-border rounded-xl px-3 py-1.5">
-            <Search className="w-3.5 h-3.5 text-zinc-650" />
+          <div className="flex items-center gap-2 max-w-sm w-full sys-bg/40 border border-border rounded-xl px-3 py-1.5">
+            <Search className="w-3.5 h-3.5 sys-text-body" />
             <input 
               type="text" 
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search by name, email, roll..."
-              className="bg-transparent border-0 p-0 text-xs text-white placeholder:text-zinc-650 focus:outline-none focus:ring-0 w-full"
+              className="bg-transparent border-0 p-0 text-xs text-white placeholder:sys-text-body focus:outline-none focus:ring-0 w-full"
             />
           </div>
         </div>
@@ -205,7 +205,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="border-b border-border text-zinc-500 font-mono text-[9px] uppercase tracking-wider select-none">
+              <tr className="border-b border-border sys-text-body font-mono text-[9px] uppercase tracking-wider select-none">
                 <th className="py-3 px-4">Rank</th>
                 <th className="py-3 px-4">Candidate Profile</th>
                 <th className="py-3 px-4">Roll Number</th>
@@ -223,16 +223,16 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                 return (
                   <tr 
                     key={s.id} 
-                    className="hover:bg-zinc-950/20 transition duration-150"
+                    className="hover:sys-bg/20 transition duration-150"
                   >
-                    <td className="py-3.5 px-4 font-mono font-bold text-zinc-400">#{s.rank}</td>
+                    <td className="py-3.5 px-4 font-mono font-bold sys-text-body">#{s.rank}</td>
                     <td className="py-3.5 px-4">
                       <div className="flex flex-col">
                         <span className="font-bold text-white">{s.name}</span>
-                        <span className="text-[10px] text-zinc-500 font-mono mt-0.5">{s.email}</span>
+                        <span className="text-[10px] sys-text-body font-mono mt-0.5">{s.email}</span>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-mono font-bold text-zinc-450 uppercase">{s.roll_number || 'N/A'}</td>
+                    <td className="py-3.5 px-4 font-mono font-bold sys-text-body uppercase">{s.roll_number || 'N/A'}</td>
                     <td className="py-3.5 px-4">
                       {isComp ? (
                         <div className="flex items-center gap-1.5">
@@ -242,22 +242,22 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                           </span>
                         </div>
                       ) : (
-                        <span className="text-zinc-550 font-mono font-bold">Unattempted</span>
+                        <span className="sys-text-body font-mono font-bold">Unattempted</span>
                       )}
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2">
-                        <span className={`font-mono font-bold ${s.integrity_score < 75 ? 'text-[#F87171]' : 'text-zinc-300'}`}>
+                        <span className={`font-mono font-bold ${s.integrity_score < 75 ? 'text-[#F87171]' : 'sys-text-primary'}`}>
                           {s.integrity_score}%
                         </span>
-                        <span className="text-[8px] text-zinc-550 font-mono font-semibold">({s.violationsCount} warnings)</span>
+                        <span className="text-[8px] sys-text-body font-mono font-semibold">({s.violationsCount} warnings)</span>
                       </div>
                     </td>
                     <td className="py-3.5 px-4">
                       <span className={`px-2 py-0.5 rounded text-[8.5px] font-mono font-bold uppercase tracking-wider ${
                         s.status === 'submitted' ? 'bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/35' : 
                         s.status === 'testing' ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border border-[#5B8CFF]/35 animate-pulse' :
-                        'bg-zinc-900 text-zinc-500'
+                        'sys-card sys-text-body'
                       }`}>
                         {s.status}
                       </span>
@@ -267,7 +267,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                         onClick={() => setSelectedSession(s)}
                         variant="ghost" 
                         size="sm"
-                        className="h-8 px-3 hover:bg-zinc-900 text-zinc-400 hover:text-white rounded-xl transition cursor-pointer flex items-center gap-1.5 ml-auto"
+                        className="h-8 px-3 hover:sys-card sys-text-body hover:text-white rounded-xl transition cursor-pointer flex items-center gap-1.5 ml-auto"
                       >
                         <Eye className="w-3.5 h-3.5" /> Inspect
                       </Button>
@@ -278,7 +278,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
 
               {filteredRanks.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-zinc-650 font-mono text-xs">
+                  <td colSpan={7} className="py-8 text-center sys-text-body font-mono text-xs">
                     No matching records found in student database ranks.
                   </td>
                 </tr>
@@ -291,19 +291,19 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
 
       {/* Visual Debugger Inspection details Modal overlay */}
       {selectedSession && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80  z-[9999] flex items-center justify-center p-4">
           <Card className="w-full max-w-4xl bg-[#0a0a0a]/95 border-border p-6 rounded-2xl relative shadow-2xl overflow-y-auto max-h-[90vh]">
-            <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#5B8CFF] to-[#14B8A6] rounded-t-2xl" />
+            <div className="absolute top-0 left-0 right-0 h-[3px] sys-bg rounded-t-2xl" />
             
             {/* Modal header */}
             <div className="flex justify-between items-start pb-4 border-b border-border mb-6">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-zinc-950 border border-border rounded-xl">
+                <div className="p-2 sys-bg border border-border rounded-xl">
                   <User className="w-5 h-5 text-[#5B8CFF]" strokeWidth={1.5} />
                 </div>
                 <div>
                   <h3 className="font-bold text-sm text-white font-heading">{selectedSession.name}</h3>
-                  <span className="text-[10px] text-zinc-500 font-mono mt-1 block">Roll: {selectedSession.roll_number} | Email: {selectedSession.email}</span>
+                  <span className="text-[10px] sys-text-body font-mono mt-1 block">Roll: {selectedSession.roll_number} | Email: {selectedSession.email}</span>
                 </div>
               </div>
 
@@ -311,7 +311,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                 onClick={() => setSelectedSession(null)}
                 variant="ghost" 
                 size="sm"
-                className="h-8 w-8 p-0 hover:bg-zinc-900 text-zinc-500 hover:text-white rounded-lg cursor-pointer"
+                className="h-8 w-8 p-0 hover:sys-card sys-text-body hover:text-white rounded-lg cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </Button>
@@ -323,39 +323,39 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
               {/* Left Column: Stats & logs (5 cols) */}
               <div className="md:col-span-5 space-y-6">
                 
-                <div className="p-4 bg-zinc-950/40 border border-border rounded-xl space-y-3.5 text-xs">
-                  <span className="text-[8.5px] font-mono font-bold text-zinc-500 uppercase tracking-widest block border-b border-zinc-900 pb-1.5">// AUDITING SUMMARIES</span>
+                <div className="p-4 sys-bg/40 border border-border rounded-xl space-y-3.5 text-xs">
+                  <span className="text-[8.5px] font-mono font-bold sys-text-body uppercase tracking-widest block border-b border-[#38383a] pb-1.5">// AUDITING SUMMARIES</span>
                   
                   <div className="flex justify-between">
-                    <span className="text-zinc-500 font-mono">Compiler Score:</span>
+                    <span className="sys-text-body font-mono">Compiler Score:</span>
                     <span className="font-bold text-white">{selectedSession.score}%</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-zinc-500 font-mono">Security Index:</span>
+                    <span className="sys-text-body font-mono">Security Index:</span>
                     <span className={`font-bold ${selectedSession.integrity_score < 75 ? 'text-[#F87171]' : 'text-[#34D399]'}`}>{selectedSession.integrity_score}%</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-zinc-500 font-mono">Time Started:</span>
-                    <span className="text-zinc-350 font-mono">{selectedSession.startedAt ? new Date(selectedSession.startedAt).toLocaleTimeString() : 'Unknown'}</span>
+                    <span className="sys-text-body font-mono">Time Started:</span>
+                    <span className="sys-text-body font-mono">{selectedSession.startedAt ? new Date(selectedSession.startedAt).toLocaleTimeString() : 'Unknown'}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-zinc-500 font-mono">Time Finished:</span>
-                    <span className="text-zinc-350 font-mono">{selectedSession.submittedAt ? new Date(selectedSession.submittedAt).toLocaleTimeString() : 'In Progress'}</span>
+                    <span className="sys-text-body font-mono">Time Finished:</span>
+                    <span className="sys-text-body font-mono">{selectedSession.submittedAt ? new Date(selectedSession.submittedAt).toLocaleTimeString() : 'In Progress'}</span>
                   </div>
                 </div>
 
                 {/* Telemetry warning timeline logs */}
-                <div className="bg-black/80 border border-border rounded-xl p-4 font-mono text-[9px] text-zinc-500 space-y-2 select-text overflow-y-auto h-64">
-                  <span className="text-[8px] uppercase font-bold text-zinc-550 tracking-widest block select-none border-b border-zinc-900 pb-1.5 mb-2 flex items-center gap-1.5">
+                <div className="bg-black/80 border border-border rounded-xl p-4 font-mono text-[9px] sys-text-body space-y-2 select-text overflow-y-auto h-64">
+                  <span className="text-[8px] uppercase font-bold sys-text-body tracking-widest block select-none border-b border-[#38383a] pb-1.5 mb-2 flex items-center gap-1.5">
                     <Activity className="w-3.5 h-3.5 text-[#F87171]" /> REAL-TIME AUDIT LOGS
                   </span>
                   {selectedSession.violation_logs?.map((log, index) => (
                     <div 
                       key={index}
-                      className={`leading-relaxed border-b border-zinc-900 pb-1.5 ${
+                      className={`leading-relaxed border-b border-[#38383a] pb-1.5 ${
                         log.includes('ALERT') || log.includes('lost') || log.includes('switch') 
                           ? 'text-[#F87171] font-bold' 
-                          : 'text-zinc-600'
+                          : 'sys-text-body'
                       }`}
                     >
                       {log}
@@ -367,14 +367,14 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
 
               {/* Right Column: Code Submissions & Terminal (7 cols) */}
               <div className="md:col-span-7 space-y-6">
-                <span className="text-[9px] font-mono font-bold text-zinc-550 uppercase tracking-widest block select-none">// COMPILER SUBMISSIONS INSPECTOR</span>
+                <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest block select-none">// COMPILER SUBMISSIONS INSPECTOR</span>
                 
                 <div className="space-y-4 max-h-[380px] overflow-y-auto pr-1">
                   {Object.entries(selectedSession.submissions || {}).map(([qId, sub]) => (
-                    <div key={qId} className="p-4 bg-zinc-950/45 border border-border rounded-xl space-y-3.5">
-                      <div className="flex justify-between items-center pb-2 border-b border-zinc-900 select-none">
+                    <div key={qId} className="p-4 sys-bg/45 border border-border rounded-xl space-y-3.5">
+                      <div className="flex justify-between items-center pb-2 border-b border-[#38383a] select-none">
                         <span className="font-bold text-white text-xs flex items-center gap-1.5 font-heading">
-                          <Code2 className="w-4 h-4 text-zinc-400" /> Challenge #{qId.slice(0, 4)}
+                          <Code2 className="w-4 h-4 sys-text-body" /> Challenge #{qId.slice(0, 4)}
                         </span>
                         
                         <span className={`px-2 py-0.5 rounded text-[8.5px] font-mono font-bold uppercase tracking-wider ${
@@ -386,14 +386,14 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
 
                       {/* Code Block display */}
                       <div className="space-y-1">
-                        <span className="text-[8px] font-mono text-zinc-500 uppercase select-none">Submitted Code ({sub.language})</span>
-                        <pre className="p-3 bg-black rounded-lg border border-border text-[9.5px] font-mono text-zinc-300 overflow-x-auto select-text leading-relaxed whitespace-pre">
+                        <span className="text-[8px] font-mono sys-text-body uppercase select-none">Submitted Code ({sub.language})</span>
+                        <pre className="p-3 bg-black rounded-lg border border-border text-[9.5px] font-mono sys-text-primary overflow-x-auto select-text leading-relaxed whitespace-pre">
                           {sub.code}
                         </pre>
                       </div>
 
                       {/* Passed cases metrics */}
-                      <div className="flex justify-between text-[9px] font-mono text-zinc-500 select-none">
+                      <div className="flex justify-between text-[9px] font-mono sys-text-body select-none">
                         <span>Cases Passed: <strong className="text-white">{sub.cases_passed} / {sub.total_cases}</strong></span>
                         <span>Execution time: <strong className="text-white">{sub.execution_time} ms</strong></span>
                       </div>
@@ -401,7 +401,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                   ))}
 
                   {Object.keys(selectedSession.submissions || {}).length === 0 && (
-                    <div className="p-8 text-center border border-dashed border-border rounded-xl text-xs font-mono text-zinc-650 select-none">
+                    <div className="p-8 text-center border border-dashed border-border rounded-xl text-xs font-mono sys-text-body select-none">
                       No code submissions saved for this session checklist yet.
                     </div>
                   )}

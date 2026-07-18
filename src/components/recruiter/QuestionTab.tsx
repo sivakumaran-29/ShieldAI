@@ -176,7 +176,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
 
   if (loading) {
     return (
-      <div className="h-[200px] flex items-center justify-center text-zinc-500 font-mono text-xs select-none">
+      <div className="h-[200px] flex items-center justify-center sys-text-body font-mono text-xs select-none">
         <SlidersHorizontal className="w-5 h-5 animate-spin mr-2" strokeWidth={1.5} />
         <span>Fetching coding challenge lists...</span>
       </div>
@@ -193,13 +193,13 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
             onClick={onBack}
             variant="ghost" 
             size="sm" 
-            className="h-9 px-3 hover:bg-[#1c1c1e]/40 border border-border text-zinc-400 hover:text-white rounded-xl cursor-pointer"
+            className="h-9 px-3 hover:bg-[#1c1c1e]/40 border border-border sys-text-body hover:text-white rounded-xl cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
           </Button>
           <div>
             <h2 className="text-[10px] font-mono font-bold tracking-widest text-[#5B8CFF] uppercase">// CHALLENGES BANK</h2>
-            <span className="text-[10px] text-zinc-500 font-mono mt-1 block">Selected assessment: {selectedAssessment.title}</span>
+            <span className="text-[10px] sys-text-body font-mono mt-1 block">Selected assessment: {selectedAssessment.title}</span>
           </div>
         </div>
         {!isEditing && (
@@ -214,13 +214,13 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
               <div className="absolute right-0 top-full mt-2 w-56 bg-[#0a0a0a] border border-border rounded-xl shadow-2xl overflow-hidden z-50 flex flex-col">
                 <button 
                   onClick={() => { setShowTypeDropdown(false); handleOpenCreateForm('mcq'); }} 
-                  className="text-left px-4 py-3.5 text-xs text-white hover:bg-zinc-900 border-b border-border font-bold transition"
+                  className="text-left px-4 py-3.5 text-xs text-white hover:sys-card border-b border-border font-bold transition"
                 >
                   Create Multiple Choice
                 </button>
                 <button 
                   onClick={() => { setShowTypeDropdown(false); handleOpenCreateForm('coding'); }} 
-                  className="text-left px-4 py-3.5 text-xs text-white hover:bg-zinc-900 font-bold transition"
+                  className="text-left px-4 py-3.5 text-xs text-white hover:sys-card font-bold transition"
                 >
                   Create Coding Challenge
                 </button>
@@ -233,8 +233,8 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
       {!isEditing ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
           {/* Part 1: MCQs */}
-          <div className="bg-zinc-950/30 p-4 border border-zinc-800/50 rounded-2xl">
-            <h3 className="text-sm font-bold text-white mb-4 border-b border-zinc-800 pb-2">Part 1: Multiple Choice Questions</h3>
+          <div className="sys-bg/30 p-4 border border-transparent rounded-2xl">
+            <h3 className="text-sm font-bold text-white mb-4 border-b border-transparent pb-2">Part 1: Multiple Choice Questions</h3>
             <div className="flex flex-col gap-4">
               {questions.filter(q => q.type === 'mcq').map((q) => (
                 <Card key={q.id} className="bg-[#0a0a0a]/80 border-border p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between min-h-48 hover:border-[#5B8CFF]/20 transition duration-300">
@@ -253,7 +253,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                           onClick={() => handleOpenEditForm(q)}
                           variant="ghost" 
                           size="sm" 
-                          className="h-7 w-7 p-0 hover:bg-zinc-900 text-zinc-500 hover:text-white rounded-lg cursor-pointer"
+                          className="h-7 w-7 p-0 hover:sys-card sys-text-body hover:text-white rounded-lg cursor-pointer"
                         >
                           <Edit className="w-3.5 h-3.5" />
                         </Button>
@@ -261,7 +261,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                           onClick={() => handleDeleteQuestion(q.id)}
                           variant="ghost" 
                           size="sm" 
-                          className="h-7 w-7 p-0 hover:bg-[#F87171]/10 text-zinc-500 hover:text-[#F87171] rounded-lg cursor-pointer"
+                          className="h-7 w-7 p-0 hover:bg-[#F87171]/10 sys-text-body hover:text-[#F87171] rounded-lg cursor-pointer"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </Button>
@@ -270,12 +270,12 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
 
                     <div>
                       <h3 className="font-bold text-xs text-white font-heading">{q.title}</h3>
-                      <p className="text-[10px] text-zinc-500 mt-1 line-clamp-3 leading-relaxed">{q.description}</p>
+                      <p className="text-[10px] sys-text-body mt-1 line-clamp-3 leading-relaxed">{q.description}</p>
                     </div>
 
                     <div className="flex flex-wrap gap-1 pt-2">
                       {q.tags?.map((t, idx) => (
-                        <span key={idx} className="bg-background border border-border text-zinc-500 font-mono text-[8px] px-2 py-0.5 rounded-lg uppercase">
+                        <span key={idx} className="bg-background border border-border sys-text-body font-mono text-[8px] px-2 py-0.5 rounded-lg uppercase">
                           {t}
                         </span>
                       ))}
@@ -285,7 +285,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
               ))}
 
               {questions.filter(q => q.type === 'mcq').length === 0 && (
-                <div className="p-8 text-center border border-dashed border-border rounded-2xl bg-[#0a0a0a]/20 text-zinc-500 text-xs font-mono select-none">
+                <div className="p-8 text-center border border-dashed border-border rounded-2xl bg-[#0a0a0a]/20 sys-text-body text-xs font-mono select-none">
                   No Multiple Choice questions added yet.
                 </div>
               )}
@@ -293,8 +293,8 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
           </div>
 
           {/* Part 2: Coding Challenges */}
-          <div className="bg-zinc-950/30 p-4 border border-zinc-800/50 rounded-2xl">
-            <h3 className="text-sm font-bold text-white mb-4 border-b border-zinc-800 pb-2">Part 2: Coding Challenges</h3>
+          <div className="sys-bg/30 p-4 border border-transparent rounded-2xl">
+            <h3 className="text-sm font-bold text-white mb-4 border-b border-transparent pb-2">Part 2: Coding Challenges</h3>
             <div className="flex flex-col gap-4">
               {questions.filter(q => q.type !== 'mcq').map((q) => (
                 <Card key={q.id} className="bg-[#0a0a0a]/80 border-border p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between min-h-48 hover:border-[#5B8CFF]/20 transition duration-300">
@@ -313,7 +313,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                           onClick={() => handleOpenEditForm(q)}
                           variant="ghost" 
                           size="sm" 
-                          className="h-7 w-7 p-0 hover:bg-zinc-900 text-zinc-500 hover:text-white rounded-lg cursor-pointer"
+                          className="h-7 w-7 p-0 hover:sys-card sys-text-body hover:text-white rounded-lg cursor-pointer"
                         >
                           <Edit className="w-3.5 h-3.5" />
                         </Button>
@@ -321,7 +321,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                           onClick={() => handleDeleteQuestion(q.id)}
                           variant="ghost" 
                           size="sm" 
-                          className="h-7 w-7 p-0 hover:bg-[#F87171]/10 text-zinc-500 hover:text-[#F87171] rounded-lg cursor-pointer"
+                          className="h-7 w-7 p-0 hover:bg-[#F87171]/10 sys-text-body hover:text-[#F87171] rounded-lg cursor-pointer"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </Button>
@@ -330,19 +330,19 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
 
                     <div>
                       <h3 className="font-bold text-xs text-white font-heading">{q.title}</h3>
-                      <p className="text-[10px] text-zinc-500 mt-1 line-clamp-3 leading-relaxed">{q.description}</p>
+                      <p className="text-[10px] sys-text-body mt-1 line-clamp-3 leading-relaxed">{q.description}</p>
                     </div>
 
                     <div className="flex flex-wrap gap-1 pt-2">
                       {q.tags?.map((t, idx) => (
-                        <span key={idx} className="bg-background border border-border text-zinc-500 font-mono text-[8px] px-2 py-0.5 rounded-lg uppercase">
+                        <span key={idx} className="bg-background border border-border sys-text-body font-mono text-[8px] px-2 py-0.5 rounded-lg uppercase">
                           {t}
                         </span>
                       ))}
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center pt-4 border-t border-border/60 text-[9px] font-mono text-zinc-500 mt-4 select-none">
+                  <div className="flex justify-between items-center pt-4 border-t border-border/60 text-[9px] font-mono sys-text-body mt-4 select-none">
                     <span>Time Limit: {q.time_limit}ms</span>
                     <span>Test Cases: {q.test_cases?.length || 0}</span>
                   </div>
@@ -350,7 +350,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
               ))}
 
               {questions.filter(q => q.type !== 'mcq').length === 0 && (
-                <div className="p-8 text-center border border-dashed border-border rounded-2xl bg-[#0a0a0a]/20 text-zinc-500 text-xs font-mono select-none">
+                <div className="p-8 text-center border border-dashed border-border rounded-2xl bg-[#0a0a0a]/20 sys-text-body text-xs font-mono select-none">
                   No coding challenges added yet.
                 </div>
               )}
@@ -374,12 +374,12 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5 col-span-2">
-                    <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Question Title</label>
+                    <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Question Title</label>
                     <input 
                       type="text" 
                       value={title} 
                       onChange={e => setTitle(e.target.value)}
-                      className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-sm font-bold focus:outline-none focus:border-[#5B8CFF]/50" 
+                      className="sys-bg border border-border text-white rounded-xl p-3 text-sm font-bold focus:outline-none focus:border-[#5B8CFF]/50" 
                       placeholder="e.g. Reverse Linked List"
                       required
                     />
@@ -387,19 +387,19 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Question Type</label>
+                  <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Question Type</label>
                   <div className="flex gap-2">
                     <button
                       type="button"
                       onClick={() => setQuestionType('coding')}
-                      className={`flex-1 py-2 text-xs font-bold rounded-lg border transition ${questionType === 'coding' ? 'bg-[#5B8CFF]/20 border-[#5B8CFF] text-[#5B8CFF]' : 'bg-zinc-950 border-border text-zinc-500 hover:text-white'}`}
+                      className={`flex-1 py-2 text-xs font-bold rounded-lg border transition ${questionType === 'coding' ? 'bg-[#5B8CFF]/20 border-[#5B8CFF] text-[#5B8CFF]' : 'sys-bg border-border sys-text-body hover:text-white'}`}
                     >
                       Coding Challenge
                     </button>
                     <button
                       type="button"
                       onClick={() => setQuestionType('mcq')}
-                      className={`flex-1 py-2 text-xs font-bold rounded-lg border transition ${questionType === 'mcq' ? 'bg-[#5B8CFF]/20 border-[#5B8CFF] text-[#5B8CFF]' : 'bg-zinc-950 border-border text-zinc-500 hover:text-white'}`}
+                      className={`flex-1 py-2 text-xs font-bold rounded-lg border transition ${questionType === 'mcq' ? 'bg-[#5B8CFF]/20 border-[#5B8CFF] text-[#5B8CFF]' : 'sys-bg border-border sys-text-body hover:text-white'}`}
                     >
                       Multiple Choice
                     </button>
@@ -409,23 +409,23 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                 {questionType === 'coding' && (
                   <>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Challenge Description</label>
+                      <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Challenge Description</label>
                       <textarea 
                         value={description} 
                         onChange={e => setDescription(e.target.value)}
-                        className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24 font-sans leading-relaxed" 
+                        className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24 font-sans leading-relaxed" 
                         placeholder="Describe problem goals, parameters and context..."
                         required
                       />
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Tags (Press Enter)</label>
-                      <div className="flex flex-wrap gap-1.5 p-2 bg-zinc-950 border border-border rounded-xl min-h-11 items-center">
+                      <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Tags (Press Enter)</label>
+                      <div className="flex flex-wrap gap-1.5 p-2 sys-bg border border-border rounded-xl min-h-11 items-center">
                         {tags.map((t, idx) => (
-                          <span key={idx} className="bg-zinc-900 border border-border text-zinc-300 font-mono text-[8px] px-2 py-0.5 rounded-lg uppercase flex items-center gap-1">
+                          <span key={idx} className="sys-card border border-border sys-text-primary font-mono text-[8px] px-2 py-0.5 rounded-lg uppercase flex items-center gap-1">
                             {t}
-                            <button type="button" onClick={() => handleRemoveTag(t)} className="text-zinc-500 hover:text-white focus:outline-none">
+                            <button type="button" onClick={() => handleRemoveTag(t)} className="sys-text-body hover:text-white focus:outline-none">
                               <X className="w-2.5 h-2.5" />
                             </button>
                           </span>
@@ -435,7 +435,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                           value={tagInput}
                           onChange={e => setTagInput(e.target.value)}
                           onKeyDown={handleAddTag}
-                          className="bg-transparent border-0 p-0 text-xs text-white focus:outline-none focus:ring-0 placeholder:text-zinc-700 flex-1 min-w-16"
+                          className="bg-transparent border-0 p-0 text-xs text-white focus:outline-none focus:ring-0 placeholder:sys-text-body flex-1 min-w-16"
                           placeholder="Add tag..."
                         />
                       </div>
@@ -448,11 +448,11 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Difficulty</label>
+                    <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Difficulty</label>
                     <select 
                       value={difficulty} 
                       onChange={e => setDifficulty(e.target.value as any)}
-                      className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
+                      className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
                     >
                       <option value="Easy">Easy</option>
                       <option value="Medium">Medium</option>
@@ -462,12 +462,12 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                   
                   {questionType === 'coding' && (
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Time Limit (ms)</label>
+                      <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Time Limit (ms)</label>
                       <input 
                         type="number" 
                         value={timeLimit} 
                         onChange={e => setTimeLimit(Number(e.target.value))}
-                        className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                        className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                         min={100}
                         max={10000}
                         required
@@ -478,24 +478,24 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Explanation</label>
+                    <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Explanation</label>
                     <input 
                       type="text" 
                       value={explanation} 
                       onChange={e => setExplanation(e.target.value)}
-                      className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
                       placeholder="Optional details..."
                     />
                   </div>
                   
                   {questionType === 'coding' && (
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Memory Limit (MB)</label>
+                      <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Memory Limit (MB)</label>
                       <input 
                         type="number" 
                         value={memoryLimit} 
                         onChange={e => setMemoryLimit(Number(e.target.value))}
-                        className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                        className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                         min={16}
                         max={1024}
                         required
@@ -508,22 +508,22 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                   <>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Input Format</label>
+                        <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Input Format</label>
                         <input 
                           type="text" 
                           value={inputFormat} 
                           onChange={e => setInputFormat(e.target.value)}
-                          className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
+                          className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
                           placeholder="e.g. Standard input integers"
                         />
                       </div>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Output Format</label>
+                        <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Output Format</label>
                         <input 
                           type="text" 
                           value={outputFormat} 
                           onChange={e => setOutputFormat(e.target.value)}
-                          className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
+                          className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
                           placeholder="e.g. Result stdout string"
                         />
                       </div>
@@ -531,20 +531,20 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
 
                     <div className="grid grid-cols-2 gap-4">
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Sample Input</label>
+                        <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Sample Input</label>
                         <textarea 
                           value={sampleInput} 
                           onChange={e => setSampleInput(e.target.value)}
-                          className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50 min-h-16"
+                          className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50 min-h-16"
                           placeholder="Sample input data..."
                         />
                       </div>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Sample Output</label>
+                        <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Sample Output</label>
                         <textarea 
                           value={sampleOutput} 
                           onChange={e => setSampleOutput(e.target.value)}
-                          className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50 min-h-16"
+                          className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50 min-h-16"
                           placeholder="Expected output data..."
                         />
                       </div>
@@ -557,11 +557,11 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
             {questionType === 'coding' ? (
               <>
                 <div className="flex flex-col gap-1.5 mb-4 mt-6">
-                  <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Constraints Guidelines</label>
+                  <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Constraints Guidelines</label>
                   <textarea 
                     value={constraints} 
                     onChange={e => setConstraints(e.target.value)}
-                    className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-20 font-mono" 
+                    className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-20 font-mono" 
                     placeholder="• 1 <= nums.length <= 10^5"
                   />
                 </div>
@@ -569,7 +569,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                 {/* Test Cases Editor section */}
                 <div className="pt-6 border-t border-border">
                   <div className="flex justify-between items-center mb-4">
-                <span className="text-[9px] font-mono font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-1.5">
+                <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest flex items-center gap-1.5">
                   <Terminal className="w-4 h-4" strokeWidth={1.5} /> Test Cases Matrix
                 </span>
                 <Button 
@@ -577,7 +577,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                   onClick={handleAddTestCase}
                   variant="outline" 
                   size="sm"
-                  className="border-border bg-zinc-950/20 text-zinc-400 hover:text-white h-7 px-3 text-[9px] font-bold rounded-xl cursor-pointer"
+                  className="border-border sys-bg/20 sys-text-body hover:text-white h-7 px-3 text-[9px] font-bold rounded-xl cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" strokeWidth={1.5} /> Add Test Case
                 </Button>
@@ -585,46 +585,46 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
 
               <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
                 {testCases.map((tc) => (
-                  <div key={tc.id} className="p-4 bg-zinc-950/40 border border-border rounded-xl grid grid-cols-1 md:grid-cols-11 gap-4 items-center animate-fade-in select-none">
+                  <div key={tc.id} className="p-4 sys-bg/40 border border-border rounded-xl grid grid-cols-1 md:grid-cols-11 gap-4 items-center animate-fade-in select-none">
                     
                     <div className="md:col-span-4 flex flex-col gap-1.5">
-                      <label className="text-[8px] font-mono uppercase text-zinc-500 tracking-wider">Input Parameter</label>
+                      <label className="text-[8px] font-mono uppercase sys-text-body tracking-wider">Input Parameter</label>
                       <textarea 
                         value={tc.input} 
                         onChange={e => handleTestCaseChange(tc.id, 'input', e.target.value)}
-                        className="bg-zinc-950 border border-border text-white rounded-lg p-2 text-xs font-mono outline-none min-h-12 focus:border-[#5B8CFF]/40"
+                        className="sys-bg border border-border text-white rounded-lg p-2 text-xs font-mono outline-none min-h-12 focus:border-[#5B8CFF]/40"
                         placeholder="stdin inputs..."
                       />
                     </div>
 
                     <div className="md:col-span-4 flex flex-col gap-1.5">
-                      <label className="text-[8px] font-mono uppercase text-zinc-500 tracking-wider">Expected Output</label>
+                      <label className="text-[8px] font-mono uppercase sys-text-body tracking-wider">Expected Output</label>
                       <textarea 
                         value={tc.expected_output} 
                         onChange={e => handleTestCaseChange(tc.id, 'expected_output', e.target.value)}
-                        className="bg-zinc-950 border border-border text-white rounded-lg p-2 text-xs font-mono outline-none min-h-12 focus:border-[#5B8CFF]/40"
+                        className="sys-bg border border-border text-white rounded-lg p-2 text-xs font-mono outline-none min-h-12 focus:border-[#5B8CFF]/40"
                         placeholder="stdout output..."
                       />
                     </div>
 
                     <div className="md:col-span-2 flex flex-col gap-2 p-1 font-sans justify-center items-start">
-                      <label className="flex items-center gap-2 text-[10px] font-semibold cursor-pointer select-none text-zinc-450 hover:text-white">
+                      <label className="flex items-center gap-2 text-[10px] font-semibold cursor-pointer select-none sys-text-body hover:text-white">
                         <input 
                           type="checkbox" 
                           checked={tc.is_public}
                           onChange={e => handleTestCaseChange(tc.id, 'is_public', e.target.checked)}
-                          className="w-3.5 h-3.5 rounded border-border text-[#5B8CFF] focus:ring-0 bg-zinc-950 cursor-pointer"
+                          className="w-3.5 h-3.5 rounded border-border text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer"
                         />
                         <span>Visible Sample</span>
                       </label>
                       
                       <div className="flex items-center gap-1.5 w-full">
-                        <span className="text-[8px] font-mono text-zinc-500 uppercase">Weight:</span>
+                        <span className="text-[8px] font-mono sys-text-body uppercase">Weight:</span>
                         <input 
                           type="number" 
                           value={tc.weight}
                           onChange={e => handleTestCaseChange(tc.id, 'weight', Number(e.target.value))}
-                          className="w-14 bg-zinc-950 border border-border text-white text-[10px] rounded p-1 text-center font-mono outline-none"
+                          className="w-14 sys-bg border border-border text-white text-[10px] rounded p-1 text-center font-mono outline-none"
                           min={0}
                         />
                       </div>
@@ -636,7 +636,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                         onClick={() => handleRemoveTestCase(tc.id)}
                         variant="ghost" 
                         size="sm"
-                        className="h-7 w-7 p-0 hover:bg-[#F87171]/10 text-zinc-650 hover:text-[#F87171] rounded-lg cursor-pointer"
+                        className="h-7 w-7 p-0 hover:bg-[#F87171]/10 sys-text-body hover:text-[#F87171] rounded-lg cursor-pointer"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </Button>
@@ -649,14 +649,14 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
               </>
             ) : (
               <div className="pt-6 border-t border-border mt-6">
-                <span className="text-[9px] font-mono font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-1.5 mb-4">
+                <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest flex items-center gap-1.5 mb-4">
                   Multiple Choice Options Matrix
                 </span>
                 
                 <div className="space-y-3">
                   {mcqOptions.map((opt, idx) => (
-                    <div key={idx} className="flex items-center gap-4 bg-zinc-950/40 p-4 border border-border rounded-xl">
-                      <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-zinc-900 border border-border text-zinc-400 font-bold font-mono text-[10px]">
+                    <div key={idx} className="flex items-center gap-4 sys-bg/40 p-4 border border-border rounded-xl">
+                      <div className="flex items-center justify-center w-8 h-8 rounded-lg sys-card border border-border sys-text-body font-bold font-mono text-[10px]">
                         {String.fromCharCode(65 + idx)}
                       </div>
                       <input 
@@ -667,16 +667,16 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                           newOps[idx] = e.target.value
                           setMcqOptions(newOps)
                         }}
-                        className="flex-1 bg-zinc-950 border border-border text-white rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
+                        className="flex-1 sys-bg border border-border text-white rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
                         placeholder={`Option ${String.fromCharCode(65 + idx)} text...`}
                       />
-                      <label className="flex items-center gap-2 text-[10px] font-semibold cursor-pointer select-none text-zinc-450 hover:text-white shrink-0 ml-4">
+                      <label className="flex items-center gap-2 text-[10px] font-semibold cursor-pointer select-none sys-text-body hover:text-white shrink-0 ml-4">
                         <input 
                           type="radio" 
                           name="mcqCorrectAnswer"
                           checked={mcqCorrectIndex === idx}
                           onChange={() => setMcqCorrectIndex(idx)}
-                          className="w-4 h-4 text-[#5B8CFF] focus:ring-0 bg-zinc-950 cursor-pointer"
+                          className="w-4 h-4 text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer"
                         />
                         <span className={mcqCorrectIndex === idx ? 'text-[#34D399] font-bold' : ''}>Correct Answer</span>
                       </label>
@@ -692,7 +692,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                 type="button" 
                 onClick={() => setIsEditing(false)}
                 variant="outline"
-                className="border-border bg-zinc-950/20 text-zinc-450 hover:text-white rounded-xl text-xs h-10 px-6 cursor-pointer"
+                className="border-border sys-bg/20 sys-text-body hover:text-white rounded-xl text-xs h-10 px-6 cursor-pointer"
               >
                 Cancel
               </Button>

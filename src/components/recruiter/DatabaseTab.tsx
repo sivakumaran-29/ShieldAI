@@ -226,7 +226,7 @@ export default function DatabaseTab() {
           <h2 className="text-[10px] font-mono font-bold tracking-widest text-[#5B8CFF] uppercase">
             // CANDIDATE DATABASE REGISTRY
           </h2>
-          <span className="text-[10px] text-zinc-500 font-mono mt-1 block">
+          <span className="text-[10px] sys-text-body font-mono mt-1 block">
             Manage student batches, authentications, and platform access.
           </span>
         </div>
@@ -252,13 +252,13 @@ export default function DatabaseTab() {
       ) : (
         <div className="space-y-6">
           <div className="relative max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sys-text-body" />
             <input 
               type="text" 
               placeholder="Search candidate roll or email..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full bg-zinc-950/50 border border-border text-white text-xs rounded-xl pl-9 pr-4 py-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition"
+              className="w-full sys-bg/50 border border-border text-white text-xs rounded-xl pl-9 pr-4 py-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition"
             />
           </div>
 
@@ -274,14 +274,14 @@ export default function DatabaseTab() {
                 <Card key={dept} className="bg-[#0a0a0a]/90 border-border rounded-2xl overflow-hidden shadow-sm">
                   <div 
                     onClick={() => toggleDept(dept)}
-                    className="p-4 bg-zinc-950/60 hover:bg-zinc-950/80 cursor-pointer flex items-center justify-between transition group"
+                    className="p-4 sys-bg hover:sys-bg/80 cursor-pointer flex items-center justify-between transition group"
                   >
                     <div className="flex items-center gap-3">
-                      {isDeptExpanded ? <ChevronDown className="w-4 h-4 text-zinc-400" /> : <ChevronRight className="w-4 h-4 text-zinc-400" />}
+                      {isDeptExpanded ? <ChevronDown className="w-4 h-4 sys-text-body" /> : <ChevronRight className="w-4 h-4 sys-text-body" />}
                       <div className="flex items-center gap-2">
                         <Folder className="w-4 h-4 text-[#5B8CFF]" />
                         <h3 className="font-bold text-sm text-white font-heading tracking-tight">{dept} Department</h3>
-                        <span className="px-2 py-0.5 bg-zinc-900 text-zinc-400 text-[9px] font-mono rounded font-bold ml-2">
+                        <span className="px-2 py-0.5 sys-card sys-text-body text-[9px] font-mono rounded font-bold ml-2">
                           {deptUsers.length} Users
                         </span>
                       </div>
@@ -305,15 +305,15 @@ export default function DatabaseTab() {
                         const isBatchExpanded = expandedBatches[batchName]
 
                         return (
-                          <div key={batchName} className="border border-border/50 rounded-xl overflow-hidden bg-zinc-950/30">
+                          <div key={batchName} className="border border-border/50 rounded-xl overflow-hidden sys-bg/30">
                             <div 
                               onClick={() => toggleBatch(batchName)}
-                              className="p-3 hover:bg-zinc-900/40 cursor-pointer flex items-center justify-between transition group/batch"
+                              className="p-3 hover:sys-card/40 cursor-pointer flex items-center justify-between transition group/batch"
                             >
                               <div className="flex items-center gap-2.5">
-                                {isBatchExpanded ? <ChevronDown className="w-3.5 h-3.5 text-zinc-500" /> : <ChevronRight className="w-3.5 h-3.5 text-zinc-500" />}
-                                <Database className="w-3.5 h-3.5 text-zinc-400" />
-                                <span className="font-bold text-xs text-zinc-200 font-heading">{batchName}</span>
+                                {isBatchExpanded ? <ChevronDown className="w-3.5 h-3.5 sys-text-body" /> : <ChevronRight className="w-3.5 h-3.5 sys-text-body" />}
+                                <Database className="w-3.5 h-3.5 sys-text-body" />
+                                <span className="font-bold text-xs sys-text-primary font-heading">{batchName}</span>
                                 <span className="px-1.5 py-0.5 bg-[#5B8CFF]/10 text-[#5B8CFF] text-[9px] font-mono rounded font-bold ml-1">
                                   {batchUsers.length}
                                 </span>
@@ -333,7 +333,7 @@ export default function DatabaseTab() {
                               <div className="border-t border-border/50">
                                 <table className="w-full text-left text-xs">
                                   <thead>
-                                    <tr className="bg-zinc-950/80 text-zinc-500 font-mono text-[9px] uppercase tracking-wider">
+                                    <tr className="sys-bg/80 sys-text-body font-mono text-[9px] uppercase tracking-wider">
                                       <th className="py-2.5 px-6 font-medium">Roll Number</th>
                                       <th className="py-2.5 px-6 font-medium">Email Address</th>
                                       <th className="py-2.5 px-6 text-right font-medium">Actions</th>
@@ -341,15 +341,15 @@ export default function DatabaseTab() {
                                   </thead>
                                   <tbody className="divide-y divide-border/20">
                                     {batchUsers.map(user => (
-                                      <tr key={user.id} className="hover:bg-zinc-900/40 transition group/row">
-                                        <td className="py-2.5 px-6 font-mono font-bold text-zinc-300">{user.name}</td>
-                                        <td className="py-2.5 px-6 text-zinc-400">{user.email}</td>
+                                      <tr key={user.id} className="hover:sys-card/40 transition group/row">
+                                        <td className="py-2.5 px-6 font-mono font-bold sys-text-primary">{user.name}</td>
+                                        <td className="py-2.5 px-6 sys-text-body">{user.email}</td>
                                         <td className="py-2 px-6 text-right">
                                           <Button 
                                             onClick={(e) => handleDeleteUser(e, user.id, user.name)}
                                             variant="ghost" 
                                             size="sm"
-                                            className="h-6 w-6 p-0 hover:bg-[#F87171]/10 text-zinc-600 hover:text-[#F87171] rounded-md cursor-pointer transition"
+                                            className="h-6 w-6 p-0 hover:bg-[#F87171]/10 sys-text-body hover:text-[#F87171] rounded-md cursor-pointer transition"
                                             title="Revoke access and delete"
                                           >
                                             <Trash2 className="w-3.5 h-3.5" />
@@ -371,7 +371,7 @@ export default function DatabaseTab() {
             })}
             
             {departments.length === 0 && (
-              <div className="text-center py-12 text-zinc-500 text-xs font-mono">
+              <div className="text-center py-12 sys-text-body text-xs font-mono">
                 No departments found in the database.
               </div>
             )}
@@ -381,9 +381,9 @@ export default function DatabaseTab() {
 
       {/* CREATE BATCH MODAL */}
       {isCreating && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80  z-[9999] flex items-center justify-center p-4">
           <Card className="w-full max-w-md bg-[#0a0a0a] border-border rounded-2xl overflow-hidden shadow-2xl animate-fade-in">
-            <div className="p-4 border-b border-border flex justify-between items-center bg-zinc-950/40">
+            <div className="p-4 border-b border-border flex justify-between items-center sys-bg/40">
               <h3 className="font-bold text-sm text-white font-heading flex items-center gap-2">
                 <Database className="w-4 h-4 text-[#5B8CFF]" /> Add New Batch
               </h3>
@@ -391,7 +391,7 @@ export default function DatabaseTab() {
             
             <form onSubmit={handleCreateBatch} className="p-6 space-y-5">
               <div className="space-y-1.5">
-                <label className="text-[9px] font-mono text-zinc-500 uppercase">Batch Identifier (e.g. CSE_D)</label>
+                <label className="text-[9px] font-mono sys-text-body uppercase">Batch Identifier (e.g. CSE_D)</label>
                 <input 
                   type="text" 
                   value={newBatchName}
@@ -403,7 +403,7 @@ export default function DatabaseTab() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-[9px] font-mono text-zinc-500 uppercase">Start Roll No</label>
+                  <label className="text-[9px] font-mono sys-text-body uppercase">Start Roll No</label>
                   <input 
                     type="text" 
                     value={startRoll}
@@ -413,7 +413,7 @@ export default function DatabaseTab() {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[9px] font-mono text-zinc-500 uppercase">End Roll No</label>
+                  <label className="text-[9px] font-mono sys-text-body uppercase">End Roll No</label>
                   <input 
                     type="text" 
                     value={endRoll}
@@ -425,7 +425,7 @@ export default function DatabaseTab() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[9px] font-mono text-zinc-500 uppercase">Email Suffix</label>
+                <label className="text-[9px] font-mono sys-text-body uppercase">Email Suffix</label>
                 <input 
                   type="text" 
                   value={emailSuffix}
@@ -450,7 +450,7 @@ export default function DatabaseTab() {
                   type="button" 
                   onClick={() => setIsCreating(false)}
                   disabled={createLoading}
-                  className="bg-transparent hover:bg-zinc-900 text-zinc-400 text-xs h-9 px-4 rounded-xl cursor-pointer"
+                  className="bg-transparent hover:sys-card sys-text-body text-xs h-9 px-4 rounded-xl cursor-pointer"
                 >
                   Cancel
                 </Button>

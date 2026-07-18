@@ -164,7 +164,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-[10px] font-mono font-bold tracking-widest text-[#5B8CFF] uppercase">// OVERVIEW DASHBOARD</h2>
-          <span className="text-[10px] text-zinc-500 font-mono mt-1 block">Live proctor operations summary and assessment controls</span>
+          <span className="text-[10px] sys-text-body font-mono mt-1 block">Live proctor operations summary and assessment controls</span>
         </div>
         {!isEditing && (
           <Button 
@@ -184,12 +184,12 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
               <Sparkles className="w-8 h-8 text-[#5B8CFF]" strokeWidth={1.5} />
             </div>
             <h3 className="text-xl font-bold text-white font-heading">Assessment Creation Engine</h3>
-            <p className="text-sm text-zinc-500 max-w-xl leading-relaxed">
+            <p className="text-sm sys-text-body max-w-xl leading-relaxed">
               Build and deploy robust technical assessments instantly. Configure the hosting department, set the strict evaluation timeline, and configure the code playground constraints.
             </p>
             <Button 
               onClick={handleOpenCreateForm}
-              className="mt-4 bg-white hover:bg-zinc-200 text-black text-sm h-11 px-8 rounded-full font-bold cursor-pointer transition shadow-[0_0_20px_rgba(255,255,255,0.15)] flex items-center gap-2"
+              className="mt-4 bg-white hover:sys-card text-black text-sm h-11 px-8 rounded-full font-bold cursor-pointer transition shadow-[0_0_20px_rgba(255,255,255,0.15)] flex items-center gap-2"
             >
               <Plus className="w-4 h-4" strokeWidth={2} /> Initialize New Assessment
             </Button>
@@ -197,12 +197,12 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
 
           {/* Active Assessments Table Section */}
           <div className="bento-card p-6 space-y-4">
-            <span className="text-[9px] font-mono font-bold text-zinc-500 uppercase tracking-widest block">Active Assessment Tracks</span>
+            <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest block">Active Assessment Tracks</span>
             
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="border-b border-border text-zinc-500 font-mono text-[9px] uppercase tracking-wider">
+                  <tr className="border-b border-border sys-text-body font-mono text-[9px] uppercase tracking-wider">
                     <th className="py-3 px-4">Evaluation Title</th>
                     <th className="py-3 px-4">Duration</th>
                     <th className="py-3 px-4">Allowed Languages</th>
@@ -215,16 +215,16 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                     <tr 
                       key={a.id} 
                       onClick={() => onSelectInspector?.(a)}
-                      className="hover:bg-zinc-950/20 cursor-pointer transition duration-200"
+                      className="hover:sys-bg/20 cursor-pointer transition duration-200"
                     >
                       <td className="py-3.5 px-4 font-bold text-white max-w-sm truncate">{a.title}</td>
-                      <td className="py-3.5 px-4 text-zinc-450 font-mono">{a.duration} mins</td>
-                      <td className="py-3.5 px-4 text-zinc-450 uppercase font-mono">{a.allowed_languages.join(', ')}</td>
+                      <td className="py-3.5 px-4 sys-text-body font-mono">{a.duration} mins</td>
+                      <td className="py-3.5 px-4 sys-text-body uppercase font-mono">{a.allowed_languages.join(', ')}</td>
                       <td className="py-3.5 px-4">
                         <span className={`px-2 py-0.5 rounded text-[8px] font-mono font-bold uppercase tracking-wider ${
                           a.status === 'Published' 
                             ? 'bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/35' 
-                            : 'bg-zinc-900 text-zinc-400'
+                            : 'sys-card sys-text-body'
                         }`}>
                           {a.status}
                         </span>
@@ -235,7 +235,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                             onClick={() => onSelectAssessment(a)}
                             variant="ghost" 
                             size="sm"
-                            className="h-7 px-2 hover:bg-[#5B8CFF]/10 text-zinc-400 hover:text-[#5B8CFF] rounded-lg cursor-pointer"
+                            className="h-7 px-2 hover:bg-[#5B8CFF]/10 sys-text-body hover:text-[#5B8CFF] rounded-lg cursor-pointer"
                             title="Manage Questions"
                           >
                             <Settings2 className="w-3.5 h-3.5" />
@@ -244,7 +244,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                             onClick={() => handleOpenEditForm(a)}
                             variant="ghost" 
                             size="sm"
-                            className="h-7 px-2 hover:bg-zinc-900 text-zinc-400 hover:text-white rounded-lg cursor-pointer"
+                            className="h-7 px-2 hover:sys-card sys-text-body hover:text-white rounded-lg cursor-pointer"
                             title="Edit Parameters"
                           >
                             <Edit className="w-3.5 h-3.5" />
@@ -253,7 +253,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                             onClick={() => handleCopyLink(a.id)}
                             variant="ghost" 
                             size="sm"
-                            className="h-7 px-2 hover:bg-zinc-900 text-zinc-400 hover:text-white rounded-lg cursor-pointer"
+                            className="h-7 px-2 hover:sys-card sys-text-body hover:text-white rounded-lg cursor-pointer"
                             title="Copy invite URL"
                           >
                             {copiedId === a.id ? <Check className="w-3.5 h-3.5 text-[#34D399]" /> : <Copy className="w-3.5 h-3.5" />}
@@ -262,7 +262,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                             onClick={() => handleDuplicate(a.id)}
                             variant="ghost" 
                             size="sm"
-                            className="h-7 px-2 hover:bg-zinc-900 text-zinc-400 hover:text-white rounded-lg cursor-pointer"
+                            className="h-7 px-2 hover:sys-card sys-text-body hover:text-white rounded-lg cursor-pointer"
                             title="Duplicate Track"
                           >
                             <Copy className="w-3.5 h-3.5" />
@@ -271,7 +271,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                             onClick={() => handleDelete(a.id)}
                             variant="ghost" 
                             size="sm"
-                            className="h-7 px-2 hover:bg-[#F87171]/10 text-zinc-550 hover:text-[#F87171] rounded-lg cursor-pointer"
+                            className="h-7 px-2 hover:bg-[#F87171]/10 sys-text-body hover:text-[#F87171] rounded-lg cursor-pointer"
                             title="Delete permanently"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -283,7 +283,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
 
                   {assessments.length === 0 && (
                     <tr>
-                      <td colSpan={5} className="py-8 text-center text-zinc-600 font-mono text-xs">
+                      <td colSpan={5} className="py-8 text-center sys-text-body font-mono text-xs">
                         No assessments currently stored in local database registry.
                       </td>
                     </tr>
@@ -310,33 +310,33 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
               {/* Left Column inputs */}
               <div className="space-y-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Assessment Title</label>
+                  <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Assessment Title</label>
                   <input 
                     type="text" 
                     value={title} 
                     onChange={e => setTitle(e.target.value)}
-                    className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50" 
+                    className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50" 
                     placeholder="e.g. Software Engineer Evaluation"
                     required
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Description</label>
+                  <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Description</label>
                   <textarea 
                     value={description} 
                     onChange={e => setDescription(e.target.value)}
-                    className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24" 
+                    className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24" 
                     placeholder="Provide overview details..."
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Instructions Guidelines</label>
+                  <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Instructions Guidelines</label>
                   <textarea 
                     value={instructions} 
                     onChange={e => setInstructions(e.target.value)}
-                    className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24" 
+                    className="sys-bg border border-border text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24" 
                     placeholder="Rules for the proctored sandbox..."
                   />
                 </div>
@@ -347,23 +347,23 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Duration (Minutes)</label>
+                    <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Duration (Minutes)</label>
                     <input 
                       type="number" 
                       value={duration} 
                       onChange={e => setDuration(Number(e.target.value))}
-                      className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                       min={1}
                       required
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Passing Score %</label>
+                    <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Passing Score %</label>
                     <input 
                       type="number" 
                       value={passingScore} 
                       onChange={e => setPassingScore(Number(e.target.value))}
-                      className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                       min={0}
                       max={100}
                       required
@@ -373,29 +373,29 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Start Time</label>
+                    <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Start Time</label>
                     <input 
                       type="datetime-local" 
                       value={startTime} 
                       onChange={e => setStartTime(e.target.value)}
-                      className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                       required
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">End Time</label>
+                    <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">End Time</label>
                     <input 
                       type="datetime-local" 
                       value={endTime} 
                       onChange={e => setEndTime(e.target.value)}
-                      className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                       required
                     />
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Allowed Languages</label>
+                  <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Allowed Languages</label>
                   <div className="flex gap-4">
                     {['python', 'javascript', 'java'].map(lang => (
                       <label key={lang} className="flex items-center gap-2 cursor-pointer select-none">
@@ -403,20 +403,20 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                           type="checkbox" 
                           checked={languages.includes(lang)}
                           onChange={() => toggleLanguage(lang)}
-                          className="w-4 h-4 rounded border-border text-[#5B8CFF] focus:ring-0 bg-zinc-950 cursor-pointer"
+                          className="w-4 h-4 rounded border-border text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer"
                         />
-                        <span className="text-xs uppercase text-zinc-400 font-mono">{lang === 'javascript' ? 'JS (ES6)' : lang}</span>
+                        <span className="text-xs uppercase sys-text-body font-mono">{lang === 'javascript' ? 'JS (ES6)' : lang}</span>
                       </label>
                     ))}
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Lobby Status</label>
+                  <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Lobby Status</label>
                   <select 
                     value={status} 
                     onChange={e => setStatus(e.target.value as any)}
-                    className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
+                    className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
                   >
                     <option value="Draft">Draft</option>
                     <option value="Published">Published</option>
@@ -425,11 +425,11 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Target Audience (Host)</label>
+                  <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Target Audience (Host)</label>
                   <select 
                     value={targetBatch} 
                     onChange={e => setTargetBatch(e.target.value)}
-                    className="bg-zinc-950 border border-border text-white rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
+                    className="sys-bg border border-border text-white rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
                   >
                     <optgroup label="Entire Departments">
                       {availableDepartments.map(d => (
@@ -456,7 +456,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                 type="button" 
                 onClick={() => setIsEditing(false)}
                 variant="outline"
-                className="border-border bg-zinc-950/20 text-zinc-450 hover:text-white rounded-xl text-xs h-10 px-6 cursor-pointer"
+                className="border-border sys-bg/20 sys-text-body hover:text-white rounded-xl text-xs h-10 px-6 cursor-pointer"
               >
                 Cancel
               </Button>

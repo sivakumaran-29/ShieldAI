@@ -302,18 +302,18 @@ export default function CandidateDashboard() {
       <div className="grain-overlay opacity-30" />
 
       {/* ================= LEFT SIDEBAR ================= */}
-      <aside className="w-64 h-screen bg-[#0a0a0a]/70 backdrop-blur-2xl border-r border-white/5 flex flex-col justify-between p-6 shrink-0 z-30 select-none shadow-2xl">
+      <aside className="w-64 h-screen bg-[#0a0a0a]/70 -2xl border-r border-transparent flex flex-col justify-between p-6 shrink-0 z-30 select-none shadow-2xl">
         <div className="space-y-8">
           
           {/* Header Brand & Theme Toggle */}
           <div className="flex items-center justify-between select-none">
             <div className="flex items-center space-x-2.5">
-              <div className="p-1.5 bg-zinc-950/80 border border-white/10 rounded-xl shadow-[0_0_15px_rgba(91,140,255,0.15)]">
+              <div className="p-1.5 sys-bg/80 border border-transparent rounded-xl shadow-[0_0_15px_rgba(91,140,255,0.15)]">
                 <Shield className="w-4 h-4 text-[#5B8CFF]" strokeWidth={1.5} />
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-xs tracking-wide text-white font-heading">ShieldAI</span>
-                <span className="text-[7.5px] font-mono text-zinc-500 uppercase tracking-widest leading-none mt-0.5">Candidate</span>
+                <span className="text-[7.5px] font-mono sys-text-body uppercase tracking-widest leading-none mt-0.5">Candidate</span>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -322,7 +322,7 @@ export default function CandidateDashboard() {
                 disabled={isSyncing}
                 variant="ghost"
                 size="icon"
-                className="w-7 h-7 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition"
+                className="w-7 h-7 rounded-lg sys-text-body hover:text-white hover:hover:bg-[#1c1c1e]/80 transition"
                 title="Sync Assessments"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-[#5B8CFF]' : ''}`} />
@@ -335,7 +335,7 @@ export default function CandidateDashboard() {
           <nav className="flex flex-col gap-2">
             <button 
               onClick={() => setActiveTab('overview')}
-              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'overview' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent'}`}
+              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'overview' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-[#1c1c1e]/80 border border-transparent'}`}
             >
               <div className="flex items-center gap-2.5">
                 <Home className="w-4 h-4" strokeWidth={1.5} />
@@ -346,7 +346,7 @@ export default function CandidateDashboard() {
 
             <button 
               onClick={() => setActiveTab('lobby')}
-              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'lobby' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent'}`}
+              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'lobby' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-[#1c1c1e]/80 border border-transparent'}`}
             >
               <div className="flex items-center gap-2.5">
                 <LayoutGrid className="w-4 h-4" strokeWidth={1.5} />
@@ -357,7 +357,7 @@ export default function CandidateDashboard() {
 
             <button 
               onClick={() => setActiveTab('history')}
-              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'history' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent'}`}
+              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'history' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-[#1c1c1e]/80 border border-transparent'}`}
             >
               <div className="flex items-center gap-2.5">
                 <History className="w-4 h-4" strokeWidth={1.5} />
@@ -369,20 +369,20 @@ export default function CandidateDashboard() {
         </div>
 
         {/* Footer Profile & Logout */}
-        <div className="space-y-4 pt-4 border-t border-white/5">
+        <div className="space-y-4 pt-4 border-t border-transparent">
           <div className="flex items-center gap-3 px-1">
-            <div className="p-2 bg-zinc-900 border border-white/10 rounded-xl">
-              <User className="w-4 h-4 text-zinc-400" strokeWidth={1.5} />
+            <div className="p-2 sys-card border border-transparent rounded-xl">
+              <User className="w-4 h-4 sys-text-body" strokeWidth={1.5} />
             </div>
             <div className="flex flex-col min-w-0">
               <span className="text-xs font-semibold text-white truncate font-heading">{user?.name || 'Candidate'}</span>
-              <span className="text-[10px] text-zinc-500 font-mono truncate">{user?.email}</span>
+              <span className="text-[10px] sys-text-body font-mono truncate">{user?.email}</span>
             </div>
           </div>
           <Button 
             onClick={logout} 
             variant="outline" 
-            className="w-full border-white/10 bg-zinc-950/40 hover:bg-zinc-900 hover:border-white/20 text-zinc-400 hover:text-white text-xs h-9 justify-center cursor-pointer transition-all duration-300 rounded-xl shadow-none"
+            className="w-full border-transparent sys-bg/40 hover:sys-card hover:border-white/20 sys-text-body hover:text-white text-xs h-9 justify-center cursor-pointer transition-all duration-300 rounded-xl shadow-none"
           >
             <LogOut className="w-3.5 h-3.5 mr-2" strokeWidth={1.5} />
             <span>Sign Out</span>
@@ -396,7 +396,7 @@ export default function CandidateDashboard() {
           
           {/* Section Breadcrumbs */}
           <div className="flex items-center justify-between select-none mb-8">
-            <div className="flex items-center gap-2 text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
+            <div className="flex items-center gap-2 text-[9px] font-mono sys-text-body uppercase tracking-widest">
               <span>CANDIDATE PANEL</span>
               <span>/</span>
               <span className="text-[#5B8CFF] font-bold">
@@ -415,13 +415,13 @@ export default function CandidateDashboard() {
           {activeTab === 'overview' && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
               {/* Hero Section */}
-              <div className="p-8 rounded-3xl bg-gradient-to-br from-zinc-900/80 to-zinc-950/80 border border-white/5 backdrop-blur-md shadow-2xl relative overflow-hidden group">
+              <div className="p-8 rounded-3xl sys-bg border border-transparent  shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-[#5B8CFF]/10 rounded-full blur-[80px] -mr-16 -mt-16 transition-opacity group-hover:opacity-100 opacity-50" />
                 <div className="relative z-10">
                   <h1 className="text-3xl font-heading font-extrabold text-white mb-2 tracking-tight">
-                    Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5B8CFF] to-teal-400">{name.charAt(0).toUpperCase() + name.slice(1)}</span>
+                    Welcome back, <span className="text-transparent bg-clip-text sys-bg">{name.charAt(0).toUpperCase() + name.slice(1)}</span>
                   </h1>
-                  <p className="text-sm text-zinc-400 max-w-xl leading-relaxed">
+                  <p className="text-sm sys-text-body max-w-xl leading-relaxed">
                     Access your secure assessment lobby, review past performance, and prepare for your upcoming scheduled evaluations.
                   </p>
                 </div>
@@ -429,55 +429,55 @@ export default function CandidateDashboard() {
 
               {/* Metrics Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="p-6 rounded-2xl bg-zinc-950/50 border border-white/5 backdrop-blur-md flex flex-col gap-4 hover:-translate-y-1 hover:border-[#5B8CFF]/30 transition-all duration-300 group shadow-lg">
+                <div className="p-6 rounded-2xl sys-bg/50 border border-transparent  flex flex-col gap-4 hover:-translate-y-1 hover:border-[#5B8CFF]/30 transition-all duration-300 group shadow-lg">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest">Completed</span>
+                    <span className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-widest">Completed</span>
                     <div className="p-2 rounded-lg bg-[#5B8CFF]/10 text-[#5B8CFF] group-hover:bg-[#5B8CFF]/20 transition-colors">
                       <CheckCircle2 className="w-4 h-4" strokeWidth={1.5} />
                     </div>
                   </div>
                   <div>
                     <div className="text-3xl font-heading font-bold text-white">{completedExams}</div>
-                    <div className="text-xs text-zinc-500 mt-1">Total Exams Taken</div>
+                    <div className="text-xs sys-text-body mt-1">Total Exams Taken</div>
                   </div>
                 </div>
 
-                <div className="p-6 rounded-2xl bg-zinc-950/50 border border-white/5 backdrop-blur-md flex flex-col gap-4 hover:-translate-y-1 hover:border-teal-500/30 transition-all duration-300 group shadow-lg">
+                <div className="p-6 rounded-2xl sys-bg/50 border border-transparent  flex flex-col gap-4 hover:-translate-y-1 hover:border-[#5B8CFF]/20 transition-all duration-300 group shadow-lg">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest">Integrity Avg</span>
-                    <div className="p-2 rounded-lg bg-teal-500/10 text-teal-500 group-hover:bg-teal-500/20 transition-colors">
+                    <span className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-widest">Integrity Avg</span>
+                    <div className="p-2 rounded-lg bg-[#5B8CFF]/10 text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors">
                       <Shield className="w-4 h-4" strokeWidth={1.5} />
                     </div>
                   </div>
                   <div>
                     <div className="text-3xl font-heading font-bold text-white flex items-baseline gap-1">
-                      {avgIntegrity} <span className="text-sm text-zinc-500 font-medium">%</span>
+                      {avgIntegrity} <span className="text-sm sys-text-body font-medium">%</span>
                     </div>
-                    <div className="text-xs text-zinc-500 mt-1">Average Trust Score</div>
+                    <div className="text-xs sys-text-body mt-1">Average Trust Score</div>
                   </div>
                 </div>
 
-                <div className="p-6 rounded-2xl bg-zinc-950/50 border border-white/5 backdrop-blur-md flex flex-col gap-4 hover:-translate-y-1 hover:border-indigo-500/30 transition-all duration-300 group shadow-lg">
+                <div className="p-6 rounded-2xl sys-bg/50 border border-transparent  flex flex-col gap-4 hover:-translate-y-1 hover:border-[#5B8CFF]/20 transition-all duration-300 group shadow-lg">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest">Available</span>
-                    <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 group-hover:bg-indigo-500/20 transition-colors">
+                    <span className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-widest">Available</span>
+                    <div className="p-2 rounded-lg bg-[#5B8CFF]/10 text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors">
                       <Calendar className="w-4 h-4" strokeWidth={1.5} />
                     </div>
                   </div>
                   <div>
                     <div className="text-3xl font-heading font-bold text-white">{activeExams}</div>
-                    <div className="text-xs text-zinc-500 mt-1">Pending Assessments</div>
+                    <div className="text-xs sys-text-body mt-1">Pending Assessments</div>
                   </div>
                 </div>
               </div>
 
               {/* Recent Activity */}
               <div className="space-y-4 pt-4">
-                <div className="flex items-center gap-2 px-1 text-[10px] font-bold text-zinc-500 font-mono tracking-widest uppercase select-none">
-                  <Activity className="w-4 h-4 text-zinc-550" strokeWidth={1.5} /> Recent Activity
+                <div className="flex items-center gap-2 px-1 text-[10px] font-bold sys-text-body font-mono tracking-widest uppercase select-none">
+                  <Activity className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Recent Activity
                 </div>
                 
-                <div className="bg-zinc-950/40 border border-white/5 rounded-2xl p-6 backdrop-blur-md shadow-lg">
+                <div className="sys-bg/40 border border-transparent rounded-2xl p-6  shadow-lg">
                   {pastSessions.length > 0 ? (
                     <div className="space-y-6">
                       {pastSessions.slice(0, 3).map((s, idx) => (
@@ -485,23 +485,23 @@ export default function CandidateDashboard() {
                           {idx !== pastSessions.slice(0, 3).length - 1 && (
                             <div className="absolute top-6 bottom-0 left-[15px] w-[1px] bg-white/10" />
                           )}
-                          <div className="w-8 h-8 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center shrink-0 z-10">
+                          <div className="w-8 h-8 rounded-full sys-card border border-transparent flex items-center justify-center shrink-0 z-10">
                             {s.status === 'submitted' ? (
-                              <Check className="w-4 h-4 text-teal-500" strokeWidth={2} />
+                              <Check className="w-4 h-4 text-[#5B8CFF]" strokeWidth={2} />
                             ) : (
                               <CircleDot className="w-4 h-4 text-[#5B8CFF]" strokeWidth={2} />
                             )}
                           </div>
                           <div className="flex-1 pb-1">
-                            <h4 className="text-sm font-semibold text-zinc-200">{s.status === 'submitted' ? 'Completed Assessment' : 'Started Assessment'}</h4>
-                            <p className="text-xs text-zinc-500 mt-1">ID: {s.assessment_id.slice(0,8).toUpperCase()} • {new Date(s.startedAt || 0).toLocaleString()}</p>
+                            <h4 className="text-sm font-semibold sys-text-primary">{s.status === 'submitted' ? 'Completed Assessment' : 'Started Assessment'}</h4>
+                            <p className="text-xs sys-text-body mt-1">ID: {s.assessment_id.slice(0,8).toUpperCase()} • {new Date(s.startedAt || 0).toLocaleString()}</p>
                             {s.status === 'submitted' && (
-                              <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-900/80 border border-white/5 text-[10px] font-mono">
-                                <span className="text-zinc-400">Score:</span>
+                              <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md sys-card border border-transparent text-[10px] font-mono">
+                                <span className="sys-text-body">Score:</span>
                                 <span className="text-white font-bold">{s.score} pts</span>
-                                <span className="mx-1 text-zinc-600">|</span>
-                                <span className="text-zinc-400">Trust:</span>
-                                <span className="text-teal-400 font-bold">{s.integrity_score}%</span>
+                                <span className="mx-1 sys-text-body">|</span>
+                                <span className="sys-text-body">Trust:</span>
+                                <span className="text-[#5B8CFF] font-bold">{s.integrity_score}%</span>
                               </div>
                             )}
                           </div>
@@ -509,7 +509,7 @@ export default function CandidateDashboard() {
                       ))}
                     </div>
                   ) : (
-                    <div className="py-8 text-center text-zinc-500 text-xs font-mono">
+                    <div className="py-8 text-center sys-text-body text-xs font-mono">
                       No recent activity found.
                     </div>
                   )}
@@ -524,8 +524,8 @@ export default function CandidateDashboard() {
               
               {/* Available Assessments */}
               <section className="lg:col-span-4 space-y-4">
-                <div className="flex items-center gap-2 px-1 text-[10px] font-bold text-zinc-500 font-mono tracking-widest uppercase select-none">
-                  <LayoutGrid className="w-4 h-4 text-zinc-550" strokeWidth={1.5} /> Available Assessments
+                <div className="flex items-center gap-2 px-1 text-[10px] font-bold sys-text-body font-mono tracking-widest uppercase select-none">
+                  <LayoutGrid className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Available Assessments
                 </div>
 
                 <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
@@ -539,8 +539,8 @@ export default function CandidateDashboard() {
                         onClick={() => handleSelectAssessment(a)}
                         className={`p-5 rounded-2xl border text-left cursor-pointer transition-all duration-300 relative group overflow-hidden ${
                           isActive 
-                            ? 'bg-zinc-950/80 border-[#5B8CFF]/50 text-foreground shadow-[0_8px_30px_rgba(91,140,255,0.12)] backdrop-blur-md -translate-y-1' 
-                            : 'bg-zinc-950/30 border-white/5 text-muted hover:border-white/20 hover:bg-zinc-900/50 backdrop-blur-md'
+                            ? 'sys-bg/80 border-[#5B8CFF]/50 text-foreground shadow-[0_8px_30px_rgba(91,140,255,0.12)]  -translate-y-1' 
+                            : 'sys-bg/30 border-transparent text-muted hover:border-white/20 hover:sys-card/50 '
                         }`}
                       >
                         {/* Purple accent border block */}
@@ -551,18 +551,18 @@ export default function CandidateDashboard() {
                         <h3 className="font-bold text-sm text-white group-hover:text-[#5B8CFF] transition duration-300 font-heading pr-2">
                           {a.title}
                         </h3>
-                        <p className="text-[11px] text-zinc-500 mt-2 line-clamp-2 leading-relaxed">
+                        <p className="text-[11px] sys-text-body mt-2 line-clamp-2 leading-relaxed">
                           {a.description}
                         </p>
 
-                        <div className="flex flex-wrap items-center gap-3 mt-5 pt-4 border-t border-white/5 text-[9px] font-mono select-none">
-                          <span className="flex items-center gap-1.5 text-zinc-400 font-bold bg-zinc-900 px-2 py-1 rounded-md border border-white/5">
-                            <Clock className="w-3.5 h-3.5 text-zinc-500" strokeWidth={1.5} /> {a.duration} MINS
+                        <div className="flex flex-wrap items-center gap-3 mt-5 pt-4 border-t border-transparent text-[9px] font-mono select-none">
+                          <span className="flex items-center gap-1.5 sys-text-body font-bold sys-card px-2 py-1 rounded-md border border-transparent">
+                            <Clock className="w-3.5 h-3.5 sys-text-body" strokeWidth={1.5} /> {a.duration} MINS
                           </span>
                           <span className={`px-2 py-1 rounded-md border text-[9px] font-bold ${
                             windowCheck.valid 
                               ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border-[#5B8CFF]/30 shadow-[0_0_10px_rgba(91,140,255,0.1)]' 
-                              : 'bg-zinc-950 text-zinc-600 border-white/5'
+                              : 'sys-bg sys-text-body border-transparent'
                           }`}>
                             {windowCheck.valid ? 'OPEN SCHEDULE' : 'UNAVAILABLE'}
                           </span>
@@ -572,7 +572,7 @@ export default function CandidateDashboard() {
                   })}
 
                   {assessments.length === 0 && (
-                    <div className="p-8 text-center bg-zinc-950/40 border border-white/5 backdrop-blur-md rounded-2xl text-xs text-zinc-500 font-mono select-none">
+                    <div className="p-8 text-center sys-bg/40 border border-transparent  rounded-2xl text-xs sys-text-body font-mono select-none">
                       No active published assessments available in candidate registry.
                     </div>
                   )}
@@ -582,22 +582,22 @@ export default function CandidateDashboard() {
               {/* Details & Setup Form */}
               <section className="lg:col-span-8">
                 {selectedAssessment ? (
-                  <Card className="bg-zinc-950/60 border-white/10 rounded-3xl shadow-2xl relative overflow-hidden backdrop-blur-xl">
-                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#5B8CFF] to-teal-400" />
+                  <Card className="sys-bg border-transparent rounded-3xl shadow-2xl relative overflow-hidden ">
+                    <div className="absolute top-0 left-0 right-0 h-1 sys-bg" />
                     
-                    <CardHeader className="pb-5 border-b border-white/5 select-none pt-8 px-8">
+                    <CardHeader className="pb-5 border-b border-transparent select-none pt-8 px-8">
                       <CardTitle className="text-lg font-bold text-white flex items-center gap-3 font-heading">
                         <BookOpen className="w-5 h-5 text-[#5B8CFF]" strokeWidth={2} /> Assessment Preparation
                       </CardTitle>
-                      <CardDescription className="text-xs text-zinc-400 mt-2">
-                        You are launching: <span className="text-white font-bold bg-white/5 px-2 py-1 rounded-md ml-1">{selectedAssessment.title}</span>
+                      <CardDescription className="text-xs sys-text-body mt-2">
+                        You are launching: <span className="text-white font-bold hover:bg-[#1c1c1e]/80 px-2 py-1 rounded-md ml-1">{selectedAssessment.title}</span>
                       </CardDescription>
                     </CardHeader>
                     
                     <CardContent className="p-8 space-y-8">
                       
                       {errorMsg && (
-                        <div className="text-xs text-zinc-200 bg-[#F87171]/10 p-4 rounded-xl border border-[#F87171]/20 flex items-center space-x-3 animate-in fade-in zoom-in-95 duration-300">
+                        <div className="text-xs sys-text-primary bg-[#F87171]/10 p-4 rounded-xl border border-[#F87171]/20 flex items-center space-x-3 animate-in fade-in zoom-in-95 duration-300">
                           <AlertCircle className="w-5 h-5 shrink-0 text-[#F87171]" strokeWidth={1.5} />
                           <span className="font-semibold leading-relaxed">{errorMsg}</span>
                         </div>
@@ -606,54 +606,54 @@ export default function CandidateDashboard() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {/* Identity parameters */}
                         <div className="space-y-5">
-                          <div className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest border-b border-white/5 pb-2.5 flex items-center gap-2 select-none">
-                            <User className="w-4 h-4 text-zinc-400" strokeWidth={1.5} /> Identity Parameters
+                          <div className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-widest border-b border-transparent pb-2.5 flex items-center gap-2 select-none">
+                            <User className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Identity Parameters
                           </div>
                           
                           <div className="space-y-4 pt-1">
                             {/* Name */}
-                            <div className="bg-zinc-900/50 border border-white/5 rounded-xl p-4 flex flex-col opacity-60 cursor-not-allowed">
+                            <div className="sys-card/50 border border-transparent rounded-xl p-4 flex flex-col opacity-60 cursor-not-allowed">
                               <div className="flex items-center justify-between select-none">
-                                <label className="text-[9px] font-mono font-bold text-zinc-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                <label className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
                                   <User className="w-3 h-3" strokeWidth={1.5} /> Candidate Full Name (Locked)
                                 </label>
-                                <Lock className="w-3 h-3 text-zinc-600" strokeWidth={1.5} />
+                                <Lock className="w-3 h-3 sys-text-body" strokeWidth={1.5} />
                               </div>
                               <input 
                                 type="text" 
                                 value={name} 
                                 readOnly
                                 disabled
-                                className="bg-transparent border-0 p-0 text-xs text-zinc-300 focus:outline-none focus:ring-0 font-semibold cursor-not-allowed select-none"
+                                className="bg-transparent border-0 p-0 text-xs sys-text-primary focus:outline-none focus:ring-0 font-semibold cursor-not-allowed select-none"
                               />
                             </div>
 
                             {/* Email */}
-                            <div className="bg-zinc-900/50 border border-white/5 rounded-xl p-4 flex flex-col opacity-60 cursor-not-allowed">
+                            <div className="sys-card/50 border border-transparent rounded-xl p-4 flex flex-col opacity-60 cursor-not-allowed">
                               <div className="flex items-center justify-between select-none">
-                                <label className="text-[9px] font-mono font-bold text-zinc-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                <label className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
                                   <Mail className="w-3 h-3" strokeWidth={1.5} /> Institutional Email
                                 </label>
-                                <Lock className="w-3 h-3 text-zinc-600" strokeWidth={1.5} />
+                                <Lock className="w-3 h-3 sys-text-body" strokeWidth={1.5} />
                               </div>
                               <input 
                                 type="email" 
                                 value={email} 
                                 readOnly
                                 disabled
-                                className="bg-transparent border-0 p-0 text-xs text-zinc-300 focus:outline-none focus:ring-0 font-semibold cursor-not-allowed select-none"
+                                className="bg-transparent border-0 p-0 text-xs sys-text-primary focus:outline-none focus:ring-0 font-semibold cursor-not-allowed select-none"
                               />
                             </div>
 
                             {/* Roll */}
-                            <div className={`bg-zinc-900/50 border border-white/10 rounded-xl p-4 flex flex-col transition-colors ${
-                              isRollDisabled ? 'opacity-60 cursor-not-allowed border-white/5' : 'hover:border-white/20 focus-within:border-[#5B8CFF]/50 focus-within:ring-1 focus-within:ring-[#5B8CFF]/50 shadow-inner'
+                            <div className={`sys-card/50 border border-transparent rounded-xl p-4 flex flex-col transition-colors ${
+                              isRollDisabled ? 'opacity-60 cursor-not-allowed border-transparent' : 'hover:border-white/20 focus-within:border-[#5B8CFF]/50 focus-within:ring-1 focus-within:ring-[#5B8CFF]/50 shadow-inner'
                             }`}>
                               <div className="flex items-center justify-between select-none">
-                                <label className="text-[9px] font-mono font-bold text-zinc-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                <label className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
                                   <Hash className="w-3 h-3" strokeWidth={1.5} /> Candidate Roll Number
                                 </label>
-                                {isRollDisabled && <Lock className="w-3 h-3 text-zinc-600" strokeWidth={1.5} />}
+                                {isRollDisabled && <Lock className="w-3 h-3 sys-text-body" strokeWidth={1.5} />}
                               </div>
                               <input 
                                 type="text" 
@@ -662,7 +662,7 @@ export default function CandidateDashboard() {
                                 readOnly={isRollDisabled}
                                 disabled={isRollDisabled}
                                 className={`bg-transparent border-0 p-0 text-xs focus:outline-none focus:ring-0 font-mono font-bold ${
-                                  isRollDisabled ? 'text-zinc-400 cursor-not-allowed select-none' : 'text-white placeholder:text-zinc-700'
+                                  isRollDisabled ? 'sys-text-body cursor-not-allowed select-none' : 'text-white placeholder:sys-text-body'
                                 }`}
                                 placeholder="U4CSE25XXX..." 
                               />
@@ -672,25 +672,25 @@ export default function CandidateDashboard() {
 
                         {/* Rules Checklist */}
                         <div className="space-y-5 flex flex-col">
-                          <div className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest border-b border-white/5 pb-2.5 flex items-center gap-2 select-none">
-                            <HelpCircle className="w-4 h-4 text-zinc-400" strokeWidth={1.5} /> Proctor Rules Checklist
+                          <div className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-widest border-b border-transparent pb-2.5 flex items-center gap-2 select-none">
+                            <HelpCircle className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Proctor Rules Checklist
                           </div>
 
-                          <div className="bg-zinc-900/40 border border-white/5 p-5 rounded-xl text-zinc-400 text-[11.5px] space-y-4 flex-1 select-none leading-relaxed shadow-inner">
+                          <div className="sys-card/40 border border-transparent p-5 rounded-xl sys-text-body text-[11.5px] space-y-4 flex-1 select-none leading-relaxed shadow-inner">
                             <div className="flex gap-3">
-                              <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" strokeWidth={2} />
+                              <CheckCircle2 className="w-4 h-4 text-[#5B8CFF] shrink-0 mt-0.5" strokeWidth={2} />
                               <p><strong>Timer Limits:</strong> A countdown of <span className="text-[#5B8CFF] font-bold font-number">{selectedAssessment.duration} minutes</span> runs globally. Automatic force-submission triggers upon expiry.</p>
                             </div>
                             <div className="flex gap-3">
-                              <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" strokeWidth={2} />
+                              <CheckCircle2 className="w-4 h-4 text-[#5B8CFF] shrink-0 mt-0.5" strokeWidth={2} />
                               <p><strong>Strict Sandbox Controls:</strong> Screen switching, tab changes, and minimizing window focus will immediately flag integrity score reductions.</p>
                             </div>
                             <div className="flex gap-3">
-                              <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" strokeWidth={2} />
+                              <CheckCircle2 className="w-4 h-4 text-[#5B8CFF] shrink-0 mt-0.5" strokeWidth={2} />
                               <p><strong>Hardware Lockouts:</strong> Copy-pasting code blocks and mouse right-clicks are intercepted and blocked inside the compiler panel.</p>
                             </div>
                             <div className="flex gap-3">
-                              <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" strokeWidth={2} />
+                              <CheckCircle2 className="w-4 h-4 text-[#5B8CFF] shrink-0 mt-0.5" strokeWidth={2} />
                               <p><strong>Optical Verification:</strong> Secure proctor networks utilize client media camera parameters for integrity audit monitors.</p>
                             </div>
                           </div>
@@ -698,21 +698,21 @@ export default function CandidateDashboard() {
                       </div>
 
                       {/* Schedule details */}
-                      <div className="p-5 bg-zinc-900/40 border border-white/5 rounded-xl flex flex-col md:flex-row md:items-center justify-between text-xs gap-5 select-none shadow-inner">
+                      <div className="p-5 sys-card/40 border border-transparent rounded-xl flex flex-col md:flex-row md:items-center justify-between text-xs gap-5 select-none shadow-inner">
                         <div className="space-y-1.5">
-                          <p className="text-zinc-500 font-bold font-mono text-[9px] uppercase tracking-widest mb-2">Evaluation Window Scheduling limits</p>
-                          <p className="text-zinc-400 flex items-center gap-2">
-                            <span className="w-12 text-zinc-500">Starts:</span> <span className="text-white font-semibold font-mono bg-white/5 px-2 py-0.5 rounded">{new Date(selectedAssessment.start_time).toLocaleString()}</span>
+                          <p className="sys-text-body font-bold font-mono text-[9px] uppercase tracking-widest mb-2">Evaluation Window Scheduling limits</p>
+                          <p className="sys-text-body flex items-center gap-2">
+                            <span className="w-12 sys-text-body">Starts:</span> <span className="text-white font-semibold font-mono hover:bg-[#1c1c1e]/80 px-2 py-0.5 rounded">{new Date(selectedAssessment.start_time).toLocaleString()}</span>
                           </p>
-                          <p className="text-zinc-400 flex items-center gap-2">
-                            <span className="w-12 text-zinc-500">Ends:</span> <span className="text-white font-semibold font-mono bg-white/5 px-2 py-0.5 rounded">{new Date(selectedAssessment.end_time).toLocaleString()}</span>
+                          <p className="sys-text-body flex items-center gap-2">
+                            <span className="w-12 sys-text-body">Ends:</span> <span className="text-white font-semibold font-mono hover:bg-[#1c1c1e]/80 px-2 py-0.5 rounded">{new Date(selectedAssessment.end_time).toLocaleString()}</span>
                           </p>
                         </div>
                         <div className="text-right">
                           <span className={`inline-block px-4 py-2 rounded-xl border text-[10px] font-bold tracking-wide ${
                             timeCheck.valid 
                               ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' 
-                              : 'bg-zinc-950 text-zinc-600 border-white/5'
+                              : 'sys-bg sys-text-body border-transparent'
                           }`}>
                             {timeCheck.valid ? '● Assessment Schedule Active' : '● Assessment Window Closed'}
                           </span>
@@ -726,24 +726,24 @@ export default function CandidateDashboard() {
                             type="checkbox" 
                             checked={readInstructions} 
                             onChange={(e) => setReadInstructions(e.target.checked)} 
-                            className="peer appearance-none w-5 h-5 rounded border border-[#5B8CFF]/50 bg-zinc-950/50 checked:bg-[#5B8CFF] checked:border-[#5B8CFF] transition-all cursor-pointer" 
+                            className="peer appearance-none w-5 h-5 rounded border border-[#5B8CFF]/50 sys-bg/50 checked:bg-[#5B8CFF] checked:border-[#5B8CFF] transition-all cursor-pointer" 
                           />
                           <Check className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" strokeWidth={3} />
                         </div>
-                        <span className="text-[11px] text-zinc-400 group-hover:text-zinc-300 leading-relaxed font-sans transition-colors">
+                        <span className="text-[11px] sys-text-body group-hover:sys-text-primary leading-relaxed font-sans transition-colors">
                           I acknowledge that I have read the security policies, consent to activation of my camera device, and understand that tab switching will log violations against my exam submission.
                         </span>
                       </label>
 
                       {/* Launch Button */}
-                      <div className="flex justify-end pt-6 border-t border-white/5 select-none">
+                      <div className="flex justify-end pt-6 border-t border-transparent select-none">
                         <Button 
                           onClick={handleLaunchAssessment}
                           disabled={isSubmitting || !timeCheck.valid}
                           className={`h-12 px-8 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 flex items-center gap-2.5 select-none shadow-lg ${
                             timeCheck.valid 
-                              ? 'bg-gradient-to-r from-[#5B8CFF] to-blue-500 hover:from-blue-500 hover:to-[#5B8CFF] text-white font-extrabold cursor-pointer active:scale-95 hover:shadow-[0_0_20px_rgba(91,140,255,0.4)]' 
-                              : 'bg-zinc-900 text-zinc-600 border border-white/5 cursor-not-allowed shadow-none'
+                              ? 'sys-bg hover:from-blue-500 hover:to-[#5B8CFF] text-white font-extrabold cursor-pointer active:scale-95 hover:shadow-[0_0_20px_rgba(91,140,255,0.4)]' 
+                              : 'sys-card sys-text-body border border-transparent cursor-not-allowed shadow-none'
                           }`}
                         >
                           {isSubmitting ? (
@@ -763,8 +763,8 @@ export default function CandidateDashboard() {
                     </CardContent>
                   </Card>
                 ) : (
-                  <div className="h-[400px] flex flex-col gap-4 items-center justify-center border border-white/5 rounded-3xl bg-zinc-950/40 backdrop-blur-md text-zinc-500 text-xs font-mono select-none">
-                    <Search className="w-8 h-8 text-zinc-700 mb-2" strokeWidth={1} />
+                  <div className="h-[400px] flex flex-col gap-4 items-center justify-center border border-transparent rounded-3xl sys-bg/40  sys-text-body text-xs font-mono select-none">
+                    <Search className="w-8 h-8 sys-text-body mb-2" strokeWidth={1} />
                     Please select an assessment path from the left lobby list.
                   </div>
                 )}
@@ -776,35 +776,35 @@ export default function CandidateDashboard() {
           {/* ================= HISTORY TAB ================= */}
           {activeTab === 'history' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="flex items-center gap-2 px-1 text-[10px] font-bold text-zinc-500 font-mono tracking-widest uppercase select-none">
-                <History className="w-4 h-4 text-zinc-550" strokeWidth={1.5} /> Past Records & Submissions
+              <div className="flex items-center gap-2 px-1 text-[10px] font-bold sys-text-body font-mono tracking-widest uppercase select-none">
+                <History className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Past Records & Submissions
               </div>
               
-              <div className="bg-zinc-950/50 border border-white/5 rounded-2xl overflow-hidden backdrop-blur-md shadow-xl">
+              <div className="sys-bg/50 border border-transparent rounded-2xl overflow-hidden  shadow-xl">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-sm whitespace-nowrap">
-                    <thead className="bg-zinc-900/80 border-b border-white/5">
+                    <thead className="sys-card border-b border-transparent">
                       <tr>
-                        <th className="px-6 py-4 font-mono text-[10px] uppercase text-zinc-500 tracking-wider">Session ID</th>
-                        <th className="px-6 py-4 font-mono text-[10px] uppercase text-zinc-500 tracking-wider">Assessment</th>
-                        <th className="px-6 py-4 font-mono text-[10px] uppercase text-zinc-500 tracking-wider">Date</th>
-                        <th className="px-6 py-4 font-mono text-[10px] uppercase text-zinc-500 tracking-wider">Status</th>
-                        <th className="px-6 py-4 font-mono text-[10px] uppercase text-zinc-500 tracking-wider">Score</th>
-                        <th className="px-6 py-4 font-mono text-[10px] uppercase text-zinc-500 tracking-wider">Integrity</th>
+                        <th className="px-6 py-4 font-mono text-[10px] uppercase sys-text-body tracking-wider">Session ID</th>
+                        <th className="px-6 py-4 font-mono text-[10px] uppercase sys-text-body tracking-wider">Assessment</th>
+                        <th className="px-6 py-4 font-mono text-[10px] uppercase sys-text-body tracking-wider">Date</th>
+                        <th className="px-6 py-4 font-mono text-[10px] uppercase sys-text-body tracking-wider">Status</th>
+                        <th className="px-6 py-4 font-mono text-[10px] uppercase sys-text-body tracking-wider">Score</th>
+                        <th className="px-6 py-4 font-mono text-[10px] uppercase sys-text-body tracking-wider">Integrity</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/5">
                       {pastSessions.length > 0 ? (
                         pastSessions.map(session => (
-                          <tr key={session.id} className="hover:bg-white/[0.02] transition-colors">
-                            <td className="px-6 py-4 font-mono text-xs text-zinc-400">{session.id.slice(0, 8)}</td>
-                            <td className="px-6 py-4 font-heading font-semibold text-zinc-200">{session.assessment_id.slice(0, 12)}...</td>
-                            <td className="px-6 py-4 text-xs text-zinc-400">{new Date(session.startedAt || 0).toLocaleDateString()}</td>
+                          <tr key={session.id} className="hover:sys-table-row transition-colors">
+                            <td className="px-6 py-4 font-mono text-xs sys-text-body">{session.id.slice(0, 8)}</td>
+                            <td className="px-6 py-4 font-heading font-semibold sys-text-primary">{session.assessment_id.slice(0, 12)}...</td>
+                            <td className="px-6 py-4 text-xs sys-text-body">{new Date(session.startedAt || 0).toLocaleDateString()}</td>
                             <td className="px-6 py-4">
                               <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
                                 session.status === 'submitted' 
-                                  ? 'bg-teal-500/10 text-teal-400 border border-teal-500/20' 
-                                  : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
+                                  ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border border-[#5B8CFF]/20' 
+                                  : 'bg-[#5B8CFF]/10 text-[#5B8CFF] border border-[#5B8CFF]/20'
                               }`}>
                                 {session.status === 'submitted' ? 'Submitted' : 'Abandoned'}
                               </span>
@@ -812,20 +812,20 @@ export default function CandidateDashboard() {
                             <td className="px-6 py-4 font-mono font-bold text-white">{session.score || 0}</td>
                             <td className="px-6 py-4">
                               <div className="flex items-center gap-2">
-                                <div className="w-16 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                                <div className="w-16 h-1.5 sys-card rounded-full overflow-hidden">
                                   <div 
-                                    className={`h-full rounded-full ${session.integrity_score >= 80 ? 'bg-teal-500' : session.integrity_score >= 50 ? 'bg-amber-500' : 'bg-rose-500'}`}
+                                    className={`h-full rounded-full ${session.integrity_score >= 80 ? 'bg-[#5B8CFF]' : session.integrity_score >= 50 ? 'bg-[#1c1c1e]' : 'bg-[#1c1c1e]'}`}
                                     style={{ width: `${session.integrity_score || 0}%` }}
                                   />
                                 </div>
-                                <span className="font-mono text-xs text-zinc-400">{session.integrity_score}%</span>
+                                <span className="font-mono text-xs sys-text-body">{session.integrity_score}%</span>
                               </div>
                             </td>
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={6} className="px-6 py-12 text-center text-zinc-500 text-xs font-mono">
+                          <td colSpan={6} className="px-6 py-12 text-center sys-text-body text-xs font-mono">
                             No past session records found.
                           </td>
                         </tr>

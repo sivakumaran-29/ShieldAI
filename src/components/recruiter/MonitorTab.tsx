@@ -35,7 +35,7 @@ export default function MonitorTab({ assessments }: MonitorTabProps) {
 
   if (loading) {
     return (
-      <div className="p-12 text-center text-xs font-mono text-zinc-550 animate-pulse select-none">
+      <div className="p-12 text-center text-xs font-mono sys-text-body animate-pulse select-none">
         Syncing live proctor channels...
       </div>
     )
@@ -50,7 +50,7 @@ export default function MonitorTab({ assessments }: MonitorTabProps) {
           <Activity className="w-5 h-5 text-[#5B8CFF] animate-pulse" strokeWidth={1.5} />
           <div>
             <h2 className="text-[10px] font-bold font-mono tracking-widest text-[#5B8CFF] uppercase">Live Proctor Grid</h2>
-            <span className="text-[10px] text-zinc-500 mt-1 block font-mono">Active candidate streams and integrity radar feeds</span>
+            <span className="text-[10px] sys-text-body mt-1 block font-mono">Active candidate streams and integrity radar feeds</span>
           </div>
         </div>
 
@@ -70,7 +70,7 @@ export default function MonitorTab({ assessments }: MonitorTabProps) {
             onClick={loadActiveTakers} 
             disabled={isRefreshing}
             variant="outline" 
-            className="border-border bg-zinc-950/20 h-8 text-[11px] font-bold text-zinc-400 hover:text-white cursor-pointer rounded-xl transition"
+            className="border-border sys-bg/20 h-8 text-[11px] font-bold sys-text-body hover:text-white cursor-pointer rounded-xl transition"
           >
             <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${isRefreshing ? 'animate-spin' : ''}`} strokeWidth={1.5} /> Sync channels
           </Button>
@@ -95,7 +95,7 @@ export default function MonitorTab({ assessments }: MonitorTabProps) {
         })}
 
         {sessions.length === 0 && (
-          <div className="col-span-full text-center p-12 bg-zinc-950/20 border border-border rounded-2xl text-xs font-mono text-zinc-550 select-none">
+          <div className="col-span-full text-center p-12 sys-bg/20 border border-border rounded-2xl text-xs font-mono sys-text-body select-none">
             No candidates are currently solving coding challenges.
           </div>
         )}
