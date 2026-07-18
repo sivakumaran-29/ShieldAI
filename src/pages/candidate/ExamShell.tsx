@@ -14,10 +14,7 @@ import {
 import { useAuthStore } from '../../store/authStore'
 import { getIceServers } from '../../lib/webrtcConfig'
 import { supabase } from '../../lib/supabaseClient'
-import { Activity, Clock, LogOut, Check, EyeOff, Lock, TriangleAlert, RefreshCw, AlertTriangle } from 'lucide-react'
-import ThemeToggle from '@/components/ui/ThemeToggle'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import ThemeToggle from '../../components/ThemeToggle'
 
 const codeTemplates: Record<string, string> = {
   python: `def solve():\n    # Read input from standard input\n    # Write your solution here\n    # For Example:\n    # nums = list(map(int, input().split(',')))\n    # target = int(input())\n    # print(two_sum(nums, target))\n    pass\n\nif __name__ == '__main__':\n    solve()`,
