@@ -595,49 +595,63 @@ export const saveCandidateSession = async (session: CandidateSession): Promise<b
   }
   localStorage.setItem(key, JSON.stringify(sessions))
 
-  // Write to Supabase
-  try {
-    const payload = {
-      exam_id: session.assessment_id,
-      student_id: session.student_id,
-      status: session.status,
-      integrity_score: session.integrity_score,
-      violation_logs: session.violation_logs,
-      code_snapshot: JSON.stringify({
-        enteredDetails: {
-          name: session.name,
-          email: session.email,
-          rollNumber: session.roll_number
-        },
-        submissions: session.submissions,
-        mcq_submissions: session.mcq_submissions,
-        finalScore: session.score,
-        startedAt: session.startedAt,
-        submittedAt: session.submittedAt
-      })
-    }
+  // Write to Supabase with Exponential Backoff + Jitter for Thundering Herd Protection
+  let retries = 3
+  let delay = 1000 // 1s initial delay
 
-    // Optimistic Update Pattern: Reduce 2 queries to 1 for 99% of saves
-    const { data: updateData, error: updateError } = await supabase
-      .from('integrity_audits')
-      .update(payload)
-      .eq('exam_id', session.assessment_id)
-      .eq('student_id', session.student_id)
-      .select('id')
-      
-    if (updateError) throw updateError
+  while (retries >= 0) {
+    try {
+      const payload = {
+        exam_id: session.assessment_id,
+        student_id: session.student_id,
+        status: session.status,
+        integrity_score: session.integrity_score,
+        violation_logs: session.violation_logs,
+        code_snapshot: JSON.stringify({
+          enteredDetails: {
+            name: session.name,
+            email: session.email,
+            rollNumber: session.roll_number
+          },
+          submissions: session.submissions,
+          mcq_submissions: session.mcq_submissions,
+          finalScore: session.score,
+          startedAt: session.startedAt,
+          submittedAt: session.submittedAt
+        })
+      }
 
-    if (!updateData || updateData.length === 0) {
-      const { error: insErr } = await supabase
+      // Optimistic Update Pattern
+      const { data: updateData, error: updateError } = await supabase
         .from('integrity_audits')
-        .insert([payload])
-      if (insErr) throw insErr
+        .update(payload)
+        .eq('exam_id', session.assessment_id)
+        .eq('student_id', session.student_id)
+        .select('id')
+        
+      if (updateError) throw updateError
+
+      if (!updateData || updateData.length === 0) {
+        const { error: insErr } = await supabase
+          .from('integrity_audits')
+          .insert([payload])
+        if (insErr) throw insErr
+      }
+      return true
+    } catch (err) {
+      if (retries === 0) {
+        console.error('[DB Engine] Supabase saveCandidateSession failed after retries:', err)
+        return false
+      }
+      
+      const jitter = Math.random() * 500
+      await new Promise(r => setTimeout(r, delay + jitter))
+      delay *= 2 // Exponential backoff
+      retries--
     }
-    return true
-  } catch (err) {
-    console.error('[DB Engine] Supabase saveCandidateSession failed:', err)
-    return false
   }
+  
+  return false
 }
 
 // ==========================================
