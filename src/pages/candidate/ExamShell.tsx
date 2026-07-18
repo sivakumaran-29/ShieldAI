@@ -27,7 +27,6 @@ export default function ExamShell() {
   const { user } = useAuthStore()
 
   // Video/Proctoring Refs
-  const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const lastFrameDataRef = useRef<ImageData | null>(null)
   const localStreamRef = useRef<MediaStream | null>(null)
@@ -70,7 +69,6 @@ export default function ExamShell() {
   const [anomalyType, setAnomalyType] = useState('')
   const [showWarningModal, setShowWarningModal] = useState(false)
   const [warningModalText, setWarningModalText] = useState('')
-  const [localStream, setLocalStream] = useState<MediaStream | null>(null)
 
   const filteredQuestions = activePart === 'mcq'
     ? questions.filter(q => q.type === 'mcq')
@@ -410,7 +408,6 @@ export default function ExamShell() {
           video: { width: 320, height: 240, frameRate: 10 }
         })
         localStreamRef.current = streamInstance
-        setLocalStream(streamInstance)
         
         // Let the brute-force useEffect handle the DOM binding
         processFrame()
