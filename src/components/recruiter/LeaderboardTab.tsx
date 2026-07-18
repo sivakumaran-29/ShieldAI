@@ -233,7 +233,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                         <span className="text-[11px] sys-text-body font-sans mt-0.5">{s.email}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-5 font-mono font-semibold sys-text-body uppercase">{s.roll_number || 'N/A'}</td>
+                    <td className="py-4 px-5 font-mono text-xs font-semibold sys-text-body uppercase">{s.roll_number || 'N/A'}</td>
                     <td className="py-4 px-5">
                       {isComp ? (
                         <div className="flex items-center gap-1.5">
