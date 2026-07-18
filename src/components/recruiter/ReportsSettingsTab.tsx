@@ -102,12 +102,19 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
           questionsList.forEach(q => {
             const sub = s.submissions?.[q.id]
             if (sub && sub.code) {
-              // Legacy fallback just in case the db holds a raw index like "0"
               let textToPrint = sub.code
+              // Legacy fallback just in case the db holds a raw index like "0"
               const asInt = parseInt(textToPrint, 10)
               if (!isNaN(asInt) && String(asInt) === textToPrint && q.mcq_options && q.mcq_options[asInt]) {
                 textToPrint = q.mcq_options[asInt]
               }
+
+              // Failsafe for corrupted legacy database entries (where "def solve():" was accidentally saved)
+              const isValidOption = q.mcq_options?.includes(textToPrint)
+              if (!isValidOption) {
+                textToPrint = 'Not Attempted'
+              }
+
               row.push(`"${textToPrint.replace(/"/g, '""')}"`)
             } else {
               row.push('"Not Attempted"')
