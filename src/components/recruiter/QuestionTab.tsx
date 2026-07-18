@@ -22,6 +22,8 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
   const [questionType, setQuestionType] = useState<'coding' | 'mcq'>('coding')
   const [mcqOptions, setMcqOptions] = useState<string[]>(['', '', '', ''])
   const [mcqCorrectIndex, setMcqCorrectIndex] = useState<number>(0)
+  const [mcqMarks, setMcqMarks] = useState<number>(1)
+  const [mcqNegativeMarks, setMcqNegativeMarks] = useState<number>(0)
   const [description, setDescription] = useState('')
   const [difficulty, setDifficulty] = useState<'Easy' | 'Medium' | 'Hard'>('Easy')
   const [constraints, setConstraints] = useState('')
@@ -61,6 +63,8 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
     setQuestionType(type)
     setMcqOptions(['', '', '', ''])
     setMcqCorrectIndex(0)
+    setMcqMarks(1)
+    setMcqNegativeMarks(0)
     setDescription('')
     setDifficulty('Easy')
     setConstraints('• 1 <= nums.length <= 10^5')
@@ -86,6 +90,8 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
     setQuestionType(q.type || 'coding')
     setMcqOptions(q.mcq_options || ['', '', '', ''])
     setMcqCorrectIndex(q.mcq_correct_index || 0)
+    setMcqMarks(q.mcq_marks ?? 1)
+    setMcqNegativeMarks(q.mcq_negative_marks ?? 0)
     setDescription(q.description)
     setDifficulty(q.difficulty)
     setConstraints(q.constraints)
@@ -148,6 +154,8 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
       type: questionType,
       mcq_options: questionType === 'mcq' ? mcqOptions : undefined,
       mcq_correct_index: questionType === 'mcq' ? mcqCorrectIndex : undefined,
+      mcq_marks: questionType === 'mcq' ? mcqMarks : undefined,
+      mcq_negative_marks: questionType === 'mcq' ? mcqNegativeMarks : undefined,
       description,
       constraints,
       input_format: inputFormat,
@@ -682,6 +690,29 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                       </label>
                     </div>
                   ))}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                  <div>
+                    <label className="block text-[10px] font-mono font-bold text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5">Marks for Correct Answer</label>
+                    <input 
+                      type="number" 
+                      value={mcqMarks} 
+                      onChange={e => setMcqMarks(parseFloat(e.target.value) || 0)} 
+                      className="w-full sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 transition shadow-inner"
+                      min={0}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-mono font-bold text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5">Negative Marks (Optional)</label>
+                    <input 
+                      type="number" 
+                      value={mcqNegativeMarks} 
+                      onChange={e => setMcqNegativeMarks(parseFloat(e.target.value) || 0)} 
+                      className="w-full sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#F87171]/50 transition shadow-inner"
+                      min={0}
+                    />
+                  </div>
                 </div>
               </div>
             )}

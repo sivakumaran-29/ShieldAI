@@ -20,6 +20,8 @@ export interface CodingQuestion {
   type?: 'coding' | 'mcq'
   mcq_options?: string[]
   mcq_correct_index?: number
+  mcq_marks?: number
+  mcq_negative_marks?: number
   description: string
   difficulty: 'Easy' | 'Medium' | 'Hard'
   constraints: string

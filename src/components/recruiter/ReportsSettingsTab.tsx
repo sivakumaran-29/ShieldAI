@@ -102,7 +102,8 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
           ]
 
           let mcqScore = 0
-          const maxScore = questionsList.length * 100
+          let maxScore = 0
+          questionsList.forEach(q => { maxScore += (q.mcq_marks ?? 1) })
 
           questionsList.forEach(q => {
             const mcqAns = s.mcq_submissions?.[q.id]
@@ -130,8 +131,12 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
             }
 
             const correctOption = q.mcq_correct_index !== undefined && q.mcq_options ? q.mcq_options[q.mcq_correct_index] : ''
-            if (textToPrint !== 'Not Attempted' && textToPrint === correctOption) {
-              mcqScore += 100
+            if (textToPrint !== 'Not Attempted') {
+              if (textToPrint === correctOption) {
+                mcqScore += (q.mcq_marks ?? 1)
+              } else {
+                mcqScore -= (q.mcq_negative_marks ?? 0)
+              }
             }
           })
           

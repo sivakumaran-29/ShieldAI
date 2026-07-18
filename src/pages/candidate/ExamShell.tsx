@@ -386,19 +386,24 @@ export default function ExamShell() {
     // Recalculate average score
     // Recalculate average score
     let totalScore = 0
+    let maxPossibleScore = 0
     questions.forEach(q => {
       if (q.type === 'mcq') {
+        maxPossibleScore += (q.mcq_marks ?? 1)
         const mcqAns = currentSession.mcq_submissions?.[q.id]
         if (mcqAns && q.mcq_options && q.mcq_correct_index !== undefined) {
           if (mcqAns === q.mcq_options[q.mcq_correct_index]) {
-            totalScore += 100
+            totalScore += (q.mcq_marks ?? 1)
+          } else {
+            totalScore -= (q.mcq_negative_marks ?? 0)
           }
         }
       } else {
+        maxPossibleScore += 100
         totalScore += submissionRecords[q.id]?.score || 0
       }
     })
-    const finalAvg = Math.round(totalScore / questions.length)
+    const finalAvg = maxPossibleScore > 0 ? Math.max(0, Math.round((totalScore / maxPossibleScore) * 100)) : 0
 
     // Remove duplicates from logs
     const sanitizedLogs = Array.from(new Set(proctorLogs.map(l => l.replace(/^\[LOG\] |^\[SYSTEM\] /, ''))))
@@ -1342,11 +1347,19 @@ export default function ExamShell() {
                 <div className="flex flex-col h-full">
                   <div className="flex-1 p-8 max-w-4xl mx-auto w-full space-y-6 overflow-y-auto pb-24">
                     
-                    <div className="flex items-center gap-4 mb-4 border-b border-white/5/50 pb-4">
+                    <div className="flex items-center gap-4 mb-4 border-b border-white/5/50 pb-4 flex-wrap">
                       <h2 className="text-xl font-extrabold text-foreground font-sans">Question {selectedQIndex + 1}</h2>
                       <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-background border border-white/5 text-muted font-bold uppercase tracking-wider">
                         DIFFICULTY: {activeQuestion.difficulty}
                       </span>
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#34D399]/10 border border-[#34D399]/30 text-[#34D399] font-bold uppercase tracking-wider">
+                        MARKS: +{activeQuestion.mcq_marks ?? 1}
+                      </span>
+                      {(activeQuestion.mcq_negative_marks ?? 0) > 0 && (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#F87171]/10 border border-[#F87171]/30 text-[#F87171] font-bold uppercase tracking-wider">
+                          NEGATIVE: -{activeQuestion.mcq_negative_marks}
+                        </span>
+                      )}
                     </div>
                     
                     <div className="text-[15px] leading-relaxed sys-text-primary font-sans whitespace-pre-wrap mb-8">

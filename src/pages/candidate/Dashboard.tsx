@@ -689,6 +689,10 @@ export default function CandidateDashboard() {
                               <CheckCircle2 className="w-4 h-4 text-[#5B8CFF] shrink-0 mt-0.5" strokeWidth={2} />
                               <p><strong>Optical Verification:</strong> Secure proctor networks utilize client media camera parameters for integrity audit monitors.</p>
                             </div>
+                            <div className="flex gap-3">
+                              <CheckCircle2 className="w-4 h-4 text-[#5B8CFF] shrink-0 mt-0.5" strokeWidth={2} />
+                              <p><strong>Marking System:</strong> Each multiple-choice question displays its specific marks for correct answers and negative marks for incorrect answers. Unattempted questions incur no penalties.</p>
+                            </div>
                           </div>
                         </div>
                       </div>
