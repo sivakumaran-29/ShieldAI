@@ -659,6 +659,38 @@ export const saveCandidateSession = async (session: CandidateSession): Promise<b
 // ==========================================
 import { createPythonWorker, createJSWorker, executeInWorker } from './codeWorkers'
 
+// PISTON API EMERGENCY FAILOVER
+const executePistonFallback = async (code: string, language: string, stdin: string): Promise<{ stdout: string, stderr: string, error?: string }> => {
+  try {
+    const pistonLang = language === 'c++' || language === 'cpp' ? 'c++' : language
+    const version = pistonLang === 'c++' ? '10.2.0' : pistonLang === 'java' ? '15.0.2' : '*'
+    
+    const response = await fetch('https://emkc.org/api/v2/piston/execute', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        language: pistonLang,
+        version: version,
+        files: [{ content: code }],
+        stdin: stdin || "",
+        compile_timeout: 10000,
+        run_timeout: 3000
+      })
+    })
+    
+    if (!response.ok) throw new Error(`Piston API Error: ${response.status}`)
+    const data = await response.json()
+    
+    return {
+      stdout: data.run?.stdout || '',
+      stderr: data.run?.stderr || data.compile?.stderr || '',
+      error: data.run?.code !== 0 ? 'Execution Error' : undefined
+    }
+  } catch (err) {
+    return { stdout: '', stderr: String(err), error: 'Fallback Engine Failed' }
+  }
+}
+
 export const evaluateCodeSnippet = async (
   code: string,
   language: string,
@@ -794,9 +826,49 @@ export const evaluateCodeSnippet = async (
     const response = await model.generateContent(evaluationPrompt)
     const text = response.response.text()
     return JSON.parse(text)
-  } catch (error) {
-    console.error('[AI Sandbox] Gemini compilation failed, running locally fallback:', error)
-    return generateMockEvaluation(code, language, testCases)
+  } catch (err) {
+    console.warn('[AI Sandbox] Gemini Rate Limited or Failed. Triggering Piston Failover...', err)
+    
+    const fallbackResults = []
+    let passedCount = 0
+    let globalVerdict: any = 'Accepted'
+
+    for (const tc of testCases) {
+      const start = performance.now()
+      const { stdout, stderr, error } = await executePistonFallback(code, language, tc.input)
+      const timeMs = performance.now() - start
+
+      let tcVerdict: any = 'Accepted'
+      let passed = false
+
+      if (error || stderr) {
+        tcVerdict = 'Runtime Error'
+        globalVerdict = 'Runtime Error'
+      } else if (stdout.trim() !== tc.expected_output.trim()) {
+        tcVerdict = 'Wrong Answer'
+        if (globalVerdict === 'Accepted') globalVerdict = 'Wrong Answer'
+      } else {
+        passed = true
+        passedCount++
+      }
+
+      fallbackResults.push({
+        testCaseId: tc.id,
+        input: tc.input,
+        expected: tc.expected_output,
+        actual: stdout.trim() || stderr.trim() || error || '',
+        passed,
+        verdict: tcVerdict,
+        executionTimeMs: Math.round(timeMs),
+        memoryUsageKb: 15000 // Mock for piston
+      })
+    }
+
+    return {
+      verdict: globalVerdict,
+      compileMessage: globalVerdict === 'Accepted' ? 'Compiled via Fallback successfully' : 'Execution failed on some cases via Fallback',
+      cases: fallbackResults
+    }
   }
 }
 
@@ -940,12 +1012,8 @@ Return ONLY a JSON object exactly matching this schema:
     const jsonStr = match ? match[1] : text
     
     return JSON.parse(jsonStr)
-  } catch (error) {
-    console.error('Terminal Simulator Error:', error)
-    return {
-      stdout: '',
-      stderr: 'Internal Server Error: Failed to simulate code execution.',
-      error: 'Execution Failed'
-    }
+  } catch (err) {
+    console.warn('[AI Sandbox] Gemini Terminal Rate Limited. Triggering Piston Failover...', err)
+    return await executePistonFallback(code, language, customInput)
   }
 }
