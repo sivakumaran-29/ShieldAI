@@ -128,9 +128,6 @@ export default function DatabaseTab() {
         await supabaseAdmin.auth.admin.deleteUser(u.id)
       }
       setCandidates(prev => prev.filter(c => c.batch !== batchName))
-      
-      const storedBatches = JSON.parse(localStorage.getItem('cached_batches') || '[]')
-      localStorage.setItem('cached_batches', JSON.stringify(storedBatches.filter((b: string) => b !== batchName)))
     } catch (err: any) {
       alert('Failed to delete batch: ' + err.message)
     } finally {
@@ -213,11 +210,6 @@ export default function DatabaseTab() {
           }
         }
         successCount++
-      }
-
-      const storedBatches = JSON.parse(localStorage.getItem('cached_batches') || '[]')
-      if (!storedBatches.includes(newBatchName)) {
-        localStorage.setItem('cached_batches', JSON.stringify([...storedBatches, newBatchName]))
       }
 
       setIsCreating(false)

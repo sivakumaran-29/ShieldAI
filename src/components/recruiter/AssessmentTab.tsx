@@ -6,7 +6,8 @@ import {
   Sparkles, Sliders, Trash2
 } from 'lucide-react'
 import { Assessment, saveAssessment, deleteAssessment, duplicateAssessment } from '../../lib/assessmentEngine'
-import { supabaseAdmin } from '../../lib/supabaseAdmin'
+import { fetchActiveBatches } from '../../lib/batchHelper'
+
 
 interface AssessmentTabProps {
   assessments: Assessment[]
@@ -40,36 +41,9 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
   useEffect(() => {
     const fetchTargets = async () => {
       try {
-        let allUsers: any[] = []
-        let page = 1
-        while (true) {
-          const { data } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 1000 })
-          if (!data?.users || data.users.length === 0) break
-          allUsers = allUsers.concat(data.users)
-          page++
-        }
-        
-        const batches = new Set<string>()
-        const depts = new Set<string>()
-        
-        allUsers.forEach(u => {
-          const b = u.user_metadata?.batch
-          if (b) {
-            batches.add(b)
-            depts.add(b.split('_')[0])
-          }
-        })
-        
-        try {
-          const cached = JSON.parse(localStorage.getItem('cached_batches') || '[]')
-          cached.forEach((b: string) => {
-            batches.add(b)
-            depts.add(b.split('_')[0])
-          })
-        } catch(e) {}
-        
-        setAvailableBatches(Array.from(batches).sort())
-        setAvailableDepartments(Array.from(depts).sort())
+        const { batches, departments } = await fetchActiveBatches()
+        setAvailableBatches(batches)
+        setAvailableDepartments(departments)
       } catch (err) {
         console.error('Failed to fetch batches', err)
       }
