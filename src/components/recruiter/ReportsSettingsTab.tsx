@@ -87,9 +87,11 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
         csvContent = "Candidate Name,Roll Number,Email,Status,"
         questionsList.forEach(q => {
           const qHeading = q.description || q.title || 'Question'
-          csvContent += `"${qHeading.replace(/"/g, '""')}",`
+          const correctOption = q.mcq_correct_index !== undefined && q.mcq_options ? q.mcq_options[q.mcq_correct_index] : ''
+          const headerText = correctOption ? `${qHeading} (Correct: ${correctOption})` : qHeading
+          csvContent += `"${headerText.replace(/"/g, '""')}",`
         })
-        csvContent += "\n"
+        csvContent += "MCQ Score,Max Score\n"
 
         sessions.forEach(s => {
           const row = [
@@ -98,6 +100,9 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
             `"${s.email || ''}"`,
             `"${s.status || ''}"`
           ]
+
+          let mcqScore = 0
+          const maxScore = questionsList.length * 100
 
           questionsList.forEach(q => {
             const mcqAns = s.mcq_submissions?.[q.id]
@@ -123,7 +128,15 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
             } else {
               row.push('"Not Attempted"')
             }
+
+            const correctOption = q.mcq_correct_index !== undefined && q.mcq_options ? q.mcq_options[q.mcq_correct_index] : ''
+            if (textToPrint !== 'Not Attempted' && textToPrint === correctOption) {
+              mcqScore += 100
+            }
           })
+          
+          row.push(`"${mcqScore}"`)
+          row.push(`"${maxScore}"`)
           
           csvContent += row.join(",") + "\n"
         })
