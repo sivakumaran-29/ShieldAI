@@ -5,14 +5,14 @@ import {
   FileText, Download, Check, Save,
   Sliders, Database, Cpu, RefreshCw, Terminal as TermIcon, Settings as GearIcon, Shield, Search
 } from 'lucide-react'
-import { Assessment } from '../../lib/assessmentEngine'
+import { Assessment, fetchCandidateSessions, fetchQuestions } from '../../lib/assessmentEngine'
 
 interface ReportsSettingsTabProps {
   defaultSection: 'reports' | 'settings' | 'logs'
   assessments: Assessment[]
 }
 
-export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTabProps) {
+export default function ReportsSettingsTab({ defaultSection, assessments }: ReportsSettingsTabProps) {
   const [activeSub, setActiveSub] = useState<'reports' | 'settings' | 'logs'>(defaultSection)
   const [isRefreshingLogs, setIsRefreshingLogs] = useState(false)
   const [logsSearch, setLogsSearch] = useState('')
@@ -23,13 +23,18 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
   const [proctorTabs, setProctorTabs] = useState(true)
   const [allowedLangs, setAllowedLangs] = useState(['python', 'javascript'])
   const [saveSuccess, setSaveSuccess] = useState(false)
+  const [exportExamId, setExportExamId] = useState<string>('')
+  const [isExporting, setIsExporting] = useState(false)
 
   // Sub-settings categories for macOS settings panel
   const [settingsCategory, setSettingsCategory] = useState<'general' | 'proctor' | 'compilers'>('general')
 
   useEffect(() => {
     setActiveSub(defaultSection)
-  }, [defaultSection])
+    if (assessments.length > 0 && !exportExamId) {
+      setExportExamId(assessments[0].id)
+    }
+  }, [defaultSection, assessments, exportExamId])
 
   // Mock logs feed
   const [systemLogs, setSystemLogs] = useState<string[]>([
@@ -56,6 +61,62 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
     e.preventDefault()
     setSaveSuccess(true)
     setTimeout(() => setSaveSuccess(false), 2000)
+  }
+
+  const handleExportCSV = async () => {
+    if (!exportExamId) return
+    setIsExporting(true)
+    try {
+      const match = assessments.find(a => a.id === exportExamId)
+      const examTitle = match ? match.title : 'Assessment'
+
+      const questionsList = await fetchQuestions(exportExamId)
+      const sessions = await fetchCandidateSessions(exportExamId)
+
+      let csvContent = "Candidate Name,Roll Number,Email,Status,Integrity Score,Total Score,"
+      questionsList.forEach(q => {
+        csvContent += `"${q.title} - Score","${q.title} - Code",`
+      })
+      csvContent += "\n"
+
+      sessions.forEach(s => {
+        const row = [
+          `"${s.name || ''}"`,
+          `"${s.roll_number || ''}"`,
+          `"${s.email || ''}"`,
+          `"${s.status || ''}"`,
+          `"${s.integrity_score ?? 100}"`,
+          `"${s.score || 0}"`
+        ]
+
+        questionsList.forEach(q => {
+          const sub = s.submissions?.[q.id]
+          if (sub) {
+            row.push(`"${sub.score ?? 0}"`)
+            const safeCode = (sub.code || '').replace(/"/g, '""')
+            row.push(`"${safeCode}"`)
+          } else {
+            row.push('"0"')
+            row.push('""')
+          }
+        })
+        
+        csvContent += row.join(",") + "\n"
+      })
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement("a")
+      link.setAttribute("href", url)
+      link.setAttribute("download", `${examTitle.replace(/\s+/g, '_')}_Responses.csv`)
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    } catch (err) {
+      console.error('Failed to export CSV', err)
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   const handleToggleLang = (lang: string) => {
@@ -130,9 +191,24 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
                 Compile spreadsheet row listings containing student identifiers, active socket connection logs, and compiler test-case details.
               </p>
             </div>
-            <div className="pt-4 border-t border-white/5 flex justify-end">
-              <Button className="sys-bg hover:sys-card border border-white/5 sys-text-body hover:text-white rounded-xl text-xs h-9 px-4 flex items-center gap-1.5 transition">
-                <Download className="w-3.5 h-3.5" /> Export Data Sheet
+            <div className="pt-4 border-t border-white/5 flex flex-col gap-2">
+              <select 
+                value={exportExamId} 
+                onChange={e => setExportExamId(e.target.value)}
+                className="border border-white/5 bg-[rgba(28,28,30,0.72)] text-foreground rounded-xl text-xs px-3 py-1.5 outline-none cursor-pointer w-full focus:border-[#5B8CFF]/50"
+              >
+                {assessments.length === 0 && <option value="">No Assessments</option>}
+                {assessments.map(a => (
+                  <option key={a.id} value={a.id}>{a.title}</option>
+                ))}
+              </select>
+              <Button 
+                onClick={handleExportCSV}
+                disabled={isExporting || !exportExamId}
+                className="sys-bg hover:sys-card border border-white/5 sys-text-body hover:text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 transition w-full"
+              >
+                <Download className={`w-3.5 h-3.5 ${isExporting ? 'animate-bounce' : ''}`} /> 
+                {isExporting ? 'Building CSV...' : 'Export Data Sheet'}
               </Button>
             </div>
           </Card>
