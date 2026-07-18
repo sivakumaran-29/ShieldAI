@@ -151,8 +151,10 @@ export default function DatabaseTab() {
       }
 
       const prefix = startMatch[1]
-      const startNum = parseInt(startMatch[2], 10)
+      const startNumStr = startMatch[2]
+      const startNum = parseInt(startNumStr, 10)
       const endNum = parseInt(endMatch[2], 10)
+      const numLength = startNumStr.length
 
       if (startNum > endNum) {
         throw new Error('Start roll number must be less than or equal to end roll number.')
@@ -162,7 +164,8 @@ export default function DatabaseTab() {
       let successCount = 0
 
       for (let i = startNum; i <= endNum; i++) {
-        const roll = `${prefix}${i}`
+        const paddedNum = i.toString().padStart(numLength, '0')
+        const roll = `${prefix}${paddedNum}`
         const email = `${roll}${emailSuffix}`
         const password = roll
 
