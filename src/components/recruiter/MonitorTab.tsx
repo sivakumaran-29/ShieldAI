@@ -49,8 +49,8 @@ export default function MonitorTab({ assessments }: MonitorTabProps) {
         <div className="flex items-center gap-3">
           <Activity className="w-5 h-5 text-[#5B8CFF] animate-pulse" strokeWidth={1.5} />
           <div>
-            <h2 className="text-[10px] font-bold font-mono tracking-widest text-[#5B8CFF] uppercase">Live Proctor Grid</h2>
-            <span className="text-[10px] sys-text-body mt-1 block font-mono">Active candidate streams and integrity radar feeds</span>
+            <h2 className="text-[14px] font-heading font-bold tracking-wider text-[#5B8CFF] uppercase">Live Proctor Grid</h2>
+            <span className="text-[11px] sys-text-body mt-1 block font-sans font-medium">Active candidate streams and integrity radar feeds</span>
           </div>
         </div>
 

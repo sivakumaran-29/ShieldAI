@@ -212,11 +212,18 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                       <td className="py-4 px-5 sys-text-body font-sans">{a.duration} mins</td>
                       <td className="py-4 px-5 sys-text-body uppercase font-sans font-medium">{a.allowed_languages.join(', ')}</td>
                       <td className="py-4 px-5">
-                        <span className={`px-2 py-1 rounded text-[8px] font-mono font-bold uppercase tracking-wider ${
+                        <span className={`px-2.5 py-1 rounded-md text-[9px] font-mono font-bold uppercase tracking-wider inline-flex items-center gap-1.5 ${
                           a.status === 'Published' 
-                            ? 'bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/35' 
-                            : 'sys-card sys-text-body'
+                            ? 'bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/20 shadow-[0_0_10px_rgba(52,211,153,0.1)]' 
+                            : a.status === 'Draft'
+                            ? 'bg-[#FBBF24]/10 text-[#FBBF24] border border-[#FBBF24]/20 shadow-[0_0_10px_rgba(251,191,36,0.1)]'
+                            : 'bg-white/5 text-white/50 border border-white/5'
                         }`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${
+                            a.status === 'Published' ? 'bg-[#34D399] shadow-[0_0_5px_#34D399]' : 
+                            a.status === 'Draft' ? 'bg-[#FBBF24] shadow-[0_0_5px_#FBBF24]' : 
+                            'bg-white/30'
+                          }`} />
                           {a.status}
                         </span>
                       </td>

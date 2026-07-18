@@ -184,19 +184,19 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
       {/* Candidate Profile Info */}
       <div className="p-4 space-y-4 flex-1 flex flex-col justify-between">
         <div className="select-none">
-          <h4 className="font-bold text-xs text-foreground font-heading">{s.name}</h4>
-          <div className="text-[9px] sys-text-body font-mono mt-1 uppercase tracking-wider font-bold">Roll: {s.roll_number || 'N/A'}</div>
+          <h4 className="font-bold text-sm text-foreground font-heading">{s.name}</h4>
+          <div className="text-[10px] sys-text-body font-sans font-semibold mt-1 uppercase tracking-wider">Roll: {s.roll_number || 'N/A'}</div>
         </div>
 
         {/* Live infractions */}
-        <div className="flex gap-4 text-[9px] border-t border-white/5 pt-3 select-none">
-          <div className="space-y-0.5">
-            <span className="sys-text-body block uppercase tracking-wider font-mono font-bold">Infractions</span>
-            <span className={`font-mono font-bold ${isCritical ? 'text-[#F87171] font-bold' : 'sys-text-body'}`}>{violationCount} warning(s)</span>
+        <div className="flex gap-4 border-t border-white/5 pt-3 select-none">
+          <div className="space-y-1 w-1/2">
+            <span className="text-[10px] sys-text-body block uppercase tracking-wider font-sans font-bold">Infractions</span>
+            <span className={`text-[11px] font-sans font-semibold ${isCritical ? 'text-[#F87171]' : 'text-white'}`}>{violationCount} warning(s)</span>
           </div>
-          <div className="space-y-0.5 border-l border-white/5 pl-4">
-            <span className="sys-text-body block uppercase tracking-wider font-mono font-bold">Exam Status</span>
-            <span className="font-mono text-foreground font-bold capitalize">{s.status}...</span>
+          <div className="space-y-1 border-l border-white/5 pl-4 w-1/2">
+            <span className="text-[10px] sys-text-body block uppercase tracking-wider font-sans font-bold">Exam Status</span>
+            <span className="text-[11px] font-sans font-semibold text-white capitalize">{s.status}...</span>
           </div>
         </div>
 

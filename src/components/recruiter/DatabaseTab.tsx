@@ -223,10 +223,10 @@ export default function DatabaseTab() {
       {/* Header */}
       <div className="flex justify-between items-center border-b border-white/5 pb-4">
         <div>
-          <h2 className="text-[10px] font-mono font-bold tracking-widest text-[#5B8CFF] uppercase">
+          <h2 className="text-[12px] font-heading font-bold tracking-wider text-[#5B8CFF] uppercase">
             // CANDIDATE DATABASE REGISTRY
           </h2>
-          <span className="text-[10px] sys-text-body font-mono mt-1 block">
+          <span className="text-[11px] sys-text-body font-sans mt-1 block font-medium">
             Manage student batches, authentications, and platform access.
           </span>
         </div>
