@@ -7,6 +7,7 @@ import { useAuthStore } from '../../store/authStore'
 import { Button } from '@/components/ui/button'
 import { fetchAssessments, Assessment } from '../../lib/assessmentEngine'
 import ThemeToggle from '../../components/ThemeToggle'
+import { AmbientGlow } from '../../components/AmbientGlow'
 
 // Tabs Imports
 import AssessmentTab from '../../components/recruiter/AssessmentTab'
@@ -104,13 +105,10 @@ export default function RecruiterDashboard() {
   )
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex font-sans antialiased overflow-hidden relative">
+    <div className="min-h-screen sys-bg text-foreground flex font-sans antialiased overflow-hidden relative">
       
       {/* 1. Ambient Background Layer */}
-      <div className="mesh-bg">
-        <div className="mesh-circle-1" />
-        <div className="mesh-circle-2" />
-      </div>
+      <AmbientGlow />
       
       {/* 2. cinematic matte noise overlay */}
       <div className="grain-overlay" />

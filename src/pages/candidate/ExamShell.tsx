@@ -6,6 +6,7 @@ import {
   CornerDownRight, ChevronLeft, Lock
 } from 'lucide-react'
 import ThemeToggle from '../../components/ThemeToggle'
+import { AmbientGlow } from '../../components/AmbientGlow'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { 
@@ -960,8 +961,9 @@ export default function ExamShell() {
 
   if (loading || !assessment) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center text-white font-mono text-xs">
-        <div className="flex flex-col items-center gap-3">
+      <div className="min-h-screen sys-bg flex items-center justify-center text-white font-mono text-xs relative">
+        <AmbientGlow />
+        <div className="flex flex-col items-center gap-3 relative z-10">
           <RefreshCw className="w-6 h-6 animate-spin sys-text-body" />
           <span>Synchronizing Assessment Environment...</span>
         </div>
@@ -970,13 +972,10 @@ export default function ExamShell() {
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col font-sans antialiased overflow-hidden bg-background text-foreground relative">
+    <div className="min-h-screen w-full flex flex-col font-sans antialiased overflow-hidden sys-bg text-foreground relative">
       
       {/* Ambient Background Layer */}
-      <div className="mesh-bg">
-        <div className="mesh-circle-1" />
-        <div className="mesh-circle-2" />
-      </div>
+      <AmbientGlow />
       <div className="grain-overlay" />
       
       <div className="flex-1 flex flex-col z-10 relative">

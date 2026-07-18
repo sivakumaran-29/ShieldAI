@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { fetchAssessments, fetchCandidateSessions, saveCandidateSession, Assessment, CandidateSession } from '../../lib/assessmentEngine'
 import ThemeToggle from '../../components/ThemeToggle'
+import { AmbientGlow } from '../../components/AmbientGlow'
 
 export default function CandidateDashboard() {
   const { user, logout } = useAuthStore()
@@ -271,8 +272,8 @@ export default function CandidateDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#000000] flex items-center justify-center text-white font-mono text-xs relative overflow-hidden">
-        <div className="grain-overlay" />
+      <div className="min-h-screen sys-bg flex items-center justify-center text-white font-mono text-xs relative overflow-hidden">
+        <AmbientGlow />
         <div className="flex flex-col items-center gap-3 relative z-10">
           <Shield className="w-6 h-6 animate-pulse text-[#5B8CFF]" strokeWidth={1.5} />
           <span className="font-heading font-semibold tracking-wider">Synchronizing Assessment Data Streams...</span>
@@ -293,10 +294,7 @@ export default function CandidateDashboard() {
     <div className="min-h-screen bg-background text-foreground flex font-sans antialiased overflow-hidden relative">
       
       {/* 1. Ambient Background Layer */}
-      <div className="mesh-bg">
-        <div className="mesh-circle-1 opacity-40" />
-        <div className="mesh-circle-2 opacity-30" />
-      </div>
+      <AmbientGlow />
       
       {/* 2. Moving Grain Noise Overlay */}
       <div className="grain-overlay opacity-30" />
