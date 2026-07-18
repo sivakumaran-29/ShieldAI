@@ -17,8 +17,16 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
   const videoRef = useRef<HTMLVideoElement>(null)
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('disconnected')
   const pcRef = useRef<RTCPeerConnection | null>(null)
+  const [isWatching, setIsWatching] = useState<boolean>(false)
+  
+  const shouldWatch = isCritical || isWatching
 
   useEffect(() => {
+    if (!shouldWatch) {
+      if (pcRef.current) pcRef.current.close()
+      return
+    }
+
     const channelName = `webrtc_stream_${s.student_id}_${s.assessment_id}`
     console.log(`[WebRTC Recruiter] Joining signaling: ${channelName}`)
 
@@ -118,7 +126,7 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
         pcRef.current.close()
       }
     }
-  }, [s.student_id, s.assessment_id])
+  }, [s.student_id, s.assessment_id, shouldWatch])
 
   return (
     <Card className={`bg-card border flex flex-col overflow-hidden max-w-sm rounded-2xl transition-all duration-300 shadow-none relative group ${
@@ -141,7 +149,10 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
 
         {connectionStatus !== 'connected' && (
           <div className="flex flex-col items-center gap-2.5 z-20 text-center p-4 select-none">
-            <div className="p-3.5 rounded-full border border-white/5 sys-bg">
+            <div 
+              className="p-3.5 rounded-full border border-white/5 sys-bg cursor-pointer hover:bg-white/10 transition-colors"
+              onClick={() => !isCritical && setIsWatching(true)}
+            >
               {connectionStatus === 'connecting' ? (
                 <Video className="w-8 h-8 sys-text-body animate-pulse" strokeWidth={1.5} />
               ) : (
@@ -149,7 +160,7 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
               )}
             </div>
             <span className="text-[9px] font-mono sys-text-body uppercase tracking-widest">
-              {connectionStatus === 'connecting' ? 'Establishing Stream...' : 'Camera Feed Offline'}
+              {connectionStatus === 'connecting' ? 'Establishing Stream...' : 'Dormant Stream (Click to Watch)'}
             </span>
           </div>
         )}
@@ -163,11 +174,16 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
         </div>
 
         {/* Score & Stream status badges */}
-        <div className="absolute top-3 left-3 z-30 flex items-center gap-1.5 select-none font-mono">
+        <div className="absolute top-3 left-3 z-30 flex flex-col items-start gap-1.5 select-none font-mono">
           <span className="px-2 py-0.5 rounded text-[8px] font-bold uppercase flex items-center gap-1 sys-bg border border-white/5 sys-text-primary">
             <span className={`w-1.5 h-1.5 rounded-full ${connectionStatus === 'connected' ? 'bg-[#34D399] animate-ping' : 'sys-card'}`} />
             {connectionStatus === 'connected' ? 'Live Stream' : 'Live Channel'}
           </span>
+          {isCritical && (
+            <span className="px-2 py-0.5 rounded text-[8px] font-bold uppercase flex items-center gap-1 bg-[#F87171]/20 text-[#F87171] border border-[#F87171]/30">
+              🚨 AI Auto-Triggered Feed
+            </span>
+          )}
         </div>
 
         <div className="absolute top-3 right-3 z-30 select-none">
@@ -183,9 +199,21 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
 
       {/* Candidate Profile Info */}
       <div className="p-4 space-y-4 flex-1 flex flex-col justify-between">
-        <div className="select-none">
-          <h4 className="font-bold text-sm text-foreground font-heading">{s.name}</h4>
-          <div className="text-[10px] sys-text-body font-sans font-semibold mt-1 uppercase tracking-wider">Roll: {s.roll_number || 'N/A'}</div>
+        <div className="select-none flex justify-between items-start">
+          <div>
+            <h4 className="font-bold text-sm text-foreground font-heading">{s.name}</h4>
+            <div className="text-[10px] sys-text-body font-sans font-semibold mt-1 uppercase tracking-wider">Roll: {s.roll_number || 'N/A'}</div>
+          </div>
+          <button 
+            onClick={() => setIsWatching(!isWatching)}
+            disabled={isCritical}
+            className={`text-[9px] px-2 py-1 rounded font-bold uppercase border transition-colors ${
+              isCritical ? 'opacity-50 cursor-not-allowed bg-black/40 text-white/50 border-white/5' :
+              isWatching ? 'bg-[#5B8CFF]/20 text-[#5B8CFF] border-[#5B8CFF]/40 hover:bg-[#5B8CFF]/30' : 'sys-bg text-white hover:bg-white/10 border-white/10'
+            }`}
+          >
+            {isWatching || isCritical ? 'Stop Feed' : 'Watch Feed'}
+          </button>
         </div>
 
         {/* Live infractions */}
