@@ -456,7 +456,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
       {activeSub === 'reports' && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           
-          <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
+          <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-8 rounded-2xl flex flex-col justify-between min-h-[420px]">
             <div className="space-y-3">
               <div className="p-2 bg-[#5B8CFF]/10 rounded-xl w-10">
                 <FileText className="w-5 h-5 text-[#5B8CFF]" strokeWidth={1.5} />
@@ -487,7 +487,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
             </div>
           </Card>
 
-          <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
+          <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-8 rounded-2xl flex flex-col justify-between min-h-[420px]">
             <div className="space-y-3">
               <div className="p-2 bg-[#14B8A6]/10 rounded-xl w-10">
                 <Database className="w-5 h-5 text-[#14B8A6]" strokeWidth={1.5} />
@@ -529,7 +529,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
             </div>
           </Card>
 
-          <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
+          <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-8 rounded-2xl flex flex-col justify-between min-h-[420px]">
             <div className="space-y-3">
               <div className="p-2 bg-[#A855F7]/10 rounded-xl w-10">
                 <FileText className="w-5 h-5 text-[#A855F7]" strokeWidth={1.5} />
