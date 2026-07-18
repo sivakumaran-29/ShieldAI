@@ -235,7 +235,7 @@ export default function DatabaseTab() {
       {/* Header */}
       <div className="flex justify-between items-center border-b border-white/5 pb-4">
         <div>
-          <h2 className="text-[12px] font-heading font-bold tracking-wider text-[#5B8CFF] uppercase">
+          <h2 className="text-3xl font-semibold tracking-tight text-[#6f8eff] mb-2">
             // CANDIDATE DATABASE REGISTRY
           </h2>
           <span className="text-[11px] sys-text-body font-sans mt-1 block font-medium">

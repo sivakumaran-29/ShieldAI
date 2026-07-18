@@ -295,7 +295,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
       {/* Header Info */}
       <div className="flex items-center justify-between select-none border-b border-white/5 pb-4">
         <div>
-          <h2 className="text-3xl font-semibold tracking-tight text-white mb-2">
+          <h2 className="text-3xl font-semibold tracking-tight text-[#6f8eff] mb-2">
             // {activeSub === 'reports' ? 'Compliance Audit Reports' : activeSub === 'settings' ? 'Global Platform Config' : 'Telemetry Network Logs'}
           </h2>
           <span className="text-[11px] sys-text-body font-sans mt-1 block font-medium">
@@ -348,7 +348,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
               <Button 
                 onClick={handleDownloadPDF}
                 disabled={isExportingPDF || !pdfExportExamId}
-                className="bg-[#5B8CFF] hover:bg-[#3b71f3] text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md w-full disabled:opacity-50"
+                className="bg-[#3f6ad5] hover:bg-[#3254a8] text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md w-full disabled:opacity-50 transition"
               >
                 <Download className="w-3.5 h-3.5" /> {isExportingPDF ? 'Generating...' : 'Download PDF'}
               </Button>
@@ -380,7 +380,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                 <Button 
                   onClick={() => handleExportCSV('mcq')}
                   disabled={isExporting || !exportExamId}
-                  className="flex-1 bg-[#5B8CFF] hover:bg-[#3b71f3] text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
+                  className="flex-1 bg-[#3f6ad5] hover:bg-[#3254a8] text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
                 >
                   <Download className="w-3.5 h-3.5" /> 
                   {isExporting ? '...' : 'MCQ Data'}
@@ -388,7 +388,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                 <Button 
                   onClick={() => handleExportCSV('coding')}
                   disabled={isExporting || !exportExamId}
-                  className="flex-1 bg-[#5B8CFF] hover:bg-[#3b71f3] text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
+                  className="flex-1 bg-[#3f6ad5] hover:bg-[#3254a8] text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
                 >
                   <Download className="w-3.5 h-3.5" /> 
                   {isExporting ? '...' : 'Coding Data'}
@@ -408,7 +408,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
               </p>
             </div>
             <div className="pt-4 border-t border-white/5 flex justify-end">
-              <Button className="sys-bg hover:sys-card border border-white/5 sys-text-body hover:text-white rounded-xl text-xs h-9 px-4 flex items-center gap-1.5 transition">
+              <Button className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition">
                 <Download className="w-3.5 h-3.5" /> Query AI Report
               </Button>
             </div>

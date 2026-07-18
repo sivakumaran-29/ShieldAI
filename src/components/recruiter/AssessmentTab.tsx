@@ -135,7 +135,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
       {/* 1. Header with action button */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-[12px] font-heading font-bold tracking-wider text-[#5B8CFF] uppercase">// OVERVIEW DASHBOARD</h2>
+          <h2 className="text-3xl font-semibold tracking-tight text-[#6f8eff] mb-2">// OVERVIEW DASHBOARD</h2>
           <span className="text-[11px] sys-text-body font-sans mt-1 block">Live proctor operations summary and assessment controls</span>
         </div>
         {!isEditing && (

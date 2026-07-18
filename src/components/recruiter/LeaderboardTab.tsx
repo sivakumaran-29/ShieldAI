@@ -122,7 +122,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center gap-4 border-b border-white/5 pb-4">
         <div>
-          <h2 className="text-[12px] font-heading font-bold tracking-wider text-[#5B8CFF] uppercase">// COHORT ANALYTICS & LEADERBOARD</h2>
+          <h2 className="text-3xl font-semibold tracking-tight text-[#6f8eff] mb-2">// COHORT ANALYTICS & LEADERBOARD</h2>
           <span className="text-[11px] sys-text-body font-sans mt-1 block font-medium">Inspect student performance, compiler scores, and sandboxed infraction timelines</span>
         </div>
 
@@ -188,7 +188,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
         
         {/* Table controls */}
         <div className="flex flex-wrap justify-between items-center gap-4 select-none">
-          <span className="text-[12px] font-heading font-bold text-[#5B8CFF] uppercase tracking-wider">// COHORT ANALYTICS & LEADERBOARD</span>
+          <span className="text-[12px] font-heading font-bold text-[#6f8eff] uppercase tracking-wider">// COHORT ANALYTICS & LEADERBOARD</span>
           
           <div className="flex items-center gap-2 max-w-sm w-full sys-bg/40 border border-white/5 rounded-xl px-3 py-1.5">
             <Search className="w-3.5 h-3.5 sys-text-body" />
