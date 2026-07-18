@@ -16,6 +16,28 @@ import { getIceServers } from '../../lib/webrtcConfig'
 import { supabase } from '../../lib/supabaseClient'
 import ThemeToggle from '../../components/ThemeToggle'
 
+const StreamVideo = ({ stream }: { stream: MediaStream | null }) => {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream
+      videoRef.current.play().catch(e => console.warn('StreamVideo play blocked:', e))
+    }
+  }, [stream])
+
+  return (
+    <video 
+      ref={videoRef}
+      autoPlay 
+      playsInline 
+      muted 
+      className="absolute inset-0 w-full h-full object-cover z-10" 
+      style={{ transform: 'scaleX(-1)' }}
+    />
+  )
+}
+
 const codeTemplates: Record<string, string> = {
   python: `def solve():\n    # Read input from standard input\n    # Write your solution here\n    # For Example:\n    # nums = list(map(int, input().split(',')))\n    # target = int(input())\n    # print(two_sum(nums, target))\n    pass\n\nif __name__ == '__main__':\n    solve()`,
   javascript: `function solve() {\n    // Write your solution here\n    // Use console.log() to output results\n}\n\nsolve();`,
@@ -70,6 +92,7 @@ export default function ExamShell() {
   const [anomalyType, setAnomalyType] = useState('')
   const [showWarningModal, setShowWarningModal] = useState(false)
   const [warningModalText, setWarningModalText] = useState('')
+  const [localStream, setLocalStream] = useState<MediaStream | null>(null)
 
   const filteredQuestions = activePart === 'mcq'
     ? questions.filter(q => q.type === 'mcq')
@@ -409,6 +432,8 @@ export default function ExamShell() {
           video: { width: 320, height: 240, frameRate: 10 }
         })
         localStreamRef.current = streamInstance
+        setLocalStream(streamInstance)
+        
         if (videoRef.current) {
           videoRef.current.srcObject = streamInstance
           
@@ -419,6 +444,9 @@ export default function ExamShell() {
             videoRef.current?.play().catch(e => console.warn('Video play prevented on metadata load:', e))
             processFrame()
           }
+        } else {
+          // If videoRef isn't attached yet, just start the frame processor loop
+          processFrame()
         }
       } catch (err) {
         logViolation('[SYSTEM] Camera media streams blocked or unavailable.')
@@ -1220,23 +1248,7 @@ export default function ExamShell() {
               )}
               
               <div className="w-full h-28 relative overflow-hidden flex items-center justify-center">
-                <video 
-                  ref={(el) => {
-                    videoRef.current = el
-                    if (el && localStreamRef.current && el.srcObject !== localStreamRef.current) {
-                      el.srcObject = localStreamRef.current
-                      el.muted = true
-                      el.setAttribute('muted', 'true')
-                      el.setAttribute('playsinline', 'true')
-                      el.setAttribute('autoplay', 'true')
-                      el.play().catch(() => {})
-                    }
-                  }} 
-                  autoPlay 
-                  playsInline 
-                  muted 
-                  className="absolute inset-0 w-full h-full object-cover transform -scale-x-100 opacity-90 z-10" 
-                />
+                {localStream && <StreamVideo stream={localStream} />}
                 <canvas ref={canvasRef} width="160" height="120" className="hidden" />
                 
                 <div className="absolute inset-0 border border-zinc-500/20 pointer-events-none z-20">
