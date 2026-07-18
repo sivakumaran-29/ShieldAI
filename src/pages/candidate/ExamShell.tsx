@@ -262,6 +262,18 @@ export default function ExamShell() {
         
         // Save initial session
         await saveCandidateSession(sessionObj)
+
+        // Single-type Assessment Auto-Routing
+        const hasMcq = questionsList.some(q => q.type === 'mcq')
+        const hasCoding = questionsList.some(q => q.type !== 'mcq')
+        const completed = sessionObj.completedParts || []
+
+        if (hasMcq && !hasCoding && !completed.includes('mcq')) {
+          setActivePart('mcq')
+        } else if (hasCoding && !hasMcq && !completed.includes('coding')) {
+          setActivePart('coding')
+        }
+
       } catch (err) {
         console.error('Failed to load exam workspace:', err)
         navigate('/candidate')
