@@ -475,6 +475,14 @@ export default function ExamShell() {
     }
   }, [loading])
 
+  // Failsafe stream binder: if video node remounts, strictly bind the active stream
+  useEffect(() => {
+    if (videoRef.current && localStreamRef.current && videoRef.current.srcObject !== localStreamRef.current) {
+      videoRef.current.srcObject = localStreamRef.current
+      videoRef.current.play().catch(() => {})
+    }
+  })
+
   // ==========================================
   // BEHAVIORAL INTERNALS / PROCTOR MONITORS
   // ==========================================
@@ -1220,7 +1228,13 @@ export default function ExamShell() {
               )}
               
               <div className="w-full h-28 relative overflow-hidden flex items-center justify-center">
-                <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover transform -scale-x-100 opacity-80" />
+                <video 
+                  ref={videoRef} 
+                  autoPlay 
+                  playsInline 
+                  muted 
+                  className="absolute inset-0 w-full h-full object-cover transform -scale-x-100 opacity-90 z-10" 
+                />
                 <canvas ref={canvasRef} width="160" height="120" className="hidden" />
                 
                 <div className="absolute inset-0 border border-zinc-500/20 pointer-events-none z-20">
