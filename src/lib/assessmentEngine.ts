@@ -660,7 +660,7 @@ export const saveCandidateSession = async (session: CandidateSession): Promise<b
 import { createPythonWorker, createJSWorker, executeInWorker } from './codeWorkers'
 
 // PISTON API EMERGENCY FAILOVER
-const executePistonFallback = async (code: string, language: string, stdin: string): Promise<{ stdout: string, stderr: string, error?: string }> => {
+const executePistonFallback = async (code: string, language: string, stdin: string, signal?: AbortSignal): Promise<{ stdout: string, stderr: string, error?: string }> => {
   try {
     const pistonLang = language === 'c++' || language === 'cpp' ? 'c++' : language
     const version = pistonLang === 'c++' ? '10.2.0' : pistonLang === 'java' ? '15.0.2' : '*'
@@ -668,6 +668,7 @@ const executePistonFallback = async (code: string, language: string, stdin: stri
     const response = await fetch('https://emkc.org/api/v2/piston/execute', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      signal,
       body: JSON.stringify({
         language: pistonLang,
         version: version,
@@ -687,7 +688,34 @@ const executePistonFallback = async (code: string, language: string, stdin: stri
       error: data.run?.code !== 0 ? 'Execution Error' : undefined
     }
   } catch (err) {
-    return { stdout: '', stderr: String(err), error: 'Fallback Engine Failed' }
+    throw err // Throw to allow catching in the cascade
+  }
+}
+
+// CODEX API TERTIARY FAILOVER
+const executeCodeXFallback = async (code: string, language: string, stdin: string): Promise<{ stdout: string, stderr: string, error?: string }> => {
+  try {
+    const codexLang = language === 'c++' ? 'cpp' : language === 'javascript' ? 'js' : language === 'python' ? 'py' : language
+    const response = await fetch('https://api.codex.jaagrav.in', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        code,
+        language: codexLang,
+        input: stdin || ""
+      })
+    })
+    
+    if (!response.ok) throw new Error(`CodeX API Error: ${response.status}`)
+    const data = await response.json()
+    
+    return {
+      stdout: data.output || '',
+      stderr: data.error || '',
+      error: data.error ? 'Execution Error' : undefined
+    }
+  } catch (err) {
+    return { stdout: '', stderr: String(err), error: 'All Execution Engines Failed' }
   }
 }
 
@@ -823,11 +851,15 @@ export const evaluateCodeSnippet = async (
       }
     `
 
-    const response = await model.generateContent(evaluationPrompt)
+    const timeoutPromise = new Promise<any>((_, reject) => setTimeout(() => reject(new Error("Timeout")), 4000))
+    const response = await Promise.race([
+      model.generateContent(evaluationPrompt),
+      timeoutPromise
+    ])
     const text = response.response.text()
     return JSON.parse(text)
   } catch (err) {
-    console.warn('[AI Sandbox] Gemini Rate Limited or Failed. Triggering Piston Failover...', err)
+    console.warn('[AI Sandbox] Gemini Rate Limited or Failed. Triggering Cascade Failover...', err)
     
     const fallbackResults = []
     let passedCount = 0
@@ -835,7 +867,24 @@ export const evaluateCodeSnippet = async (
 
     for (const tc of testCases) {
       const start = performance.now()
-      const { stdout, stderr, error } = await executePistonFallback(code, language, tc.input)
+      let stdout = '', stderr = '', error: string | undefined = undefined;
+
+      try {
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 4000)
+        const pistonRes = await executePistonFallback(code, language, tc.input, controller.signal)
+        clearTimeout(timeoutId)
+        stdout = pistonRes.stdout
+        stderr = pistonRes.stderr
+        error = pistonRes.error
+      } catch (pistonErr) {
+        console.warn('[AI Sandbox] Piston Failed. Triggering Tertiary CodeX...', pistonErr)
+        const codexRes = await executeCodeXFallback(code, language, tc.input)
+        stdout = codexRes.stdout
+        stderr = codexRes.stderr
+        error = codexRes.error
+      }
+
       const timeMs = performance.now() - start
 
       let tcVerdict: any = 'Accepted'
@@ -1006,14 +1055,28 @@ Return ONLY a JSON object exactly matching this schema:
 }
 `
 
-    const response = await terminalModel.generateContent(prompt)
+    const timeoutPromise = new Promise<any>((_, reject) => setTimeout(() => reject(new Error("Timeout")), 4000))
+    const response = await Promise.race([
+      terminalModel.generateContent(prompt),
+      timeoutPromise
+    ])
+    
     const text = response.response.text()
     const match = text.match(/```json\n([\s\S]*?)\n```/)
     const jsonStr = match ? match[1] : text
     
     return JSON.parse(jsonStr)
   } catch (err) {
-    console.warn('[AI Sandbox] Gemini Terminal Rate Limited. Triggering Piston Failover...', err)
-    return await executePistonFallback(code, language, customInput)
+    console.warn('[AI Sandbox] Gemini Terminal Failed. Triggering Cascade...', err)
+    try {
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 4000)
+      const pistonRes = await executePistonFallback(code, language, customInput, controller.signal)
+      clearTimeout(timeoutId)
+      return pistonRes
+    } catch (pistonErr) {
+      console.warn('[AI Sandbox] Piston Failed. Triggering Tertiary CodeX...', pistonErr)
+      return await executeCodeXFallback(code, language, customInput)
+    }
   }
 }
