@@ -30,6 +30,13 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
   const [pdfExportExamId, setPdfExportExamId] = useState<string>('')
   const [isExportingPDF, setIsExportingPDF] = useState(false)
 
+  useEffect(() => {
+    if (assessments.length > 0) {
+      if (!exportExamId) setExportExamId(assessments[assessments.length - 1].id)
+      if (!pdfExportExamId) setPdfExportExamId(assessments[assessments.length - 1].id)
+    }
+  }, [assessments, exportExamId, pdfExportExamId])
+
   // Sub-settings categories for macOS settings panel
   const [settingsCategory, setSettingsCategory] = useState<'general' | 'proctor' | 'compilers'>('general')
 
@@ -288,8 +295,8 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
       {/* Header Info */}
       <div className="flex items-center justify-between select-none border-b border-white/5 pb-4">
         <div>
-          <h2 className="text-[10px] font-mono font-bold tracking-widest text-[#5B8CFF] uppercase">
-            // {activeSub === 'reports' ? 'COMPLIANCE AUDIT REPORTS' : activeSub === 'settings' ? 'GLOBAL PLATFORM CONFIG' : 'TELEMETRY NETWORK LOGS'}
+          <h2 className="text-3xl font-semibold tracking-tight text-white mb-2">
+            // {activeSub === 'reports' ? 'Compliance Audit Reports' : activeSub === 'settings' ? 'Global Platform Config' : 'Telemetry Network Logs'}
           </h2>
           <span className="text-[11px] sys-text-body font-sans mt-1 block font-medium">
             {activeSub === 'reports' 
@@ -334,7 +341,6 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                 className="border border-white/5 bg-[rgba(28,28,30,0.72)] text-foreground rounded-xl text-xs px-3 py-1.5 outline-none cursor-pointer w-full focus:border-[#5B8CFF]/50"
               >
                 {assessments.length === 0 && <option value="">No Assessments</option>}
-                <option value="" disabled>Select Assessment</option>
                 {assessments.map(a => (
                   <option key={a.id} value={a.id}>{a.title}</option>
                 ))}
@@ -374,17 +380,17 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                 <Button 
                   onClick={() => handleExportCSV('mcq')}
                   disabled={isExporting || !exportExamId}
-                  className="flex-1 sys-bg hover:sys-card border border-white/5 sys-text-body hover:text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 transition"
+                  className="flex-1 bg-[#5B8CFF] hover:bg-[#3b71f3] text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
                 >
-                  <Download className={`w-3.5 h-3.5 ${isExporting ? 'animate-bounce' : ''}`} /> 
+                  <Download className="w-3.5 h-3.5" /> 
                   {isExporting ? '...' : 'MCQ Data'}
                 </Button>
                 <Button 
                   onClick={() => handleExportCSV('coding')}
                   disabled={isExporting || !exportExamId}
-                  className="flex-1 sys-bg hover:sys-card border border-white/5 sys-text-body hover:text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 transition"
+                  className="flex-1 bg-[#5B8CFF] hover:bg-[#3b71f3] text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
                 >
-                  <Download className={`w-3.5 h-3.5 ${isExporting ? 'animate-bounce' : ''}`} /> 
+                  <Download className="w-3.5 h-3.5" /> 
                   {isExporting ? '...' : 'Coding Data'}
                 </Button>
               </div>
