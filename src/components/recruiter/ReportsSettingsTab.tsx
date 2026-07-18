@@ -63,19 +63,27 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
     setTimeout(() => setSaveSuccess(false), 2000)
   }
 
-  const handleExportCSV = async () => {
+  const handleExportCSV = async (type: 'mcq' | 'coding') => {
     if (!exportExamId) return
     setIsExporting(true)
     try {
       const match = assessments.find(a => a.id === exportExamId)
       const examTitle = match ? match.title : 'Assessment'
 
-      const questionsList = await fetchQuestions(exportExamId)
+      const rawQuestions = await fetchQuestions(exportExamId)
+      const questionsList = rawQuestions.filter(q => type === 'mcq' ? q.type === 'mcq' : q.type !== 'mcq')
+
+      if (questionsList.length === 0) {
+        alert(`No ${type === 'mcq' ? 'MCQ' : 'Coding'} questions found for this assessment!`)
+        setIsExporting(false)
+        return
+      }
+
       const sessions = await fetchCandidateSessions(exportExamId)
 
       let csvContent = "Candidate Name,Roll Number,Email,Status,Integrity Score,Total Score,"
       questionsList.forEach(q => {
-        csvContent += `"${q.title} - Score","${q.title} - Code",`
+        csvContent += `"${q.title} - Score","${q.title} - ${type === 'mcq' ? 'Answer' : 'Code'}",`
       })
       csvContent += "\n"
 
@@ -108,7 +116,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
       const url = URL.createObjectURL(blob)
       const link = document.createElement("a")
       link.setAttribute("href", url)
-      link.setAttribute("download", `${examTitle.replace(/\s+/g, '_')}_Responses.csv`)
+      link.setAttribute("download", `${examTitle.replace(/\s+/g, '_')}_${type.toUpperCase()}_Responses.csv`)
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
@@ -202,14 +210,24 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                   <option key={a.id} value={a.id}>{a.title}</option>
                 ))}
               </select>
-              <Button 
-                onClick={handleExportCSV}
-                disabled={isExporting || !exportExamId}
-                className="sys-bg hover:sys-card border border-white/5 sys-text-body hover:text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 transition w-full"
-              >
-                <Download className={`w-3.5 h-3.5 ${isExporting ? 'animate-bounce' : ''}`} /> 
-                {isExporting ? 'Building CSV...' : 'Export Data Sheet'}
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={() => handleExportCSV('mcq')}
+                  disabled={isExporting || !exportExamId}
+                  className="flex-1 sys-bg hover:sys-card border border-white/5 sys-text-body hover:text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 transition"
+                >
+                  <Download className={`w-3.5 h-3.5 ${isExporting ? 'animate-bounce' : ''}`} /> 
+                  {isExporting ? '...' : 'MCQ Data'}
+                </Button>
+                <Button 
+                  onClick={() => handleExportCSV('coding')}
+                  disabled={isExporting || !exportExamId}
+                  className="flex-1 sys-bg hover:sys-card border border-white/5 sys-text-body hover:text-white rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 transition"
+                >
+                  <Download className={`w-3.5 h-3.5 ${isExporting ? 'animate-bounce' : ''}`} /> 
+                  {isExporting ? '...' : 'Coding Data'}
+                </Button>
+              </div>
             </div>
           </Card>
 
