@@ -200,6 +200,11 @@ export default function DatabaseTab() {
         successCount++
       }
 
+      const storedBatches = JSON.parse(localStorage.getItem('cached_batches') || '[]')
+      if (!storedBatches.includes(newBatchName)) {
+        localStorage.setItem('cached_batches', JSON.stringify([...storedBatches, newBatchName]))
+      }
+
       setIsCreating(false)
       loadCandidates()
     } catch (err: any) {

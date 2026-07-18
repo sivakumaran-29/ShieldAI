@@ -60,6 +60,14 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
           }
         })
         
+        try {
+          const cached = JSON.parse(localStorage.getItem('cached_batches') || '[]')
+          cached.forEach((b: string) => {
+            batches.add(b)
+            depts.add(b.split('_')[0])
+          })
+        } catch(e) {}
+        
         setAvailableBatches(Array.from(batches).sort())
         setAvailableDepartments(Array.from(depts).sort())
       } catch (err) {
