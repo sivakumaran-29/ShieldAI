@@ -9,11 +9,12 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { 
   fetchQuestions, fetchAssessments, saveCandidateSession, fetchCandidateSessions,
-  evaluateCodeSnippet, CodingQuestion, Assessment, CandidateSession, QuestionSubmission
+  evaluateCodeSnippet, simulateTerminalRun, CodingQuestion, Assessment, CandidateSession, QuestionSubmission
 } from '../../lib/assessmentEngine'
 import { useAuthStore } from '../../store/authStore'
 import { getIceServers } from '../../lib/webrtcConfig'
 import { supabase } from '../../lib/supabaseClient'
+import ThemeToggle from '../../components/ThemeToggle'
 
 const codeTemplates: Record<string, string> = {
   python: `def solve():\n    # Read input from standard input\n    # Write your solution here\n    # For Example:\n    # nums = list(map(int, input().split(',')))\n    # target = int(input())\n    # print(two_sum(nums, target))\n    pass\n\nif __name__ == '__main__':\n    solve()`,
@@ -40,12 +41,20 @@ export default function ExamShell() {
 
   // Editor states
   const [language, setLanguage] = useState('python')
-  const editorTheme = 'vs-dark' as string
   const [codeMap, setCodeMap] = useState<Record<string, Record<string, string>>>({}) // Maps qId -> { lang -> code }
   const [consoleOutput, setConsoleOutput] = useState('Sandbox compilation terminal ready. Awaiting local code execution...')
   const [isRunning, setIsRunning] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [testResults, setTestResults] = useState<any>(null)
+  
+  // Section Navigation States
+  const [activePart, setActivePart] = useState<'menu' | 'mcq' | 'coding'>('menu')
+  
+  // Custom Terminal Execution
+  const [customInput, setCustomInput] = useState('')
+  const [terminalTab, setTerminalTab] = useState<'console' | 'testcases'>('console')
+  const [reviewMarked, setReviewMarked] = useState<Record<string, boolean>>({})
+  const [isSyncing, setIsSyncing] = useState(false)
   
   // Timer & warnings
   const [timeLeft, setTimeLeft] = useState(3600)
@@ -62,8 +71,33 @@ export default function ExamShell() {
   const [showWarningModal, setShowWarningModal] = useState(false)
   const [warningModalText, setWarningModalText] = useState('')
 
-  const activeQuestion = questions[selectedQIndex]
+  const filteredQuestions = activePart === 'mcq'
+    ? questions.filter(q => q.type === 'mcq')
+    : activePart === 'coding'
+      ? questions.filter(q => q.type !== 'mcq')
+      : []
 
+  const activeQuestion = filteredQuestions[selectedQIndex]
+
+  const handleStartPart = (part: 'mcq' | 'coding') => {
+    setActivePart(part)
+    setSelectedQIndex(0)
+    setTestResults(null)
+    setConsoleOutput('Sandbox compilation terminal ready. Awaiting local code execution...')
+  }
+
+  const handleSubmitPart = async () => {
+    if (!currentSession) return
+    if (window.confirm(`Submit Part: ${activePart.toUpperCase()}? You will not be able to return to this section.`)) {
+      setLoading(true)
+      const nextParts = [...(currentSession.completedParts || []), activePart as 'mcq' | 'coding']
+      const updatedSession = { ...currentSession, completedParts: nextParts }
+      await saveCandidateSession(updatedSession)
+      setCurrentSession(updatedSession)
+      setActivePart('menu')
+      setLoading(false)
+    }
+  }
   // ==========================================
   // INITIALIZATION & LOADING
   // ==========================================
@@ -83,6 +117,27 @@ export default function ExamShell() {
           navigate('/candidate')
           return
         }
+
+        const candidateBatch = user?.batch || 'CSE_C'
+        const candidateDept = candidateBatch.split('_')[0]
+        
+        const target = matchAss.target_batch
+        let isAllowed = false
+        if (!target || target === 'ALL') {
+          isAllowed = true
+        } else if (target.startsWith('DEPT_')) {
+          const targetDept = target.replace('DEPT_', '')
+          if (targetDept === candidateDept) isAllowed = true
+        } else if (target === candidateBatch) {
+          isAllowed = true
+        }
+
+        if (!isAllowed) {
+          alert('SECURITY VIOLATION: You are not authorized to participate in this exam batch.')
+          navigate('/candidate')
+          return
+        }
+
         setAssessment(matchAss)
         
         // Fetch questions
@@ -154,6 +209,7 @@ export default function ExamShell() {
             integrity_score: 100,
             violation_logs: ['[SYSTEM] Session initialized.'],
             submissions: {},
+            completedParts: [],
             startedAt: new Date().toISOString(),
             submittedAt: '',
             updated_at: new Date().toISOString()
@@ -180,10 +236,13 @@ export default function ExamShell() {
     loadAssessmentWorkspace()
   }, [user, navigate])
 
-  // Get Code for current question/language
   const getActiveCode = (): string => {
-    if (!activeQuestion || !codeMap[activeQuestion.id]) return ''
-    return codeMap[activeQuestion.id][language] || codeTemplates[language] || ''
+    if (!activeQuestion) return ''
+    if (activeQuestion.type === 'mcq') {
+      const sub = currentSession?.submissions?.[activeQuestion.id]
+      return sub ? String(sub.score) : '' // Temporarily store selected answer in code/score map
+    }
+    return codeMap[activeQuestion.id]?.[language] || codeTemplates[language] || ''
   }
 
   // Update code in map and save to cache
@@ -206,6 +265,33 @@ export default function ExamShell() {
       }
       return updated
     })
+  }
+
+  const handleSync = async () => {
+    try {
+      const examId = localStorage.getItem('pending_exam_id')
+      if (!examId) return
+      
+      setIsSyncing(true)
+      setTimerAlert('Syncing platform data...')
+      
+      const [assessments, questionsList] = await Promise.all([
+        fetchAssessments(),
+        fetchQuestions(examId)
+      ])
+      
+      const matchAss = assessments.find(a => a.id === examId)
+      if (matchAss) setAssessment(matchAss)
+      if (questionsList) setQuestions(questionsList)
+      
+      setTimeout(() => setTimerAlert(''), 2000)
+    } catch (error) {
+      console.error('Failed to sync', error)
+      setTimerAlert('Sync failed.')
+      setTimeout(() => setTimerAlert(''), 2000)
+    } finally {
+      setIsSyncing(false)
+    }
   }
 
   // ==========================================
@@ -279,7 +365,7 @@ export default function ExamShell() {
       setTimeLeft(prev => {
         const next = prev - 1
         
-        // Alert warnings at 5, 2, and 1 minutes
+        // Alert warnings
         if (next === 300) {
           setTimerAlert('5 minutes remaining! Make sure to verify and run final solutions!')
         } else if (next === 120) {
@@ -390,7 +476,6 @@ export default function ExamShell() {
   useEffect(() => {
     if (loading) return
 
-    // 1. Tab switches (visibility)
     const handleVisibilityChange = () => {
       if (document.hidden) {
         logViolation('Tab switched - Browser lost layout visibility.')
@@ -398,13 +483,11 @@ export default function ExamShell() {
       }
     }
 
-    // 2. Focus loss
     const handleWindowBlur = () => {
       logViolation('Window focus lost - User engaged tools outside environment.')
       triggerWarningModal('Warning: Browser window focus lost. Keep your cursor inside the coding workspace.')
     }
 
-    // 3. Fullscreen check
     const handleFullscreenChange = () => {
       if (!document.fullscreenElement) {
         logViolation('Minimized or Fullscreen mode terminated.')
@@ -412,7 +495,6 @@ export default function ExamShell() {
       }
     }
 
-    // 4. Keyboard Shortcuts for DevTools
     const handleKeyDown = (e: KeyboardEvent) => {
       if (
         e.key === 'F12' || 
@@ -425,7 +507,6 @@ export default function ExamShell() {
       }
     }
 
-    // 5. Copy/paste intercepts
     const handleCopy = (e: ClipboardEvent) => {
       e.preventDefault()
       logViolation('Copy attempt intercepted.')
@@ -438,7 +519,6 @@ export default function ExamShell() {
       triggerWarningModal('Restricted: Paste operations are disabled in this editor.')
     }
 
-    // 6. Right click intercept
     const handleContextMenu = (e: MouseEvent) => {
       e.preventDefault()
       logViolation('Right click context menu attempt blocked.')
@@ -508,82 +588,66 @@ export default function ExamShell() {
         }
 
         pc.onconnectionstatechange = () => {
-          console.log(`[WebRTC] Connection state changed: ${pc?.connectionState}`)
+          console.log(`[WebRTC] Peer Connection state: ${pc?.connectionState}`)
         }
 
-        try {
-          const offer = await pc.createOffer()
-          await pc.setLocalDescription(offer)
-          channel.send({
-            type: 'broadcast',
-            event: 'offer',
-            payload: offer
-          })
-        } catch (offerErr) {
-          console.error('[WebRTC] Failed to create SDP offer:', offerErr)
-        }
+        const offer = await pc.createOffer()
+        await pc.setLocalDescription(offer)
+
+        channel.send({
+          type: 'broadcast',
+          event: 'offer',
+          payload: offer
+        })
       })
       .on('broadcast', { event: 'answer' }, async ({ payload }) => {
-        if (!pc) return
-        try {
-          await pc.setRemoteDescription(new RTCSessionDescription(payload))
-        } catch (descErr) {
-          console.error('[WebRTC] Failed to set remote description answer:', descErr)
+        console.log('[WebRTC] Received SDP Answer from Recruiter.')
+        if (pc) {
+          try {
+            await pc.setRemoteDescription(new RTCSessionDescription(payload))
+          } catch (err) {
+            console.error('[WebRTC] Failed setting remote answer SDP:', err)
+          }
         }
       })
       .on('broadcast', { event: 'ice-candidate' }, async ({ payload }) => {
-        if (!pc) return
-        try {
-          await pc.addIceCandidate(new RTCIceCandidate(payload))
-        } catch (iceErr) {
-          console.error('[WebRTC] Failed to add remote ICE candidate:', iceErr)
+        if (pc) {
+          try {
+            await pc.addIceCandidate(new RTCIceCandidate(payload))
+          } catch (err) {
+            console.error('[WebRTC] Failed adding remote candidate:', err)
+          }
         }
       })
       .subscribe()
 
     return () => {
-      console.log('[WebRTC] Cleaning up candidate signaling channel...')
+      console.log('[WebRTC] Cleaning WebRTC channel connections...')
       channel.unsubscribe()
-      if (pc) {
-        pc.close()
-      }
+      if (pc) pc.close()
     }
-  }, [loading, user?.id, assessment?.id])
+  }, [loading, user, assessment])
 
+  // ==========================================
+  // PROCTORING LOGS LOGGER
+  // ==========================================
   const logViolation = (message: string) => {
-    const now = new Date().toLocaleTimeString()
-    const logItem = `[${now}] ALERT: ${message}`
+    const timestamp = new Date().toLocaleTimeString()
+    const finalLog = `[ALERT - ${timestamp}] ${message}`
     
-    let updatedLogs: string[] = []
     setProctorLogs(prev => {
-      // Avoid spamming consecutive identical warnings
-      if (prev[prev.length - 1] === logItem) {
-        updatedLogs = prev
+      // Avoid duplicate spam
+      if (prev.length > 0 && prev[prev.length - 1].includes(message)) {
         return prev
       }
-      updatedLogs = [...prev, logItem]
-      return updatedLogs
-    })
-    
-    let updatedScore = 100
-    setIntegrityScore(prev => {
-      updatedScore = Math.max(0, prev - 4)
-      return updatedScore
+      return [...prev, finalLog]
     })
 
-    // Immediately push telemetry violation state to Supabase in real-time
-    if (currentSession && assessment) {
-      setTimeout(async () => {
-        const sanitizedLogs = Array.from(new Set(updatedLogs.map(l => l.replace(/^\[LOG\] |^\[SYSTEM\] /, ''))))
-        const syncSession = {
-          ...currentSession,
-          integrity_score: updatedScore,
-          violation_logs: sanitizedLogs,
-          updated_at: new Date().toISOString()
-        }
-        await saveCandidateSession(syncSession)
-      }, 100)
-    }
+    // Reduce integrity score
+    setIntegrityScore(prev => {
+      const nextScore = Math.max(0, prev - 8)
+      return nextScore
+    })
   }
 
   const triggerWarningModal = (text: string) => {
@@ -592,9 +656,9 @@ export default function ExamShell() {
   }
 
   const enterFullscreen = () => {
-    const elem = document.documentElement
+    const elem = document.documentElement as any
     if (elem.requestFullscreen) {
-      elem.requestFullscreen().catch(() => {})
+      elem.requestFullscreen()
     }
     setShowWarningModal(false)
   }
@@ -631,50 +695,88 @@ export default function ExamShell() {
   }, [loading, currentSession, assessment])
 
   // ==========================================
-  // CODE RUNNER CORE
+  // CODE RUNNER AND SUBMIT COMPILER CONTROLS
   // ==========================================
+  const handleResetCode = () => {
+    if (!activeQuestion) return
+    if (window.confirm('Reset code editor to initial solution template? Current drafts will be cleared.')) {
+      handleCodeChange(codeTemplates[language])
+    }
+  }
+
   const handleRunCode = async () => {
     if (!activeQuestion) return
     setIsRunning(true)
-    setConsoleOutput('Checking syntax structures against compiler sandboxes...')
-    setTestResults(null)
+    setTerminalTab('console')
+    setConsoleOutput('Compiling code natively in sandbox cluster...\n')
 
     const codeToRun = getActiveCode()
-    
-    // Filter only public cases
-    const publicCases = activeQuestion.test_cases.filter(c => c.is_public)
 
     try {
-      const response = await evaluateCodeSnippet(
-        codeToRun,
-        language,
-        publicCases,
-        activeQuestion.time_limit,
-        activeQuestion.memory_limit
-      )
+      const response = await simulateTerminalRun(codeToRun, language, customInput)
 
-      setConsoleOutput(
-        `Execution Status: ${response.verdict}\n` +
-        `Compiler Message: ${response.compileMessage || 'Success'}\n\n` +
-        `Ran ${response.cases.length} Public Test Cases.\n`
-      )
+      let output = `[Sandbox Status]: Execution complete.\n\n`
+      if (response.error) {
+        output += `[ERROR SUMMARY]: ${response.error}\n\n`
+      }
+      if (response.stderr) {
+        output += `--- STDERR ---\n${response.stderr}\n\n`
+      }
+      if (response.stdout) {
+        output += `--- STDOUT ---\n${response.stdout}\n`
+      }
       
-      setTestResults({
-        verdict: response.verdict,
-        compileMessage: response.compileMessage,
-        cases: response.cases,
-        isSubmit: false
-      })
+      setConsoleOutput(output)
+      setTestResults(null) // hide test cases on native run
     } catch (err: any) {
       setConsoleOutput(`Runtime sandbox error compiled: ${err.message}`)
     } finally {
       setIsRunning(false)
     }
   }
+  
+  const handleMcqSelect = (index: number) => {
+    if (!activeQuestion || activeQuestion.type !== 'mcq') return
+    // Save selection temporarily to submissions with code = selectedIndex
+    setCurrentSession(prev => {
+      if (!prev) return null
+      const nextSubmissions = {
+        ...(prev.submissions || {}),
+        [activeQuestion.id]: {
+          code: String(index),
+          language: 'mcq',
+          status: (index === activeQuestion.mcq_correct_index ? 'Accepted' : 'Wrong Answer') as 'Accepted' | 'Wrong Answer',
+          cases_passed: index === activeQuestion.mcq_correct_index ? 1 : 0,
+          total_cases: 1,
+          score: index === activeQuestion.mcq_correct_index ? 100 : 0,
+          execution_time: 0,
+          memory_usage: 0
+        }
+      }
+      return { ...prev, submissions: nextSubmissions }
+    })
+  }
+
+  const handleSaveAndNext = () => {
+    if (selectedQIndex < filteredQuestions.length - 1) {
+      setSelectedQIndex(p => p + 1)
+    }
+  }
+
+  const handleClearResponse = () => {
+    if (!activeQuestion || activeQuestion.type !== 'mcq') return
+    setCurrentSession(prev => {
+      if (!prev) return null
+      const nextSubmissions = { ...prev.submissions }
+      delete nextSubmissions[activeQuestion.id]
+      return { ...prev, submissions: nextSubmissions }
+    })
+  }
 
   const handleSubmitQuestion = async () => {
     if (!activeQuestion) return
     setIsSubmitting(true)
+    setTerminalTab('testcases')
     setConsoleOutput('Executing final evaluation against all test cases (hidden + public)...')
     setTestResults(null)
 
@@ -689,13 +791,11 @@ export default function ExamShell() {
         activeQuestion.memory_limit
       )
 
-      // Calculate score for this question based on case weights
       let passedCasesWeight = 0
       let totalCasesWeight = 0
       let passedCount = 0
 
       response.cases.forEach(c => {
-        // Find matching original test case for weights
         const originalCase = activeQuestion.test_cases.find(t => t.id === c.testCaseId)
         const weight = originalCase?.weight || 10
         totalCasesWeight += weight
@@ -710,7 +810,6 @@ export default function ExamShell() {
         ? Math.round((passedCasesWeight / totalCasesWeight) * 100) 
         : 0
 
-      // Get avg execution metrics
       const avgTime = Math.round(response.cases.reduce((acc, c) => acc + c.executionTimeMs, 0) / response.cases.length)
       const avgMem = Math.round(response.cases.reduce((acc, c) => acc + c.memoryUsageKb, 0) / response.cases.length)
 
@@ -732,7 +831,6 @@ export default function ExamShell() {
         score: scoreObtained
       })
 
-      // Write submission immediately into local states
       setCurrentSession(prev => {
         if (!prev) return null
         const nextSubmissions = {
@@ -748,56 +846,48 @@ export default function ExamShell() {
             memory_usage: avgMem
           }
         }
-
-        let totalS = 0
-        questions.forEach(q => {
-          totalS += nextSubmissions[q.id]?.score || 0
-        })
-        const newAvg = Math.round(totalS / questions.length)
-
         return {
           ...prev,
-          submissions: nextSubmissions,
-          score: newAvg,
-          updated_at: new Date().toISOString()
+          submissions: nextSubmissions
         }
       })
-
     } catch (err: any) {
-      setConsoleOutput(`System evaluation transaction failed: ${err.message}`)
+      setConsoleOutput(`Compiler evaluation error: ${err.message || 'System crash.'}`)
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  const handleResetCode = () => {
-    if (!activeQuestion) return
-    const defaultVal = codeTemplates[language] || ''
-    handleCodeChange(defaultVal)
-    setConsoleOutput('Editor reset to default language template.')
+  // ==========================================
+  // FINISH EXAM SUBMISSIONS SYSTEM
+  // ==========================================
+  const handleForceSubmission = async () => {
+    console.log('[SYSTEM] Duration window expired. Automating sandbox freeze...')
+    await executeSubmissionPipeline()
   }
 
-  // ==========================================
-  // FINAL SUBMIT & TERMINATIONS
-  // ==========================================
   const handleFinishAssessment = async () => {
-    if (window.confirm('Are you sure you want to finish the assessment? This will lock all submissions.')) {
-      await finalizeAndSubmitResult()
+    if (window.confirm('Acknowledge and submit assessment? Check test case verdicts before finalizing.')) {
+      await executeSubmissionPipeline()
     }
   }
 
-  const handleForceSubmission = async () => {
-    logViolation('Time limits expired. Force-submission initiated.')
-    await finalizeAndSubmitResult()
-  }
-
-  const finalizeAndSubmitResult = async () => {
+  const executeSubmissionPipeline = async () => {
+    if (!currentSession || !assessment) return
     setLoading(true)
+
     try {
       const finalSnapshot = buildSessionSnapshot()
       finalSnapshot.status = 'submitted'
       finalSnapshot.submittedAt = new Date().toISOString()
-      
+      finalSnapshot.updated_at = new Date().toISOString()
+
+      // Kill camera streams
+      if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach(t => t.stop())
+      }
+      localStreamRef.current = null
+
       const success = await saveCandidateSession(finalSnapshot)
       if (success) {
         localStorage.removeItem('pending_exam_id')
@@ -817,9 +907,9 @@ export default function ExamShell() {
 
   if (loading || !assessment) {
     return (
-      <div className="min-h-screen bg-[#07090e] flex items-center justify-center text-sky-400 font-mono text-sm">
+      <div className="min-h-screen bg-black flex items-center justify-center text-white font-mono text-xs">
         <div className="flex flex-col items-center gap-3">
-          <RefreshCw className="w-8 h-8 animate-spin text-sky-400" />
+          <RefreshCw className="w-6 h-6 animate-spin text-zinc-400" />
           <span>Synchronizing Assessment Environment...</span>
         </div>
       </div>
@@ -827,206 +917,325 @@ export default function ExamShell() {
   }
 
   return (
-    <div className={`min-h-screen w-full flex flex-col font-sans antialiased overflow-hidden ${
-      editorTheme === 'light' ? 'bg-[#f8fafc] text-neutral-900' : 'bg-[#04060a] text-neutral-200'
-    }`}>
+    <div className="min-h-screen w-full flex flex-col font-sans antialiased overflow-hidden bg-background text-foreground relative">
       
+      {/* Ambient Background Layer */}
+      <div className="mesh-bg">
+        <div className="mesh-circle-1" />
+        <div className="mesh-circle-2" />
+      </div>
+      <div className="grain-overlay" />
+      
+      <div className="flex-1 flex flex-col z-10 relative">
       {/* EXAM PANEL HEADER */}
-      <header className={`px-4 py-3 flex items-center justify-between sticky top-0 z-50 border-b ${
-        editorTheme === 'light' ? 'bg-white border-neutral-200 shadow-sm' : 'bg-[#090e18]/80 border-sky-950/40 backdrop-blur-xl'
-      }`}>
+      <header className="px-6 py-3 flex items-center justify-between sticky top-0 z-50 border-b border-border bg-card/65 backdrop-blur-xl">
         <div className="flex items-center space-x-3 select-none">
-          <div className="p-1 px-2 border rounded-lg bg-sky-950/20 border-sky-950 text-sky-400 flex items-center gap-1.5 font-bold tracking-tight text-xs">
-            <Lock className="w-3.5 h-3.5 animate-pulse" /> Protected Environment
+          <div className="p-1 px-2 border rounded bg-zinc-950/65 border-zinc-800 text-white flex items-center gap-1.5 font-bold tracking-tight text-[10px] font-mono">
+            <Lock className="w-3.5 h-3.5 animate-pulse" strokeWidth={1.5} /> Protected Environment
           </div>
-          <span className="font-extrabold text-sm tracking-tight hidden md:inline-block">
+          <span className="font-bold text-xs tracking-wider uppercase font-mono text-muted hidden md:inline-block">
             {assessment.title}
           </span>
         </div>
 
-        {/* TIMER ALERT FLASHER */}
+        {/* TIMER ALERT */}
         {timerAlert && (
-          <div className="hidden lg:flex items-center gap-2 p-1.5 px-3 bg-red-950/30 border border-red-900/40 rounded-xl text-red-500 font-mono text-[10px] font-bold tracking-wide animate-pulse">
-            <AlertTriangle className="w-4 h-4 fill-current" /> {timerAlert}
+          <div className="hidden lg:flex items-center gap-2 p-1.5 px-3 bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-200 font-mono text-[9px] font-bold tracking-wide animate-pulse">
+            <AlertTriangle className="w-4 h-4 text-white shrink-0" strokeWidth={1.5} /> {timerAlert}
           </div>
         )}
 
-        <div className="flex items-center space-x-3">
-
-          {/* INTEGRITY INDEX STATUS */}
-          <div className={`flex items-center space-x-2 border px-2.5 py-1 rounded-lg ${
+        <div className="flex items-center space-x-4">
+          {/* INTEGRITY SCALE */}
+          <div className={`flex items-center space-x-2 border px-2.5 py-1 rounded ${
             integrityScore > 75 
-              ? 'bg-emerald-950/20 border-emerald-950/30 text-emerald-400' 
-              : 'bg-red-950/20 border-red-950/30 text-red-400 animate-pulse'
+              ? 'bg-zinc-950 border-zinc-800 text-zinc-200' 
+              : 'bg-zinc-900 border-zinc-700 text-white animate-pulse'
           }`}>
-            <Activity className="w-4 h-4" />
-            <span className="text-xs font-mono font-bold">Integrity: {integrityScore}%</span>
+            <Activity className="w-4 h-4" strokeWidth={1.5} />
+            <span className="text-[10px] font-mono font-bold">INTEGRITY: {integrityScore}%</span>
           </div>
 
           {/* TIMER */}
-          <div className={`p-1.5 px-3 border rounded-lg text-xs font-mono font-black ${
+          <div className={`p-1.5 px-3 border rounded text-xs font-mono font-bold ${
             timeLeft < 300 
-              ? 'bg-red-950/50 border-red-500/30 text-red-400 animate-pulse' 
-              : editorTheme === 'light' 
-                ? 'bg-neutral-100 border-neutral-200 text-neutral-700' 
-                : 'bg-sky-950/25 border-sky-950/60 text-sky-400'
+              ? 'bg-zinc-900 border-zinc-700 text-white animate-pulse' 
+              : 'bg-zinc-950 border-zinc-800 text-white'
           }`}>
-            <Clock className="w-3.5 h-3.5 inline mr-1.5" />
+            <Clock className="w-3.5 h-3.5 inline mr-1.5" strokeWidth={1.5} />
             {formatTimerString(timeLeft)}
           </div>
 
-          <Button 
-            onClick={handleFinishAssessment} 
-            className="bg-emerald-600 hover:bg-emerald-500 text-neutral-950 font-black px-4 h-8 rounded-lg text-xs tracking-wider cursor-pointer select-none active:scale-95"
+          <Button
+            onClick={handleSync}
+            disabled={isSyncing}
+            variant="outline"
+            size="icon"
+            className="w-8 h-8 rounded-lg bg-zinc-950 border-zinc-800 text-zinc-400 hover:text-white transition shadow-sm"
+            title="Sync Latest Changes"
           >
-            Submit Exam
+            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-[#5B8CFF]' : ''}`} />
           </Button>
+
+          <ThemeToggle />
+
+          {activePart === 'menu' ? (
+            <Button 
+              onClick={handleFinishAssessment} 
+              className="bg-[#5B8CFF] hover:bg-[#3b71f3] text-white font-extrabold px-4 h-8 rounded-xl text-xs tracking-wider cursor-pointer select-none active:scale-95 transition"
+            >
+              Submit Exam
+            </Button>
+          ) : (
+            <Button 
+              onClick={handleSubmitPart} 
+              className="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-4 h-8 rounded-xl text-xs tracking-wider cursor-pointer select-none active:scale-95 transition"
+            >
+              Submit Section
+            </Button>
+          )}
         </div>
       </header>
 
       {/* CORE WORKSPACE GRID */}
-      <main className="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden h-[calc(100vh-57px)] animate-fade-in">
+      {activePart === 'menu' ? (
+        <main className="flex-1 overflow-y-auto p-12 flex flex-col items-center justify-center animate-fade-in relative z-10">
+          <div className="max-w-2xl w-full text-center space-y-6">
+            <h1 className="text-3xl font-extrabold text-white tracking-tight">Assessment Overview</h1>
+            <p className="text-zinc-400 text-sm font-mono">Select a section to begin. Once a section is submitted, you cannot return to it.</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+              {/* Part 1: MCQ */}
+              <div className={`p-8 border rounded-2xl flex flex-col items-center text-center transition ${
+                currentSession?.completedParts?.includes('mcq') 
+                  ? 'bg-zinc-950/50 border-zinc-800 opacity-60' 
+                  : 'bg-card/60 border-border hover:border-[#5B8CFF]/50 shadow-xl hover:-translate-y-1'
+              }`}>
+                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4 border border-zinc-800">
+                  <span className="font-mono font-bold text-[#14B8A6]">P1</span>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Multiple Choice</h3>
+                <p className="text-xs text-zinc-500 mb-6 flex-1">Core conceptual knowledge and scenario analysis.</p>
+                {currentSession?.completedParts?.includes('mcq') ? (
+                  <Button disabled className="w-full bg-zinc-900 text-zinc-500 font-bold">SUBMITTED</Button>
+                ) : (
+                  <Button onClick={() => handleStartPart('mcq')} className="w-full bg-[#5B8CFF] hover:bg-[#3b71f3] text-white font-bold cursor-pointer transition">
+                    START SECTION
+                  </Button>
+                )}
+              </div>
+
+              {/* Part 2: Coding */}
+              <div className={`p-8 border rounded-2xl flex flex-col items-center text-center transition ${
+                currentSession?.completedParts?.includes('coding') 
+                  ? 'bg-zinc-950/50 border-zinc-800 opacity-60' 
+                  : 'bg-card/60 border-border hover:border-[#5B8CFF]/50 shadow-xl hover:-translate-y-1'
+              }`}>
+                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4 border border-zinc-800">
+                  <span className="font-mono font-bold text-[#5B8CFF]">P2</span>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Coding Challenges</h3>
+                <p className="text-xs text-zinc-500 mb-6 flex-1">Algorithmic problem solving and secure logic implementation.</p>
+                {currentSession?.completedParts?.includes('coding') ? (
+                  <Button disabled className="w-full bg-zinc-900 text-zinc-500 font-bold">SUBMITTED</Button>
+                ) : (
+                  <Button onClick={() => handleStartPart('coding')} className="w-full bg-[#5B8CFF] hover:bg-[#3b71f3] text-white font-bold cursor-pointer transition">
+                    START SECTION
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            {currentSession?.completedParts?.includes('mcq') && currentSession?.completedParts?.includes('coding') && (
+              <div className="mt-8">
+                <Button onClick={handleFinishAssessment} className="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-8 h-12 rounded-xl tracking-widest text-sm shadow-lg animate-pulse">
+                  FINALIZE EXAM
+                </Button>
+              </div>
+            )}
+          </div>
+        </main>
+      ) : (
+      <main className="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden h-[calc(100vh-57px)] animate-fade-in relative z-10">
         
-        {/* LEFT COLUMN: Problem descriptions (5 grid size) */}
-        <section className={`lg:col-span-5 p-4 flex flex-col space-y-4 overflow-y-auto border-r ${
-          editorTheme === 'light' ? 'bg-white border-neutral-200' : 'bg-[#080d14]/70 border-sky-950/30'
-        }`}>
-          {/* QUESTION SWITCHER */}
-          <div className="flex items-center justify-between border-b border-sky-900/10 pb-3 select-none">
-            <h3 className="text-xs font-bold font-mono tracking-widest text-sky-500 uppercase">Question Playlist</h3>
-            <div className="flex items-center gap-1">
+        {/* LEFT COLUMN: Problem Description & Telemetry */}
+        <section className={`p-5 flex flex-col space-y-4 overflow-y-auto border-r border-border bg-card/30 ${activePart === 'mcq' ? 'lg:col-span-3' : 'lg:col-span-5'}`}>
+          
+          {/* QUESTION SELECTOR */}
+          <div className="flex items-center justify-between border-b border-border pb-3 select-none">
+            <h3 className="text-[10px] font-bold font-mono tracking-widest text-muted uppercase">Part: {activePart === 'mcq' ? 'MCQ' : 'Coding'}</h3>
+            <div className="flex items-center gap-1.5">
               <Button 
                 variant="outline" 
                 size="sm" 
                 disabled={selectedQIndex === 0} 
                 onClick={() => setSelectedQIndex(p => p - 1)}
-                className={`h-7 px-2 border ${
-                  editorTheme === 'light' ? 'border-neutral-200' : 'border-sky-950/30 bg-sky-950/5'
-                }`}
+                className="h-7 px-2 border border-border bg-card/45 hover:bg-zinc-900"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
               </Button>
-              <span className="text-xs font-mono font-bold px-2">
-                {selectedQIndex + 1} / {questions.length}
+              <span className="text-[10px] font-mono font-bold px-2">
+                {selectedQIndex + 1} / {filteredQuestions.length}
               </span>
               <Button 
                 variant="outline" 
                 size="sm" 
-                disabled={selectedQIndex === questions.length - 1} 
+                disabled={selectedQIndex === filteredQuestions.length - 1} 
                 onClick={() => setSelectedQIndex(p => p + 1)}
-                className={`h-7 px-2 border ${
-                  editorTheme === 'light' ? 'border-neutral-200' : 'border-sky-950/30 bg-sky-950/5'
-                }`}
+                className="h-7 px-2 border border-border bg-card/45 hover:bg-zinc-900"
               >
                 <ChevronRight className="w-3.5 h-3.5" />
               </Button>
             </div>
           </div>
 
+          <div className="py-2 flex gap-2">
+            <Button onClick={handleSubmitPart} className="flex-1 bg-emerald-600/20 text-emerald-500 border border-emerald-500/30 hover:bg-emerald-600 hover:text-white text-[10px] font-mono tracking-widest uppercase transition h-8">
+              Submit {activePart === 'mcq' ? 'MCQ' : 'Coding'} Section
+            </Button>
+          </div>
+
           {activeQuestion ? (
             <div className="space-y-5 flex-1 flex flex-col">
-              <div>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-sky-950/30 border border-sky-900/30 text-sky-400 font-bold uppercase tracking-wider">
-                  Difficulty: {activeQuestion.difficulty}
-                </span>
-                <h1 className="text-lg font-extrabold tracking-tight mt-2 flex items-center gap-1.5">
-                  <CornerDownRight className="w-4 h-4 text-sky-500" /> {activeQuestion.title}
-                </h1>
-              </div>
+              {activePart !== 'mcq' && (
+                <>
+                  <div>
+                    <span className="px-2 py-0.5 rounded text-[9px] font-mono bg-background border border-border text-muted font-bold uppercase tracking-wider">
+                      DIFFICULTY: {activeQuestion.difficulty}
+                    </span>
+                    <h1 className="text-base font-extrabold tracking-tight mt-2.5 flex items-center gap-1.5 text-foreground">
+                      <CornerDownRight className="w-4 h-4 text-zinc-500" strokeWidth={1.5} /> {activeQuestion.title}
+                    </h1>
+                  </div>
 
-              {/* Problem description text */}
-              <div className="space-y-4 text-sm leading-relaxed text-neutral-400 font-sans whitespace-pre-wrap">
-                {activeQuestion.description}
-              </div>
+                  {/* Description */}
+                  <div className="space-y-4 text-xs leading-relaxed text-muted font-sans whitespace-pre-wrap">
+                    {activeQuestion.description}
+                  </div>
+                </>
+              )}
+              
+              {activePart === 'mcq' && (
+                <div className="mt-4 p-4 border border-border bg-card/20 rounded-xl space-y-3">
+                  <h4 className="text-[10px] font-mono font-bold text-foreground uppercase tracking-widest border-b border-border pb-2">Question Navigator</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {filteredQuestions.map((q, idx) => {
+                      const isAnswered = currentSession?.submissions?.[q.id]?.code !== undefined
+                      const isMarked = reviewMarked[q.id]
+                      const isActive = selectedQIndex === idx
+                      
+                      let btnColor = 'bg-zinc-900 text-zinc-500 border-border hover:bg-zinc-800' // Unanswered default
+                      if (isActive) btnColor = 'bg-foreground text-background border-foreground shadow-[0_0_10px_rgba(255,255,255,0.2)]'
+                      else if (isMarked) btnColor = 'bg-yellow-500/10 text-yellow-500 border-yellow-500/30'
+                      else if (isAnswered) btnColor = 'bg-[#5B8CFF]/15 text-[#5B8CFF] border-[#5B8CFF]/30'
 
-              {/* Tag badges */}
-              <div className="flex flex-wrap gap-1.5">
-                {activeQuestion.tags.map((tag, idx) => (
-                  <span key={idx} className="bg-neutral-800/40 text-neutral-400 border border-neutral-800 text-[10px] px-2 py-0.5 rounded-md font-mono">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              {/* Constraints */}
-              <div className={`p-4 rounded-2xl border ${
-                editorTheme === 'light' ? 'bg-neutral-50 border-neutral-200' : 'bg-neutral-900/20 border-neutral-900/40'
-              }`}>
-                <h4 className="text-xs font-mono font-bold text-sky-400 uppercase tracking-widest mb-1.5">Constraints</h4>
-                <pre className="text-xs leading-relaxed font-mono whitespace-pre-wrap text-neutral-450">{activeQuestion.constraints}</pre>
-              </div>
-
-              {/* Input format & Output format */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className={`p-3.5 rounded-2xl border ${
-                  editorTheme === 'light' ? 'bg-neutral-50 border-neutral-200' : 'bg-neutral-900/20 border-neutral-900/40'
-                }`}>
-                  <h4 className="text-[10px] font-mono font-bold text-sky-450 uppercase tracking-wider mb-1">Input Format</h4>
-                  <p className="text-xs text-neutral-450">{activeQuestion.input_format}</p>
+                      return (
+                        <button
+                          key={q.id}
+                          onClick={() => setSelectedQIndex(idx)}
+                          className={`w-8 h-8 rounded border flex items-center justify-center text-[10px] font-mono font-bold transition-all ${btnColor}`}
+                        >
+                          {idx + 1}
+                        </button>
+                      )
+                    })}
+                  </div>
+                  <div className="flex flex-wrap gap-x-4 gap-y-2 mt-2 pt-2 border-t border-border/50 text-[9px] font-mono text-zinc-500">
+                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded bg-foreground"></div> Current</div>
+                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded bg-[#5B8CFF]/60"></div> Answered</div>
+                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded bg-yellow-500/60"></div> Review</div>
+                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded bg-zinc-800"></div> Unanswered</div>
+                  </div>
                 </div>
-                <div className={`p-3.5 rounded-2xl border ${
-                  editorTheme === 'light' ? 'bg-neutral-50 border-neutral-200' : 'bg-neutral-900/20 border-neutral-900/40'
-                }`}>
-                  <h4 className="text-[10px] font-mono font-bold text-sky-450 uppercase tracking-wider mb-1">Output Format</h4>
-                  <p className="text-xs text-neutral-450">{activeQuestion.output_format}</p>
-                </div>
-              </div>
+              )}
 
-              {/* Samples */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-                <div className="space-y-1.5 flex flex-col">
-                  <span className="text-[10px] font-mono font-bold text-sky-450 uppercase tracking-wider px-1">Sample Input</span>
-                  <pre className="bg-[#030508] p-3 rounded-xl border border-sky-950/20 text-xs font-mono text-sky-300 min-h-16 whitespace-pre-wrap">{activeQuestion.sample_input}</pre>
-                </div>
-                <div className="space-y-1.5 flex flex-col">
-                  <span className="text-[10px] font-mono font-bold text-sky-450 uppercase tracking-wider px-1">Sample Output</span>
-                  <pre className="bg-[#030508] p-3 rounded-xl border border-sky-950/20 text-xs font-mono text-emerald-400 min-h-16 whitespace-pre-wrap">{activeQuestion.sample_output}</pre>
-                </div>
-              </div>
+              {activePart !== 'mcq' && (
+                <>
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-1.5">
+                    {activeQuestion.tags?.map((tag, idx) => (
+                      <span key={idx} className="bg-background text-muted border border-border text-[9px] px-2 py-0.5 rounded font-mono">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
 
-              {activeQuestion.explanation && (
-                <div className="text-xs text-neutral-450 leading-relaxed italic bg-sky-950/5 border border-sky-950/20 p-3 rounded-xl">
-                  <strong>Explanation:</strong> {activeQuestion.explanation}
-                </div>
+                  {/* Constraints */}
+                  <div className="p-4 rounded-xl border bg-card/40 border-border">
+                    <h4 className="text-[9px] font-mono font-bold text-foreground uppercase tracking-widest mb-1.5">Constraints</h4>
+                    <pre className="text-xs leading-relaxed font-mono whitespace-pre-wrap text-zinc-500">{activeQuestion.constraints}</pre>
+                  </div>
+
+                  {/* Format specs */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-3.5 rounded-xl border bg-card/40 border-border">
+                      <h4 className="text-[9px] font-mono font-bold text-muted uppercase tracking-wider mb-1">Input Format</h4>
+                      <p className="text-[11px] text-zinc-500">{activeQuestion.input_format}</p>
+                    </div>
+                    <div className="p-3.5 rounded-xl border bg-card/40 border-border">
+                      <h4 className="text-[9px] font-mono font-bold text-muted uppercase tracking-wider mb-1">Output Format</h4>
+                      <p className="text-[11px] text-zinc-500">{activeQuestion.output_format}</p>
+                    </div>
+                  </div>
+
+                  {/* Samples */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                    <div className="space-y-1.5 flex flex-col">
+                      <span className="text-[9px] font-mono font-bold text-zinc-500 uppercase tracking-wider px-1">Sample Input</span>
+                      <pre className="bg-background p-3 rounded border border-border text-[11px] font-mono text-muted min-h-16 whitespace-pre-wrap">{activeQuestion.sample_input}</pre>
+                    </div>
+                    <div className="space-y-1.5 flex flex-col">
+                      <span className="text-[9px] font-mono font-bold text-zinc-500 uppercase tracking-wider px-1">Sample Output</span>
+                      <pre className="bg-background p-3 rounded border border-border text-[11px] font-mono text-foreground min-h-16 whitespace-pre-wrap">{activeQuestion.sample_output}</pre>
+                    </div>
+                  </div>
+
+                  {activeQuestion.explanation && (
+                    <div className="text-[11px] text-zinc-500 leading-normal italic bg-background border border-border p-3 rounded-xl">
+                      <strong>Explanation:</strong> {activeQuestion.explanation}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-xs font-mono text-neutral-500">
-              No questions linked to dashboard assessment.
+            <div className="flex-1 flex items-center justify-center text-xs font-mono text-zinc-650">
+              No questions linked to assessment lobby.
             </div>
           )}
 
-          {/* PROCTOR LOGS AND CAMERA DRAWER (AT BOTTOM OF SPEC PANEL) */}
-          <div className="pt-4 border-t border-sky-900/10 grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Visual camera card */}
-            <Card className="bg-[#030508] border-sky-950/40 overflow-hidden relative shadow-none min-h-28">
+          {/* PROCTORING TELEMETRY SIDEBAR DRAWER */}
+          <div className="pt-4 border-t border-border grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            {/* Visual camera radar card */}
+            <Card className="bg-background border-border overflow-hidden relative shadow-none min-h-28 rounded-xl flex items-center justify-center">
               {isAnomalyActive && (
-                <div className="absolute top-2 right-2 z-30 bg-red-650 text-white font-mono font-bold text-[8px] px-1.5 py-0.5 rounded flex items-center animate-bounce">
-                  <EyeOff className="w-2.5 h-2.5 mr-1" /> {anomalyType}
+                <div className="absolute top-2 right-2 z-30 bg-[#EF4444] text-white font-mono font-bold text-[8px] px-1.5 py-0.5 rounded flex items-center animate-bounce">
+                  <EyeOff className="w-2.5 h-2.5 mr-1" strokeWidth={1.5} /> {anomalyType}
                 </div>
               )}
               
               <div className="w-full h-28 relative overflow-hidden flex items-center justify-center">
-                <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover transform -scale-x-100" />
+                <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover transform -scale-x-100 opacity-80" />
                 <canvas ref={canvasRef} width="160" height="120" className="hidden" />
                 
-                <div className="absolute inset-0 border-2 border-sky-500/10 pointer-events-none z-20">
-                  <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-sky-400" />
-                  <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-sky-400" />
-                  <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-sky-400" />
-                  <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-sky-400" />
+                <div className="absolute inset-0 border border-zinc-500/20 pointer-events-none z-20">
+                  <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t border-l border-white/60" />
+                  <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t border-r border-white/60" />
+                  <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b border-l border-white/60" />
+                  <div className="absolute bottom-2 right-2 w-3.5 h-3.5 border-b border-r border-white/60" />
                 </div>
               </div>
             </Card>
 
-            {/* Proctor Alert Timeline log */}
-            <Card className="bg-[#030508] border-sky-950/40 flex flex-col shadow-none overflow-hidden h-28">
-              <div className="bg-neutral-900 px-2 py-1 text-[9px] uppercase font-bold text-neutral-400 tracking-wider">
+            {/* Telemetry timeline logs */}
+            <Card className="bg-black border-border flex flex-col shadow-none overflow-hidden h-28 rounded-xl">
+              <div className="bg-background border-b border-border px-2.5 py-1.5 text-[8.5px] uppercase font-bold text-zinc-500 tracking-wider">
                 Telemetry Log
               </div>
-              <div className="p-2 font-mono text-[9px] space-y-1.5 overflow-y-auto flex-1 text-neutral-500 max-h-[80px]">
+              <div className="p-2 font-mono text-[9px] space-y-1.5 overflow-y-auto flex-1 text-zinc-500 max-h-[80px]">
                 {proctorLogs.slice(-20).map((log, idx) => (
-                  <div key={idx} className={log.includes('ALERT') ? 'text-red-400 font-bold bg-red-950/20 px-1 rounded' : 'text-neutral-500'}>
+                  <div key={idx} className={log.includes('ALERT') ? 'text-white font-bold bg-[#EF4444]/15 border border-[#EF4444]/30 px-1 rounded' : 'text-zinc-500'}>
                     {log}
                   </div>
                 ))}
@@ -1035,186 +1244,281 @@ export default function ExamShell() {
           </div>
         </section>
 
-        {/* RIGHT COLUMN: Monaco editor & execution console (7 grid size) */}
-        <section className={`lg:col-span-7 flex flex-col h-full overflow-hidden ${
-          editorTheme === 'light' ? 'bg-[#f1f5f9]' : 'bg-[#090e18]'
-        }`}>
-          {/* EDITOR MENUS */}
-          <div className={`px-4 py-2 flex items-center justify-between border-b ${
-            editorTheme === 'light' ? 'bg-white border-neutral-200' : 'bg-neutral-950 border-sky-950/30'
-          }`}>
-            <span className="text-[11px] font-mono font-bold text-neutral-400 flex items-center gap-1.5 uppercase">
-              <Terminal className="w-3.5 h-3.5 text-sky-500" /> Sandbox workspace compilation node
-            </span>
-            <div className="flex items-center gap-2 select-none">
-              <select 
-                value={language} 
-                onChange={(e) => setLanguage(e.target.value)} 
-                className={`border rounded-lg text-xs px-2 py-1 font-semibold cursor-pointer outline-none ${
-                  editorTheme === 'light' 
-                    ? 'border-neutral-200 bg-white text-neutral-700' 
-                    : 'border-sky-950/50 bg-[#0c1423] text-sky-305'
-                }`}
-              >
-                {assessment.allowed_languages.includes('python') && <option value="python">Python 3.10</option>}
-                {assessment.allowed_languages.includes('javascript') && <option value="javascript">JavaScript (ES6)</option>}
-                {assessment.allowed_languages.includes('java') && <option value="java">Java (JDK 17)</option>}
-              </select>
+        {/* RIGHT COLUMN: Code Workspace & Terminal or MCQ View */}
+        <section className={`flex flex-col h-full overflow-hidden bg-background ${activePart === 'mcq' ? 'lg:col-span-9' : 'lg:col-span-7'}`}>
+          
+          {/* EDITOR SUB-HEADER */}
+          {activeQuestion?.type !== 'mcq' && (
+            <div className="px-4 py-2 flex items-center justify-between border-b border-border bg-card">
+              <span className="text-[10px] font-mono font-bold text-muted flex items-center gap-1.5 uppercase select-none">
+                <Terminal className="w-3.5 h-3.5 text-zinc-400" strokeWidth={1.5} /> Compiler Workspace Node
+              </span>
+              <div className="flex items-center gap-2 select-none">
+                <select 
+                  value={language} 
+                  onChange={(e) => setLanguage(e.target.value)} 
+                  className="border border-border bg-background text-foreground rounded text-xs px-2 py-1 font-semibold outline-none cursor-pointer"
+                >
+                  {assessment.allowed_languages.includes('python') && <option value="python">Python 3.10</option>}
+                  {assessment.allowed_languages.includes('javascript') && <option value="javascript">JavaScript (ES6)</option>}
+                  {assessment.allowed_languages.includes('java') && <option value="java">Java (JDK 17)</option>}
+                </select>
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* MONACO CODE EDITOR ENVIRONMENT */}
-          <div className="flex-1 min-h-0 bg-[#1e1e1e]">
+          {/* MONACO CODE EDITOR OR MCQ CONTAINER */}
+          <div className="flex-1 min-h-0 bg-[#1e1e1e] relative overflow-y-auto">
             {activeQuestion ? (
-              <Editor 
-                height="100%" 
-                language={language === 'java' ? 'java' : language === 'javascript' ? 'javascript' : 'python'} 
-                theme={editorTheme === 'vs-dark' ? 'vs-dark' : 'light'} 
-                value={getActiveCode()} 
-                onChange={handleCodeChange}
-                options={{ 
-                  fontSize: 13, 
-                  minimap: { enabled: false }, 
-                  automaticLayout: true,
-                  fontFamily: 'Consolas, monaco, monospace',
-                  theme: editorTheme === 'vs-dark' ? 'vs-dark' : 'light',
-                  lineNumbers: 'on',
-                  cursorBlinking: 'smooth',
-                  tabSize: 4,
-                  insertSpaces: true
-                }} 
-              />
+              activeQuestion.type === 'mcq' ? (
+                <div className="flex flex-col h-full">
+                  <div className="flex-1 p-8 max-w-4xl mx-auto w-full space-y-6 overflow-y-auto pb-24">
+                    
+                    <div className="flex items-center gap-4 mb-4 border-b border-border/50 pb-4">
+                      <h2 className="text-xl font-extrabold text-foreground font-sans">Question {selectedQIndex + 1}</h2>
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-background border border-border text-muted font-bold uppercase tracking-wider">
+                        DIFFICULTY: {activeQuestion.difficulty}
+                      </span>
+                    </div>
+                    
+                    <div className="text-[15px] leading-relaxed text-zinc-300 font-sans whitespace-pre-wrap mb-8">
+                      {activeQuestion.description}
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4 mt-8">
+                      {activeQuestion.mcq_options?.map((opt, idx) => {
+                        const selectedVal = currentSession?.submissions?.[activeQuestion.id]?.code
+                        const isSelected = selectedVal === String(idx)
+                        return (
+                          <button
+                            key={idx}
+                            onClick={() => handleMcqSelect(idx)}
+                            className={`flex items-center text-left p-4 rounded-xl border transition-all duration-200 ${
+                              isSelected 
+                                ? 'bg-[#5B8CFF]/10 border-[#5B8CFF] shadow-[0_0_15px_rgba(91,140,255,0.15)]' 
+                                : 'bg-zinc-900 border-border hover:border-zinc-700 hover:bg-zinc-800'
+                            }`}
+                          >
+                            <div className={`flex items-center justify-center w-8 h-8 rounded-lg mr-4 font-bold font-mono text-[10px] ${
+                              isSelected ? 'bg-[#5B8CFF] text-white' : 'bg-black text-zinc-500 border border-border'
+                            }`}>
+                              {String.fromCharCode(65 + idx)}
+                            </div>
+                            <span className={`text-[15px] font-sans ${isSelected ? 'text-white font-semibold' : 'text-zinc-300'}`}>
+                              {opt}
+                            </span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+
+                  {/* BOTTOM ACTION BAR FOR MCQ */}
+                  <div className="h-20 bg-card border-t border-border flex items-center justify-between px-8 absolute bottom-0 left-0 right-0 z-20 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+                    <div className="flex items-center gap-3">
+                      <Button 
+                        onClick={handleClearResponse}
+                        variant="outline"
+                        className="h-10 px-5 text-xs font-mono font-bold bg-background text-zinc-400 border-border hover:bg-zinc-900 hover:text-white uppercase tracking-widest"
+                      >
+                        Clear Response
+                      </Button>
+                      <Button 
+                        onClick={() => setReviewMarked(prev => ({ ...prev, [activeQuestion.id]: !prev[activeQuestion.id] }))}
+                        variant="outline"
+                        className={`h-10 px-5 text-xs font-mono font-bold uppercase tracking-widest transition ${reviewMarked[activeQuestion.id] ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30' : 'bg-background text-zinc-400 border-border hover:bg-zinc-900 hover:text-white'}`}
+                      >
+                        {reviewMarked[activeQuestion.id] ? 'Unmark Review' : 'Mark for Review'}
+                      </Button>
+                    </div>
+                    
+                    <div className="flex items-center gap-3">
+                      <Button 
+                        onClick={() => setSelectedQIndex(p => p - 1)}
+                        disabled={selectedQIndex === 0}
+                        variant="outline"
+                        className="h-10 px-5 text-xs font-mono font-bold bg-background text-zinc-400 border-border hover:bg-zinc-900 hover:text-white uppercase tracking-widest disabled:opacity-30"
+                      >
+                        Previous
+                      </Button>
+                      <Button 
+                        onClick={handleSaveAndNext}
+                        disabled={selectedQIndex === filteredQuestions.length - 1}
+                        className="h-10 px-6 text-xs font-mono font-bold bg-[#5B8CFF] hover:bg-[#3b71f3] text-white uppercase tracking-widest shadow-lg"
+                      >
+                        Save & Next <ChevronRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Editor 
+                  height="100%" 
+                  language={language === 'java' ? 'java' : language === 'javascript' ? 'javascript' : 'python'} 
+                  theme="vs-dark"
+                  value={getActiveCode()} 
+                  onChange={handleCodeChange}
+                  options={{ 
+                    fontSize: 13, 
+                    minimap: { enabled: false }, 
+                    automaticLayout: true,
+                    fontFamily: 'Consolas, monaco, monospace',
+                    lineNumbers: 'on',
+                    cursorBlinking: 'smooth',
+                    tabSize: 4,
+                    insertSpaces: true
+                  }} 
+                />
+              )
             ) : (
-              <div className="h-full flex items-center justify-center text-xs font-mono text-neutral-500 bg-neutral-950">
+              <div className="h-full flex items-center justify-center text-xs font-mono text-zinc-650 bg-black">
                 Load a problem set to begin typing code...
               </div>
             )}
           </div>
 
-          {/* SPLIT TRAY: RUNTIME TEST CASES AND CONSOLE OUTPUT */}
-          <div className={`h-56 flex flex-col border-t ${
-            editorTheme === 'light' ? 'bg-white border-neutral-200' : 'bg-neutral-950 border-sky-950/40'
-          }`}>
-            {/* Console Output bar */}
-            <div className={`px-4 py-2.5 flex items-center justify-between text-xs border-b select-none ${
-              editorTheme === 'light' ? 'bg-neutral-100 border-neutral-200' : 'bg-neutral-900 border-sky-950/30'
-            }`}>
-              <span className="flex items-center text-neutral-450 uppercase font-mono tracking-wider font-bold text-[10px]"><Terminal className="w-3.5 h-3.5 mr-2 text-sky-500" /> Execution Console Terminal</span>
-              <div className="flex items-center gap-2">
-                <Button 
-                  onClick={handleResetCode} 
+          {/* SPLIT CONSOLE PANEL */}
+          {activeQuestion?.type !== 'mcq' && (
+            <div className="h-64 flex flex-col border-t border-border bg-card">
+              {/* Control Bar */}
+              <div className="px-4 py-2 flex items-center justify-between text-xs border-b border-border bg-card/40 select-none">
+                <div className="flex items-center gap-4">
+                  <button 
+                    onClick={() => setTerminalTab('console')}
+                    className={`flex items-center uppercase font-mono tracking-wider font-bold text-[9px] pb-1 border-b-2 transition ${terminalTab === 'console' ? 'text-[#14B8A6] border-[#14B8A6]' : 'text-zinc-500 border-transparent hover:text-zinc-400'}`}
+                  >
+                    <Terminal className="w-3.5 h-3.5 mr-2" strokeWidth={1.5} /> Console Output
+                  </button>
+                  <button 
+                    onClick={() => setTerminalTab('testcases')}
+                    className={`flex items-center uppercase font-mono tracking-wider font-bold text-[9px] pb-1 border-b-2 transition ${terminalTab === 'testcases' ? 'text-[#14B8A6] border-[#14B8A6]' : 'text-zinc-500 border-transparent hover:text-zinc-400'}`}
+                  >
+                    Custom Test Case Input
+                  </button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    onClick={handleResetCode} 
+                    variant="outline" 
+                    size="sm"
+                    className="h-6 text-[9px] font-bold font-mono border border-border bg-background hover:bg-zinc-900 px-2.5 rounded text-muted hover:text-foreground"
+                  >
+                    <RefreshCw className="w-3 h-3 mr-1" strokeWidth={1.5} /> RESET TEMPLATE
+                  </Button>
+                  <Button
+                    onClick={() => setConsoleOutput('Execution console reports cleared.')} 
                   variant="outline" 
                   size="sm"
-                  className={`h-6 text-[10px] border px-2.5 font-bold ${
-                    editorTheme === 'light' ? 'border-neutral-200' : 'border-sky-950/30 bg-sky-950/5'
-                  }`}
+                  className="h-6 text-[9px] font-bold font-mono border border-border bg-background hover:bg-zinc-900 px-2.5 rounded text-muted hover:text-foreground"
                 >
-                  <RefreshCw className="w-3 h-3 mr-1" /> Reset Code
-                </Button>
-                <Button 
-                  onClick={() => setConsoleOutput('Execution console reports cleared.')} 
-                  variant="outline" 
-                  size="sm"
-                  className={`h-6 text-[10px] border px-2.5 font-bold ${
-                    editorTheme === 'light' ? 'border-neutral-200' : 'border-sky-950/30 bg-sky-950/5'
-                  }`}
-                >
-                  <Trash2 className="w-3.5 h-3.5 mr-1" /> Clear Output
+                  <Trash2 className="w-3.5 h-3.5 mr-1" strokeWidth={1.5} /> CLEAR OUTPUT
                 </Button>
                 <Button 
                   onClick={handleRunCode} 
                   disabled={isRunning || isSubmitting} 
-                  className="bg-sky-650 hover:bg-sky-600 text-white font-bold h-6 px-3 text-[10px] tracking-wider active:scale-95 transition"
+                  className="bg-zinc-900/60 hover:bg-zinc-800 text-[#14B8A6] border border-[#14B8A6]/35 font-bold h-6 px-3 text-[9px] font-mono tracking-wider active:scale-95 transition rounded-xl cursor-pointer"
                 >
-                  {isRunning ? 'Running...' : 'Run Code'}
+                  {isRunning ? 'RUNNING...' : 'RUN CODE'}
                 </Button>
                 <Button 
                   onClick={handleSubmitQuestion} 
                   disabled={isRunning || isSubmitting} 
-                  className="bg-emerald-650 hover:bg-emerald-600 text-white font-extrabold h-6 px-3.5 text-[10px] tracking-wider active:scale-95 transition shadow-sm"
+                  className="bg-[#5B8CFF] hover:bg-[#3b71f3] text-white font-extrabold h-6 px-3.5 text-[9px] font-mono tracking-wider active:scale-95 transition rounded-xl cursor-pointer"
                 >
-                  {isSubmitting ? 'Evaluating...' : 'Submit Code'}
+                  {isSubmitting ? 'EVALUATING...' : 'SUBMIT CODE'}
                 </Button>
               </div>
             </div>
 
-            {/* CONSOLE PRE-BOX LOG OUTPUT & TESTCASE VERDICTS */}
+            {/* PRE-OUTPUT DIAGNOSTICS & VERDICTS */}
             <div className="flex-1 flex overflow-hidden">
-              <pre className="flex-1 p-4 font-mono text-[10.5px] text-neutral-400 overflow-y-auto whitespace-pre-wrap leading-relaxed select-text bg-[#030509]/30">
+              
+              {terminalTab === 'testcases' && (
+                <div className="w-64 border-r border-border p-3 bg-black flex flex-col">
+                  <span className="text-[9px] font-mono text-zinc-500 uppercase mb-2 font-bold tracking-widest">Custom STDIN Input</span>
+                  <textarea 
+                    value={customInput}
+                    onChange={(e) => setCustomInput(e.target.value)}
+                    className="flex-1 bg-zinc-950 border border-zinc-800 rounded p-2 text-[10px] font-mono text-zinc-300 focus:outline-none focus:border-[#5B8CFF]/50 resize-none"
+                    placeholder="Enter custom input for 'Run Code' here..."
+                  />
+                </div>
+              )}
+
+              <pre className="flex-1 p-4 font-mono text-[10px] text-zinc-450 overflow-y-auto whitespace-pre-wrap leading-relaxed select-text bg-black/10">
                 {consoleOutput}
               </pre>
 
-              {/* TEST CASE INDIVIDUAL VERDICT PILLS GRID */}
+              {/* Case Verdict Sidebar */}
               {testResults && (
-                <div className="w-64 border-l border-sky-950/30 p-3 bg-[#030509]/55 overflow-y-auto max-h-full space-y-2 select-none">
-                  <div className="text-[9px] font-mono font-bold text-sky-400 uppercase tracking-widest border-b border-sky-900/10 pb-1">
-                    {testResults.isSubmit ? 'Final Submission Verdict' : 'Run Output Summary'}
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-neutral-450 font-bold">Overall Status:</span>
-                    <span className={`font-mono font-extrabold ${
-                      testResults.verdict === 'Accepted' ? 'text-emerald-450' : 'text-red-400 animate-pulse'
+                <div className="w-64 border-l border-zinc-900 p-3 bg-[#050507]/60 overflow-y-auto max-h-full space-y-2 select-none">
+                  <div className="text-[9px] font-mono font-bold text-zinc-500 uppercase tracking-widest border-b border-zinc-900 pb-1 flex items-center justify-between">
+                    <span>{testResults.isSubmit ? 'Final Verdict' : 'Run Verdict'}</span>
+                    <span className={`px-1.5 py-0.5 rounded text-[8px] font-extrabold ${
+                      testResults.verdict === 'Accepted' ? 'bg-zinc-900 border border-zinc-800 text-white' : 'bg-zinc-950 border border-zinc-900 text-zinc-500 animate-pulse'
                     }`}>{testResults.verdict}</span>
                   </div>
 
                   {testResults.isSubmit && (
-                    <div className="text-[10px] text-neutral-450 space-y-0.5 border-t border-sky-900/10 pt-1.5">
-                      <div>Score Obtained: <span className="text-sky-400 font-bold font-mono">{testResults.score}%</span></div>
-                      <div>Passed Cases: <span className="text-emerald-450 font-bold font-mono">{testResults.passedCount} / {testResults.totalCount}</span></div>
+                    <div className="text-[10px] text-zinc-500 space-y-0.5 border-t border-zinc-900/60 pt-1.5">
+                      <div>Score Obtained: <span className="text-white font-bold font-mono">{testResults.score}%</span></div>
+                      <div>Passed Cases: <span className="text-white font-bold font-mono">{testResults.passedCount} / {testResults.totalCount}</span></div>
                     </div>
                   )}
 
-                  <div className="space-y-1.5 pt-1.5 border-t border-sky-900/10">
+                  <div className="space-y-1.5 pt-1.5 border-t border-border">
                     {testResults.cases?.map((c: any, index: number) => (
-                      <div key={index} className="p-2 bg-neutral-900/40 border border-neutral-900 rounded-lg text-[9px] flex flex-col space-y-1 font-mono">
-                        <div className="flex justify-between items-center text-[10px]">
-                          <span className="text-neutral-400 font-bold">Case #{index + 1} ({c.testCaseId})</span>
+                      <div key={index} className="p-2 bg-background border border-border rounded text-[9px] flex flex-col space-y-1 font-mono">
+                        <div className="flex justify-between items-center">
+                          <span className="text-zinc-500 font-bold">Case #{index + 1}</span>
                           <span className={`px-1 rounded text-[8px] font-bold ${
-                            c.passed ? 'bg-emerald-950/35 text-emerald-400' : 'bg-red-950/35 text-red-405'
+                            c.passed ? 'bg-zinc-900 text-white border border-zinc-800' : 'bg-black text-zinc-600 border border-zinc-900'
                           }`}>
                             {c.verdict}
                           </span>
                         </div>
-                        <div className="text-neutral-500 truncate max-w-full">In: {c.input?.replace(/\n/g, ' ')}</div>
-                        <div className="text-neutral-500 truncate max-w-full">Exp: {c.expected}</div>
-                        <div className="text-neutral-400 truncate max-w-full font-bold">Act: {c.actual || '(None)'}</div>
+                        <div className="text-zinc-500 truncate max-w-full">Input: {c.input?.replace(/\n/g, ' ')}</div>
+                        <div className="text-zinc-500 truncate max-w-full">Expected: {c.expected}</div>
+                        <div className="text-zinc-400 truncate max-w-full font-bold">Actual: {c.actual || '(None)'}</div>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
+              </div>
             </div>
-          </div>
+          )}
         </section>
-
+ 
       </main>
-
-      {/* WARNING POPUP SCREEN (TAB LOSS / VISIBILITY WARNING OVERLAY) */}
+      )}
+      </div>
+ 
+      {/* WARNING POPUP SCREEN */}
       {showWarningModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-[9000] p-4">
-          <Card className="w-full max-w-md bg-neutral-900 border-red-500/40 p-6 text-center shadow-2xl relative">
-            <div className="absolute top-0 left-0 right-0 h-[3px] bg-red-650" />
-            <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4 animate-bounce" />
-            <h3 className="text-lg font-black text-white tracking-tight uppercase">Workspace Violation Alert</h3>
-            <p className="text-xs text-neutral-300 mt-2 leading-relaxed">
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-[9000] p-4">
+          <Card className="w-full max-w-md bg-card border border-border p-6 text-center shadow-none relative rounded-2xl">
+            <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#EF4444]" />
+            <AlertTriangle className="w-12 h-12 text-[#EF4444] mx-auto mb-4 animate-bounce" strokeWidth={1.5} />
+            <h3 className="text-base font-bold text-foreground tracking-tight uppercase font-mono">Workspace Violation Alert</h3>
+            <p className="text-xs text-muted mt-2.5 leading-relaxed">
               {warningModalText}
             </p>
             <div className="mt-6 flex flex-col gap-2">
               <Button 
                 onClick={enterFullscreen} 
-                className="w-full bg-red-600 hover:bg-red-500 text-white font-extrabold text-xs h-10 rounded-xl"
+                className="w-full bg-[#EF4444] hover:bg-[#DC2626] text-white font-extrabold text-xs h-10 rounded-xl cursor-pointer"
               >
                 Re-enter Secure Fullscreen Mode
               </Button>
-              <p className="text-[10px] text-neutral-500 font-mono mt-2">
+              <p className="text-[10px] text-zinc-500 font-mono mt-2 select-none">
                 Multiple infractions will negatively affect your overall assessment score metrics.
               </p>
             </div>
           </Card>
         </div>
       )}
-
+ 
     </div>
   )
 }

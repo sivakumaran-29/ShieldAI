@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Shield, AlertCircle, Fingerprint, ArrowRight, Mail, Lock } from 'lucide-react'
+import { Shield, AlertCircle, Fingerprint, ArrowRight, Mail, Lock, Terminal } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { Button } from '@/components/ui/button'
 
@@ -12,6 +12,34 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const [loading, setLoading] = useState(false)
+  const [telemetryLogs, setTelemetryLogs] = useState<string[]>([])
+
+  useEffect(() => {
+    const systems = [
+      'SECURE_TUNNEL_ESTABLISHED',
+      'INTEGRITY_SHIELD_READY',
+      'OPTICAL_SENSOR_STANDBY',
+      'COMPILER_SANDBOX_IDLE',
+      'DATABASE_POOL_CONNECTED',
+      'TELEMETRY_PIPELINE_ACTIVE'
+    ]
+    
+    setTelemetryLogs([
+      `[${new Date().toLocaleTimeString()}] SHIELD_AI INIT_GATEWAY_SESSION`,
+      `[${new Date().toLocaleTimeString()}] CRYPTO_KEY_NEGOTIATION COMPLETED`
+    ])
+
+    const interval = setInterval(() => {
+      const randomSys = systems[Math.floor(Math.random() * systems.length)]
+      const timestamp = new Date().toLocaleTimeString()
+      setTelemetryLogs(prev => [
+        `[${timestamp}] ${randomSys}`,
+        ...prev.slice(0, 5)
+      ])
+    }, 4000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -39,152 +67,136 @@ export default function Login() {
   }
 
   return (
-    <div className="w-full min-h-screen flex font-sans antialiased select-none overflow-hidden relative bg-black">
+    <div className="w-screen h-screen flex font-sans antialiased overflow-hidden bg-[#000000] text-[#f5f5f7]">
       
-      {/* --- DARK DOMINATED TO OBSIDIAN BLACK GRADIENT CORE --- */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a0c] to-[#121215] z-0" />
-      
-      {/* Dynamic Zinc Ambient Lighting Core focused right under the form section */}
-      <div className="absolute top-1/2 right-[-10%] -translate-y-1/2 w-[700px] h-[700px] bg-zinc-800/[0.04] rounded-full blur-[150px] pointer-events-none mix-blend-screen" />
-      <div className="absolute top-1/4 right-[10%] w-[400px] h-[400px] bg-zinc-900/[0.03] rounded-full blur-[120px] pointer-events-none mix-blend-screen" />
+      {/* Subtle Apple-style Glow in background */}
+      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#5B8CFF]/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-[#14B8A6]/10 rounded-full blur-[150px] pointer-events-none" />
 
-      {/* High-Tech Technical Blueprint Grid Backdrop Overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(#27272a_1.2px,transparent_1.2px)] opacity-20 pointer-events-none" />
-
-      {/* ================= LEFT HALF CONTENT HUB (52% Width Layout) ================= */}
-      <div className="hidden lg:flex lg:w-[52%] flex-col justify-between p-16 relative z-10 animate-fade-in">
+      <div className="flex w-full h-full relative z-10">
         
-        {/* ShieldAI Logo Header & Minimal Tagline */}
-        <div className="space-y-2 group cursor-pointer">
-          <div className="flex items-center space-x-3.5">
-            <div className="p-3 bg-neutral-950 border border-zinc-800 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.8)] group-hover:border-zinc-700 transition-all duration-300">
-              <Shield className="w-6 h-6 text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
+        {/* LEFT PANEL: Branding & Visuals (Apple style clean typography) */}
+        <div className="hidden lg:flex w-1/2 flex-col justify-between p-12 lg:p-20 border-r border-[#ffffff0a] bg-[#000000]/40 backdrop-blur-3xl">
+          
+          <div className="flex items-center space-x-3 select-none">
+            <div className="p-2 bg-[#1c1c1e] rounded-xl border border-[#38383a]">
+              <Shield className="w-5 h-5 text-[#5B8CFF]" strokeWidth={1.5} />
             </div>
-            <span className="text-2xl font-black tracking-tight text-neutral-100">
-              Shield<span className="bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent font-black tracking-tighter">AI</span>
+            <span className="text-xl font-bold tracking-tight text-white font-sans">
+              ShieldAI
             </span>
           </div>
-          {/* Minimal Sub-Tagline Line */}
-          <p className="text-[11px] text-zinc-500 font-mono tracking-wider pl-1.5 transition-colors group-hover:text-zinc-300 duration-300">
-            // Real-time systemic behavioral integrity monitoring endpoint.
-          </p>
-        </div>
 
-        {/* Dynamic Presentation Headlines */}
-        <div className="max-w-xl space-y-6 my-auto pl-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-zinc-950/40 border border-zinc-800 text-[10px] font-mono tracking-widest uppercase text-white rounded-lg shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" /> Live Telemetry Session Active
-          </div>
-          
-          <h1 className="text-4xl lg:text-5xl font-black tracking-tight leading-[1.12] text-neutral-200">
-            Intelligent <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-350 to-neutral-400 drop-shadow-[0_2px_15px_rgba(255,255,255,0.15)]">behavioral integrity node frameworks.</span>
-          </h1>
-          
-          <p className="text-xs text-neutral-400 font-bold leading-relaxed max-w-sm opacity-70">
-            Localized browser proctoring analysis handling secure encrypted state triggers natively within Room 66.
-          </p>
-        </div>
-
-        {/* Institutional Base Subtext */}
-        <div className="text-[9px] font-mono tracking-widest text-neutral-600 uppercase pl-2 opacity-40">
-          AMRITA UNIVERSITY INTEGRITY EVALUATION NETWORK
-        </div>
-      </div>
-
-      {/* ================= CENTRAL TRANSITION ZONE: STYLISH SKY CHEVRONS ================= */}
-      <div className="absolute top-1/2 left-[50%] -translate-y-1/2 -translate-x-1/2 z-30 hidden lg:flex items-center space-x-1.5 pointer-events-none tracking-widest font-black text-2xl select-none">
-        <span className="animate-pulse duration-[1400ms] text-neutral-800">&gt;</span>
-        <span className="animate-pulse duration-[1200ms] text-neutral-650">&gt;</span>
-        <span className="animate-pulse duration-[1000ms] text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">&gt;</span>
-      </div>
-
-      {/* ================= RIGHT HALF: PREMIUM SKY GLASS PORTAL HUB (48% Width) ================= */}
-      <div className="w-full lg:w-[48%] flex flex-col justify-center items-center p-6 sm:p-16 z-10">
-        <div className="w-full max-w-md space-y-8 relative z-10 group transition-all duration-500 ease-out transform hover:-translate-y-1 animate-fade-in">
-          
-          {/* Form Header */}
-          <div className="space-y-1 text-center lg:text-left pl-1">
-            <h2 className="text-3xl font-black tracking-tight text-neutral-100 drop-shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-              Terminal Gateway
-            </h2>
-            <p className="text-xs text-zinc-400 font-bold tracking-wide uppercase">Provide verified institutional access parameters.</p>
-          </div>
-
-          <form onSubmit={handleFormSubmit} className="space-y-6">
-            {errorMessage && (
-              <div className="text-xs text-red-400 bg-red-950/40 p-3.5 rounded-xl border border-red-900/40 flex items-center space-x-2.5 animate-fadeIn">
-                <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
-                <span className="font-bold tracking-wide">{errorMessage}</span>
-              </div>
-            )}
+          <div className="max-w-md space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#1c1c1e] border border-[#38383a] text-[10px] font-semibold tracking-widest uppercase text-white rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse" /> Live Telemetry Active
+            </div>
             
-            {/* --- TRUE FROSTED OBSIDIAN GLASS CONTAINER --- */}
-            <div className="bg-zinc-950/20 border border-zinc-800/80 p-6 rounded-3xl shadow-[0_30px_70px_-15px_rgba(0,0,0,0.9)] backdrop-blur-xl space-y-4 transition-all duration-500 group-hover:border-zinc-700 group-hover:bg-zinc-950/40 group-hover:shadow-[0_0_40px_rgba(255,255,255,0.05)] relative overflow-hidden animate-glow-pulse">
-              
-              {/* Solid Luminous Chrome Accent Left Border Strip */}
-              <div className="absolute left-0 inset-y-0 w-[4px] bg-gradient-to-b from-white via-zinc-400 to-zinc-650 rounded-l-3xl shadow-[0_0_15px_rgba(255,255,255,0.2)]" />
+            <h1 className="text-4xl lg:text-5xl font-semibold tracking-[-0.04em] leading-[1.1] text-white">
+              Intelligent integrity <br />
+              <span className="text-[#86868b]">verification frameworks.</span>
+            </h1>
+            
+            <p className="text-[15px] text-[#86868b] font-medium leading-relaxed max-w-sm">
+              High-fidelity behavior telemetry and secure localized coding environments designed to verify talent authenticity.
+            </p>
 
-              {/* Email Input Column Wrapper */}
-              <div className="bg-black/90 border border-zinc-800/80 rounded-xl p-3.5 focus-within:border-zinc-500 focus-within:bg-zinc-950/20 focus-within:shadow-[0_0_15px_rgba(255,255,255,0.04)] transition-all duration-300 relative flex flex-col">
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-zinc-400 font-bold text-[9px] font-mono tracking-widest uppercase">
-                    Institutional Email
-                  </label>
-                  <Mail className="w-3.5 h-3.5 text-zinc-500 transition-colors focus-within:text-white" />
-                </div>
-                <input 
-                  type="email" 
-                  value={email} 
-                  onChange={e => setEmail(e.target.value)}
-                  className="w-full bg-transparent border-0 p-0 text-xs text-neutral-100 focus:outline-none focus:ring-0 placeholder:text-neutral-800 font-semibold tracking-wide" 
-                  placeholder="name@amrita.edu" 
-                  required 
-                />
+            <div className="mt-8 border border-[#38383a] rounded-2xl bg-[#1c1c1e]/50 p-5 font-mono text-[10px] text-[#86868b] space-y-2.5 backdrop-blur-xl">
+              <div className="flex items-center gap-2 text-white border-b border-[#38383a] pb-3 mb-3">
+                <Terminal className="w-4 h-4" />
+                <span className="font-semibold tracking-widest uppercase">System Terminal</span>
               </div>
-
-              {/* Password PIN Input Column Wrapper */}
-              <div className="bg-black/90 border border-zinc-800/80 rounded-xl p-3.5 focus-within:border-zinc-500 focus-within:bg-zinc-950/20 focus-within:shadow-[0_0_15px_rgba(255,255,255,0.04)] transition-all duration-300 relative flex flex-col">
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-zinc-400 font-bold text-[9px] font-mono tracking-widest uppercase">
-                    Security Token PIN
-                  </label>
-                  <Lock className="w-3.5 h-3.5 text-zinc-500 transition-colors focus-within:text-white" />
-                </div>
-                <input 
-                  type="password" 
-                  value={password} 
-                  onChange={e => setPassword(e.target.value)}
-                  className="w-full bg-transparent border-0 p-0 text-xs text-neutral-100 focus:outline-none focus:ring-0 placeholder:text-neutral-800 font-mono tracking-widest text-neutral-200" 
-                  placeholder="••••••••" 
-                  required 
-                />
+              <div className="space-y-1.5 opacity-80">
+                {telemetryLogs.map((log, idx) => (
+                  <div key={idx} className="truncate tracking-wide">{log}</div>
+                ))}
               </div>
+            </div>
+          </div>
 
+          <div className="text-[11px] font-medium tracking-widest text-[#86868b] uppercase select-none">
+            ShieldAI Enterprise v4.0
+          </div>
+        </div>
+
+        {/* RIGHT PANEL: Minimalist Gateway Form */}
+        <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8 lg:p-0 bg-transparent">
+          <div className="w-full max-w-[380px] space-y-8">
+            
+            <div className="text-center space-y-2 select-none">
+              <h2 className="text-3xl font-semibold tracking-tight text-white">
+                Gateway Access
+              </h2>
+              <p className="text-[14px] text-[#86868b] font-medium">Verify credentials for secure institutional assessment.</p>
             </div>
 
-            {/* Custom Metal-Glowing Action Button */}
-            <Button 
-              type="submit" 
-              disabled={loading} 
-              className="w-full bg-gradient-to-r from-white to-zinc-300 hover:from-zinc-100 hover:to-zinc-405 text-black font-black h-12 rounded-xl cursor-pointer transition-all duration-300 disabled:bg-neutral-900 disabled:text-neutral-608 border border-zinc-700 flex items-center justify-center gap-2 text-xs shadow-[0_4px_25px_rgba(255,255,255,0.06)] active:scale-[0.99] tracking-wider"
-            >
-              {loading ? (
-                <>
-                  <Fingerprint className="w-4 h-4 animate-spin text-black" />
-                  <span>Validating Terminal Handshake...</span>
-                </>
-              ) : (
-                <>
-                  <span>Initialize Secure Authentication</span>
-                  <ArrowRight className="w-4 h-4" />
-                </>
+            <form onSubmit={handleFormSubmit} className="space-y-5">
+              {errorMessage && (
+                <div className="text-[13px] text-white bg-[#F87171]/20 p-4 rounded-2xl border border-[#F87171]/30 flex items-center space-x-3">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-[#F87171]" />
+                  <span className="font-medium">{errorMessage}</span>
+                </div>
               )}
-            </Button>
-          </form>
+              
+              <div className="space-y-4">
+                <div className="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-4 flex flex-col focus-within:border-[#5B8CFF] focus-within:ring-1 focus-within:ring-[#5B8CFF] transition-all">
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-[10px] font-semibold text-[#86868b] uppercase tracking-widest">
+                      Institutional Email
+                    </label>
+                    <Mail className="w-4 h-4 text-[#86868b]" />
+                  </div>
+                  <input 
+                    type="email" 
+                    value={email} 
+                    onChange={e => setEmail(e.target.value)}
+                    className="w-full bg-transparent border-0 p-0 text-[15px] text-white focus:outline-none focus:ring-0 placeholder:text-[#48484a] font-medium" 
+                    placeholder="name@institution.edu" 
+                    required 
+                  />
+                </div>
 
+                <div className="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-4 flex flex-col focus-within:border-[#5B8CFF] focus-within:ring-1 focus-within:ring-[#5B8CFF] transition-all">
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-[10px] font-semibold text-[#86868b] uppercase tracking-widest">
+                      Security Token PIN
+                    </label>
+                    <Lock className="w-4 h-4 text-[#86868b]" />
+                  </div>
+                  <input 
+                    type="password" 
+                    value={password} 
+                    onChange={e => setPassword(e.target.value)}
+                    className="w-full bg-transparent border-0 p-0 text-[15px] text-white focus:outline-none focus:ring-0 placeholder:text-[#48484a] font-medium tracking-widest" 
+                    placeholder="••••••••" 
+                    required 
+                  />
+                </div>
+              </div>
+
+              <Button 
+                type="submit" 
+                disabled={loading} 
+                className="w-full bg-[#f5f5f7] hover:bg-white text-black font-semibold h-[52px] rounded-2xl cursor-pointer transition-all duration-300 disabled:opacity-50 text-[14px] shadow-lg active:scale-[0.98] select-none flex items-center justify-center gap-2 mt-4"
+              >
+                {loading ? (
+                  <>
+                    <Fingerprint className="w-4 h-4 animate-pulse text-black" />
+                    <span>VERIFYING...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>CONTINUE TO DASHBOARD</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </Button>
+            </form>
+
+          </div>
         </div>
-      </div>
 
+      </div>
     </div>
   )
 }

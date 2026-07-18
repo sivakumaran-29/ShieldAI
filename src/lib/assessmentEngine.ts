@@ -1,4 +1,4 @@
-import { supabase } from './supabaseClient'
+import { supabaseAdmin as supabase } from './supabaseAdmin'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
 // ==========================================
@@ -17,6 +17,9 @@ export interface CodingQuestion {
   id: string
   exam_id: string
   title: string
+  type?: 'coding' | 'mcq'
+  mcq_options?: string[]
+  mcq_correct_index?: number
   description: string
   difficulty: 'Easy' | 'Medium' | 'Hard'
   constraints: string
@@ -42,6 +45,7 @@ export interface Assessment {
   passing_score: number
   allowed_languages: string[]
   status: 'Draft' | 'Published' | 'Closed'
+  target_batch?: string
   created_at: string
   created_by: string
 }
@@ -69,9 +73,10 @@ export interface CandidateSession {
   score: number
   integrity_score: number
   violation_logs: string[]
-  submissions: Record<string, QuestionSubmission> // Maps questionId -> QuestionSubmission
-  startedAt: string
-  submittedAt: string
+  submissions?: Record<string, QuestionSubmission> // question_id -> submission
+  completedParts?: ('mcq' | 'coding')[] // Tracks which parts the candidate has locked/submitted
+  startedAt?: string
+  submittedAt?: string
   updated_at: string
 }
 
@@ -91,6 +96,7 @@ const DEFAULT_ASSESSMENTS: Assessment[] = [
     passing_score: 70,
     allowed_languages: ['python', 'javascript', 'java'],
     status: 'Published',
+    target_batch: 'CSE_C',
     created_at: new Date().toISOString(),
     created_by: 'recruiter'
   },
@@ -105,6 +111,7 @@ const DEFAULT_ASSESSMENTS: Assessment[] = [
     passing_score: 75,
     allowed_languages: ['javascript', 'python'],
     status: 'Draft',
+    target_batch: 'CSE_C',
     created_at: new Date().toISOString(),
     created_by: 'recruiter'
   }
@@ -234,6 +241,7 @@ export const saveAssessment = async (assessment: Assessment): Promise<boolean> =
         passing_score: assessment.passing_score,
         allowed_languages: assessment.allowed_languages,
         status: assessment.status,
+        target_batch: assessment.target_batch,
         created_at: assessment.created_at,
         created_by: assessment.created_by
       })
@@ -339,7 +347,7 @@ export const fetchAllQuestions = async (): Promise<CodingQuestion[]> => {
     const { data: dbData, error } = await supabase
       .from('exam_questions')
       .select('*')
-      .eq('type', 'CODING')
+      .in('type', ['CODING', 'MCQ'])
 
     if (error) throw error
 
@@ -388,9 +396,11 @@ export const saveQuestion = async (question: CodingQuestion): Promise<boolean> =
   try {
     const payload = {
       exam_id: question.exam_id,
-      type: 'CODING',
+      type: question.type === 'mcq' ? 'MCQ' : 'CODING',
       question_text: JSON.stringify({
+        id: question.id,
         title: question.title,
+        type: question.type,
         description: question.description,
         difficulty: question.difficulty,
         constraints: question.constraints,
@@ -402,20 +412,22 @@ export const saveQuestion = async (question: CodingQuestion): Promise<boolean> =
         time_limit: question.time_limit,
         memory_limit: question.memory_limit,
         test_cases: question.test_cases,
-        tags: question.tags
+        tags: question.tags,
+        mcq_options: question.mcq_options,
+        mcq_correct_index: question.mcq_correct_index
       })
     }
 
-    // Try to see if this matches an existing row ID (if numerical or uuid)
-    const isNumerical = /^\d+$/.test(question.id)
+    // Try to see if this matches an existing row ID (UUID)
+    const isDbId = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(question.id)
     let existingRow = null
 
-    if (isNumerical) {
+    if (isDbId) {
       const { data } = await supabase
         .from('exam_questions')
         .select('id')
-        .eq('id', parseInt(question.id))
-        .single()
+        .eq('id', question.id)
+        .maybeSingle()
       existingRow = data
     } else {
       // Check based on unique characteristics (e.g. title) within matching exam
@@ -423,11 +435,13 @@ export const saveQuestion = async (question: CodingQuestion): Promise<boolean> =
         .from('exam_questions')
         .select('id, type, question_text, exam_id')
         .eq('exam_id', question.exam_id)
-        .eq('type', 'CODING')
+        .in('type', ['CODING', 'MCQ'])
       
       existingRow = allRows.data?.find((r: any) => {
         try {
-          return JSON.parse(r.question_text).title === question.title
+          const parsed = JSON.parse(r.question_text)
+          if (parsed.id && parsed.id === question.id) return true
+          return parsed.title === question.title
         } catch {
           return false
         }
@@ -463,19 +477,19 @@ export const deleteQuestion = async (questionId: string): Promise<boolean> => {
 
   // Supabase delete
   try {
-    const isNumerical = /^\d+$/.test(questionId)
-    if (isNumerical) {
+    const isDbId = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(questionId)
+    if (isDbId) {
       const { error } = await supabase
         .from('exam_questions')
         .delete()
-        .eq('id', parseInt(questionId))
+        .eq('id', questionId)
       if (error) throw error
     } else {
       // Fetch matching items in Supabase to find exact match
       const { data } = await supabase
         .from('exam_questions')
         .select('id, type, question_text')
-        .eq('type', 'CODING')
+        .in('type', ['CODING', 'MCQ'])
 
       const rowToDelete = data?.find((r: any) => {
         try {
@@ -794,5 +808,52 @@ const generateMockEvaluation = (code: string, language: string, testCases: TestC
     verdict: finalVerdict,
     compileMessage: 'Compilation Successful.\nLogs: Execution returned without exits.',
     cases: evaluatedCases
+  }
+}
+
+// ==========================================
+// TERMINAL SIMULATOR 
+// ==========================================
+
+export const simulateTerminalRun = async (code: string, language: string, customInput: string): Promise<{ stdout: string, stderr: string, error?: string }> => {
+  try {
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY
+    if (!apiKey) throw new Error("No API key")
+    const genAI = new GoogleGenerativeAI(apiKey)
+    const terminalModel = genAI.getGenerativeModel({ model: 'gemini-3.1-flash-lite' })
+
+    const prompt = `You are a strict, raw compiler/runtime environment for ${language}.
+The user has provided the following code:
+\`\`\`${language}
+${code}
+\`\`\`
+
+The user has provided the following stdin input:
+\`\`\`
+${customInput}
+\`\`\`
+
+Execute the code using the stdin. Do NOT provide any explanation, markdown, or chat text. 
+Return ONLY a JSON object exactly matching this schema:
+{
+  "stdout": "The standard output (console.logs, prints, etc) from the program. Keep it brief if infinite loop.",
+  "stderr": "The standard error or stack trace if the code fails to compile or throws a runtime error. Leave empty if successful.",
+  "error": "Short summary of the error if any, else null."
+}
+`
+
+    const response = await terminalModel.generateContent(prompt)
+    const text = response.response.text()
+    const match = text.match(/```json\n([\s\S]*?)\n```/)
+    const jsonStr = match ? match[1] : text
+    
+    return JSON.parse(jsonStr)
+  } catch (error) {
+    console.error('Terminal Simulator Error:', error)
+    return {
+      stdout: '',
+      stderr: 'Internal Server Error: Failed to simulate code execution.',
+      error: 'Execution Failed'
+    }
   }
 }

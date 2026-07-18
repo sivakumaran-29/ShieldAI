@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { supabase } from '../lib/supabaseClient'
 
 interface AuthState {
-  user: { name: string; email: string; role: string; id: string } | null
+  user: { name: string; email: string; role: string; id: string; batch: string } | null
   isAuthenticated: boolean
   initialized: boolean
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
@@ -35,7 +35,13 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
 
     set({
-      user: { id: authData.user.id, email, name: profile.name, role: profile.role === 'student' ? 'candidate' : profile.role },
+      user: { 
+        id: authData.user.id, 
+        email, 
+        name: profile.name, 
+        role: profile.role === 'student' ? 'candidate' : profile.role,
+        batch: authData.user.user_metadata?.batch || 'CSE_C'
+      },
       isAuthenticated: true
     })
     
@@ -61,7 +67,8 @@ export const useAuthStore = create<AuthState>((set) => ({
               id: session.user.id, 
               email: session.user.email || '', 
               name: profile.name, 
-              role: profile.role === 'student' ? 'candidate' : profile.role 
+              role: profile.role === 'student' ? 'candidate' : profile.role,
+              batch: session.user.user_metadata?.batch || 'CSE_C'
             },
             isAuthenticated: true,
             initialized: true

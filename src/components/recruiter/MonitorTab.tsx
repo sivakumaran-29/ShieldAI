@@ -18,14 +18,12 @@ export default function MonitorTab({ assessments }: MonitorTabProps) {
     setIsRefreshing(true)
     const targetId = filterExamId === 'all' ? undefined : filterExamId
     const data = await fetchCandidateSessions(targetId)
-    // Filter to show active sessions or ones that started recently (testing status)
     const active = data.filter(s => s.status === 'testing')
     setSessions(active)
     setIsRefreshing(false)
     setLoading(false)
   }
 
-  // Poll for real-time telemetry every 5 seconds
   useEffect(() => {
     loadActiveTakers()
     const pollingInterval = setInterval(() => {
@@ -37,22 +35,22 @@ export default function MonitorTab({ assessments }: MonitorTabProps) {
 
   if (loading) {
     return (
-      <div className="p-12 text-center text-xs font-mono text-sky-400">
+      <div className="p-12 text-center text-xs font-mono text-zinc-550 animate-pulse select-none">
         Syncing live proctor channels...
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in select-none">
       
       {/* Tab Header bar */}
-      <div className="flex justify-between items-center select-none">
-        <div className="flex items-center gap-2">
-          <Activity className="w-5 h-5 text-sky-400 animate-pulse" />
+      <div className="flex flex-wrap justify-between items-center gap-4 select-none border-b border-border pb-4">
+        <div className="flex items-center gap-3">
+          <Activity className="w-5 h-5 text-[#5B8CFF] animate-pulse" strokeWidth={1.5} />
           <div>
-            <h2 className="text-sm font-bold font-mono tracking-widest text-sky-400 uppercase">Live Proctor Grid</h2>
-            <span className="text-[10px] text-neutral-450 mt-0.5 block">Displaying active exam-takers telemetry channels (Auto-polling active)</span>
+            <h2 className="text-[10px] font-bold font-mono tracking-widest text-[#5B8CFF] uppercase">Live Proctor Grid</h2>
+            <span className="text-[10px] text-zinc-500 mt-1 block font-mono">Active candidate streams and integrity radar feeds</span>
           </div>
         </div>
 
@@ -60,7 +58,7 @@ export default function MonitorTab({ assessments }: MonitorTabProps) {
           <select 
             value={filterExamId} 
             onChange={e => setFilterExamId(e.target.value)}
-            className="bg-neutral-950 border border-sky-955 text-neutral-100 rounded-xl p-2 h-8 text-[11px] outline-none focus:border-sky-500 font-bold cursor-pointer"
+            className="border border-border bg-[#0a0a0a] text-foreground rounded-xl text-xs px-3 py-1.5 font-semibold outline-none cursor-pointer focus:border-[#5B8CFF]/50"
           >
             <option value="all">All Assessments</option>
             {assessments.map(a => (
@@ -72,14 +70,14 @@ export default function MonitorTab({ assessments }: MonitorTabProps) {
             onClick={loadActiveTakers} 
             disabled={isRefreshing}
             variant="outline" 
-            className="border-sky-955 h-8 text-[11px] font-bold text-sky-400 hover:bg-sky-950/20 cursor-pointer"
+            className="border-border bg-zinc-950/20 h-8 text-[11px] font-bold text-zinc-400 hover:text-white cursor-pointer rounded-xl transition"
           >
-            <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${isRefreshing ? 'animate-spin' : ''}`} /> Sync channels
+            <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${isRefreshing ? 'animate-spin' : ''}`} strokeWidth={1.5} /> Sync channels
           </Button>
         </div>
       </div>
 
-      {/* Grid of video streams */}
+      {/* Grid of streams */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
         {sessions.map(s => {
@@ -97,7 +95,7 @@ export default function MonitorTab({ assessments }: MonitorTabProps) {
         })}
 
         {sessions.length === 0 && (
-          <div className="col-span-full text-center p-12 bg-neutral-900/10 border border-sky-950 rounded-3xl text-xs font-mono text-neutral-500">
+          <div className="col-span-full text-center p-12 bg-zinc-950/20 border border-border rounded-2xl text-xs font-mono text-zinc-550 select-none">
             No candidates are currently solving coding challenges.
           </div>
         )}

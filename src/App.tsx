@@ -22,12 +22,16 @@ function ExamRouteWrapper() {
   )
 }
 
+import { useThemeStore } from './store/themeStore'
+
 export default function App() {
   const { isAuthenticated, user, initialized, restoreSession } = useAuthStore()
+  const { theme } = useThemeStore()
 
   useEffect(() => {
     restoreSession()
-  }, [restoreSession])
+    document.documentElement.classList.toggle('light', theme === 'light')
+  }, [restoreSession, theme])
 
   if (!initialized) {
     return (
