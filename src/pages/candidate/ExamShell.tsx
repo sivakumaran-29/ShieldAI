@@ -363,22 +363,37 @@ export default function ExamShell() {
     
     // Add current codes structure
     questions.forEach(q => {
-      const qCode = codeMap[q.id]?.[language] || codeTemplates[language]
-      if (!submissionRecords[q.id]) {
-        submissionRecords[q.id] = {
-          code: qCode,
-          language: language,
-          status: 'Not Attempted',
-          cases_passed: 0,
-          total_cases: q.test_cases.length,
-          score: 0,
-          execution_time: 0,
-          memory_usage: 0
+      if (q.type === 'mcq') {
+        if (!submissionRecords[q.id]) {
+          submissionRecords[q.id] = {
+            code: '',
+            language: 'mcq',
+            status: 'Not Attempted',
+            cases_passed: 0,
+            total_cases: 1,
+            score: 0,
+            execution_time: 0,
+            memory_usage: 0
+          }
         }
       } else {
-        // Just update code contents
-        submissionRecords[q.id].code = qCode
-        submissionRecords[q.id].language = language
+        const qCode = codeMap[q.id]?.[language] || codeTemplates[language]
+        if (!submissionRecords[q.id]) {
+          submissionRecords[q.id] = {
+            code: qCode,
+            language: language,
+            status: 'Not Attempted',
+            cases_passed: 0,
+            total_cases: q.test_cases?.length || 0,
+            score: 0,
+            execution_time: 0,
+            memory_usage: 0
+          }
+        } else {
+          // Just update code contents
+          submissionRecords[q.id].code = qCode
+          submissionRecords[q.id].language = language
+        }
       }
     })
 
