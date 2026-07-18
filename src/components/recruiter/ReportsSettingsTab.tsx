@@ -103,7 +103,7 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
       {activeSub === 'reports' && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           
-          <Card className="bg-[#0a0a0a]/85 border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
+          <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
             <div className="space-y-3">
               <div className="p-2 bg-[#5B8CFF]/10 rounded-xl w-10">
                 <FileText className="w-5 h-5 text-[#5B8CFF]" strokeWidth={1.5} />
@@ -120,7 +120,7 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
             </div>
           </Card>
 
-          <Card className="bg-[#0a0a0a]/85 border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
+          <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
             <div className="space-y-3">
               <div className="p-2 bg-[#14B8A6]/10 rounded-xl w-10">
                 <Database className="w-5 h-5 text-[#14B8A6]" strokeWidth={1.5} />
@@ -137,7 +137,7 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
             </div>
           </Card>
 
-          <Card className="bg-[#0a0a0a]/85 border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
+          <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-[220px]">
             <div className="space-y-3">
               <div className="p-2 bg-[#A855F7]/10 rounded-xl w-10">
                 <Sliders className="w-5 h-5 text-[#A855F7]" strokeWidth={1.5} />
@@ -159,7 +159,7 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
 
       {/* ================= SETTINGS SECTION (macOS PANELS STYLE) ================= */}
       {activeSub === 'settings' && (
-        <Card className="bg-[#0a0a0a]/85 border-white/5 rounded-2xl overflow-hidden shadow-xl grid grid-cols-1 md:grid-cols-12 min-h-[350px]">
+        <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 rounded-2xl overflow-hidden shadow-xl grid grid-cols-1 md:grid-cols-12 min-h-[350px]">
           
           {/* macOS settings sub sidebar (3 cols) */}
           <div className="md:col-span-3 sys-bg/20 border-r border-white/5 p-4 flex flex-col gap-1.5">
@@ -316,7 +316,7 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
         <Card className="bg-[#000000] border-white/5 rounded-2xl overflow-hidden shadow-2xl flex flex-col min-h-[380px]">
           
           {/* Terminal header controls */}
-          <div className="bg-[#0a0a0a]/80 border-b border-white/5 px-4 py-2.5 flex justify-between items-center select-none text-[10px]">
+          <div className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-b border-white/5 px-4 py-2.5 flex justify-between items-center select-none text-[10px]">
             <span className="flex items-center sys-text-body font-mono font-bold">
               <TermIcon className="w-4.5 h-4.5 mr-2 sys-text-body" /> SYSTEM MONITOR TERMINAL
             </span>

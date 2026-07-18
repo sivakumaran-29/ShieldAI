@@ -99,7 +99,7 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
                   className={`border transition-all duration-300 rounded-2xl cursor-pointer p-4 relative overflow-hidden shadow-none ${
                     selectedRoleKey === r.key 
                       ? 'bg-card border-[#5B8CFF]/40' 
-                      : 'bg-[#0a0a0a]/20 border-white/5 hover:border-transparent'
+                      : 'bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 hover:border-transparent'
                   }`}
                 >
                   <div 
@@ -122,7 +122,7 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
 
           {/* Role details & permissions check list */}
           <div className="lg:col-span-7">
-            <Card className="bg-[#0a0a0a]/80 border-white/5 p-6 rounded-2xl relative overflow-hidden shadow-xl space-y-6">
+            <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-6 rounded-2xl relative overflow-hidden shadow-xl space-y-6">
               <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ backgroundColor: activeRole.color }} />
               
               <div className="flex justify-between items-start select-none">
@@ -175,7 +175,7 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
         </div>
       ) : (
         /* PERMISSIONS MATRIX SECTION */
-        <Card className="bg-[#0a0a0a]/80 border-white/5 p-6 rounded-2xl relative overflow-hidden shadow-xl">
+        <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-6 rounded-2xl relative overflow-hidden shadow-xl">
           <div className="absolute top-0 left-0 right-0 h-[2px] sys-bg" />
           
           <div className="space-y-4">

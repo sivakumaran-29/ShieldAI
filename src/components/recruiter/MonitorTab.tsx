@@ -58,7 +58,7 @@ export default function MonitorTab({ assessments }: MonitorTabProps) {
           <select 
             value={filterExamId} 
             onChange={e => setFilterExamId(e.target.value)}
-            className="border border-white/5 bg-[#0a0a0a] text-foreground rounded-xl text-xs px-3 py-1.5 font-semibold outline-none cursor-pointer focus:border-[#5B8CFF]/50"
+            className="border border-white/5 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] text-foreground rounded-xl text-xs px-3 py-1.5 font-semibold outline-none cursor-pointer focus:border-[#5B8CFF]/50"
           >
             <option value="all">All Assessments</option>
             {assessments.map(a => (

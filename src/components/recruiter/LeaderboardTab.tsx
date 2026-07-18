@@ -130,7 +130,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
           <select 
             value={filterExamId} 
             onChange={e => setFilterExamId(e.target.value)}
-            className="border border-white/5 bg-[#0a0a0a] text-foreground rounded-xl text-xs px-3 py-1.5 font-semibold outline-none cursor-pointer focus:border-[#5B8CFF]/50"
+            className="border border-white/5 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] text-foreground rounded-xl text-xs px-3 py-1.5 font-semibold outline-none cursor-pointer focus:border-[#5B8CFF]/50"
           >
             <option value="all">All Assessments</option>
             {assessments.map(a => (
@@ -292,7 +292,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
       {/* Visual Debugger Inspection details Modal overlay */}
       {selectedSession && (
         <div className="fixed inset-0 bg-black/80  z-[9999] flex items-center justify-center p-4">
-          <Card className="w-full max-w-4xl bg-[#0a0a0a]/95 border-white/5 p-6 rounded-2xl relative shadow-2xl overflow-y-auto max-h-[90vh]">
+          <Card className="w-full max-w-4xl bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-6 rounded-2xl relative shadow-2xl overflow-y-auto max-h-[90vh]">
             <div className="absolute top-0 left-0 right-0 h-[3px] sys-bg rounded-t-2xl" />
             
             {/* Modal header */}

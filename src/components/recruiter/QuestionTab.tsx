@@ -211,7 +211,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
               <Plus className="w-4 h-4" strokeWidth={1.5} /> Add Challenge
             </Button>
             {showTypeDropdown && (
-              <div className="absolute right-0 top-full mt-2 w-56 bg-[#0a0a0a] border border-white/5 rounded-xl shadow-2xl overflow-hidden z-50 flex flex-col">
+              <div className="absolute right-0 top-full mt-2 w-56 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 rounded-xl shadow-2xl overflow-hidden z-50 flex flex-col">
                 <button 
                   onClick={() => { setShowTypeDropdown(false); handleOpenCreateForm('mcq'); }} 
                   className="text-left px-4 py-3.5 text-xs text-white hover:sys-card border-b border-white/5 font-bold transition"
@@ -237,7 +237,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
             <h3 className="text-sm font-bold text-white mb-4 border-b border-transparent pb-2">Part 1: Multiple Choice Questions</h3>
             <div className="flex flex-col gap-4">
               {questions.filter(q => q.type === 'mcq').map((q) => (
-                <Card key={q.id} className="bg-[#0a0a0a]/80 border-white/5 p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between min-h-48 hover:border-[#5B8CFF]/20 transition duration-300">
+                <Card key={q.id} className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between min-h-48 hover:border-[#5B8CFF]/20 transition duration-300">
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <span className={`px-2 py-0.5 rounded border text-[8px] font-mono font-bold uppercase tracking-wider ${
@@ -285,7 +285,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
               ))}
 
               {questions.filter(q => q.type === 'mcq').length === 0 && (
-                <div className="p-8 text-center border border-dashed border-white/5 rounded-2xl bg-[#0a0a0a]/20 sys-text-body text-xs font-mono select-none">
+                <div className="p-8 text-center border border-dashed border-white/5 rounded-2xl bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] sys-text-body text-xs font-mono select-none">
                   No Multiple Choice questions added yet.
                 </div>
               )}
@@ -297,7 +297,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
             <h3 className="text-sm font-bold text-white mb-4 border-b border-transparent pb-2">Part 2: Coding Challenges</h3>
             <div className="flex flex-col gap-4">
               {questions.filter(q => q.type !== 'mcq').map((q) => (
-                <Card key={q.id} className="bg-[#0a0a0a]/80 border-white/5 p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between min-h-48 hover:border-[#5B8CFF]/20 transition duration-300">
+                <Card key={q.id} className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between min-h-48 hover:border-[#5B8CFF]/20 transition duration-300">
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <span className={`px-2 py-0.5 rounded border text-[8px] font-mono font-bold uppercase tracking-wider ${
@@ -350,7 +350,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
               ))}
 
               {questions.filter(q => q.type !== 'mcq').length === 0 && (
-                <div className="p-8 text-center border border-dashed border-white/5 rounded-2xl bg-[#0a0a0a]/20 sys-text-body text-xs font-mono select-none">
+                <div className="p-8 text-center border border-dashed border-white/5 rounded-2xl bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] sys-text-body text-xs font-mono select-none">
                   No coding challenges added yet.
                 </div>
               )}
@@ -359,7 +359,7 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
         </div>
       ) : (
         /* Edit Challenge Form */
-        <Card className="bg-[#0a0a0a]/90 border-white/5 p-8 rounded-2xl relative overflow-hidden animate-fade-in shadow-2xl">
+        <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-8 rounded-2xl relative overflow-hidden animate-fade-in shadow-2xl">
           <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-[#5B8CFF]" />
           
           <h3 className="text-sm font-bold text-white mb-6 font-heading flex items-center gap-2">

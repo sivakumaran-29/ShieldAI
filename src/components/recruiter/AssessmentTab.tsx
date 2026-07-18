@@ -179,7 +179,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
       {!isEditing ? (
         <div className="space-y-8">
           
-          <div className="bento-card p-8 flex flex-col items-center justify-center text-center space-y-4 border-dashed border-2 border-white/5/50 bg-[#0a0a0a]/50 mb-8">
+          <div className="bento-card p-8 flex flex-col items-center justify-center text-center space-y-4 border-dashed border-2 border-white/5/50 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] mb-8">
             <div className="p-4 bg-[#5B8CFF]/10 rounded-full mb-2">
               <Sparkles className="w-8 h-8 text-[#5B8CFF]" strokeWidth={1.5} />
             </div>
@@ -296,7 +296,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
         </div>
       ) : (
         /* Glass-morphic Edit / Create Form overlay */
-        <Card className="bg-[#0a0a0a]/90 border-white/5 p-8 rounded-2xl relative overflow-hidden animate-fade-in shadow-2xl">
+        <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-8 rounded-2xl relative overflow-hidden animate-fade-in shadow-2xl">
           <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-[#5B8CFF]" />
           
           <h3 className="text-sm font-bold text-white mb-6 font-heading flex items-center gap-2">

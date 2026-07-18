@@ -207,7 +207,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
         {/* Left Console area (8 cols) */}
         <div className="md:col-span-8 space-y-6">
           {!activeGeneratorType ? (
-            <div className="border border-dashed border-white/5 bg-[#0a0a0a]/30 rounded-2xl p-12 flex flex-col items-center justify-center text-center space-y-4 shadow-inner min-h-64">
+            <div className="border border-dashed border-white/5 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] rounded-2xl p-12 flex flex-col items-center justify-center text-center space-y-4 shadow-inner min-h-64">
               <div className="w-12 h-12 sys-card rounded-full flex items-center justify-center mb-2 border border-transparent">
                 <Terminal className="w-5 h-5 sys-text-body" />
               </div>
@@ -223,7 +223,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                   <Plus className="w-4 h-4" strokeWidth={2} /> Create Challenge with AI
                 </Button>
                 {showTypeDropdown && (
-                  <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-56 bg-[#0a0a0a] border border-white/5 rounded-xl shadow-2xl overflow-hidden z-50 flex flex-col animate-fade-in">
+                  <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-56 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 rounded-xl shadow-2xl overflow-hidden z-50 flex flex-col animate-fade-in">
                     <button 
                       onClick={() => { setShowTypeDropdown(false); setActiveGeneratorType('mcq'); }} 
                       className="text-left px-4 py-3.5 text-xs text-white hover:sys-card border-b border-white/5 font-bold transition"
@@ -241,7 +241,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
               </div>
             </div>
           ) : (
-            <Card className="bg-[#0a0a0a]/80 border-white/5 p-6 rounded-2xl relative overflow-hidden shadow-xl animate-fade-in">
+            <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-6 rounded-2xl relative overflow-hidden shadow-xl animate-fade-in">
               <div className="absolute top-0 left-0 right-0 h-[2px] sys-bg" />
               
               <div className="space-y-4">
@@ -343,7 +343,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
 
         {/* Right Info area (4 cols) */}
         <div className="md:col-span-4">
-          <div className="p-5 bg-[#0a0a0a]/40 border border-white/5 rounded-2xl space-y-4">
+          <div className="p-5 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 rounded-2xl space-y-4">
             <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest block">How it works</span>
             <div className="text-[11px] sys-text-body space-y-3 leading-relaxed">
               <p>ShieldAI leverages advanced LLM engines to create programming challenges dynamically.</p>
@@ -361,7 +361,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
           <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest block">AI DRAFT PREVIEW PROPOSAL</span>
 
           {generatedQuestions.map((q, idx) => (
-            <Card key={idx} className="bg-[#0a0a0a]/80 border-white/5 p-6 rounded-2xl relative overflow-hidden space-y-6">
+            <Card key={idx} className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-6 rounded-2xl relative overflow-hidden space-y-6">
               <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#5B8CFF]" />
               
               <div className="flex justify-between items-start">

@@ -271,7 +271,7 @@ export default function DatabaseTab() {
               const deptBatches = Array.from(new Set(deptUsers.map(u => u.batch))).sort()
 
               return (
-                <Card key={dept} className="bg-[#0a0a0a]/90 border-white/5 rounded-2xl overflow-hidden shadow-sm">
+                <Card key={dept} className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 rounded-2xl overflow-hidden shadow-sm">
                   <div 
                     onClick={() => toggleDept(dept)}
                     className="p-4 sys-bg hover:sys-bg/80 cursor-pointer flex items-center justify-between transition group"
@@ -299,7 +299,7 @@ export default function DatabaseTab() {
                   </div>
 
                   {isDeptExpanded && (
-                    <div className="border-t border-white/5/50 bg-[#0a0a0a]/50 p-4 space-y-4">
+                    <div className="border-t border-white/5/50 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] p-4 space-y-4">
                       {deptBatches.map(batchName => {
                         const batchUsers = deptUsers.filter(c => c.batch === batchName)
                         const isBatchExpanded = expandedBatches[batchName]
@@ -382,7 +382,7 @@ export default function DatabaseTab() {
       {/* CREATE BATCH MODAL */}
       {isCreating && (
         <div className="fixed inset-0 bg-black/80  z-[9999] flex items-center justify-center p-4">
-          <Card className="w-full max-w-md bg-[#0a0a0a] border-white/5 rounded-2xl overflow-hidden shadow-2xl animate-fade-in">
+          <Card className="w-full max-w-md bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 rounded-2xl overflow-hidden shadow-2xl animate-fade-in">
             <div className="p-4 border-b border-white/5 flex justify-between items-center sys-bg/40">
               <h3 className="font-bold text-sm text-white font-heading flex items-center gap-2">
                 <Database className="w-4 h-4 text-[#5B8CFF]" /> Add New Batch
