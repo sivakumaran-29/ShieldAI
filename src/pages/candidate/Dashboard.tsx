@@ -57,8 +57,7 @@ export default function CandidateDashboard() {
         setAssessments(activeList)
 
         // Fetch past sessions for history
-        const allSessions = await fetchCandidateSessions()
-        const mySessions = allSessions.filter(s => s.student_id === user?.id || s.email === email)
+        const mySessions = await fetchCandidateSessions(undefined, user?.id)
         setPastSessions(mySessions.sort((a, b) => new Date(b.startedAt || 0).getTime() - new Date(a.startedAt || 0).getTime()))
 
         // Check if there is a pending assessment ID cached
@@ -117,8 +116,7 @@ export default function CandidateDashboard() {
       })
       setAssessments(activeList)
 
-      const allSessions = await fetchCandidateSessions()
-      const mySessions = allSessions.filter(s => s.student_id === user?.id || s.email === email)
+      const mySessions = await fetchCandidateSessions(undefined, user?.id)
       setPastSessions(mySessions.sort((a, b) => new Date(b.startedAt || 0).getTime() - new Date(a.startedAt || 0).getTime()))
 
       const pendingId = localStorage.getItem('pending_exam_id')

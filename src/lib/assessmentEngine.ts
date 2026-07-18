@@ -518,7 +518,7 @@ export const deleteQuestion = async (questionId: string): Promise<boolean> => {
 // CANDIDATE AUDIT / SESSION STATE ENGINE
 // ==========================================
 
-export const fetchCandidateSessions = async (assessmentId?: string): Promise<CandidateSession[]> => {
+export const fetchCandidateSessions = async (assessmentId?: string, studentId?: string): Promise<CandidateSession[]> => {
   try {
     let query = supabase
       .from('integrity_audits')
@@ -526,6 +526,10 @@ export const fetchCandidateSessions = async (assessmentId?: string): Promise<Can
       
     if (assessmentId) {
       query = query.eq('exam_id', assessmentId)
+    }
+    
+    if (studentId) {
+      query = query.eq('student_id', studentId)
     }
 
     const { data: dbData, error } = await query
@@ -586,7 +590,6 @@ export const saveCandidateSession = async (session: CandidateSession): Promise<b
     sessions.push(session)
   }
   localStorage.setItem(key, JSON.stringify(sessions))
-  localStorage.setItem(`sys_sessions_all`, JSON.stringify(sessions))
 
   // Write to Supabase
   try {
@@ -609,24 +612,21 @@ export const saveCandidateSession = async (session: CandidateSession): Promise<b
       })
     }
 
-    const { data: existing } = await supabase
+    // Optimistic Update Pattern: Reduce 2 queries to 1 for 99% of saves
+    const { data: updateData, error: updateError } = await supabase
       .from('integrity_audits')
-      .select('id')
+      .update(payload)
       .eq('exam_id', session.assessment_id)
       .eq('student_id', session.student_id)
-      .maybeSingle()
+      .select('id')
+      
+    if (updateError) throw updateError
 
-    if (existing) {
-      const { error } = await supabase
-        .from('integrity_audits')
-        .update(payload)
-        .eq('id', existing.id)
-      if (error) throw error
-    } else {
-      const { error } = await supabase
+    if (!updateData || updateData.length === 0) {
+      const { error: insErr } = await supabase
         .from('integrity_audits')
         .insert([payload])
-      if (error) throw error
+      if (insErr) throw insErr
     }
     return true
   } catch (err) {

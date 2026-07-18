@@ -135,6 +135,9 @@ export default function ExamShell() {
       setLoading(false)
     }
   }
+
+
+
   // ==========================================
   // INITIALIZATION & LOADING
   // ==========================================
@@ -330,21 +333,6 @@ export default function ExamShell() {
       setIsSyncing(false)
     }
   }
-
-  // ==========================================
-  // AUTOSAVE SEQUENCE
-  // ==========================================
-  useEffect(() => {
-    if (loading || !currentSession || !assessment) return
-
-    const autosaveTimer = setInterval(async () => {
-      const syncSession = buildSessionSnapshot()
-      console.log('[Autosave] Syncing exam progress state...')
-      await saveCandidateSession(syncSession)
-    }, 20000) // every 20 seconds
-
-    return () => clearInterval(autosaveTimer)
-  }, [loading, currentSession, assessment, codeMap, language, integrityScore, proctorLogs])
 
   const buildSessionSnapshot = (): CandidateSession => {
     if (!currentSession || !assessment) throw new Error('Missing session context')
