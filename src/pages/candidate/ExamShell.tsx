@@ -412,6 +412,7 @@ export default function ExamShell() {
         if (videoRef.current) {
           videoRef.current.srcObject = streamInstance
           videoRef.current.onloadedmetadata = () => {
+            videoRef.current?.play().catch(e => console.warn('Video play prevented:', e))
             processFrame()
           }
         }
@@ -560,22 +561,18 @@ export default function ExamShell() {
       .on('broadcast', { event: 'request-connection' }, async () => {
         console.log('[WebRTC] Received connection query. Creating WebRTC PeerConnection...')
         
+        const localStream = localStreamRef.current
+        if (!localStream) {
+          console.warn('[WebRTC] Local camera stream not yet ready. Ignoring connection request until camera is active.')
+          return
+        }
+
         if (pc) {
           pc.close()
         }
 
         const config = getIceServers()
         pc = new RTCPeerConnection(config)
-
-        const localStream = localStreamRef.current
-        if (localStream) {
-          console.log('[WebRTC] Attaching local stream tracks to PC...')
-          localStream.getTracks().forEach(track => {
-            pc?.addTrack(track, localStream)
-          })
-        } else {
-          console.warn('[WebRTC] Local camera stream not available to attach.')
-        }
 
         pc.onicecandidate = (event) => {
           if (event.candidate) {
@@ -587,18 +584,21 @@ export default function ExamShell() {
           }
         }
 
-        pc.onconnectionstatechange = () => {
-          console.log(`[WebRTC] Peer Connection state: ${pc?.connectionState}`)
+        console.log('[WebRTC] Attaching local stream tracks to PC...')
+        localStream.getTracks().forEach(track => pc?.addTrack(track, localStream))
+
+        try {
+          const offer = await pc.createOffer({ offerToReceiveVideo: false, offerToReceiveAudio: false })
+          await pc.setLocalDescription(offer)
+          
+          channel.send({
+            type: 'broadcast',
+            event: 'offer',
+            payload: offer
+          })
+        } catch (err) {
+          console.error('[WebRTC] Failed creating offer SDP:', err)
         }
-
-        const offer = await pc.createOffer()
-        await pc.setLocalDescription(offer)
-
-        channel.send({
-          type: 'broadcast',
-          event: 'offer',
-          payload: offer
-        })
       })
       .on('broadcast', { event: 'answer' }, async ({ payload }) => {
         console.log('[WebRTC] Received SDP Answer from Recruiter.')
