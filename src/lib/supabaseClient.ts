@@ -8,4 +8,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.error("Supabase environment routing parameters are missing! Check your .env setup.")
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co', 
+  supabaseAnonKey || 'placeholder'
+)
