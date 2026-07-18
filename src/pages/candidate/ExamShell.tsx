@@ -21,8 +21,22 @@ const StreamVideo = ({ stream }: { stream: MediaStream | null }) => {
   
   useEffect(() => {
     if (videoRef.current && stream) {
-      videoRef.current.srcObject = stream
-      videoRef.current.play().catch(e => console.warn('StreamVideo play blocked:', e))
+      console.log('✔ Candidate Video Element Found')
+      console.log('✔ Stream Attached', { id: stream.id, active: stream.active, tracks: stream.getVideoTracks().map(t => t.readyState) })
+      
+      const video = videoRef.current
+      video.srcObject = stream
+      
+      // Explicitly set properties to bypass strict autoplay policies
+      video.muted = true
+      video.defaultMuted = true
+      video.playsInline = true
+      video.autoplay = true
+      
+      video.play().then(() => {
+        console.log('✔ video.play() Successful')
+        console.log('✔ Candidate Preview Visible', { width: video.videoWidth, height: video.videoHeight })
+      }).catch(e => console.error('play() interrupted or autoplay blocked:', e))
     }
   }, [stream])
 
@@ -427,9 +441,13 @@ export default function ExamShell() {
 
     async function startCameraProctor() {
       try {
+        console.log('✔ Camera Permission Granted (Attempting getUserMedia)')
         streamInstance = await navigator.mediaDevices.getUserMedia({
           video: { width: 320, height: 240, frameRate: 10 }
         })
+        console.log('✔ MediaStream Created')
+        console.log('✔ MediaStream Active', streamInstance.active)
+        
         localStreamRef.current = streamInstance
         setLocalStream(streamInstance)
         
@@ -620,6 +638,7 @@ export default function ExamShell() {
 
         console.log('[WebRTC] Attaching local stream tracks to PC...')
         localStream.getTracks().forEach(track => pc?.addTrack(track, localStream))
+        console.log('✔ Stream Sent to Admin')
 
         try {
           const offer = await pc.createOffer({ offerToReceiveVideo: false, offerToReceiveAudio: false })
