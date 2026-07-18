@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { 
-  Plus, Copy, Check, Edit, Settings2,
+  Plus, Copy, Edit, Settings2,
   Sparkles, Sliders, Trash2
 } from 'lucide-react'
 import { Assessment, saveAssessment, deleteAssessment, duplicateAssessment } from '../../lib/assessmentEngine'
@@ -16,9 +16,6 @@ interface AssessmentTabProps {
 }
 
 export default function AssessmentTab({ assessments, onRefresh, onSelectAssessment, onSelectInspector }: AssessmentTabProps) {
-  const [copiedId, setCopiedId] = useState<string | null>(null)
-  
-  // Form states matching new layout
   const [isEditing, setIsEditing] = useState(false)
   const [editId, setEditId] = useState<string | null>(null)
   const [title, setTitle] = useState('')
@@ -71,13 +68,6 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
     }
     fetchTargets()
   }, [])
-
-  const handleCopyLink = (id: string) => {
-    const url = `${window.location.origin}/exam?id=${id}`
-    navigator.clipboard.writeText(url)
-    setCopiedId(id)
-    setTimeout(() => setCopiedId(null), 2000)
-  }
 
   const handleOpenCreateForm = () => {
     setIsEditing(true)
@@ -169,7 +159,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
         {!isEditing && (
           <Button 
             onClick={handleOpenCreateForm} 
-            className="bg-[#5B8CFF] hover:bg-[#3b71f3] text-white text-xs h-10 px-5 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-md"
+            className="bg-[#0070F3] hover:bg-[#005bb5] text-white text-xs h-10 px-5 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,112,243,0.4)]"
           >
             <Plus className="w-4 h-4" strokeWidth={1.5} /> Create Assessment
           </Button>
@@ -189,7 +179,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
             </p>
             <Button 
               onClick={handleOpenCreateForm}
-              className="mt-4 bg-white hover:sys-card text-black text-sm h-11 px-8 rounded-full font-bold cursor-pointer transition shadow-[0_0_20px_rgba(255,255,255,0.15)] flex items-center gap-2"
+              className="mt-4 bg-[#0070F3] text-white hover:bg-[#0070F3]/90 text-sm h-11 px-8 rounded-full font-bold cursor-pointer transition-all duration-300 shadow-[0_0_20px_rgba(0,112,243,0.3)] hover:shadow-[0_0_40px_rgba(0,112,243,0.6)] hover:-translate-y-0.5 flex items-center gap-2"
             >
               <Plus className="w-4 h-4" strokeWidth={2} /> Initialize New Assessment
             </Button>
@@ -199,30 +189,30 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
           <div className="bento-card p-6 space-y-4">
             <span className="text-[11px] font-heading font-semibold sys-text-body uppercase tracking-wider block mb-4">Active Assessment Tracks</span>
             
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto pb-4">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="bg-[rgba(28,28,30,0.5)] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider">
-                    <th className="py-3 px-4 rounded-l-xl border-y border-l border-white/5">Evaluation Title</th>
-                    <th className="py-3 px-4 border-y border-white/5">Duration</th>
-                    <th className="py-3 px-4 border-y border-white/5">Allowed Languages</th>
-                    <th className="py-3 px-4 border-y border-white/5">Status</th>
-                    <th className="py-3 px-4 rounded-r-xl border-y border-r border-white/5 text-right">Actions</th>
+                  <tr className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider">
+                    <th className="py-4 px-5 rounded-l-2xl border-y border-l border-white/5">Evaluation Title</th>
+                    <th className="py-4 px-5 border-y border-white/5">Duration</th>
+                    <th className="py-4 px-5 border-y border-white/5">Allowed Languages</th>
+                    <th className="py-4 px-5 border-y border-white/5">Status</th>
+                    <th className="py-4 px-5 rounded-r-2xl border-y border-r border-white/5 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
-                  <tr className="h-2"></tr> {/* Spacer after header */}
-                  {assessments.map(a => (
+                <tbody className="divide-y divide-white/[0.02]">
+                  <tr className="h-3"></tr> {/* Spacer after header */}
+                  {assessments.map((a, index) => (
                     <tr 
                       key={a.id} 
                       onClick={() => onSelectInspector?.(a)}
-                      className="hover:sys-bg/20 cursor-pointer transition duration-200"
+                      className="hover:bg-white/[0.02] cursor-pointer transition duration-200"
                     >
-                      <td className="py-3.5 px-4 font-semibold text-white font-heading max-w-sm truncate">{a.title}</td>
-                      <td className="py-3.5 px-4 sys-text-body font-sans">{a.duration} mins</td>
-                      <td className="py-3.5 px-4 sys-text-body uppercase font-sans font-medium">{a.allowed_languages.join(', ')}</td>
-                      <td className="py-3.5 px-4">
-                        <span className={`px-2 py-0.5 rounded text-[8px] font-mono font-bold uppercase tracking-wider ${
+                      <td className={`py-4 px-5 font-semibold text-white font-heading max-w-sm truncate ${index === 0 ? 'rounded-tl-2xl' : ''} ${index === assessments.length - 1 ? 'rounded-bl-2xl' : ''} border-l border-white/5 ${index === 0 ? 'border-t' : ''} ${index === assessments.length - 1 ? 'border-b' : ''}`}>{a.title}</td>
+                      <td className={`py-4 px-5 sys-text-body font-sans ${index === 0 ? 'border-t border-white/5' : ''} ${index === assessments.length - 1 ? 'border-b border-white/5' : ''}`}>{a.duration} mins</td>
+                      <td className={`py-4 px-5 sys-text-body uppercase font-sans font-medium ${index === 0 ? 'border-t border-white/5' : ''} ${index === assessments.length - 1 ? 'border-b border-white/5' : ''}`}>{a.allowed_languages.join(', ')}</td>
+                      <td className={`py-4 px-5 ${index === 0 ? 'border-t border-white/5' : ''} ${index === assessments.length - 1 ? 'border-b border-white/5' : ''}`}>
+                        <span className={`px-2 py-1 rounded text-[8px] font-mono font-bold uppercase tracking-wider ${
                           a.status === 'Published' 
                             ? 'bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/35' 
                             : 'sys-card sys-text-body'
@@ -230,52 +220,43 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                           {a.status}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 text-right" onClick={e => e.stopPropagation()}>
+                      <td className={`py-4 px-5 text-right ${index === 0 ? 'rounded-tr-2xl' : ''} ${index === assessments.length - 1 ? 'rounded-br-2xl' : ''} border-r border-white/5 ${index === 0 ? 'border-t' : ''} ${index === assessments.length - 1 ? 'border-b' : ''}`} onClick={e => e.stopPropagation()}>
                         <div className="flex justify-end gap-1.5">
                           <Button 
                             onClick={() => onSelectAssessment(a)}
                             variant="ghost" 
                             size="sm"
-                            className="h-7 px-2 hover:bg-[#5B8CFF]/10 sys-text-body hover:text-[#5B8CFF] rounded-lg cursor-pointer"
+                            className="h-8 w-8 p-0 hover:bg-[#5B8CFF]/10 sys-text-body hover:text-[#5B8CFF] rounded-lg cursor-pointer transition-colors"
                             title="Manage Questions"
                           >
-                            <Settings2 className="w-3.5 h-3.5" />
+                            <Settings2 className="w-4 h-4" />
                           </Button>
                           <Button 
                             onClick={() => handleOpenEditForm(a)}
                             variant="ghost" 
                             size="sm"
-                            className="h-7 px-2 hover:sys-card sys-text-body hover:text-white rounded-lg cursor-pointer"
+                            className="h-8 w-8 p-0 hover:bg-white/5 sys-text-body hover:text-white rounded-lg cursor-pointer transition-colors"
                             title="Edit Parameters"
                           >
-                            <Edit className="w-3.5 h-3.5" />
-                          </Button>
-                          <Button 
-                            onClick={() => handleCopyLink(a.id)}
-                            variant="ghost" 
-                            size="sm"
-                            className="h-7 px-2 hover:sys-card sys-text-body hover:text-white rounded-lg cursor-pointer"
-                            title="Copy invite URL"
-                          >
-                            {copiedId === a.id ? <Check className="w-3.5 h-3.5 text-[#34D399]" /> : <Copy className="w-3.5 h-3.5" />}
+                            <Edit className="w-4 h-4" />
                           </Button>
                           <Button 
                             onClick={() => handleDuplicate(a.id)}
                             variant="ghost" 
                             size="sm"
-                            className="h-7 px-2 hover:sys-card sys-text-body hover:text-white rounded-lg cursor-pointer"
-                            title="Duplicate Track"
+                            className="h-8 w-8 p-0 hover:bg-white/5 sys-text-body hover:text-white rounded-lg cursor-pointer transition-colors"
+                            title="Duplicate"
                           >
-                            <Copy className="w-3.5 h-3.5" />
+                            <Copy className="w-4 h-4" />
                           </Button>
                           <Button 
                             onClick={() => handleDelete(a.id)}
                             variant="ghost" 
                             size="sm"
-                            className="h-7 px-2 hover:bg-[#F87171]/10 sys-text-body hover:text-[#F87171] rounded-lg cursor-pointer"
-                            title="Delete permanently"
+                            className="h-8 w-8 p-0 hover:bg-[#F87171]/10 sys-text-body hover:text-[#F87171] rounded-lg cursor-pointer transition-colors"
+                            title="Delete"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
                       </td>

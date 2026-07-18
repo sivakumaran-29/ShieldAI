@@ -122,8 +122,8 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center gap-4 border-b border-white/5 pb-4">
         <div>
-          <h2 className="text-[10px] font-mono font-bold tracking-widest text-[#5B8CFF] uppercase">// COHORT ANALYTICS & LEADERBOARD</h2>
-          <span className="text-[10px] sys-text-body font-mono mt-1 block">Inspect student performance, compiler scores, and sandboxed infraction timelines</span>
+          <h2 className="text-[12px] font-heading font-bold tracking-wider text-[#5B8CFF] uppercase">// COHORT ANALYTICS & LEADERBOARD</h2>
+          <span className="text-[11px] sys-text-body font-sans mt-1 block font-medium">Inspect student performance, compiler scores, and sandboxed infraction timelines</span>
         </div>
 
         <div className="flex items-center gap-3">
@@ -303,7 +303,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                 </div>
                 <div>
                   <h3 className="font-bold text-sm text-white font-heading">{selectedSession.name}</h3>
-                  <span className="text-[10px] sys-text-body font-mono mt-1 block">Roll: {selectedSession.roll_number} | Email: {selectedSession.email}</span>
+                  <span className="text-[11px] sys-text-body font-sans mt-1 block font-medium">Roll: {selectedSession.roll_number} | Email: {selectedSession.email}</span>
                 </div>
               </div>
 

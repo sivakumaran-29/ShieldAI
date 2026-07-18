@@ -271,16 +271,14 @@ export default function DatabaseTab() {
               const deptBatches = Array.from(new Set(deptUsers.map(u => u.batch))).sort()
 
               return (
-                <Card key={dept} className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 rounded-2xl overflow-hidden shadow-sm">
+                <Card key={dept} className="bg-[rgba(28,28,30,0.3)] backdrop-blur-[24px] border-white/5 rounded-[24px] overflow-hidden shadow-2xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] hover:border-white/10">
                   <div 
                     onClick={() => toggleDept(dept)}
-                    className="p-4 sys-bg hover:sys-bg/80 cursor-pointer flex items-center justify-between transition group"
+                    className="p-5 bg-transparent hover:bg-white/[0.02] cursor-pointer flex items-center justify-between transition-colors duration-300 group"
                   >
                     <div className="flex items-center gap-3">
                       {isDeptExpanded ? <ChevronDown className="w-4 h-4 sys-text-body" /> : <ChevronRight className="w-4 h-4 sys-text-body" />}
-                      <div className="flex items-center gap-2">
-                        <Folder className="w-4 h-4 text-[#5B8CFF]" />
-                        <h3 className="font-bold text-sm text-white font-heading tracking-tight">{dept} Department</h3>
+                      <div className="flex items-center gap-3"><div className="p-2 bg-[#5B8CFF]/10 rounded-xl group-hover:scale-110 transition-transform duration-300"><Folder className="w-4 h-4 text-[#5B8CFF]" /></div><h3 className="font-bold text-base text-white font-heading tracking-wide">{dept} Department</h3>
                         <span className="px-2 py-0.5 sys-card sys-text-body text-[9px] font-mono rounded font-bold ml-2">
                           {deptUsers.length} Users
                         </span>
@@ -299,21 +297,21 @@ export default function DatabaseTab() {
                   </div>
 
                   {isDeptExpanded && (
-                    <div className="border-t border-white/5/50 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] p-4 space-y-4">
+                    <div className="border-t border-white/5 bg-black/20 p-6 space-y-4">
                       {deptBatches.map(batchName => {
                         const batchUsers = deptUsers.filter(c => c.batch === batchName)
                         const isBatchExpanded = expandedBatches[batchName]
 
                         return (
-                          <div key={batchName} className="border border-white/5/50 rounded-xl overflow-hidden sys-bg/30">
+                          <div key={batchName} className="border border-white/5 rounded-2xl overflow-hidden bg-[rgba(28,28,30,0.4)] backdrop-blur-md shadow-sm transition-all duration-300 hover:border-white/10">
                             <div 
                               onClick={() => toggleBatch(batchName)}
-                              className="p-3 hover:sys-card/40 cursor-pointer flex items-center justify-between transition group/batch"
+                              className="p-4 hover:bg-white/[0.02] cursor-pointer flex items-center justify-between transition-colors duration-300 group/batch"
                             >
                               <div className="flex items-center gap-2.5">
                                 {isBatchExpanded ? <ChevronDown className="w-3.5 h-3.5 sys-text-body" /> : <ChevronRight className="w-3.5 h-3.5 sys-text-body" />}
                                 <Database className="w-3.5 h-3.5 sys-text-body" />
-                                <span className="font-bold text-xs sys-text-primary font-heading">{batchName}</span>
+                                <span className="font-bold text-sm text-white font-heading tracking-wide">{batchName}</span>
                                 <span className="px-1.5 py-0.5 bg-[#5B8CFF]/10 text-[#5B8CFF] text-[9px] font-mono rounded font-bold ml-1">
                                   {batchUsers.length}
                                 </span>
@@ -330,21 +328,16 @@ export default function DatabaseTab() {
                             </div>
 
                             {isBatchExpanded && (
-                              <div className="border-t border-white/5/50">
-                                <table className="w-full text-left text-xs">
+                              <div className="border-t border-white/5 pb-2"><div className="overflow-x-auto px-4 pt-4"><table className="w-full text-left text-xs border-collapse">
                                   <thead>
-                                    <tr className="sys-bg/80 sys-text-body font-mono text-[9px] uppercase tracking-wider">
-                                      <th className="py-2.5 px-6 font-medium">Roll Number</th>
-                                      <th className="py-2.5 px-6 font-medium">Email Address</th>
-                                      <th className="py-2.5 px-6 text-right font-medium">Actions</th>
-                                    </tr>
+                                    <tr className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider"><th className="py-3 px-5 rounded-l-2xl border-y border-l border-white/5">Roll Number</th><th className="py-3 px-5 border-y border-white/5">Email Address</th><th className="py-3 px-5 rounded-r-2xl border-y border-r border-white/5 text-right">Actions</th></tr>
                                   </thead>
-                                  <tbody className="divide-y divide-border/20">
+                                  <tbody className="divide-y divide-white/[0.02]"><tr className="h-2"></tr>
                                     {batchUsers.map(user => (
-                                      <tr key={user.id} className="hover:sys-card/40 transition group/row">
-                                        <td className="py-2.5 px-6 font-mono font-bold sys-text-primary">{user.name}</td>
-                                        <td className="py-2.5 px-6 sys-text-body">{user.email}</td>
-                                        <td className="py-2 px-6 text-right">
+                                      <tr key={user.id} className="hover:bg-white/[0.02] transition-colors duration-200 group/row">
+                                        <td className="py-3 px-5 font-semibold font-heading text-white max-w-xs truncate">{user.name}</td>
+                                        <td className="py-3 px-5 sys-text-body font-sans">{user.email}</td>
+                                        <td className="py-2 px-5 text-right">
                                           <Button 
                                             onClick={(e) => handleDeleteUser(e, user.id, user.name)}
                                             variant="ghost" 
@@ -357,9 +350,7 @@ export default function DatabaseTab() {
                                         </td>
                                       </tr>
                                     ))}
-                                  </tbody>
-                                </table>
-                              </div>
+                                  </tbody></table></div></div>
                             )}
                           </div>
                         )

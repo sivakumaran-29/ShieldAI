@@ -81,7 +81,7 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
         <h2 className="text-[10px] font-mono font-bold tracking-widest text-[#5B8CFF] uppercase">
           {defaultSection === 'roles' ? '// SECURITY ROLES CONFIGURATION' : '// PERMISSION ACCESS CONTROL'}
         </h2>
-        <span className="text-[10px] sys-text-body font-mono mt-1 block">Manage administrator roles, clearance levels, and security permission grids</span>
+        <span className="text-[11px] sys-text-body font-sans mt-1 block font-medium">Manage administrator roles, clearance levels, and security permission grids</span>
       </div>
 
       {defaultSection === 'roles' ? (

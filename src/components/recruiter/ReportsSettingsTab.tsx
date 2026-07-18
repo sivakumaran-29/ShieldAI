@@ -77,7 +77,7 @@ export default function ReportsSettingsTab({ defaultSection }: ReportsSettingsTa
           <h2 className="text-[10px] font-mono font-bold tracking-widest text-[#5B8CFF] uppercase">
             // {activeSub === 'reports' ? 'COMPLIANCE AUDIT REPORTS' : activeSub === 'settings' ? 'GLOBAL PLATFORM CONFIG' : 'TELEMETRY NETWORK LOGS'}
           </h2>
-          <span className="text-[10px] sys-text-body font-mono mt-1 block">
+          <span className="text-[11px] sys-text-body font-sans mt-1 block font-medium">
             {activeSub === 'reports' 
               ? 'Download evaluation summary sheets and audit registries' 
               : activeSub === 'settings' 

@@ -198,8 +198,8 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
             <ArrowLeft className="w-4 h-4" />
           </Button>
           <div>
-            <h2 className="text-[10px] font-mono font-bold tracking-widest text-[#5B8CFF] uppercase">// CHALLENGES BANK</h2>
-            <span className="text-[10px] sys-text-body font-mono mt-1 block">Selected assessment: {selectedAssessment.title}</span>
+            <h2 className="text-[12px] font-heading font-bold tracking-wider text-[#5B8CFF] uppercase">// CHALLENGES BANK</h2>
+            <span className="text-[11px] sys-text-body font-sans mt-1 block font-medium">Selected assessment: {selectedAssessment.title}</span>
           </div>
         </div>
         {!isEditing && (
