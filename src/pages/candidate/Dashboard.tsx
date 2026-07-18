@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
   Shield, Clock, HelpCircle, Play, LogOut, 
-  AlertCircle, LayoutGrid, CheckCircle2, User, Mail, Hash, BookOpen, Lock, ChevronRight, RefreshCw
+  AlertCircle, LayoutGrid, CheckCircle2, User, Mail, Hash, BookOpen, Lock, ChevronRight, RefreshCw,
+  Home, History, Calendar, Activity, Check, CircleDot, Search
 } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { fetchAssessments, fetchCandidateSessions, saveCandidateSession, Assessment } from '../../lib/assessmentEngine'
+import { fetchAssessments, fetchCandidateSessions, saveCandidateSession, Assessment, CandidateSession } from '../../lib/assessmentEngine'
 import ThemeToggle from '../../components/ThemeToggle'
 
 export default function CandidateDashboard() {
@@ -16,8 +17,10 @@ export default function CandidateDashboard() {
 
   // State elements
   const [assessments, setAssessments] = useState<Assessment[]>([])
+  const [pastSessions, setPastSessions] = useState<CandidateSession[]>([])
   const [selectedAssessment, setSelectedAssessment] = useState<Assessment | null>(null)
   const [loading, setLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState<'overview' | 'lobby' | 'history'>('overview')
 
   // Details form
   const email = user?.email || ''
@@ -52,12 +55,18 @@ export default function CandidateDashboard() {
         })
         setAssessments(activeList)
 
+        // Fetch past sessions for history
+        const allSessions = await fetchCandidateSessions()
+        const mySessions = allSessions.filter(s => s.student_id === user?.id || s.email === email)
+        setPastSessions(mySessions.sort((a, b) => new Date(b.startedAt || 0).getTime() - new Date(a.startedAt || 0).getTime()))
+
         // Check if there is a pending assessment ID cached
         const pendingId = localStorage.getItem('pending_exam_id')
         if (pendingId) {
           const match = activeList.find(a => a.id === pendingId)
           if (match) {
             setSelectedAssessment(match)
+            setActiveTab('lobby')
           } else if (activeList.length > 0) {
             setSelectedAssessment(activeList[0])
             localStorage.removeItem('pending_exam_id')
@@ -69,7 +78,6 @@ export default function CandidateDashboard() {
         // Prepopulate student Roll Number if cached from past attempts
         const cachedRoll = localStorage.getItem('candidate_roll')
         if (cachedRoll) setRollNumber(cachedRoll)
-
 
         // Extract Roll number from student email if matching Amrita pattern
         if (user?.email && !cachedRoll) {
@@ -87,7 +95,7 @@ export default function CandidateDashboard() {
       }
     }
     loadData()
-  }, [user])
+  }, [user, email])
 
   const handleSync = async () => {
     try {
@@ -98,18 +106,19 @@ export default function CandidateDashboard() {
 
       const activeList = list.filter(a => {
         if (a.status !== 'Published') return false
-        
         const target = a.target_batch
         if (!target || target === 'ALL') return true
-        
         if (target.startsWith('DEPT_')) {
           const targetDept = target.replace('DEPT_', '')
           return targetDept === candidateDept
         }
-        
         return target === candidateBatch
       })
       setAssessments(activeList)
+
+      const allSessions = await fetchCandidateSessions()
+      const mySessions = allSessions.filter(s => s.student_id === user?.id || s.email === email)
+      setPastSessions(mySessions.sort((a, b) => new Date(b.startedAt || 0).getTime() - new Date(a.startedAt || 0).getTime()))
 
       const pendingId = localStorage.getItem('pending_exam_id')
       if (pendingId) {
@@ -275,26 +284,31 @@ export default function CandidateDashboard() {
   const isRollDisabled = !!(user?.email && user.email.match(/u4cse25\d+/i)) || !!localStorage.getItem('candidate_roll')
   const timeCheck = selectedAssessment ? isAssessmentTimeWindowValid(selectedAssessment) : { valid: false, message: '' }
 
+  // Metrics calculation
+  const completedExams = pastSessions.filter(s => s.status === 'submitted').length;
+  const activeExams = assessments.length;
+  const avgIntegrity = completedExams > 0 ? Math.round(pastSessions.filter(s => s.status === 'submitted').reduce((acc, s) => acc + (s.integrity_score || 0), 0) / completedExams) : 100;
+  
   return (
     <div className="min-h-screen bg-background text-foreground flex font-sans antialiased overflow-hidden relative">
       
       {/* 1. Ambient Background Layer */}
       <div className="mesh-bg">
-        <div className="mesh-circle-1" />
-        <div className="mesh-circle-2" />
+        <div className="mesh-circle-1 opacity-40" />
+        <div className="mesh-circle-2 opacity-30" />
       </div>
       
       {/* 2. Moving Grain Noise Overlay */}
-      <div className="grain-overlay" />
+      <div className="grain-overlay opacity-30" />
 
       {/* ================= LEFT SIDEBAR ================= */}
-      <aside className="w-64 h-screen bg-[#0a0a0a]/80 backdrop-blur-md border-r border-border flex flex-col justify-between p-6 shrink-0 z-30 select-none">
+      <aside className="w-64 h-screen bg-[#0a0a0a]/70 backdrop-blur-2xl border-r border-white/5 flex flex-col justify-between p-6 shrink-0 z-30 select-none shadow-2xl">
         <div className="space-y-8">
           
           {/* Header Brand & Theme Toggle */}
           <div className="flex items-center justify-between select-none">
             <div className="flex items-center space-x-2.5">
-              <div className="p-1.5 bg-zinc-950 border border-border rounded-xl">
+              <div className="p-1.5 bg-zinc-950/80 border border-white/10 rounded-xl shadow-[0_0_15px_rgba(91,140,255,0.15)]">
                 <Shield className="w-4 h-4 text-[#5B8CFF]" strokeWidth={1.5} />
               </div>
               <div className="flex flex-col">
@@ -306,35 +320,58 @@ export default function CandidateDashboard() {
               <Button
                 onClick={handleSync}
                 disabled={isSyncing}
-                variant="outline"
+                variant="ghost"
                 size="icon"
-                className="w-8 h-8 rounded-lg bg-zinc-950 border-zinc-800 text-zinc-400 hover:text-white transition shadow-sm"
+                className="w-7 h-7 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition"
                 title="Sync Assessments"
               >
-                <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-[#5B8CFF]' : ''}`} />
+                <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-[#5B8CFF]' : ''}`} />
               </Button>
               <ThemeToggle />
             </div>
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex flex-col gap-1.5">
+          <nav className="flex flex-col gap-2">
             <button 
-              className="flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl border bg-[#5B8CFF]/10 text-[#5B8CFF] border-[#5B8CFF]/20 select-none cursor-default"
+              onClick={() => setActiveTab('overview')}
+              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'overview' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent'}`}
+            >
+              <div className="flex items-center gap-2.5">
+                <Home className="w-4 h-4" strokeWidth={1.5} />
+                <span>Dashboard Home</span>
+              </div>
+              {activeTab === 'overview' && <ChevronRight className="w-3 h-3" strokeWidth={1.5} />}
+            </button>
+
+            <button 
+              onClick={() => setActiveTab('lobby')}
+              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'lobby' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent'}`}
             >
               <div className="flex items-center gap-2.5">
                 <LayoutGrid className="w-4 h-4" strokeWidth={1.5} />
                 <span>Assessment Lobby</span>
               </div>
-              <ChevronRight className="w-3 h-3 opacity-100" strokeWidth={1.5} />
+              {activeTab === 'lobby' && <ChevronRight className="w-3 h-3" strokeWidth={1.5} />}
+            </button>
+
+            <button 
+              onClick={() => setActiveTab('history')}
+              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'history' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent'}`}
+            >
+              <div className="flex items-center gap-2.5">
+                <History className="w-4 h-4" strokeWidth={1.5} />
+                <span>Past Records</span>
+              </div>
+              {activeTab === 'history' && <ChevronRight className="w-3 h-3" strokeWidth={1.5} />}
             </button>
           </nav>
         </div>
 
         {/* Footer Profile & Logout */}
-        <div className="space-y-4 pt-4 border-t border-border">
+        <div className="space-y-4 pt-4 border-t border-white/5">
           <div className="flex items-center gap-3 px-1">
-            <div className="p-2 bg-zinc-900 border border-border rounded-xl">
+            <div className="p-2 bg-zinc-900 border border-white/10 rounded-xl">
               <User className="w-4 h-4 text-zinc-400" strokeWidth={1.5} />
             </div>
             <div className="flex flex-col min-w-0">
@@ -345,7 +382,7 @@ export default function CandidateDashboard() {
           <Button 
             onClick={logout} 
             variant="outline" 
-            className="w-full border-border bg-zinc-950/40 hover:bg-zinc-900 text-zinc-400 hover:text-white text-xs h-9 justify-center cursor-pointer transition rounded-xl"
+            className="w-full border-white/10 bg-zinc-950/40 hover:bg-zinc-900 hover:border-white/20 text-zinc-400 hover:text-white text-xs h-9 justify-center cursor-pointer transition-all duration-300 rounded-xl shadow-none"
           >
             <LogOut className="w-3.5 h-3.5 mr-2" strokeWidth={1.5} />
             <span>Sign Out</span>
@@ -354,16 +391,18 @@ export default function CandidateDashboard() {
       </aside>
 
       {/* ================= RIGHT MAIN CONTENT AREA ================= */}
-      <main className="flex-1 h-screen overflow-y-auto bg-transparent p-8 md:p-12 z-10 relative">
-        <div className="max-w-6xl w-full mx-auto space-y-8 animate-fade-in pb-12">
+      <main className="flex-1 h-screen overflow-y-auto bg-transparent p-8 md:p-12 z-10 relative custom-scrollbar">
+        <div className="max-w-6xl w-full mx-auto animate-fade-in pb-12">
           
           {/* Section Breadcrumbs */}
-          <div className="flex items-center justify-between select-none">
+          <div className="flex items-center justify-between select-none mb-8">
             <div className="flex items-center gap-2 text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
               <span>CANDIDATE PANEL</span>
               <span>/</span>
-              <span className="text-[#5B8CFF] font-bold">Lobby</span>
-              {selectedAssessment && (
+              <span className="text-[#5B8CFF] font-bold">
+                {activeTab === 'overview' ? 'DASHBOARD' : activeTab === 'lobby' ? 'LOBBY' : 'HISTORY'}
+              </span>
+              {activeTab === 'lobby' && selectedAssessment && (
                 <>
                   <span>/</span>
                   <span className="text-muted">{selectedAssessment.title}</span>
@@ -372,254 +411,431 @@ export default function CandidateDashboard() {
             </div>
           </div>
 
-          {/* Grid Area */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            {/* Available Assessments */}
-            <section className="lg:col-span-4 space-y-4">
-              <div className="flex items-center gap-2 px-1 text-[10px] font-bold text-zinc-500 font-mono tracking-widest uppercase select-none">
-                <LayoutGrid className="w-4 h-4 text-zinc-550" strokeWidth={1.5} /> Available Assessments
+          {/* ================= OVERVIEW TAB ================= */}
+          {activeTab === 'overview' && (
+            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              {/* Hero Section */}
+              <div className="p-8 rounded-3xl bg-gradient-to-br from-zinc-900/80 to-zinc-950/80 border border-white/5 backdrop-blur-md shadow-2xl relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-[#5B8CFF]/10 rounded-full blur-[80px] -mr-16 -mt-16 transition-opacity group-hover:opacity-100 opacity-50" />
+                <div className="relative z-10">
+                  <h1 className="text-3xl font-heading font-extrabold text-white mb-2 tracking-tight">
+                    Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5B8CFF] to-teal-400">{name.charAt(0).toUpperCase() + name.slice(1)}</span>
+                  </h1>
+                  <p className="text-sm text-zinc-400 max-w-xl leading-relaxed">
+                    Access your secure assessment lobby, review past performance, and prepare for your upcoming scheduled evaluations.
+                  </p>
+                </div>
               </div>
 
-              <div className="space-y-4 max-h-[600px] overflow-y-auto pr-1">
-                {assessments.map((a) => {
-                  const isActive = selectedAssessment?.id === a.id
-                  const windowCheck = isAssessmentTimeWindowValid(a)
-                  
-                  return (
-                    <div 
-                      key={a.id} 
-                      onClick={() => handleSelectAssessment(a)}
-                      className={`p-4 rounded-xl border text-left cursor-pointer transition-all duration-300 relative group overflow-hidden ${
-                        isActive 
-                          ? 'bg-[#0a0a0a]/90 border-[#5B8CFF]/45 text-foreground shadow-xl' 
-                          : 'bg-[#0a0a0a]/35 border-border text-muted hover:border-zinc-800'
-                      }`}
-                    >
-                      {/* Purple accent border block */}
-                      <div className={`absolute top-0 left-0 bottom-0 w-[3px] transition ${
-                        isActive ? 'bg-[#5B8CFF] shadow-[0_0_8px_rgba(91,140,255,0.4)]' : 'bg-transparent'
-                      }`} />
-
-                      <h3 className="font-bold text-xs text-white group-hover:text-primary transition duration-300 font-heading">
-                        {a.title}
-                      </h3>
-                      <p className="text-[10px] text-zinc-500 mt-1.5 line-clamp-2 leading-relaxed">
-                        {a.description}
-                      </p>
-
-                      <div className="flex flex-wrap items-center gap-3 mt-4 pt-3 border-t border-border text-[9px] font-mono select-none">
-                        <span className="flex items-center gap-1.5 text-zinc-550 font-bold">
-                          <Clock className="w-3.5 h-3.5" strokeWidth={1.5} /> {a.duration} MINS
-                        </span>
-                        <span className={`px-2 py-0.5 rounded border text-[8px] font-bold ${
-                          windowCheck.valid 
-                            ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border-[#5B8CFF]/30' 
-                            : 'bg-zinc-950 text-zinc-600 border-border'
-                        }`}>
-                          {windowCheck.valid ? 'OPEN SCHEDULE' : 'UNAVAILABLE'}
-                        </span>
-                      </div>
+              {/* Metrics Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="p-6 rounded-2xl bg-zinc-950/50 border border-white/5 backdrop-blur-md flex flex-col gap-4 hover:-translate-y-1 hover:border-[#5B8CFF]/30 transition-all duration-300 group shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest">Completed</span>
+                    <div className="p-2 rounded-lg bg-[#5B8CFF]/10 text-[#5B8CFF] group-hover:bg-[#5B8CFF]/20 transition-colors">
+                      <CheckCircle2 className="w-4 h-4" strokeWidth={1.5} />
                     </div>
-                  )
-                })}
-
-                {assessments.length === 0 && (
-                  <div className="p-8 text-center bg-card border border-border rounded-xl text-xs text-zinc-600 font-mono select-none">
-                    No active published assessments available in candidate registry.
                   </div>
-                )}
+                  <div>
+                    <div className="text-3xl font-heading font-bold text-white">{completedExams}</div>
+                    <div className="text-xs text-zinc-500 mt-1">Total Exams Taken</div>
+                  </div>
+                </div>
+
+                <div className="p-6 rounded-2xl bg-zinc-950/50 border border-white/5 backdrop-blur-md flex flex-col gap-4 hover:-translate-y-1 hover:border-teal-500/30 transition-all duration-300 group shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest">Integrity Avg</span>
+                    <div className="p-2 rounded-lg bg-teal-500/10 text-teal-500 group-hover:bg-teal-500/20 transition-colors">
+                      <Shield className="w-4 h-4" strokeWidth={1.5} />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-heading font-bold text-white flex items-baseline gap-1">
+                      {avgIntegrity} <span className="text-sm text-zinc-500 font-medium">%</span>
+                    </div>
+                    <div className="text-xs text-zinc-500 mt-1">Average Trust Score</div>
+                  </div>
+                </div>
+
+                <div className="p-6 rounded-2xl bg-zinc-950/50 border border-white/5 backdrop-blur-md flex flex-col gap-4 hover:-translate-y-1 hover:border-indigo-500/30 transition-all duration-300 group shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest">Available</span>
+                    <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 group-hover:bg-indigo-500/20 transition-colors">
+                      <Calendar className="w-4 h-4" strokeWidth={1.5} />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-heading font-bold text-white">{activeExams}</div>
+                    <div className="text-xs text-zinc-500 mt-1">Pending Assessments</div>
+                  </div>
+                </div>
               </div>
-            </section>
 
-            {/* Details & Setup Form */}
-            <section className="lg:col-span-8">
-              {selectedAssessment ? (
-                <Card className="bg-[#0a0a0a]/90 border-border rounded-2xl shadow-none relative overflow-hidden">
-                  <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-[#5B8CFF]" />
-                  
-                  <CardHeader className="pb-4 border-b border-border select-none">
-                    <CardTitle className="text-sm font-bold text-white flex items-center gap-2.5 font-heading">
-                      <BookOpen className="w-5 h-5 text-zinc-400" strokeWidth={1.5} /> Assessment Preparation
-                    </CardTitle>
-                    <CardDescription className="text-xs text-zinc-500 mt-1">
-                      You are launching: <span className="text-white font-bold">{selectedAssessment.title}</span>
-                    </CardDescription>
-                  </CardHeader>
-                  
-                  <CardContent className="p-6 space-y-6">
+              {/* Recent Activity */}
+              <div className="space-y-4 pt-4">
+                <div className="flex items-center gap-2 px-1 text-[10px] font-bold text-zinc-500 font-mono tracking-widest uppercase select-none">
+                  <Activity className="w-4 h-4 text-zinc-550" strokeWidth={1.5} /> Recent Activity
+                </div>
+                
+                <div className="bg-zinc-950/40 border border-white/5 rounded-2xl p-6 backdrop-blur-md shadow-lg">
+                  {pastSessions.length > 0 ? (
+                    <div className="space-y-6">
+                      {pastSessions.slice(0, 3).map((s, idx) => (
+                        <div key={s.id} className="flex gap-4 relative">
+                          {idx !== pastSessions.slice(0, 3).length - 1 && (
+                            <div className="absolute top-6 bottom-0 left-[15px] w-[1px] bg-white/10" />
+                          )}
+                          <div className="w-8 h-8 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center shrink-0 z-10">
+                            {s.status === 'submitted' ? (
+                              <Check className="w-4 h-4 text-teal-500" strokeWidth={2} />
+                            ) : (
+                              <CircleDot className="w-4 h-4 text-[#5B8CFF]" strokeWidth={2} />
+                            )}
+                          </div>
+                          <div className="flex-1 pb-1">
+                            <h4 className="text-sm font-semibold text-zinc-200">{s.status === 'submitted' ? 'Completed Assessment' : 'Started Assessment'}</h4>
+                            <p className="text-xs text-zinc-500 mt-1">ID: {s.assessment_id.slice(0,8).toUpperCase()} • {new Date(s.startedAt || 0).toLocaleString()}</p>
+                            {s.status === 'submitted' && (
+                              <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-900/80 border border-white/5 text-[10px] font-mono">
+                                <span className="text-zinc-400">Score:</span>
+                                <span className="text-white font-bold">{s.score} pts</span>
+                                <span className="mx-1 text-zinc-600">|</span>
+                                <span className="text-zinc-400">Trust:</span>
+                                <span className="text-teal-400 font-bold">{s.integrity_score}%</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="py-8 text-center text-zinc-500 text-xs font-mono">
+                      No recent activity found.
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ================= LOBBY TAB ================= */}
+          {activeTab === 'lobby' && (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start animate-in fade-in slide-in-from-bottom-4 duration-500">
+              
+              {/* Available Assessments */}
+              <section className="lg:col-span-4 space-y-4">
+                <div className="flex items-center gap-2 px-1 text-[10px] font-bold text-zinc-500 font-mono tracking-widest uppercase select-none">
+                  <LayoutGrid className="w-4 h-4 text-zinc-550" strokeWidth={1.5} /> Available Assessments
+                </div>
+
+                <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                  {assessments.map((a) => {
+                    const isActive = selectedAssessment?.id === a.id
+                    const windowCheck = isAssessmentTimeWindowValid(a)
                     
-                    {errorMsg && (
-                      <div className="text-xs text-zinc-200 bg-[#F87171]/10 p-3.5 rounded-xl border border-[#F87171]/20 flex items-center space-x-2.5 animate-fade-in">
-                        <AlertCircle className="w-4 h-4 shrink-0 text-[#F87171]" strokeWidth={1.5} />
-                        <span className="font-semibold">{errorMsg}</span>
-                      </div>
-                    )}
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {/* Identity parameters */}
-                      <div className="space-y-4">
-                        <div className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest border-b border-border pb-2 flex items-center gap-1.5 select-none">
-                          <User className="w-4 h-4 text-zinc-500" strokeWidth={1.5} /> Identity Parameters
-                        </div>
-                        
-                        <div className="space-y-4 pt-1">
-                          {/* Name */}
-                          <div className="bg-zinc-950/60 border border-border rounded-xl p-3.5 flex flex-col opacity-50 cursor-not-allowed">
-                            <div className="flex items-center justify-between select-none">
-                              <label className="text-[9px] font-mono font-bold text-zinc-550 uppercase tracking-wider mb-1 flex items-center gap-1">
-                                <User className="w-3 h-3" strokeWidth={1.5} /> Candidate Full Name (Locked)
-                              </label>
-                              <Lock className="w-3 h-3 text-zinc-600" strokeWidth={1.5} />
-                            </div>
-                            <input 
-                              type="text" 
-                              value={name} 
-                              readOnly
-                              disabled
-                              className="bg-transparent border-0 p-0 text-xs text-zinc-400 focus:outline-none focus:ring-0 font-semibold cursor-not-allowed select-none"
-                            />
-                          </div>
-
-                          {/* Email */}
-                          <div className="bg-zinc-950/60 border border-border rounded-xl p-3.5 flex flex-col opacity-50 cursor-not-allowed">
-                            <div className="flex items-center justify-between select-none">
-                              <label className="text-[9px] font-mono font-bold text-zinc-555 uppercase tracking-wider mb-1 flex items-center gap-1">
-                                <Mail className="w-3 h-3" strokeWidth={1.5} /> Institutional Email
-                              </label>
-                              <Lock className="w-3 h-3 text-zinc-600" strokeWidth={1.5} />
-                            </div>
-                            <input 
-                              type="email" 
-                              value={email} 
-                              readOnly
-                              disabled
-                              className="bg-transparent border-0 p-0 text-xs text-zinc-400 focus:outline-none focus:ring-0 font-semibold cursor-not-allowed select-none"
-                            />
-                          </div>
-
-                          {/* Roll */}
-                          <div className={`bg-zinc-950/60 border border-border rounded-xl p-3.5 flex flex-col ${
-                            isRollDisabled ? 'opacity-50 cursor-not-allowed' : ''
-                          }`}>
-                            <div className="flex items-center justify-between select-none">
-                              <label className="text-[9px] font-mono font-bold text-zinc-550 uppercase tracking-wider mb-1 flex items-center gap-1">
-                                <Hash className="w-3 h-3" strokeWidth={1.5} /> Candidate Roll Number
-                              </label>
-                              {isRollDisabled && <Lock className="w-3 h-3 text-zinc-600" strokeWidth={1.5} />}
-                            </div>
-                            <input 
-                              type="text" 
-                              value={rollNumber} 
-                              onChange={(e) => setRollNumber(e.target.value.toUpperCase())} 
-                              readOnly={isRollDisabled}
-                              disabled={isRollDisabled}
-                              className={`bg-transparent border-0 p-0 text-xs focus:outline-none focus:ring-0 font-mono font-bold ${
-                                isRollDisabled ? 'text-zinc-450 cursor-not-allowed select-none' : 'text-white placeholder:text-zinc-700'
-                              }`}
-                              placeholder="U4CSE25XXX..." 
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Rules Checklist */}
-                      <div className="space-y-4 flex flex-col">
-                        <div className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest border-b border-border pb-2 flex items-center gap-1.5 select-none">
-                          <HelpCircle className="w-4 h-4 text-zinc-500" strokeWidth={1.5} /> Proctor Rules Checklist
-                        </div>
-
-                        <div className="bg-zinc-950/20 border border-border p-4 rounded-xl text-zinc-450 text-[11px] space-y-3.5 flex-1 select-none leading-relaxed">
-                          <div className="flex gap-2.5">
-                            <CheckCircle2 className="w-4 h-4 text-[#14B8A6] shrink-0 mt-0.5" strokeWidth={1.5} />
-                            <p><strong>Timer Limits:</strong> A countdown of <span className="text-[#5B8CFF] font-bold font-number">{selectedAssessment.duration} minutes</span> runs globally. Automatic force-submission triggers upon expiry.</p>
-                          </div>
-                          <div className="flex gap-2.5">
-                            <CheckCircle2 className="w-4 h-4 text-[#14B8A6] shrink-0 mt-0.5" strokeWidth={1.5} />
-                            <p><strong>Strict Sandbox Controls:</strong> Screen switching, tab changes, and minimizing window focus will immediately flag integrity score reductions.</p>
-                          </div>
-                          <div className="flex gap-2.5">
-                            <CheckCircle2 className="w-4 h-4 text-[#14B8A6] shrink-0 mt-0.5" strokeWidth={1.5} />
-                            <p><strong>Hardware Lockouts:</strong> Copy-pasting code blocks and mouse right-clicks are intercepted and blocked inside the compiler panel.</p>
-                          </div>
-                          <div className="flex gap-2.5">
-                            <CheckCircle2 className="w-4 h-4 text-[#14B8A6] shrink-0 mt-0.5" strokeWidth={1.5} />
-                            <p><strong>Optical Verification:</strong> Secure proctor networks utilize client media camera parameters for integrity audit monitors.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Schedule details */}
-                    <div className="p-4 bg-zinc-950/20 border border-border rounded-xl flex flex-col md:flex-row md:items-center justify-between text-xs gap-4 select-none">
-                      <div className="space-y-1">
-                        <p className="text-zinc-500 font-bold font-mono text-[9px] uppercase tracking-wider">Evaluation Window Scheduling limits</p>
-                        <p className="text-zinc-450">
-                          Starts: <span className="text-white font-semibold font-mono">{new Date(selectedAssessment.start_time).toLocaleString()}</span>
-                        </p>
-                        <p className="text-zinc-450">
-                          Ends: <span className="text-white font-semibold font-mono">{new Date(selectedAssessment.end_time).toLocaleString()}</span>
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <span className={`inline-block px-3 py-1.5 rounded-xl border text-[10px] font-bold ${
-                          timeCheck.valid 
-                            ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border-[#5B8CFF]/30' 
-                            : 'bg-zinc-950 text-zinc-500 border-border'
-                        }`}>
-                          {timeCheck.valid ? '● Assessment Schedule Active' : '● Assessment Window Closed'}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Consent */}
-                    <label className="flex items-start gap-3.5 p-3.5 bg-zinc-950/20 border border-border rounded-xl cursor-pointer select-none">
-                      <input 
-                        type="checkbox" 
-                        checked={readInstructions} 
-                        onChange={(e) => setReadInstructions(e.target.checked)} 
-                        className="w-4 h-4 rounded border-border text-[#5B8CFF] focus:ring-0 bg-background cursor-pointer mt-0.5" 
-                      />
-                      <span className="text-[10px] text-zinc-500 leading-relaxed font-sans">
-                        I acknowledge that I have read the security policies, consent to activation of my camera device, and understand that tab switching will log violations against my exam submission.
-                      </span>
-                    </label>
-
-                    {/* Launch Button */}
-                    <div className="flex justify-end pt-4 border-t border-border select-none">
-                      <Button 
-                        onClick={handleLaunchAssessment}
-                        disabled={isSubmitting || !timeCheck.valid}
-                        className={`h-11 px-8 rounded-xl font-bold text-xs tracking-wider transition-all duration-300 flex items-center gap-2 select-none shadow-md ${
-                          timeCheck.valid 
-                            ? 'bg-[#5B8CFF] hover:bg-[#3b71f3] text-white font-extrabold cursor-pointer active:scale-95' 
-                            : 'bg-zinc-950 text-zinc-500 border border-border cursor-not-allowed'
+                    return (
+                      <div 
+                        key={a.id} 
+                        onClick={() => handleSelectAssessment(a)}
+                        className={`p-5 rounded-2xl border text-left cursor-pointer transition-all duration-300 relative group overflow-hidden ${
+                          isActive 
+                            ? 'bg-zinc-950/80 border-[#5B8CFF]/50 text-foreground shadow-[0_8px_30px_rgba(91,140,255,0.12)] backdrop-blur-md -translate-y-1' 
+                            : 'bg-zinc-950/30 border-white/5 text-muted hover:border-white/20 hover:bg-zinc-900/50 backdrop-blur-md'
                         }`}
                       >
-                        {isSubmitting ? (
-                          <>
-                            <Shield className="w-4 h-4 animate-spin text-white" strokeWidth={1.5} />
-                            <span>Initializing Compilers...</span>
-                          </>
-                        ) : (
-                          <>
-                            <span>Acknowledge & Launch Code Environment</span>
-                            <Play className="w-4 h-4 fill-current text-white" strokeWidth={1.5} />
-                          </>
-                        )}
-                      </Button>
+                        {/* Purple accent border block */}
+                        <div className={`absolute top-0 left-0 bottom-0 w-1 transition-all duration-300 ${
+                          isActive ? 'bg-[#5B8CFF] shadow-[0_0_12px_rgba(91,140,255,0.8)]' : 'bg-transparent'
+                        }`} />
+
+                        <h3 className="font-bold text-sm text-white group-hover:text-[#5B8CFF] transition duration-300 font-heading pr-2">
+                          {a.title}
+                        </h3>
+                        <p className="text-[11px] text-zinc-500 mt-2 line-clamp-2 leading-relaxed">
+                          {a.description}
+                        </p>
+
+                        <div className="flex flex-wrap items-center gap-3 mt-5 pt-4 border-t border-white/5 text-[9px] font-mono select-none">
+                          <span className="flex items-center gap-1.5 text-zinc-400 font-bold bg-zinc-900 px-2 py-1 rounded-md border border-white/5">
+                            <Clock className="w-3.5 h-3.5 text-zinc-500" strokeWidth={1.5} /> {a.duration} MINS
+                          </span>
+                          <span className={`px-2 py-1 rounded-md border text-[9px] font-bold ${
+                            windowCheck.valid 
+                              ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border-[#5B8CFF]/30 shadow-[0_0_10px_rgba(91,140,255,0.1)]' 
+                              : 'bg-zinc-950 text-zinc-600 border-white/5'
+                          }`}>
+                            {windowCheck.valid ? 'OPEN SCHEDULE' : 'UNAVAILABLE'}
+                          </span>
+                        </div>
+                      </div>
+                    )
+                  })}
+
+                  {assessments.length === 0 && (
+                    <div className="p-8 text-center bg-zinc-950/40 border border-white/5 backdrop-blur-md rounded-2xl text-xs text-zinc-500 font-mono select-none">
+                      No active published assessments available in candidate registry.
                     </div>
-
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="h-[400px] flex items-center justify-center border border-border rounded-2xl bg-[#0a0a0a]/20 text-zinc-500 text-xs font-mono select-none">
-                  Please select an assessment path from the left lobby list.
+                  )}
                 </div>
-              )}
-            </section>
+              </section>
 
-          </div>
+              {/* Details & Setup Form */}
+              <section className="lg:col-span-8">
+                {selectedAssessment ? (
+                  <Card className="bg-zinc-950/60 border-white/10 rounded-3xl shadow-2xl relative overflow-hidden backdrop-blur-xl">
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#5B8CFF] to-teal-400" />
+                    
+                    <CardHeader className="pb-5 border-b border-white/5 select-none pt-8 px-8">
+                      <CardTitle className="text-lg font-bold text-white flex items-center gap-3 font-heading">
+                        <BookOpen className="w-5 h-5 text-[#5B8CFF]" strokeWidth={2} /> Assessment Preparation
+                      </CardTitle>
+                      <CardDescription className="text-xs text-zinc-400 mt-2">
+                        You are launching: <span className="text-white font-bold bg-white/5 px-2 py-1 rounded-md ml-1">{selectedAssessment.title}</span>
+                      </CardDescription>
+                    </CardHeader>
+                    
+                    <CardContent className="p-8 space-y-8">
+                      
+                      {errorMsg && (
+                        <div className="text-xs text-zinc-200 bg-[#F87171]/10 p-4 rounded-xl border border-[#F87171]/20 flex items-center space-x-3 animate-in fade-in zoom-in-95 duration-300">
+                          <AlertCircle className="w-5 h-5 shrink-0 text-[#F87171]" strokeWidth={1.5} />
+                          <span className="font-semibold leading-relaxed">{errorMsg}</span>
+                        </div>
+                      )}
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {/* Identity parameters */}
+                        <div className="space-y-5">
+                          <div className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest border-b border-white/5 pb-2.5 flex items-center gap-2 select-none">
+                            <User className="w-4 h-4 text-zinc-400" strokeWidth={1.5} /> Identity Parameters
+                          </div>
+                          
+                          <div className="space-y-4 pt-1">
+                            {/* Name */}
+                            <div className="bg-zinc-900/50 border border-white/5 rounded-xl p-4 flex flex-col opacity-60 cursor-not-allowed">
+                              <div className="flex items-center justify-between select-none">
+                                <label className="text-[9px] font-mono font-bold text-zinc-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                  <User className="w-3 h-3" strokeWidth={1.5} /> Candidate Full Name (Locked)
+                                </label>
+                                <Lock className="w-3 h-3 text-zinc-600" strokeWidth={1.5} />
+                              </div>
+                              <input 
+                                type="text" 
+                                value={name} 
+                                readOnly
+                                disabled
+                                className="bg-transparent border-0 p-0 text-xs text-zinc-300 focus:outline-none focus:ring-0 font-semibold cursor-not-allowed select-none"
+                              />
+                            </div>
+
+                            {/* Email */}
+                            <div className="bg-zinc-900/50 border border-white/5 rounded-xl p-4 flex flex-col opacity-60 cursor-not-allowed">
+                              <div className="flex items-center justify-between select-none">
+                                <label className="text-[9px] font-mono font-bold text-zinc-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                  <Mail className="w-3 h-3" strokeWidth={1.5} /> Institutional Email
+                                </label>
+                                <Lock className="w-3 h-3 text-zinc-600" strokeWidth={1.5} />
+                              </div>
+                              <input 
+                                type="email" 
+                                value={email} 
+                                readOnly
+                                disabled
+                                className="bg-transparent border-0 p-0 text-xs text-zinc-300 focus:outline-none focus:ring-0 font-semibold cursor-not-allowed select-none"
+                              />
+                            </div>
+
+                            {/* Roll */}
+                            <div className={`bg-zinc-900/50 border border-white/10 rounded-xl p-4 flex flex-col transition-colors ${
+                              isRollDisabled ? 'opacity-60 cursor-not-allowed border-white/5' : 'hover:border-white/20 focus-within:border-[#5B8CFF]/50 focus-within:ring-1 focus-within:ring-[#5B8CFF]/50 shadow-inner'
+                            }`}>
+                              <div className="flex items-center justify-between select-none">
+                                <label className="text-[9px] font-mono font-bold text-zinc-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                  <Hash className="w-3 h-3" strokeWidth={1.5} /> Candidate Roll Number
+                                </label>
+                                {isRollDisabled && <Lock className="w-3 h-3 text-zinc-600" strokeWidth={1.5} />}
+                              </div>
+                              <input 
+                                type="text" 
+                                value={rollNumber} 
+                                onChange={(e) => setRollNumber(e.target.value.toUpperCase())} 
+                                readOnly={isRollDisabled}
+                                disabled={isRollDisabled}
+                                className={`bg-transparent border-0 p-0 text-xs focus:outline-none focus:ring-0 font-mono font-bold ${
+                                  isRollDisabled ? 'text-zinc-400 cursor-not-allowed select-none' : 'text-white placeholder:text-zinc-700'
+                                }`}
+                                placeholder="U4CSE25XXX..." 
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Rules Checklist */}
+                        <div className="space-y-5 flex flex-col">
+                          <div className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest border-b border-white/5 pb-2.5 flex items-center gap-2 select-none">
+                            <HelpCircle className="w-4 h-4 text-zinc-400" strokeWidth={1.5} /> Proctor Rules Checklist
+                          </div>
+
+                          <div className="bg-zinc-900/40 border border-white/5 p-5 rounded-xl text-zinc-400 text-[11.5px] space-y-4 flex-1 select-none leading-relaxed shadow-inner">
+                            <div className="flex gap-3">
+                              <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" strokeWidth={2} />
+                              <p><strong>Timer Limits:</strong> A countdown of <span className="text-[#5B8CFF] font-bold font-number">{selectedAssessment.duration} minutes</span> runs globally. Automatic force-submission triggers upon expiry.</p>
+                            </div>
+                            <div className="flex gap-3">
+                              <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" strokeWidth={2} />
+                              <p><strong>Strict Sandbox Controls:</strong> Screen switching, tab changes, and minimizing window focus will immediately flag integrity score reductions.</p>
+                            </div>
+                            <div className="flex gap-3">
+                              <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" strokeWidth={2} />
+                              <p><strong>Hardware Lockouts:</strong> Copy-pasting code blocks and mouse right-clicks are intercepted and blocked inside the compiler panel.</p>
+                            </div>
+                            <div className="flex gap-3">
+                              <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" strokeWidth={2} />
+                              <p><strong>Optical Verification:</strong> Secure proctor networks utilize client media camera parameters for integrity audit monitors.</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Schedule details */}
+                      <div className="p-5 bg-zinc-900/40 border border-white/5 rounded-xl flex flex-col md:flex-row md:items-center justify-between text-xs gap-5 select-none shadow-inner">
+                        <div className="space-y-1.5">
+                          <p className="text-zinc-500 font-bold font-mono text-[9px] uppercase tracking-widest mb-2">Evaluation Window Scheduling limits</p>
+                          <p className="text-zinc-400 flex items-center gap-2">
+                            <span className="w-12 text-zinc-500">Starts:</span> <span className="text-white font-semibold font-mono bg-white/5 px-2 py-0.5 rounded">{new Date(selectedAssessment.start_time).toLocaleString()}</span>
+                          </p>
+                          <p className="text-zinc-400 flex items-center gap-2">
+                            <span className="w-12 text-zinc-500">Ends:</span> <span className="text-white font-semibold font-mono bg-white/5 px-2 py-0.5 rounded">{new Date(selectedAssessment.end_time).toLocaleString()}</span>
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <span className={`inline-block px-4 py-2 rounded-xl border text-[10px] font-bold tracking-wide ${
+                            timeCheck.valid 
+                              ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' 
+                              : 'bg-zinc-950 text-zinc-600 border-white/5'
+                          }`}>
+                            {timeCheck.valid ? '● Assessment Schedule Active' : '● Assessment Window Closed'}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Consent */}
+                      <label className="flex items-start gap-4 p-5 bg-[#5B8CFF]/5 hover:bg-[#5B8CFF]/10 border border-[#5B8CFF]/20 rounded-xl cursor-pointer select-none transition-colors group">
+                        <div className="relative flex items-center justify-center mt-0.5">
+                          <input 
+                            type="checkbox" 
+                            checked={readInstructions} 
+                            onChange={(e) => setReadInstructions(e.target.checked)} 
+                            className="peer appearance-none w-5 h-5 rounded border border-[#5B8CFF]/50 bg-zinc-950/50 checked:bg-[#5B8CFF] checked:border-[#5B8CFF] transition-all cursor-pointer" 
+                          />
+                          <Check className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" strokeWidth={3} />
+                        </div>
+                        <span className="text-[11px] text-zinc-400 group-hover:text-zinc-300 leading-relaxed font-sans transition-colors">
+                          I acknowledge that I have read the security policies, consent to activation of my camera device, and understand that tab switching will log violations against my exam submission.
+                        </span>
+                      </label>
+
+                      {/* Launch Button */}
+                      <div className="flex justify-end pt-6 border-t border-white/5 select-none">
+                        <Button 
+                          onClick={handleLaunchAssessment}
+                          disabled={isSubmitting || !timeCheck.valid}
+                          className={`h-12 px-8 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 flex items-center gap-2.5 select-none shadow-lg ${
+                            timeCheck.valid 
+                              ? 'bg-gradient-to-r from-[#5B8CFF] to-blue-500 hover:from-blue-500 hover:to-[#5B8CFF] text-white font-extrabold cursor-pointer active:scale-95 hover:shadow-[0_0_20px_rgba(91,140,255,0.4)]' 
+                              : 'bg-zinc-900 text-zinc-600 border border-white/5 cursor-not-allowed shadow-none'
+                          }`}
+                        >
+                          {isSubmitting ? (
+                            <>
+                              <Shield className="w-5 h-5 animate-spin text-white" strokeWidth={2} />
+                              <span>Initializing Security Modules...</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>Acknowledge & Launch Environment</span>
+                              <Play className="w-4 h-4 fill-current text-white" strokeWidth={2} />
+                            </>
+                          )}
+                        </Button>
+                      </div>
+
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="h-[400px] flex flex-col gap-4 items-center justify-center border border-white/5 rounded-3xl bg-zinc-950/40 backdrop-blur-md text-zinc-500 text-xs font-mono select-none">
+                    <Search className="w-8 h-8 text-zinc-700 mb-2" strokeWidth={1} />
+                    Please select an assessment path from the left lobby list.
+                  </div>
+                )}
+              </section>
+
+            </div>
+          )}
+
+          {/* ================= HISTORY TAB ================= */}
+          {activeTab === 'history' && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="flex items-center gap-2 px-1 text-[10px] font-bold text-zinc-500 font-mono tracking-widest uppercase select-none">
+                <History className="w-4 h-4 text-zinc-550" strokeWidth={1.5} /> Past Records & Submissions
+              </div>
+              
+              <div className="bg-zinc-950/50 border border-white/5 rounded-2xl overflow-hidden backdrop-blur-md shadow-xl">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm whitespace-nowrap">
+                    <thead className="bg-zinc-900/80 border-b border-white/5">
+                      <tr>
+                        <th className="px-6 py-4 font-mono text-[10px] uppercase text-zinc-500 tracking-wider">Session ID</th>
+                        <th className="px-6 py-4 font-mono text-[10px] uppercase text-zinc-500 tracking-wider">Assessment</th>
+                        <th className="px-6 py-4 font-mono text-[10px] uppercase text-zinc-500 tracking-wider">Date</th>
+                        <th className="px-6 py-4 font-mono text-[10px] uppercase text-zinc-500 tracking-wider">Status</th>
+                        <th className="px-6 py-4 font-mono text-[10px] uppercase text-zinc-500 tracking-wider">Score</th>
+                        <th className="px-6 py-4 font-mono text-[10px] uppercase text-zinc-500 tracking-wider">Integrity</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {pastSessions.length > 0 ? (
+                        pastSessions.map(session => (
+                          <tr key={session.id} className="hover:bg-white/[0.02] transition-colors">
+                            <td className="px-6 py-4 font-mono text-xs text-zinc-400">{session.id.slice(0, 8)}</td>
+                            <td className="px-6 py-4 font-heading font-semibold text-zinc-200">{session.assessment_id.slice(0, 12)}...</td>
+                            <td className="px-6 py-4 text-xs text-zinc-400">{new Date(session.startedAt || 0).toLocaleDateString()}</td>
+                            <td className="px-6 py-4">
+                              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
+                                session.status === 'submitted' 
+                                  ? 'bg-teal-500/10 text-teal-400 border border-teal-500/20' 
+                                  : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
+                              }`}>
+                                {session.status === 'submitted' ? 'Submitted' : 'Abandoned'}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 font-mono font-bold text-white">{session.score || 0}</td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-2">
+                                <div className="w-16 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                                  <div 
+                                    className={`h-full rounded-full ${session.integrity_score >= 80 ? 'bg-teal-500' : session.integrity_score >= 50 ? 'bg-amber-500' : 'bg-rose-500'}`}
+                                    style={{ width: `${session.integrity_score || 0}%` }}
+                                  />
+                                </div>
+                                <span className="font-mono text-xs text-zinc-400">{session.integrity_score}%</span>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={6} className="px-6 py-12 text-center text-zinc-500 text-xs font-mono">
+                            No past session records found.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
 
         </div>
       </main>
