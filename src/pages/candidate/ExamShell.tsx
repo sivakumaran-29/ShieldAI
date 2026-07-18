@@ -5,8 +5,9 @@ import {
   Terminal, Activity, EyeOff, AlertTriangle, RefreshCw, Trash2, Clock, ChevronRight,
   CornerDownRight, ChevronLeft, Lock
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import ThemeToggle from '../../components/ThemeToggle'
 import { Card } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { 
   fetchQuestions, fetchAssessments, saveCandidateSession, fetchCandidateSessions,
   evaluateCodeSnippet, simulateTerminalRun, CodingQuestion, Assessment, CandidateSession, QuestionSubmission
@@ -14,7 +15,28 @@ import {
 import { useAuthStore } from '../../store/authStore'
 import { getIceServers } from '../../lib/webrtcConfig'
 import { supabase } from '../../lib/supabaseClient'
-import ThemeToggle from '../../components/ThemeToggle'
+
+const StreamVideo = ({ stream }: { stream: MediaStream | null }) => {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream
+      videoRef.current.play().catch(e => console.warn('StreamVideo play blocked:', e))
+    }
+  }, [stream])
+
+  return (
+    <video 
+      ref={videoRef}
+      autoPlay 
+      playsInline 
+      muted 
+      className="absolute inset-0 w-full h-full object-cover z-10" 
+      style={{ transform: 'scaleX(-1)' }}
+    />
+  )
+}
 
 const codeTemplates: Record<string, string> = {
   python: `def solve():\n    # Read input from standard input\n    # Write your solution here\n    # For Example:\n    # nums = list(map(int, input().split(',')))\n    # target = int(input())\n    # print(two_sum(nums, target))\n    pass\n\nif __name__ == '__main__':\n    solve()`,
@@ -69,6 +91,7 @@ export default function ExamShell() {
   const [anomalyType, setAnomalyType] = useState('')
   const [showWarningModal, setShowWarningModal] = useState(false)
   const [warningModalText, setWarningModalText] = useState('')
+  const [localStream, setLocalStream] = useState<MediaStream | null>(null)
 
   const filteredQuestions = activePart === 'mcq'
     ? questions.filter(q => q.type === 'mcq')
@@ -408,8 +431,9 @@ export default function ExamShell() {
           video: { width: 320, height: 240, frameRate: 10 }
         })
         localStreamRef.current = streamInstance
+        setLocalStream(streamInstance)
         
-        // Let the brute-force useEffect handle the DOM binding
+        // Let the isolated StreamVideo handle the DOM binding
         processFrame()
       } catch (err) {
         logViolation('[SYSTEM] Camera media streams blocked or unavailable.')
@@ -417,9 +441,21 @@ export default function ExamShell() {
     }
 
     function processFrame() {
-      const video = document.getElementById('candidate-video') as HTMLVideoElement
       const canvas = canvasRef.current
-      if (!video || !canvas || video.paused || video.ended) {
+      if (!canvas || !localStreamRef.current) {
+        animationFrameId = requestAnimationFrame(processFrame)
+        return
+      }
+      
+      const track = localStreamRef.current.getVideoTracks()[0]
+      if (!track || track.readyState !== 'live') {
+        animationFrameId = requestAnimationFrame(processFrame)
+        return
+      }
+
+      // We need a hidden video element just to feed the canvas if we don't have direct access
+      const video = document.getElementById('candidate-video') as HTMLVideoElement
+      if (!video || video.paused || video.ended) {
         animationFrameId = requestAnimationFrame(processFrame)
         return
       }
@@ -468,24 +504,6 @@ export default function ExamShell() {
       localStreamRef.current = null
     }
   }, [loading])
-
-  // BRUTE-FORCE BINDER: Runs on every single render to guarantee video playback
-  useEffect(() => {
-    const video = document.getElementById('candidate-video') as HTMLVideoElement
-    if (video && localStreamRef.current) {
-      if (video.srcObject !== localStreamRef.current) {
-        video.srcObject = localStreamRef.current
-        video.muted = true
-        video.defaultMuted = true
-        video.playsInline = true
-        video.autoplay = true
-        video.onloadedmetadata = () => video.play().catch(() => {})
-        video.play().catch(() => {})
-      } else if (video.paused) {
-        video.play().catch(() => {})
-      }
-    }
-  })
 
   // ==========================================
   // BEHAVIORAL INTERNALS / PROCTOR MONITORS
@@ -1232,14 +1250,10 @@ export default function ExamShell() {
               )}
               
               <div className="w-full h-28 relative overflow-hidden flex items-center justify-center bg-zinc-900 rounded-lg">
-                <video 
-                  id="candidate-video"
-                  autoPlay 
-                  playsInline 
-                  muted 
-                  className="absolute inset-0 w-full h-full object-cover z-[100]" 
-                  style={{ transform: 'scaleX(-1)' }}
-                />
+                <div id="candidate-video-container" className="absolute inset-0 w-full h-full z-[100]">
+                  {localStream && <StreamVideo stream={localStream} />}
+                  <video id="candidate-video" className="hidden" playsInline muted autoPlay />
+                </div>
                 <canvas ref={canvasRef} width="160" height="120" className="hidden" />
                 
                 <div className="absolute inset-0 border border-zinc-500/20 pointer-events-none z-20">
