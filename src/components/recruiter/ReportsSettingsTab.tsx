@@ -428,7 +428,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
       <div className="flex items-center justify-between select-none border-b border-white/5 pb-4">
         <div>
           <h2 className="text-3xl font-semibold tracking-tight text-[#6f8eff] mb-2">
-            // {activeSub === 'reports' ? 'COMPLIANCE AUDIT REPORTS' : activeSub === 'settings' ? 'Global Platform Config' : 'Telemetry Network Logs'}
+            // {activeSub === 'reports' ? 'COMPLIANCE AUDIT REPORTS' : activeSub === 'settings' ? 'GLOBAL PLATFORM CONFIG' : 'Telemetry Network Logs'}
           </h2>
           <span className="text-[11px] sys-text-body font-sans mt-1 block font-medium">
             {activeSub === 'reports' 
@@ -457,12 +457,12 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           
           <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-8 rounded-2xl flex flex-col justify-between min-h-[420px]">
-            <div className="space-y-3">
-              <div className="p-2 bg-[#5B8CFF]/10 rounded-xl w-10">
-                <FileText className="w-5 h-5 text-[#5B8CFF]" strokeWidth={1.5} />
+            <div className="space-y-4">
+              <div className="p-3 bg-[#5B8CFF]/10 rounded-2xl w-12 h-12 flex items-center justify-center">
+                <FileText className="w-6 h-6 text-[#5B8CFF]" strokeWidth={1.5} />
               </div>
-              <h4 className="font-bold text-xs text-white font-heading">Cohort Integrity Summary</h4>
-              <p className="text-[10.5px] sys-text-body leading-relaxed font-sans">
+              <h4 className="font-bold text-base text-white font-heading">Cohort Integrity Summary</h4>
+              <p className="text-sm sys-text-body leading-relaxed font-sans">
                 Full list details of all registered candidates, overall integrity rating indices, compiler scores, and timing parameters.
               </p>
             </div>
@@ -488,12 +488,12 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
           </Card>
 
           <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-8 rounded-2xl flex flex-col justify-between min-h-[420px]">
-            <div className="space-y-3">
-              <div className="p-2 bg-[#14B8A6]/10 rounded-xl w-10">
-                <Database className="w-5 h-5 text-[#14B8A6]" strokeWidth={1.5} />
+            <div className="space-y-4">
+              <div className="p-3 bg-[#14B8A6]/10 rounded-2xl w-12 h-12 flex items-center justify-center">
+                <Database className="w-6 h-6 text-[#14B8A6]" strokeWidth={1.5} />
               </div>
-              <h4 className="font-bold text-xs text-white font-heading">Raw CSV Database Audit</h4>
-              <p className="text-[10.5px] sys-text-body leading-relaxed font-sans">
+              <h4 className="font-bold text-base text-white font-heading">Raw CSV Database Audit</h4>
+              <p className="text-sm sys-text-body leading-relaxed font-sans">
                 Compile spreadsheet row listings containing student identifiers, active socket connection logs, and compiler test-case details.
               </p>
             </div>
@@ -530,12 +530,12 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
           </Card>
 
           <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-8 rounded-2xl flex flex-col justify-between min-h-[420px]">
-            <div className="space-y-3">
-              <div className="p-2 bg-[#A855F7]/10 rounded-xl w-10">
-                <FileText className="w-5 h-5 text-[#A855F7]" strokeWidth={1.5} />
+            <div className="space-y-4">
+              <div className="p-3 bg-[#A855F7]/10 rounded-2xl w-12 h-12 flex items-center justify-center">
+                <FileText className="w-6 h-6 text-[#A855F7]" strokeWidth={1.5} />
               </div>
-              <h4 className="font-bold text-xs text-white font-heading">Assessment Question Bank</h4>
-              <p className="text-[10.5px] sys-text-body leading-relaxed font-sans">
+              <h4 className="font-bold text-base text-white font-heading">Assessment Question Bank</h4>
+              <p className="text-sm sys-text-body leading-relaxed font-sans">
                 Export a beautifully formatted PDF containing all MCQs with answers, and coding challenges with complete constraints and test cases.
               </p>
             </div>
