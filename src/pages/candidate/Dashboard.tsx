@@ -378,7 +378,7 @@ export default function CandidateDashboard() {
           <Button 
             onClick={logout} 
             variant="outline" 
-            className="w-full border-transparent sys-bg/40 hover:sys-card hover:border-white/20 sys-text-body hover:text-white text-xs h-9 justify-center cursor-pointer transition-all duration-300 rounded-xl shadow-none"
+            className="w-full border-transparent sys-bg/40 !bg-[#00000066] hover:!bg-[rgba(28,28,30,0.72)] hover:border-white/20 sys-text-body hover:text-white text-xs h-9 justify-center cursor-pointer transition-all duration-300 rounded-xl !shadow-none hover:!shadow-none"
           >
             <LogOut className="w-3.5 h-3.5 mr-2" strokeWidth={1.5} />
             <span>Sign Out</span>

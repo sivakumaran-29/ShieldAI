@@ -245,7 +245,7 @@ export default function DatabaseTab() {
 
         <Button 
           onClick={() => setIsCreating(true)}
-          className="bg-[#5B8CFF] hover:bg-[#3b71f3] text-white text-xs h-9 px-4 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-md"
+          className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white text-xs h-9 px-4 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-md"
         >
           <Plus className="w-4 h-4" strokeWidth={1.5} /> Inject Batch
         </Button>
@@ -460,7 +460,7 @@ export default function DatabaseTab() {
                 <Button 
                   type="submit" 
                   disabled={createLoading}
-                  className="bg-[#5B8CFF] hover:bg-[#3b71f3] text-white text-xs h-9 px-5 rounded-xl font-bold cursor-pointer transition shadow-md flex items-center gap-2"
+                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white text-xs h-9 px-5 rounded-xl font-bold cursor-pointer transition shadow-md flex items-center gap-2"
                 >
                   {createLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   {createLoading ? 'Injecting...' : 'Confirm Injection'}

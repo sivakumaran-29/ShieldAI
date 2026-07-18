@@ -434,7 +434,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
               </Button>
               <Button 
                 type="submit" 
-                className="bg-[#5B8CFF] hover:bg-[#3b71f3] text-white rounded-xl text-xs h-10 px-6 font-bold cursor-pointer transition shadow-md"
+                className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white rounded-xl text-xs h-10 px-6 font-bold cursor-pointer transition shadow-md"
               >
                 Save Configuration
               </Button>

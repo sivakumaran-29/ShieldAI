@@ -247,7 +247,7 @@ export default function RecruiterDashboard() {
             <Button 
               onClick={logout} 
               variant="outline" 
-              className={`border-white/5 sys-bg/20 hover:sys-card sys-text-body hover:text-white text-xs h-9 justify-center cursor-pointer transition rounded-xl flex-1 ${
+              className={`border-white/5 sys-bg/20 !shadow-none hover:!bg-[rgba(28,28,30,0.72)] hover:!shadow-none sys-text-body hover:text-white text-xs h-9 justify-center cursor-pointer transition rounded-xl flex-1 ${
                 isCollapsed ? 'p-0' : ''
               }`}
               title="Sign Out"

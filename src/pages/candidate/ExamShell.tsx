@@ -1052,7 +1052,7 @@ export default function ExamShell() {
           {activePart === 'menu' ? (
             <Button 
               onClick={handleFinishAssessment} 
-              className="bg-[#5B8CFF] hover:bg-[#3b71f3] text-white font-extrabold px-4 h-8 rounded-xl text-xs tracking-wider cursor-pointer select-none active:scale-95 transition"
+              className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white font-extrabold px-4 h-8 rounded-xl text-xs tracking-wider cursor-pointer select-none active:scale-95 transition"
             >
               Submit Exam
             </Button>
@@ -1089,7 +1089,7 @@ export default function ExamShell() {
                 {currentSession?.completedParts?.includes('mcq') ? (
                   <Button disabled className="w-full sys-card sys-text-body font-bold">SUBMITTED</Button>
                 ) : (
-                  <Button onClick={() => handleStartPart('mcq')} className="w-full bg-[#5B8CFF] hover:bg-[#3b71f3] text-white font-bold cursor-pointer transition">
+                  <Button onClick={() => handleStartPart('mcq')} className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white font-bold cursor-pointer transition">
                     START SECTION
                   </Button>
                 )}
@@ -1109,7 +1109,7 @@ export default function ExamShell() {
                 {currentSession?.completedParts?.includes('coding') ? (
                   <Button disabled className="w-full sys-card sys-text-body font-bold">SUBMITTED</Button>
                 ) : (
-                  <Button onClick={() => handleStartPart('coding')} className="w-full bg-[#5B8CFF] hover:bg-[#3b71f3] text-white font-bold cursor-pointer transition">
+                  <Button onClick={() => handleStartPart('coding')} className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white font-bold cursor-pointer transition">
                     START SECTION
                   </Button>
                 )}
@@ -1160,7 +1160,7 @@ export default function ExamShell() {
           </div>
 
           <div className="py-2 flex gap-2">
-            <Button onClick={handleSubmitPart} className="flex-1 bg-emerald-600/20 text-emerald-500 border border-emerald-500/30 hover:bg-emerald-600 hover:text-white text-[10px] font-mono tracking-widest uppercase transition h-8">
+            <Button onClick={handleSubmitPart} className="flex-1 bg-[#3f6ad5] hover:bg-[#3254a8] text-white hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] border-none hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-[10px] font-mono tracking-widest uppercase transition h-8">
               {isSingleTypeExam ? 'Final Submit' : `Submit ${activePart === 'mcq' ? 'MCQ' : 'Coding'} Section`}
             </Button>
           </div>
@@ -1425,7 +1425,7 @@ export default function ExamShell() {
                       <Button 
                         onClick={handleSaveAndNext}
                         disabled={selectedQIndex === filteredQuestions.length - 1}
-                        className="h-10 px-6 text-xs font-mono font-bold bg-[#5B8CFF] hover:bg-[#3b71f3] text-white uppercase tracking-widest shadow-lg"
+                        className="h-10 px-6 text-xs font-mono font-bold bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white uppercase tracking-widest shadow-lg"
                       >
                         Save & Next <ChevronRight className="w-4 h-4 ml-2" />
                       </Button>
@@ -1504,7 +1504,7 @@ export default function ExamShell() {
                 <Button 
                   onClick={handleSubmitQuestion} 
                   disabled={isRunning || isSubmitting} 
-                  className="bg-[#5B8CFF] hover:bg-[#3b71f3] text-white font-extrabold h-6 px-3.5 text-[9px] font-mono tracking-wider active:scale-95 transition rounded-xl cursor-pointer"
+                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white font-extrabold h-6 px-3.5 text-[9px] font-mono tracking-wider active:scale-95 transition rounded-xl cursor-pointer"
                 >
                   {isSubmitting ? 'EVALUATING...' : 'SUBMIT CODE'}
                 </Button>
@@ -1588,7 +1588,7 @@ export default function ExamShell() {
             <div className="mt-6 flex flex-col gap-2">
               <Button 
                 onClick={enterFullscreen} 
-                className="w-full bg-[#EF4444] hover:bg-[#DC2626] text-white font-extrabold text-xs h-10 rounded-xl cursor-pointer"
+                className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white font-extrabold text-xs h-10 rounded-xl cursor-pointer"
               >
                 Re-enter Secure Fullscreen Mode
               </Button>
