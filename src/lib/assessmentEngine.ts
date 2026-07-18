@@ -74,6 +74,7 @@ export interface CandidateSession {
   integrity_score: number
   violation_logs: string[]
   submissions?: Record<string, QuestionSubmission> // question_id -> submission
+  mcq_submissions?: Record<string, string> // question_id -> exact option text
   completedParts?: ('mcq' | 'coding')[] // Tracks which parts the candidate has locked/submitted
   startedAt?: string
   submittedAt?: string
@@ -561,6 +562,7 @@ export const fetchCandidateSessions = async (assessmentId?: string, studentId?: 
           integrity_score: row.integrity_score ?? 100,
           violation_logs: Array.isArray(row.violation_logs) ? row.violation_logs : [],
           submissions: details.submissions || {},
+          mcq_submissions: details.mcq_submissions || {},
           startedAt: details.startedAt || '',
           submittedAt: details.submittedAt || '',
           updated_at: row.updated_at
@@ -606,6 +608,7 @@ export const saveCandidateSession = async (session: CandidateSession): Promise<b
           rollNumber: session.roll_number
         },
         submissions: session.submissions,
+        mcq_submissions: session.mcq_submissions,
         finalScore: session.score,
         startedAt: session.startedAt,
         submittedAt: session.submittedAt

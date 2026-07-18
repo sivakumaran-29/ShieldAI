@@ -100,9 +100,13 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
           ]
 
           questionsList.forEach(q => {
-            const sub = s.submissions?.[q.id]
-            if (sub && sub.code) {
-              let textToPrint = sub.code
+            const mcqAns = s.mcq_submissions?.[q.id]
+            const legacySub = s.submissions?.[q.id]
+            
+            // Check new isolated dictionary first, then fallback to old submission structure
+            let textToPrint = mcqAns || (legacySub && legacySub.code ? legacySub.code : '')
+
+            if (textToPrint) {
               // Legacy fallback just in case the db holds a raw index like "0"
               const asInt = parseInt(textToPrint, 10)
               if (!isNaN(asInt) && String(asInt) === textToPrint && q.mcq_options && q.mcq_options[asInt]) {

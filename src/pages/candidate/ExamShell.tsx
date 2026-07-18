@@ -301,8 +301,7 @@ export default function ExamShell() {
   const getActiveCode = (): string => {
     if (!activeQuestion) return ''
     if (activeQuestion.type === 'mcq') {
-      const sub = currentSession?.submissions?.[activeQuestion.id]
-      return sub ? String(sub.score) : '' // Temporarily store selected answer in code/score map
+      return currentSession?.mcq_submissions?.[activeQuestion.id] || ''
     }
     return codeMap[activeQuestion.id]?.[language] || codeTemplates[language] || ''
   }
@@ -361,16 +360,15 @@ export default function ExamShell() {
 
     const submissionRecords: Record<string, QuestionSubmission> = { ...currentSession.submissions }
     
-    // Add current codes structure
-    questions.forEach(q => {
-      const qCode = q.type === 'mcq' 
-        ? (submissionRecords[q.id]?.code || '') 
-        : (codeMap[q.id]?.[language] || codeTemplates[language])
+    // Add current codes structure (ONLY for coding questions)
+    const codingQuestions = questions.filter(q => q.type !== 'mcq')
+    codingQuestions.forEach(q => {
+      const qCode = codeMap[q.id]?.[language] || codeTemplates[language]
         
       if (!submissionRecords[q.id]) {
         submissionRecords[q.id] = {
           code: qCode,
-          language: q.type === 'mcq' ? 'mcq' : language,
+          language: language,
           status: 'Not Attempted',
           cases_passed: 0,
           total_cases: q.test_cases?.length || 1,
@@ -379,16 +377,26 @@ export default function ExamShell() {
           memory_usage: 0
         }
       } else {
-        // Update code contents (which preserves the MCQ text because qCode equals the existing text)
+        // Update code contents
         submissionRecords[q.id].code = qCode
-        submissionRecords[q.id].language = q.type === 'mcq' ? 'mcq' : language
+        submissionRecords[q.id].language = language
       }
     })
 
     // Recalculate average score
+    // Recalculate average score
     let totalScore = 0
     questions.forEach(q => {
-      totalScore += submissionRecords[q.id]?.score || 0
+      if (q.type === 'mcq') {
+        const mcqAns = currentSession.mcq_submissions?.[q.id]
+        if (mcqAns && q.mcq_options && q.mcq_correct_index !== undefined) {
+          if (mcqAns === q.mcq_options[q.mcq_correct_index]) {
+            totalScore += 100
+          }
+        }
+      } else {
+        totalScore += submissionRecords[q.id]?.score || 0
+      }
     })
     const finalAvg = Math.round(totalScore / questions.length)
 
@@ -805,23 +813,14 @@ export default function ExamShell() {
   const handleMcqSelect = (index: number) => {
     if (!activeQuestion || activeQuestion.type !== 'mcq') return
     const selectedText = activeQuestion.mcq_options?.[index] || String(index)
-    // Save selection temporarily to submissions with code = selectedText
+    // Save selection temporarily to mcq_submissions with code = selectedText
     setCurrentSession(prev => {
       if (!prev) return null
-      const nextSubmissions = {
-        ...(prev.submissions || {}),
-        [activeQuestion.id]: {
-          code: selectedText,
-          language: 'mcq',
-          status: (index === activeQuestion.mcq_correct_index ? 'Accepted' : 'Wrong Answer') as 'Accepted' | 'Wrong Answer',
-          cases_passed: index === activeQuestion.mcq_correct_index ? 1 : 0,
-          total_cases: 1,
-          score: index === activeQuestion.mcq_correct_index ? 100 : 0,
-          execution_time: 0,
-          memory_usage: 0
-        }
+      const nextMcqSubmissions = {
+        ...(prev.mcq_submissions || {}),
+        [activeQuestion.id]: selectedText
       }
-      return { ...prev, submissions: nextSubmissions }
+      return { ...prev, mcq_submissions: nextMcqSubmissions }
     })
   }
 
@@ -835,9 +834,9 @@ export default function ExamShell() {
     if (!activeQuestion || activeQuestion.type !== 'mcq') return
     setCurrentSession(prev => {
       if (!prev) return null
-      const nextSubmissions = { ...prev.submissions }
-      delete nextSubmissions[activeQuestion.id]
-      return { ...prev, submissions: nextSubmissions }
+      const nextMcqSubmissions = { ...prev.mcq_submissions }
+      delete nextMcqSubmissions[activeQuestion.id]
+      return { ...prev, mcq_submissions: nextMcqSubmissions }
     })
   }
 
@@ -1356,7 +1355,7 @@ export default function ExamShell() {
 
                     <div className="grid grid-cols-1 gap-4 mt-8">
                       {activeQuestion.mcq_options?.map((opt, idx) => {
-                        const selectedVal = currentSession?.submissions?.[activeQuestion.id]?.code
+                        const selectedVal = currentSession?.mcq_submissions?.[activeQuestion.id]
                         const isSelected = selectedVal === opt || selectedVal === String(idx)
                         return (
                           <button
