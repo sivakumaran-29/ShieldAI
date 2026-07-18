@@ -163,8 +163,8 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
       {/* 1. Header with action button */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-[10px] font-mono font-bold tracking-widest text-[#5B8CFF] uppercase">// OVERVIEW DASHBOARD</h2>
-          <span className="text-[10px] sys-text-body font-mono mt-1 block">Live proctor operations summary and assessment controls</span>
+          <h2 className="text-[12px] font-heading font-bold tracking-wider text-[#5B8CFF] uppercase">// OVERVIEW DASHBOARD</h2>
+          <span className="text-[11px] sys-text-body font-sans mt-1 block">Live proctor operations summary and assessment controls</span>
         </div>
         {!isEditing && (
           <Button 
@@ -179,8 +179,8 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
       {!isEditing ? (
         <div className="space-y-8">
           
-          <div className="bento-card p-8 flex flex-col items-center justify-center text-center space-y-4 border-dashed border-2 border-white/5/50 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] mb-8">
-            <div className="p-4 bg-[#5B8CFF]/10 rounded-full mb-2">
+          <div className="group p-8 flex flex-col items-center justify-center text-center space-y-4 border border-white/5 rounded-[24px] bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] mb-8 hover:shadow-[0_0_40px_rgba(91,140,255,0.08)] hover:border-white/10 transition-all duration-500 cursor-pointer">
+            <div className="p-4 bg-[#5B8CFF]/10 rounded-full mb-2 group-hover:scale-110 transition-transform duration-500">
               <Sparkles className="w-8 h-8 text-[#5B8CFF]" strokeWidth={1.5} />
             </div>
             <h3 className="text-xl font-bold text-white font-heading">Assessment Creation Engine</h3>
@@ -197,29 +197,30 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
 
           {/* Active Assessments Table Section */}
           <div className="bento-card p-6 space-y-4">
-            <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest block">Active Assessment Tracks</span>
+            <span className="text-[11px] font-heading font-semibold sys-text-body uppercase tracking-wider block mb-4">Active Assessment Tracks</span>
             
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="border-b border-white/5 sys-text-body font-mono text-[9px] uppercase tracking-wider">
-                    <th className="py-3 px-4">Evaluation Title</th>
-                    <th className="py-3 px-4">Duration</th>
-                    <th className="py-3 px-4">Allowed Languages</th>
-                    <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4 text-right">Actions</th>
+                  <tr className="bg-[rgba(28,28,30,0.5)] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider">
+                    <th className="py-3 px-4 rounded-l-xl border-y border-l border-white/5">Evaluation Title</th>
+                    <th className="py-3 px-4 border-y border-white/5">Duration</th>
+                    <th className="py-3 px-4 border-y border-white/5">Allowed Languages</th>
+                    <th className="py-3 px-4 border-y border-white/5">Status</th>
+                    <th className="py-3 px-4 rounded-r-xl border-y border-r border-white/5 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/60">
+                <tbody className="divide-y divide-white/5">
+                  <tr className="h-2"></tr> {/* Spacer after header */}
                   {assessments.map(a => (
                     <tr 
                       key={a.id} 
                       onClick={() => onSelectInspector?.(a)}
                       className="hover:sys-bg/20 cursor-pointer transition duration-200"
                     >
-                      <td className="py-3.5 px-4 font-bold text-white max-w-sm truncate">{a.title}</td>
-                      <td className="py-3.5 px-4 sys-text-body font-mono">{a.duration} mins</td>
-                      <td className="py-3.5 px-4 sys-text-body uppercase font-mono">{a.allowed_languages.join(', ')}</td>
+                      <td className="py-3.5 px-4 font-semibold text-white font-heading max-w-sm truncate">{a.title}</td>
+                      <td className="py-3.5 px-4 sys-text-body font-sans">{a.duration} mins</td>
+                      <td className="py-3.5 px-4 sys-text-body uppercase font-sans font-medium">{a.allowed_languages.join(', ')}</td>
                       <td className="py-3.5 px-4">
                         <span className={`px-2 py-0.5 rounded text-[8px] font-mono font-bold uppercase tracking-wider ${
                           a.status === 'Published' 

@@ -115,7 +115,7 @@ export default function RecruiterDashboard() {
 
       {/* ================= LEFT SIDEBAR (COLLAPSIBLE OS DOCK) ================= */}
       <aside 
-        className={`h-screen bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-r border-white/5 flex flex-col justify-between p-5 shrink-0 z-30 select-none transition-all duration-300 transition-spring ${
+        className={`h-screen bg-[#000000]/40 backdrop-blur-3xl border-r border-white/5 flex flex-col justify-between p-5 shrink-0 z-30 select-none transition-all duration-300 transition-spring ${
           isCollapsed ? 'w-20' : 'w-64'
         }`}
       >
@@ -161,17 +161,7 @@ export default function RecruiterDashboard() {
             </div>
           )}
 
-          {/* Workspace Switcher indicators */}
-          {!isCollapsed && (
-            <div className="p-3 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/40 border border-white/5 rounded-xl flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-md bg-[#5B8CFF]/15 border border-[#5B8CFF]/35 flex items-center justify-center text-[10px] font-bold text-[#5B8CFF]">
-                  AM
-                </div>
-                <span className="text-xs font-semibold sys-text-primary">Amrita Recruiter</span>
-              </div>
-            </div>
-          )}
+
 
           {/* OS Navigation Links */}
           <nav className="flex flex-col gap-1">
@@ -274,10 +264,10 @@ export default function RecruiterDashboard() {
         {/* TOP BAR FLOATING COMMAND WORKSPACE */}
         <header className="h-16 border-b border-white/5 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] flex items-center justify-between px-8 z-25 ">
           {/* Breadcrumbs trail */}
-          <div className="flex items-center gap-2 text-[10px] font-mono sys-text-body uppercase tracking-widest select-none">
+          <div className="flex items-center gap-2 text-[10px] font-heading font-semibold uppercase tracking-widest select-none text-white/60">
             <span>SHIELD_OS</span>
             <span>/</span>
-            <span className="text-[#5B8CFF] font-bold">{activeSection}</span>
+            <span className="text-[#5B8CFF]">{activeSection}</span>
             {selectedAssessment && (activeSection === 'questions' || activeSection === 'ai-generate') && (
               <>
                 <span>/</span>
