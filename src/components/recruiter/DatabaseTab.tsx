@@ -166,6 +166,16 @@ export default function DatabaseTab() {
       const total = endNum - startNum + 1
       let successCount = 0
 
+      // Pre-fetch all users to avoid pagination limits and rate limits in the loop
+      let allAuthUsers: any[] = []
+      let page = 1
+      while (true) {
+        const { data } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 1000 })
+        if (!data?.users || data.users.length === 0) break
+        allAuthUsers = allAuthUsers.concat(data.users)
+        page++
+      }
+
       for (let i = startNum; i <= endNum; i++) {
         const paddedNum = i.toString().padStart(numLength, '0')
         const roll = `${prefix}${paddedNum}`
@@ -174,8 +184,7 @@ export default function DatabaseTab() {
 
         setCreateProgress(`Creating user ${successCount + 1}/${total}: ${email}`)
 
-        const { data: searchData } = await supabaseAdmin.auth.admin.listUsers()
-        const existingUser = searchData?.users.find(u => u.email === email)
+        const existingUser = allAuthUsers.find(u => u.email === email)
         
         let userId = existingUser?.id
 
