@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Shield, LayoutDashboard, BarChart2, Users, Database,
   FileText, Settings, LogOut, ChevronLeft, ChevronRight,
-  Search, User, Sparkles, Command, Library, X
+  Search, User, Sparkles, Command, Library, X, RefreshCw
 } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { Button } from '@/components/ui/button'
@@ -29,6 +29,15 @@ export default function RecruiterDashboard() {
   const [assessmentsList, setAssessmentsList] = useState<Assessment[]>([])
   const [selectedAssessment, setSelectedAssessment] = useState<Assessment | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isSyncing, setIsSyncing] = useState(false)
+  
+  const handleSync = async () => {
+    setIsSyncing(true)
+    await loadAssessments()
+    setTimeout(() => {
+      window.location.reload()
+    }, 500)
+  }
   
   // Floating Command Palette state
   const [showPalette, setShowPalette] = useState(false)
@@ -278,7 +287,15 @@ export default function RecruiterDashboard() {
 
           {/* Heartbeat system status */}
           <div className="flex items-center gap-4">
-            
+            <button 
+              onClick={handleSync}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/5 sys-bg/40 hover:sys-card transition-all cursor-pointer group"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 sys-text-body group-hover:text-white ${isSyncing ? 'animate-spin text-[#5B8CFF]' : ''}`} />
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider sys-text-body group-hover:text-white">
+                {isSyncing ? 'Syncing...' : 'Sync'}
+              </span>
+            </button>
 
           </div>
         </header>
