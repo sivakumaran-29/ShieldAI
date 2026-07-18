@@ -428,7 +428,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
       <div className="flex items-center justify-between select-none border-b border-white/5 pb-4">
         <div>
           <h2 className="text-3xl font-semibold tracking-tight text-[#6f8eff] mb-2">
-            // {activeSub === 'reports' ? 'Compliance Audit Reports' : activeSub === 'settings' ? 'Global Platform Config' : 'Telemetry Network Logs'}
+            // {activeSub === 'reports' ? 'COMPLIANCE AUDIT REPORTS' : activeSub === 'settings' ? 'Global Platform Config' : 'Telemetry Network Logs'}
           </h2>
           <span className="text-[11px] sys-text-body font-sans mt-1 block font-medium">
             {activeSub === 'reports' 
