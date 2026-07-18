@@ -14,29 +14,10 @@ import {
 import { useAuthStore } from '../../store/authStore'
 import { getIceServers } from '../../lib/webrtcConfig'
 import { supabase } from '../../lib/supabaseClient'
-import ThemeToggle from '../../components/ThemeToggle'
-
-const StreamVideo = ({ stream }: { stream: MediaStream | null }) => {
-  const videoRef = useRef<HTMLVideoElement>(null)
-  
-  useEffect(() => {
-    if (videoRef.current && stream) {
-      videoRef.current.srcObject = stream
-      videoRef.current.play().catch(e => console.warn('StreamVideo play blocked:', e))
-    }
-  }, [stream])
-
-  return (
-    <video 
-      ref={videoRef}
-      autoPlay 
-      playsInline 
-      muted 
-      className="absolute inset-0 w-full h-full object-cover z-10" 
-      style={{ transform: 'scaleX(-1)' }}
-    />
-  )
-}
+import { Activity, Clock, LogOut, Check, EyeOff, Lock, TriangleAlert, RefreshCw, AlertTriangle } from 'lucide-react'
+import ThemeToggle from '@/components/ui/ThemeToggle'
+import { Card } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 
 const codeTemplates: Record<string, string> = {
   python: `def solve():\n    # Read input from standard input\n    # Write your solution here\n    # For Example:\n    # nums = list(map(int, input().split(',')))\n    # target = int(input())\n    # print(two_sum(nums, target))\n    pass\n\nif __name__ == '__main__':\n    solve()`,
@@ -434,29 +415,20 @@ export default function ExamShell() {
         localStreamRef.current = streamInstance
         setLocalStream(streamInstance)
         
-        if (videoRef.current) {
-          videoRef.current.srcObject = streamInstance
-          
-          // Try playing immediately to avoid waiting for metadata event which sometimes drops on certain browsers
-          videoRef.current.play().catch(e => console.warn('Immediate video play prevented:', e))
-          
-          videoRef.current.onloadedmetadata = () => {
-            videoRef.current?.play().catch(e => console.warn('Video play prevented on metadata load:', e))
-            processFrame()
-          }
-        } else {
-          // If videoRef isn't attached yet, just start the frame processor loop
-          processFrame()
-        }
+        // Let the brute-force useEffect handle the DOM binding
+        processFrame()
       } catch (err) {
         logViolation('[SYSTEM] Camera media streams blocked or unavailable.')
       }
     }
 
     function processFrame() {
-      const video = videoRef.current
+      const video = document.getElementById('candidate-video') as HTMLVideoElement
       const canvas = canvasRef.current
-      if (!video || !canvas) return
+      if (!video || !canvas || video.paused || video.ended) {
+        animationFrameId = requestAnimationFrame(processFrame)
+        return
+      }
 
       const ctx = canvas.getContext('2d', { willReadFrequently: true })
       if (!ctx) return
@@ -502,6 +474,24 @@ export default function ExamShell() {
       localStreamRef.current = null
     }
   }, [loading])
+
+  // BRUTE-FORCE BINDER: Runs on every single render to guarantee video playback
+  useEffect(() => {
+    const video = document.getElementById('candidate-video') as HTMLVideoElement
+    if (video && localStreamRef.current) {
+      if (video.srcObject !== localStreamRef.current) {
+        video.srcObject = localStreamRef.current
+        video.muted = true
+        video.defaultMuted = true
+        video.playsInline = true
+        video.autoplay = true
+        video.onloadedmetadata = () => video.play().catch(() => {})
+        video.play().catch(() => {})
+      } else if (video.paused) {
+        video.play().catch(() => {})
+      }
+    }
+  })
 
   // ==========================================
   // BEHAVIORAL INTERNALS / PROCTOR MONITORS
@@ -1247,8 +1237,15 @@ export default function ExamShell() {
                 </div>
               )}
               
-              <div className="w-full h-28 relative overflow-hidden flex items-center justify-center">
-                {localStream && <StreamVideo stream={localStream} />}
+              <div className="w-full h-28 relative overflow-hidden flex items-center justify-center bg-zinc-900 rounded-lg">
+                <video 
+                  id="candidate-video"
+                  autoPlay 
+                  playsInline 
+                  muted 
+                  className="absolute inset-0 w-full h-full object-cover z-[100]" 
+                  style={{ transform: 'scaleX(-1)' }}
+                />
                 <canvas ref={canvasRef} width="160" height="120" className="hidden" />
                 
                 <div className="absolute inset-0 border border-zinc-500/20 pointer-events-none z-20">
