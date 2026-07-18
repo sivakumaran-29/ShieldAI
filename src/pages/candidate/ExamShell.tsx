@@ -108,6 +108,10 @@ export default function ExamShell() {
   const [warningModalText, setWarningModalText] = useState('')
   const [localStream, setLocalStream] = useState<MediaStream | null>(null)
 
+  const hasMcqGlobal = questions.some(q => q.type === 'mcq')
+  const hasCodingGlobal = questions.some(q => q.type !== 'mcq')
+  const isSingleTypeExam = (hasMcqGlobal && !hasCodingGlobal) || (!hasMcqGlobal && hasCodingGlobal)
+
   const filteredQuestions = activePart === 'mcq'
     ? questions.filter(q => q.type === 'mcq')
     : activePart === 'coding'
@@ -125,6 +129,12 @@ export default function ExamShell() {
 
   const handleSubmitPart = async () => {
     if (!currentSession) return
+
+    if (isSingleTypeExam) {
+      handleFinishAssessment()
+      return
+    }
+
     if (window.confirm(`Submit Part: ${activePart.toUpperCase()}? You will not be able to return to this section.`)) {
       setLoading(true)
       const nextParts = [...(currentSession.completedParts || []), activePart as 'mcq' | 'coding']
@@ -1043,7 +1053,7 @@ export default function ExamShell() {
               onClick={handleSubmitPart} 
               className="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-4 h-8 rounded-xl text-xs tracking-wider cursor-pointer select-none active:scale-95 transition"
             >
-              Submit Section
+              {isSingleTypeExam ? 'Final Submit' : 'Submit Section'}
             </Button>
           )}
         </div>
@@ -1143,7 +1153,7 @@ export default function ExamShell() {
 
           <div className="py-2 flex gap-2">
             <Button onClick={handleSubmitPart} className="flex-1 bg-emerald-600/20 text-emerald-500 border border-emerald-500/30 hover:bg-emerald-600 hover:text-white text-[10px] font-mono tracking-widest uppercase transition h-8">
-              Submit {activePart === 'mcq' ? 'MCQ' : 'Coding'} Section
+              {isSingleTypeExam ? 'Final Submit' : `Submit ${activePart === 'mcq' ? 'MCQ' : 'Coding'} Section`}
             </Button>
           </div>
 
