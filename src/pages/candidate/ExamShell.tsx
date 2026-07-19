@@ -1282,13 +1282,14 @@ export default function ExamShell() {
             )}
 
             {/* MAIN CONTENT AREA */}
-            <div className="flex-1 relative h-full w-full min-h-0 bg-[#09090B]">
+            <div className="flex-1 min-h-0 grid grid-rows-[1fr_auto] h-full w-full bg-[#09090B]">
               {activeQuestion ? (
                 activeQuestion.type === 'mcq' ? (
-                  <div className="absolute inset-0 flex flex-col">
+                  <>
                     
                     {/* MCQ QUESTION BODY */}
-                    <div className="flex-1 p-10 max-w-4xl mx-auto w-full overflow-y-auto pb-[120px]">
+                    <div className="overflow-y-auto relative w-full h-full min-h-0">
+                      <div className="p-10 max-w-4xl mx-auto w-full pb-12">
                       
                       <div className="flex items-center gap-3 mb-8 flex-wrap">
                         <span className="px-3 py-1 rounded-md text-[10px] font-semibold bg-[#111216] border border-[rgba(255,255,255,0.06)] text-[#8A9099] uppercase tracking-wider">
@@ -1340,11 +1341,12 @@ export default function ExamShell() {
                             </button>
                           )
                         })}
+                        </div>
                       </div>
                     </div>
 
                     {/* BOTTOM ACTION BAR */}
-                    <div className="absolute bottom-0 left-0 right-0 w-full h-24 bg-[#09090B]/90 backdrop-blur-md border-t border-[rgba(255,255,255,0.06)] flex items-center justify-between px-10 z-20">
+                    <div className="h-24 bg-[#09090B]/90 backdrop-blur-md border-t border-[rgba(255,255,255,0.06)] flex items-center justify-between px-10 z-20">
                       <div className="flex items-center gap-4">
                         <Button 
                           onClick={handleClearResponse}
@@ -1382,9 +1384,9 @@ export default function ExamShell() {
                         </Button>
                       </div>
                     </div>
-                  </div>
+                  </>
                 ) : (
-                  <div className="flex-1 flex min-h-0 w-full">
+                  <div className="row-span-2 flex h-full w-full min-h-0">
                     {/* ... Coding UI will remain conceptually similar but with dark theme colors if needed. Wait, coding UI needs to be preserved exactly as requested? "The current interface is to be discarded entirely... DO NOT modify any business logic... Keep every feature and wiring exactly the same." I'll update the colors slightly to match the global theme. */}
                     <div className="w-1/2 h-full border-r border-[rgba(255,255,255,0.06)] bg-[#09090B] flex flex-col">
                       <div className="p-6 overflow-y-auto flex-1 space-y-6">
