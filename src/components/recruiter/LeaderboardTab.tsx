@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { 
@@ -302,7 +303,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
       </div>
 
       {/* Visual Debugger Inspection details Modal overlay */}
-      {selectedSession && (
+      {selectedSession && createPortal(
         <div className="fixed inset-0 bg-black/80  z-[9999] flex items-center justify-center p-4">
           <Card className="w-full max-w-4xl bg-panel backdrop-blur-[16px] border-divider p-6 rounded-2xl relative shadow-2xl overflow-y-auto max-h-[90vh]">
             <div className="absolute top-0 left-0 right-0 h-[3px] sys-bg rounded-t-2xl" />
@@ -423,7 +424,8 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
 
             </div>
           </Card>
-        </div>
+        </div>,
+        document.body
       )}
 
     </div>

@@ -648,7 +648,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                         max={95} 
                         value={integrityThreshold}
                         onChange={e => setIntegrityThreshold(Number(e.target.value))}
-                        className="w-full h-1 sys-card rounded-lg appearance-none cursor-pointer accent-[#5B8CFF]"
+                        className="w-full h-2 bg-divider rounded-lg appearance-none cursor-pointer accent-[#5B8CFF]"
                       />
                       <span className="text-[10px] sys-text-body block leading-normal">
                         Candidates dropping below this compliance mark are flagged as critical on the proctor grid.
@@ -720,7 +720,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                           step={100}
                           value={maxExecutionTime}
                           onChange={e => setMaxExecutionTime(Number(e.target.value))}
-                          className="w-full h-1 sys-card rounded-lg appearance-none cursor-pointer accent-[#5B8CFF]"
+                          className="w-full h-2 bg-divider rounded-lg appearance-none cursor-pointer accent-[#5B8CFF]"
                         />
                       </div>
                       
@@ -736,7 +736,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                           step={32}
                           value={maxMemoryLimit}
                           onChange={e => setMaxMemoryLimit(Number(e.target.value))}
-                          className="w-full h-1 sys-card rounded-lg appearance-none cursor-pointer accent-[#5B8CFF]"
+                          className="w-full h-2 bg-divider rounded-lg appearance-none cursor-pointer accent-[#5B8CFF]"
                         />
                       </div>
                     </div>

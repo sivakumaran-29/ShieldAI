@@ -286,12 +286,16 @@ export default function DatabaseTab() {
                 <Card key={dept} className={`bg-card backdrop-blur-[24px] border-divider rounded-[24px] overflow-hidden shadow-2xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] hover:border-border-strong ${isDeptExpanded ? 'col-span-1 md:col-span-2 lg:col-span-4' : ''}`}>
                   <div 
                     onClick={() => toggleDept(dept)}
-                    className="p-5 bg-transparent hover:bg-hover cursor-pointer flex items-center justify-between transition-colors duration-300 group"
+                    className="p-5 bg-transparent hover:bg-hover cursor-pointer flex items-center justify-between transition-colors duration-300 group min-w-0"
                   >
-                    <div className="flex items-center gap-3">
-                      {isDeptExpanded ? <ChevronDown className="w-4 h-4 sys-text-body" /> : <ChevronRight className="w-4 h-4 sys-text-body" />}
-                      <div className="flex items-center gap-3"><div className="p-2 bg-[#5B8CFF]/10 rounded-xl group-hover:scale-110 transition-transform duration-300"><Folder className="w-4 h-4 text-[#5B8CFF]" /></div><h3 className="font-bold text-base text-primary font-heading tracking-wide">{dept} Department</h3>
-                        <span className="px-2 py-0.5 sys-card sys-text-body text-[9px] font-mono rounded font-bold ml-2">
+                    <div className="flex items-center gap-3 min-w-0">
+                      {isDeptExpanded ? <ChevronDown className="w-4 h-4 sys-text-body shrink-0" /> : <ChevronRight className="w-4 h-4 sys-text-body shrink-0" />}
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="p-2 bg-[#5B8CFF]/10 rounded-xl group-hover:scale-110 transition-transform duration-300 shrink-0">
+                          <Folder className="w-4 h-4 text-[#5B8CFF]" />
+                        </div>
+                        <h3 className="font-bold text-base text-primary font-heading tracking-wide truncate">{dept} Department</h3>
+                        <span className="px-2 py-0.5 sys-card sys-text-body text-[9px] font-mono rounded font-bold ml-2 shrink-0 hidden sm:inline-block">
                           {deptUsers.length} Users
                         </span>
                       </div>
