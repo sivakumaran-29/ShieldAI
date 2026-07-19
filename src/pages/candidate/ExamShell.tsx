@@ -1170,14 +1170,14 @@ export default function ExamShell() {
               
               <div className="grid grid-cols-5 gap-2 mb-8">
                 {filteredQuestions.map((q, idx) => {
-                  const isAnswered = currentSession?.submissions?.[q.id]?.code !== undefined
+                  const isAnswered = activePart === 'mcq' ? currentSession?.mcq_submissions?.[q.id] !== undefined : currentSession?.submissions?.[q.id]?.code !== undefined
                   const isMarked = reviewMarked[q.id]
                   const isActive = selectedQIndex === idx
                   
                   let btnStyle = 'bg-[#111216] border-[rgba(255,255,255,0.06)] text-[#8A9099] hover:bg-[rgba(255,255,255,0.04)] hover:text-[#F5F5F5]'
                   if (isActive) btnStyle = 'bg-[#F5F5F5] border-transparent text-[#09090B] shadow-[0_0_15px_rgba(255,255,255,0.1)]'
                   else if (isMarked) btnStyle = 'bg-amber-500/10 border-amber-500/30 text-amber-500 hover:bg-amber-500/20'
-                  else if (isAnswered) btnStyle = 'bg-[#5B8CFF]/10 border-[#5B8CFF]/30 text-[#5B8CFF] hover:bg-[#5B8CFF]/20'
+                  else if (isAnswered) btnStyle = 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20'
 
                   return (
                     <button
@@ -1194,7 +1194,7 @@ export default function ExamShell() {
               {/* LEGEND */}
               <div className="space-y-3 text-xs text-[#8A9099]">
                 <div className="flex items-center gap-3"><div className="w-2.5 h-2.5 rounded-full bg-[#F5F5F5]"></div> <span className="font-medium">Current</span></div>
-                <div className="flex items-center gap-3"><div className="w-2.5 h-2.5 rounded-full bg-[#5B8CFF]"></div> <span className="font-medium">Answered</span></div>
+                <div className="flex items-center gap-3"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div> <span className="font-medium">Answered</span></div>
                 <div className="flex items-center gap-3"><div className="w-2.5 h-2.5 rounded-full bg-amber-500"></div> <span className="font-medium">Review</span></div>
                 <div className="flex items-center gap-3"><div className="w-2.5 h-2.5 rounded-full border border-[rgba(255,255,255,0.2)] bg-[#111216]"></div> <span className="font-medium">Unanswered</span></div>
               </div>
@@ -1282,13 +1282,13 @@ export default function ExamShell() {
             )}
 
             {/* MAIN CONTENT AREA */}
-            <div className="flex-1 min-h-0 relative overflow-y-auto bg-[#09090B]">
+            <div className="flex-1 min-h-0 relative flex flex-col bg-[#09090B]">
               {activeQuestion ? (
                 activeQuestion.type === 'mcq' ? (
                   <div className="flex flex-col h-full">
                     
                     {/* MCQ QUESTION BODY */}
-                    <div className="flex-1 p-10 max-w-4xl mx-auto w-full overflow-y-auto pb-32">
+                    <div className="flex-1 p-10 max-w-4xl mx-auto w-full overflow-y-auto pb-12">
                       
                       <div className="flex items-center gap-3 mb-8 flex-wrap">
                         <span className="px-3 py-1 rounded-md text-[10px] font-semibold bg-[#111216] border border-[rgba(255,255,255,0.06)] text-[#8A9099] uppercase tracking-wider">
@@ -1308,7 +1308,7 @@ export default function ExamShell() {
                         <Latex>{activeQuestion.title || ''}</Latex>
                       </h1>
                       
-                      <div className="text-base leading-relaxed text-[#B8BDC7] mb-12">
+                      <div className="text-lg font-semibold leading-relaxed text-[#F5F5F5] mb-12">
                         <Latex>{activeQuestion.description || ''}</Latex>
                       </div>
 
@@ -1344,7 +1344,7 @@ export default function ExamShell() {
                     </div>
 
                     {/* BOTTOM ACTION BAR */}
-                    <div className="h-24 bg-[#09090B]/90 backdrop-blur-md border-t border-[rgba(255,255,255,0.06)] flex items-center justify-between px-10 absolute bottom-0 left-0 right-0 z-20">
+                    <div className="h-24 shrink-0 bg-[#09090B]/90 backdrop-blur-md border-t border-[rgba(255,255,255,0.06)] flex items-center justify-between px-10 z-20">
                       <div className="flex items-center gap-4">
                         <Button 
                           onClick={handleClearResponse}
