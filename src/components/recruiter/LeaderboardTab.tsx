@@ -204,8 +204,8 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
         </div>
 
         <div className="overflow-x-auto pb-4">
-          <div className="border border-divider rounded-2xl overflow-hidden bg-panel">
-            <table className="w-full text-left text-xs min-w-[800px] w-full">
+          <div className="border border-divider rounded-2xl overflow-hidden bg-panel min-w-[800px]">
+            <table className="w-full text-left text-xs min-w-[800px]">
               <thead className="table-header-group">
                 <tr className="bg-panel backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider border-b border-divider select-none">
                   <th className="py-4 px-5">Rank</th>
