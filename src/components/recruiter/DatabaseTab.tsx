@@ -340,25 +340,33 @@ export default function DatabaseTab() {
                             </div>
 
                             {isBatchExpanded && (
-                              <div className="border-t border-white/5 pb-2"><div className="overflow-x-auto px-4 pt-4"><table className="w-full text-left text-xs border-collapse">
-                                  <thead>
+                              <div className="border-t border-white/5 pb-2"><div className="overflow-x-auto px-4 pt-4"><table className="w-full text-left text-xs border-collapse block lg:table">
+                                  <thead className="hidden lg:table-header-group">
                                     <tr className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider"><th className="py-3 px-5 rounded-l-2xl border-y border-l border-white/5">Roll Number</th><th className="py-3 px-5 border-y border-white/5">Email Address</th><th className="py-3 px-5 rounded-r-2xl border-y border-r border-white/5 text-right">Actions</th></tr>
                                   </thead>
-                                  <tbody className="divide-y divide-white/[0.02]"><tr className="h-2"></tr>
+                                  <tbody className="block lg:table-row-group divide-y lg:divide-white/[0.02]"><tr className="hidden lg:table-row h-2"></tr>
                                     {batchUsers.map(user => (
-                                      <tr key={user.id} className="hover:bg-white/[0.02] transition-colors duration-200 group/row">
-                                        <td className="py-3 px-5 font-semibold font-heading text-white max-w-xs truncate">{user.name}</td>
-                                        <td className="py-3 px-5 sys-text-body font-sans">{user.email}</td>
-                                        <td className="py-2 px-5 text-right">
-                                          <Button 
-                                            onClick={(e) => handleDeleteUser(e, user.id, user.name)}
-                                            variant="ghost" 
-                                            size="sm"
-                                            className="h-6 w-6 p-0 hover:bg-[#F87171]/10 sys-text-body hover:text-[#F87171] rounded-md cursor-pointer transition"
-                                            title="Revoke access and delete"
-                                          >
-                                            <Trash2 className="w-3.5 h-3.5" />
-                                          </Button>
+                                      <tr key={user.id} className="hover:bg-white/[0.02] transition-colors duration-200 group/row block lg:table-row p-4 lg:p-0 mb-4 lg:mb-0 border border-white/5 lg:border-transparent rounded-2xl lg:rounded-none bg-[rgba(28,28,30,0.4)] lg:bg-transparent">
+                                        <td className="py-2 lg:py-3 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell font-semibold font-heading text-white max-w-xs truncate border-b border-white/5 lg:border-none">
+                                          <span className="lg:hidden text-[10px] uppercase font-bold text-[#8A9099] mb-1 sm:mb-0">Roll Number</span>
+                                          <span>{user.name}</span>
+                                        </td>
+                                        <td className="py-2 lg:py-3 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell sys-text-body font-sans border-b border-white/5 lg:border-none">
+                                          <span className="lg:hidden text-[10px] uppercase font-bold text-[#8A9099] mb-1 sm:mb-0">Email Address</span>
+                                          <span>{user.email}</span>
+                                        </td>
+                                        <td className="py-3 lg:py-2 px-1 lg:px-5 flex justify-end lg:table-cell">
+                                          <div className="flex justify-end gap-1.5 w-full lg:w-auto">
+                                            <Button 
+                                              onClick={(e) => handleDeleteUser(e, user.id, user.name)}
+                                              variant="ghost" 
+                                              size="sm"
+                                              className="h-8 w-8 lg:h-6 lg:w-6 p-0 hover:bg-[#F87171]/10 sys-text-body hover:text-[#F87171] rounded-md cursor-pointer transition"
+                                              title="Revoke access and delete"
+                                            >
+                                              <Trash2 className="w-4 h-4 lg:w-3.5 lg:h-3.5" />
+                                            </Button>
+                                          </div>
                                         </td>
                                       </tr>
                                     ))}

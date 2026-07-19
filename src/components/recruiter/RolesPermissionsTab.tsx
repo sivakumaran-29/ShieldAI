@@ -182,8 +182,8 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
             <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest block select-none">// SYSTEM ACCESS CAPABILITY MATRIX</span>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-xs select-none">
-                <thead>
+              <table className="w-full text-left border-collapse text-xs select-none block lg:table">
+                <thead className="hidden lg:table-header-group">
                   <tr className="border-b border-white/5 sys-text-body font-mono text-[9px] uppercase tracking-wider">
                     <th className="py-3 px-4">Permission Node</th>
                     {roles.map(r => (
@@ -191,11 +191,12 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/60">
+                <tbody className="block lg:table-row-group divide-y lg:divide-border/60">
                   {PERMISSION_DEFINITIONS.map(p => (
-                    <tr key={p.key} className="hover:sys-bg/20 transition duration-150">
-                      <td className="py-3.5 px-4">
-                        <div className="flex flex-col">
+                    <tr key={p.key} className="hover:sys-bg/20 transition duration-150 block lg:table-row p-4 lg:p-0 mb-4 lg:mb-0 bg-[rgba(28,28,30,0.4)] lg:bg-transparent rounded-2xl lg:rounded-none border border-white/5 lg:border-none">
+                      <td className="py-2 lg:py-3.5 px-1 lg:px-4 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell border-b border-white/5 lg:border-none">
+                        <span className="lg:hidden text-[10px] uppercase font-bold text-[#8A9099] mb-1 sm:mb-0">Permission Node</span>
+                        <div className="flex flex-col sm:text-right lg:text-left">
                           <span className="font-bold text-white">{p.name}</span>
                           <span className="text-[10px] sys-text-body mt-0.5">{p.desc}</span>
                         </div>
@@ -203,10 +204,11 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
                       {roles.map(r => {
                         const hasPerm = r.permissions.includes(p.key)
                         return (
-                          <td key={r.key} className="py-3.5 px-4 text-center">
+                          <td key={r.key} className="py-2 lg:py-3.5 px-1 lg:px-4 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell border-b border-white/5 lg:border-none last:border-none">
+                            <span className="lg:hidden text-[10px] uppercase font-bold text-[#8A9099] mb-1 sm:mb-0">{r.name}</span>
                             <button 
                               onClick={() => handleTogglePermission(r.key, p.key)}
-                              className="mx-auto flex focus:outline-none"
+                              className="lg:mx-auto flex focus:outline-none"
                             >
                               <div className={`w-5 h-5 rounded border transition flex items-center justify-center ${
                                 hasPerm 
