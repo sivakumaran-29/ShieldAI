@@ -420,25 +420,25 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                   </div>
                 </div>
 
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">{questionType === 'mcq' ? 'Question Description' : 'Challenge Description'}</label>
+                  <textarea 
+                    value={description} 
+                    onChange={e => setDescription(e.target.value)}
+                    className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24 font-sans leading-relaxed" 
+                    placeholder="Describe problem goals, parameters and context. You can use LaTeX math block: $$E=mc^2$$ or inline $x^2$."
+                    required
+                  />
+                  {description.trim() && (
+                    <div className="mt-2 p-3 bg-[#0B0B0D] rounded-lg border border-[#5B8CFF]/30 text-xs text-white">
+                      <span className="text-[#5B8CFF] text-[8px] font-bold uppercase mb-1 block">Live Preview</span>
+                      <Latex>{description}</Latex>
+                    </div>
+                  )}
+                </div>
+
                 {questionType === 'coding' && (
                   <>
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Challenge Description</label>
-                      <textarea 
-                        value={description} 
-                        onChange={e => setDescription(e.target.value)}
-                        className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24 font-sans leading-relaxed" 
-                        placeholder="Describe problem goals, parameters and context. You can use LaTeX math block: $$E=mc^2$$ or inline $x^2$."
-                        required
-                      />
-                      {description.trim() && (
-                        <div className="mt-2 p-3 bg-[#0B0B0D] rounded-lg border border-[#5B8CFF]/30 text-xs text-white">
-                          <span className="text-[#5B8CFF] text-[8px] font-bold uppercase mb-1 block">Live Preview</span>
-                          <Latex>{description}</Latex>
-                        </div>
-                      )}
-                    </div>
-
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Tags (Press Enter)</label>
                       <div className="flex flex-wrap gap-1.5 p-2 sys-bg border border-white/5 rounded-xl min-h-11 items-center">

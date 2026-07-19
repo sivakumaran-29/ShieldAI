@@ -1375,6 +1375,10 @@ export default function ExamShell() {
                         </span>
                       )}
                     </div>
+
+                    <h1 className="text-[17px] font-extrabold tracking-tight mt-2.5 mb-4 flex items-center gap-2 text-white">
+                      <CornerDownRight className="w-4 h-4 text-[#5B8CFF]" strokeWidth={2} /> <Latex>{activeQuestion.title || ''}</Latex>
+                    </h1>
                     
                     <div className="text-[15px] leading-relaxed sys-text-primary font-sans whitespace-pre-wrap mb-8">
                       <Latex>{activeQuestion.description || ''}</Latex>
@@ -1388,16 +1392,20 @@ export default function ExamShell() {
                           <button
                             key={idx}
                             onClick={() => handleMcqSelect(idx)}
-                            className={`w-full flex items-center text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer ${
-                              isSelected ? 'bg-[#5B8CFF] text-white' : 'bg-[#1A1C20] shadow-inner shadow-black/20 sys-text-body border-white/[0.03]'
+                            className={`group w-full flex items-center text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer ${
+                              isSelected 
+                                ? 'bg-[#5B8CFF]/[0.03] border-[#5B8CFF]/50 shadow-[0_0_15px_rgba(91,140,255,0.05)]' 
+                                : 'bg-[#17181C] hover:bg-[#1C1E23] border-white/[0.04] hover:border-white/[0.08]'
                             }`}
                           >
-                            <div className={`flex items-center justify-center w-8 h-8 rounded-lg mr-4 font-bold font-mono text-[10px] ${
-                              isSelected ? 'bg-white text-[#5B8CFF]' : 'bg-black sys-text-body border border-white/5'
+                            <div className={`flex shrink-0 items-center justify-center w-7 h-7 rounded-full mr-4 font-bold font-mono text-[10px] border transition-all duration-200 ${
+                              isSelected 
+                                ? 'bg-[#5B8CFF] text-white border-[#5B8CFF]' 
+                                : 'bg-transparent text-[#8E93A5] border-white/10 group-hover:border-white/20 group-hover:text-white'
                             }`}>
                               {String.fromCharCode(65 + idx)}
                             </div>
-                            <span className={`text-[15px] font-sans ${isSelected ? 'text-white font-semibold' : 'sys-text-primary'}`}>
+                            <span className={`text-[15px] font-sans leading-relaxed ${isSelected ? 'text-[#E2E8F0] font-medium' : 'text-[#94A3B8] group-hover:text-[#CBD5E1]'}`}>
                               <Latex>{opt || ''}</Latex>
                             </span>
                           </button>
