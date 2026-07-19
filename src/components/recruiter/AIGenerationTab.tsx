@@ -219,7 +219,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
               <div className="relative mt-4">
                 <Button 
                   onClick={() => setShowTypeDropdown(!showTypeDropdown)}
-                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-primary text-xs h-10 px-6 rounded-xl font-bold cursor-pointer transition flex items-center gap-2 shadow-lg"
+                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white text-xs h-10 px-6 rounded-xl font-bold cursor-pointer transition flex items-center gap-2 shadow-lg"
                 >
                   <Plus className="w-4 h-4" strokeWidth={2} /> Create Challenge with AI
                 </Button>
@@ -307,7 +307,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                   <Button 
                     onClick={handleGenerateQuestions}
                     disabled={generating || !prompt.trim()}
-                    className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-primary text-xs h-11 rounded-xl font-bold cursor-pointer transition flex items-center justify-center gap-1.5 shadow-md disabled:opacity-40"
+                    className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white text-xs h-11 rounded-xl font-bold cursor-pointer transition flex items-center justify-center gap-1.5 shadow-md disabled:opacity-40"
                   >
                     {generating ? (
                       <>

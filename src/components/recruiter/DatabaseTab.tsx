@@ -245,7 +245,7 @@ export default function DatabaseTab() {
 
         <Button 
           onClick={() => setIsCreating(true)}
-          className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-primary text-xs h-9 px-4 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-md"
+          className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white text-xs h-9 px-4 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-md"
         >
           <Plus className="w-4 h-4" strokeWidth={1.5} /> Inject Batch
         </Button>
@@ -283,7 +283,7 @@ export default function DatabaseTab() {
               const deptBatches = Array.from(new Set(deptUsers.map(u => u.batch))).sort()
 
               return (
-                <Card key={dept} className={`bg-[rgba(28,28,30,0.3)] backdrop-blur-[24px] border-divider rounded-[24px] overflow-hidden shadow-2xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] hover:border-border-strong ${isDeptExpanded ? 'col-span-1 md:col-span-2 lg:col-span-4' : ''}`}>
+                <Card key={dept} className={`bg-card backdrop-blur-[24px] border-divider rounded-[24px] overflow-hidden shadow-2xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] hover:border-border-strong ${isDeptExpanded ? 'col-span-1 md:col-span-2 lg:col-span-4' : ''}`}>
                   <div 
                     onClick={() => toggleDept(dept)}
                     className="p-5 bg-transparent hover:bg-hover cursor-pointer flex items-center justify-between transition-colors duration-300 group"
@@ -468,7 +468,7 @@ export default function DatabaseTab() {
                 <Button 
                   type="submit" 
                   disabled={createLoading}
-                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-primary text-xs h-9 px-5 rounded-xl font-bold cursor-pointer transition shadow-md flex items-center gap-2"
+                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white text-xs h-9 px-5 rounded-xl font-bold cursor-pointer transition shadow-md flex items-center gap-2"
                 >
                   {createLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   {createLoading ? 'Injecting...' : 'Confirm Injection'}

@@ -1204,7 +1204,7 @@ export default function ExamShell() {
                   {currentSession?.completedParts?.includes('mcq') ? (
                     <Button disabled className="w-full bg-surface text-tertiary font-medium rounded-xl h-12">Submitted</Button>
                   ) : (
-                    <Button onClick={() => handleStartPart('mcq')} className="w-full bg-[#3f6ad5] hover:bg-[#5B8CFF] text-primary font-semibold h-12 rounded-xl transition-all shadow-lg shadow-[#3f6ad5]/20">
+                    <Button onClick={() => handleStartPart('mcq')} className="w-full bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white font-semibold h-12 rounded-xl transition-all shadow-lg shadow-[#3f6ad5]/20">
                       Start Section
                     </Button>
                   )}
@@ -1224,7 +1224,7 @@ export default function ExamShell() {
                   {currentSession?.completedParts?.includes('coding') ? (
                     <Button disabled className="w-full bg-surface text-tertiary font-medium rounded-xl h-12">Submitted</Button>
                   ) : (
-                    <Button onClick={() => handleStartPart('coding')} className="w-full bg-[#3f6ad5] hover:bg-[#5B8CFF] text-primary font-semibold h-12 rounded-xl transition-all shadow-lg shadow-[#3f6ad5]/20">
+                    <Button onClick={() => handleStartPart('coding')} className="w-full bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white font-semibold h-12 rounded-xl transition-all shadow-lg shadow-[#3f6ad5]/20">
                       Start Section
                     </Button>
                   )}
@@ -1666,7 +1666,7 @@ export default function ExamShell() {
                     <Button 
                       onClick={handleSubmitQuestion} 
                       disabled={isRunning || isSubmitting || !!currentSession?.submissions?.[activeQuestion.id]} 
-                      className="bg-[#3f6ad5] hover:bg-[#5B8CFF] text-primary shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50 disabled:pointer-events-none"
+                      className="bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50 disabled:pointer-events-none"
                     >
                       {!!currentSession?.submissions?.[activeQuestion.id] ? 'Submitted' : isSubmitting ? 'Evaluating...' : 'Submit Code'}
                     </Button>
@@ -1764,7 +1764,7 @@ export default function ExamShell() {
                   <Button 
                     onClick={handleSaveAndNext}
                     disabled={selectedQIndex === filteredQuestions.length - 1}
-                    className="h-11 px-8 rounded-xl text-xs font-bold bg-[#3f6ad5] hover:bg-[#5B8CFF] text-primary shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center"
+                    className="h-11 px-8 rounded-xl text-xs font-bold bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center"
                   >
                     Save & Next <ChevronRight className="w-4 h-4 ml-2" />
                   </Button>

@@ -35,7 +35,7 @@ export default function App() {
 
   if (!initialized) {
     return (
-      <div className="min-h-screen bg-[#07090e] flex items-center justify-center text-sky-400 font-mono text-sm">
+      <div className="min-h-screen bg-background flex items-center justify-center text-primary font-mono text-sm">
         <span>Restoring Security Session...</span>
       </div>
     )

@@ -208,7 +208,7 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
             onClick={() => setIsWatching(!isWatching)}
             disabled={isCritical}
             className={`text-[9px] px-2 py-1 rounded font-bold uppercase border transition-colors ${
-              isCritical ? 'opacity-50 cursor-not-allowed bg-black/40 text-white/50 border-divider' :
+              isCritical ? 'opacity-50 cursor-not-allowed bg-surface/50 text-white/50 border-divider' :
               isWatching ? 'bg-[#5B8CFF]/20 text-[#5B8CFF] border-[#5B8CFF]/40 hover:bg-[#5B8CFF]/30' : 'sys-bg text-primary hover:bg-white/10 border-border-strong'
             }`}
           >

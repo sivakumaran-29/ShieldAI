@@ -493,7 +493,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
               <Button 
                 onClick={handleDownloadPDF}
                 disabled={isExportingPDF || !pdfExportExamId}
-                className="bg-[#3f6ad5] hover:bg-[#3254a8] text-primary hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md w-full disabled:opacity-50 transition"
+                className="bg-[#3f6ad5] hover:bg-[#3254a8] text-white hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md w-full disabled:opacity-50 transition"
               >
                 <Download className="w-3.5 h-3.5" /> {isExportingPDF ? 'Generating...' : 'Download PDF'}
               </Button>
@@ -525,7 +525,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                 <Button 
                   onClick={() => handleExportCSV('mcq')}
                   disabled={isExporting || !exportExamId}
-                  className="flex-1 bg-[#3f6ad5] hover:bg-[#3254a8] text-primary hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
+                  className="flex-1 bg-[#3f6ad5] hover:bg-[#3254a8] text-white hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
                 >
                   <Download className="w-3.5 h-3.5" /> 
                   {isExporting ? '...' : 'MCQ Data'}
@@ -533,7 +533,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                 <Button 
                   onClick={() => handleExportCSV('coding')}
                   disabled={isExporting || !exportExamId}
-                  className="flex-1 bg-[#3f6ad5] hover:bg-[#3254a8] text-primary hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
+                  className="flex-1 bg-[#3f6ad5] hover:bg-[#3254a8] text-white hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
                 >
                   <Download className="w-3.5 h-3.5" /> 
                   {isExporting ? '...' : 'Coding Data'}
@@ -566,7 +566,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
               <Button 
                 onClick={handleDownloadQuestionBankPDF}
                 disabled={isExportingQuestionBank || !pdfQuestionBankExamId}
-                className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] text-primary hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
+                className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] text-white hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
               >
                 <Download className="w-3.5 h-3.5" /> {isExportingQuestionBank ? 'Generating...' : 'Download PDF'}
               </Button>
@@ -754,7 +754,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                 
                 <Button 
                   type="submit"
-                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-primary rounded-xl text-xs h-10 px-6 font-bold cursor-pointer transition shadow-md"
+                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white rounded-xl text-xs h-10 px-6 font-bold cursor-pointer transition shadow-md"
                 >
                   <Save className="w-4 h-4 mr-1.5" /> Save Changes
                 </Button>
