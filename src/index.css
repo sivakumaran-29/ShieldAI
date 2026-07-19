@@ -23,7 +23,7 @@
 
   html.light {
     /* Light Mode Overrides */
-    --color-bg-base: #FAFAFA; /* Lighter background */
+    --color-bg-base: #F2F3F5; /* Slightly greyer background */
     --color-bg-surface: #EBEBEB; /* Grey boxes */
     --color-bg-panel: rgba(235, 235, 235, 0.95);
     --color-bg-panel-solid: #E0E0E0;

@@ -143,7 +143,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
         {!isEditing && (
           <Button 
             onClick={handleOpenCreateForm} 
-            className="bg-[#0070F3] hover:bg-[#005bb5] text-primary text-xs h-10 px-5 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,112,243,0.4)]"
+            className="bg-[#0070F3] hover:bg-[#005bb5] text-white text-xs h-10 px-5 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,112,243,0.4)]"
           >
             <Plus className="w-4 h-4" strokeWidth={1.5} /> Create Assessment
           </Button>
@@ -163,7 +163,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
             </p>
             <Button 
               onClick={handleOpenCreateForm}
-              className="mt-4 bg-[#0070F3] text-primary hover:bg-[#0070F3]/90 text-sm h-11 px-8 rounded-full font-bold cursor-pointer transition-all duration-300 shadow-[0_0_20px_rgba(0,112,243,0.3)] hover:shadow-[0_0_40px_rgba(0,112,243,0.6)] hover:-translate-y-0.5 flex items-center gap-2"
+              className="mt-4 bg-[#0070F3] text-white hover:bg-[#0070F3]/90 text-sm h-11 px-8 rounded-full font-bold cursor-pointer transition-all duration-300 shadow-[0_0_20px_rgba(0,112,243,0.3)] hover:shadow-[0_0_40px_rgba(0,112,243,0.6)] hover:-translate-y-0.5 flex items-center gap-2"
             >
               <Plus className="w-4 h-4" strokeWidth={2} /> Initialize New Assessment
             </Button>
