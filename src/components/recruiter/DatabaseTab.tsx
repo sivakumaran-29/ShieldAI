@@ -301,15 +301,17 @@ export default function DatabaseTab() {
                       </div>
                     </div>
                     
-                    <Button 
-                      onClick={(e) => handleDeleteDept(e, dept)}
-                      variant="ghost" 
-                      size="sm"
-                      className="absolute right-4 h-7 px-3 bg-[#F87171]/5 hover:bg-[#F87171]/15 text-[#F87171]/80 hover:text-[#F87171] rounded-lg cursor-pointer transition opacity-0 group-hover:opacity-100 backdrop-blur-md"
-                    >
-                      <Trash2 className="w-3.5 h-3.5 mr-1.5" />
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider hidden sm:inline-block">Delete Dept</span>
-                    </Button>
+                    {isDeptExpanded && (
+                      <Button 
+                        onClick={(e) => handleDeleteDept(e, dept)}
+                        variant="ghost" 
+                        size="sm"
+                        className="absolute right-4 h-7 px-3 bg-[#F87171]/5 hover:bg-[#F87171]/15 text-[#F87171]/80 hover:text-[#F87171] rounded-lg cursor-pointer transition opacity-0 group-hover:opacity-100 backdrop-blur-md"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 mr-1.5" />
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider hidden sm:inline-block">Delete Dept</span>
+                      </Button>
+                    )}
                   </div>
 
                   {isDeptExpanded && (
