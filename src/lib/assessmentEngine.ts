@@ -246,6 +246,7 @@ export const saveAssessment = async (assessment: Assessment): Promise<boolean> =
         allowed_languages: assessment.allowed_languages,
         status: assessment.status,
         target_batch: assessment.target_batch,
+        exam_mode: assessment.exam_mode,
         created_at: assessment.created_at,
         created_by: assessment.created_by
       })
