@@ -389,9 +389,14 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                       value={title} 
                       onChange={e => setTitle(e.target.value)}
                       className="sys-bg border border-white/5 text-white rounded-xl p-3 text-sm font-bold focus:outline-none focus:border-[#5B8CFF]/50" 
-                      placeholder="e.g. Reverse Linked List"
+                      placeholder="e.g. Reverse Linked List (LaTeX allowed)"
                       required
                     />
+                    {title.trim() && (
+                      <div className="mt-1 p-2 bg-[#0B0B0D] rounded-lg border border-white/5 text-xs text-white">
+                        <Latex>{title}</Latex>
+                      </div>
+                    )}
                   </div>
                 </div>
 

@@ -1188,7 +1188,7 @@ export default function ExamShell() {
                       DIFFICULTY: {activeQuestion.difficulty}
                     </span>
                     <h1 className="text-base font-extrabold tracking-tight mt-2.5 flex items-center gap-1.5 text-foreground">
-                      <CornerDownRight className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> {activeQuestion.title}
+                      <CornerDownRight className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> <Latex>{activeQuestion.title || ''}</Latex>
                     </h1>
                   </div>
 
