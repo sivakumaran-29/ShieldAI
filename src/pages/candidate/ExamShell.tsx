@@ -1282,13 +1282,13 @@ export default function ExamShell() {
             )}
 
             {/* MAIN CONTENT AREA */}
-            <div className="flex-1 flex flex-col min-h-0 bg-[#09090B]">
+            <div className="flex-1 relative h-full w-full min-h-0 bg-[#09090B]">
               {activeQuestion ? (
                 activeQuestion.type === 'mcq' ? (
-                  <div className="flex-1 flex flex-col min-h-0">
+                  <div className="absolute inset-0 flex flex-col">
                     
                     {/* MCQ QUESTION BODY */}
-                    <div className="flex-1 p-10 max-w-4xl mx-auto w-full overflow-y-auto pb-12">
+                    <div className="flex-1 p-10 max-w-4xl mx-auto w-full overflow-y-auto pb-[120px]">
                       
                       <div className="flex items-center gap-3 mb-8 flex-wrap">
                         <span className="px-3 py-1 rounded-md text-[10px] font-semibold bg-[#111216] border border-[rgba(255,255,255,0.06)] text-[#8A9099] uppercase tracking-wider">
@@ -1344,7 +1344,7 @@ export default function ExamShell() {
                     </div>
 
                     {/* BOTTOM ACTION BAR */}
-                    <div className="flex-none h-24 bg-[#09090B]/90 backdrop-blur-md border-t border-[rgba(255,255,255,0.06)] flex items-center justify-between px-10 z-20">
+                    <div className="absolute bottom-0 left-0 right-0 w-full h-24 bg-[#09090B]/90 backdrop-blur-md border-t border-[rgba(255,255,255,0.06)] flex items-center justify-between px-10 z-20">
                       <div className="flex items-center gap-4">
                         <Button 
                           onClick={handleClearResponse}
