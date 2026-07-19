@@ -23,21 +23,33 @@
 
   html.light {
     /* Light Mode Overrides */
-    --color-bg-base: #E2E4E9;
-    --color-bg-surface: #F4F6F8;
-    --color-bg-panel: rgba(244, 246, 248, 0.9);
-    --color-bg-panel-solid: #EAECEF;
-    --color-bg-card: rgba(244, 246, 248, 0.85);
+    --color-bg-base: #FAFAFA; /* Lighter background */
+    --color-bg-surface: #EBEBEB; /* Grey boxes */
+    --color-bg-panel: rgba(235, 235, 235, 0.95);
+    --color-bg-panel-solid: #E0E0E0;
+    --color-bg-card: rgba(235, 235, 235, 0.9);
     --color-bg-input: #FFFFFF;
-    --color-bg-hover: rgba(0, 0, 0, 0.06);
+    --color-bg-hover: rgba(0, 0, 0, 0.08);
     
-    --color-border-subtle: rgba(0, 0, 0, 0.1);
-    --color-border-strong: rgba(0, 0, 0, 0.2);
+    --color-border-subtle: rgba(0, 0, 0, 0.15);
+    --color-border-strong: rgba(0, 0, 0, 0.25);
     
     --color-text-primary: #000000;
-    --color-text-secondary: #111111;
-    --color-text-tertiary: #333333;
+    --color-text-secondary: #000000;
+    --color-text-tertiary: #111111;
     --color-text-inverted: #FFFFFF;
+  }
+
+  html.light, html.light body, html.light #root {
+    -webkit-font-smoothing: auto; /* Makes text thicker in light mode */
+  }
+
+  html.light .sys-text-body, html.light .sys-table, html.light .sys-table-header {
+    font-weight: 600 !important;
+  }
+  
+  html.light h1, html.light h2, html.light h3, html.light .sys-title-h2 {
+    font-weight: 800 !important;
   }
 
   html, body, #root {
