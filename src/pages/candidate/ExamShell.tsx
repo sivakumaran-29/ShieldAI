@@ -1532,50 +1532,50 @@ export default function ExamShell() {
                 </div>
               </div>
             )}
+            
+            {/* PERSISTENT BOTTOM ACTION BAR (MCQ Only) */}
+            {activeQuestion && activeQuestion.type === 'mcq' && (
+              <div className="flex-none h-24 bg-[#09090B] border-t border-[rgba(255,255,255,0.06)] flex items-center justify-between px-10 z-20 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+                <div className="flex items-center gap-4">
+                  <Button 
+                    onClick={handleClearResponse}
+                    variant="ghost"
+                    className="h-11 px-6 rounded-xl text-xs font-semibold text-[#8A9099] hover:bg-[#111216] hover:text-[#F5F5F5] transition-colors"
+                  >
+                    Clear Response
+                  </Button>
+                  <Button 
+                    onClick={() => setReviewMarked(prev => ({ ...prev, [activeQuestion.id]: !prev[activeQuestion.id] }))}
+                    className={`h-11 px-6 rounded-xl text-xs font-semibold transition-all ${
+                      reviewMarked[activeQuestion.id] 
+                        ? 'bg-amber-500/10 text-amber-500 border border-amber-500/30 hover:bg-amber-500/20' 
+                        : 'bg-[#111216] text-[#B8BDC7] border border-[rgba(255,255,255,0.06)] hover:bg-[#15171B] hover:text-[#F5F5F5]'
+                    }`}
+                  >
+                    {reviewMarked[activeQuestion.id] ? 'Unmark Review' : 'Mark for Review'}
+                  </Button>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                  <Button 
+                    onClick={() => setSelectedQIndex(p => p - 1)}
+                    disabled={selectedQIndex === 0}
+                    className="h-11 px-8 rounded-xl text-xs font-semibold bg-[#111216] text-[#B8BDC7] border border-[rgba(255,255,255,0.06)] hover:bg-[#15171B] hover:text-[#F5F5F5] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    Previous
+                  </Button>
+                  <Button 
+                    onClick={handleSaveAndNext}
+                    disabled={selectedQIndex === filteredQuestions.length - 1}
+                    className="h-11 px-8 rounded-xl text-xs font-bold bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center"
+                  >
+                    Save & Next <ChevronRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </section>
         </main>
-        
-        {/* PERSISTENT BOTTOM ACTION BAR (MCQ Only - Moved to Root Layout) */}
-        {activeQuestion && activeQuestion.type === 'mcq' && (
-          <div className="flex-none h-24 bg-[#09090B] border-t border-[rgba(255,255,255,0.06)] flex items-center justify-between px-10 z-20 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
-            <div className="flex items-center gap-4">
-              <Button 
-                onClick={handleClearResponse}
-                variant="ghost"
-                className="h-11 px-6 rounded-xl text-xs font-semibold text-[#8A9099] hover:bg-[#111216] hover:text-[#F5F5F5] transition-colors"
-              >
-                Clear Response
-              </Button>
-              <Button 
-                onClick={() => setReviewMarked(prev => ({ ...prev, [activeQuestion.id]: !prev[activeQuestion.id] }))}
-                className={`h-11 px-6 rounded-xl text-xs font-semibold transition-all ${
-                  reviewMarked[activeQuestion.id] 
-                    ? 'bg-amber-500/10 text-amber-500 border border-amber-500/30 hover:bg-amber-500/20' 
-                    : 'bg-[#111216] text-[#B8BDC7] border border-[rgba(255,255,255,0.06)] hover:bg-[#15171B] hover:text-[#F5F5F5]'
-                }`}
-              >
-                {reviewMarked[activeQuestion.id] ? 'Unmark Review' : 'Mark for Review'}
-              </Button>
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <Button 
-                onClick={() => setSelectedQIndex(p => p - 1)}
-                disabled={selectedQIndex === 0}
-                className="h-11 px-8 rounded-xl text-xs font-semibold bg-[#111216] text-[#B8BDC7] border border-[rgba(255,255,255,0.06)] hover:bg-[#15171B] hover:text-[#F5F5F5] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-              >
-                Previous
-              </Button>
-              <Button 
-                onClick={handleSaveAndNext}
-                disabled={selectedQIndex === filteredQuestions.length - 1}
-                className="h-11 px-8 rounded-xl text-xs font-bold bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center"
-              >
-                Save & Next <ChevronRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-          </div>
-        )}
         </>
         )}
       </div>
