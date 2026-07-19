@@ -426,7 +426,16 @@ export default function ExamShell() {
   // COUNTDOWN CLOCK & DEADLINE VALIDATION
   // ==========================================
   useEffect(() => {
-    if (loading || timeLeft <= 0) return
+    if (loading) return
+    
+    if (timeLeft <= 0) {
+      setTimeout(() => {
+        if (currentSession && currentSession.status !== 'submitted') {
+          handleForceSubmission()
+        }
+      }, 0)
+      return
+    }
 
     const timer = setInterval(() => {
       setTimeLeft(prev => {
@@ -453,6 +462,15 @@ export default function ExamShell() {
 
     return () => clearInterval(timer)
   }, [loading, timeLeft])
+
+  // Auto-sync integrity drops
+  useEffect(() => {
+    if (currentSession && currentSession.integrity_score !== integrityScore) {
+      const updated = { ...currentSession, integrity_score: integrityScore }
+      setCurrentSession(updated)
+      saveCandidateSession(updated)
+    }
+  }, [integrityScore])
 
   const formatTimerString = (totalSecs: number): string => {
     const hours = Math.floor(totalSecs / 3600)

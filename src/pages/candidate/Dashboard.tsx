@@ -79,14 +79,10 @@ export default function CandidateDashboard() {
         const cachedRoll = localStorage.getItem('candidate_roll')
         if (cachedRoll) setRollNumber(cachedRoll)
 
-        // Extract Roll number from student email if matching Amrita pattern
+        // Extract Roll number from student email prefix
         if (user?.email && !cachedRoll) {
-          const emailParts = user.email.split('@')[0]
-          const rollRegex = /u4cse25\d+/i
-          const match = emailParts.match(rollRegex)
-          if (match) {
-            setRollNumber(match[0].toUpperCase())
-          }
+          const emailPrefix = user.email.split('@')[0]
+          setRollNumber(emailPrefix.toUpperCase())
         }
       } catch (err) {
         console.error('Failed to load candidate dashboard assessments:', err)
@@ -280,7 +276,7 @@ export default function CandidateDashboard() {
     )
   }
 
-  const isRollDisabled = !!(user?.email && user.email.match(/u4cse25\d+/i)) || !!localStorage.getItem('candidate_roll')
+  const isRollDisabled = !!user?.email || !!localStorage.getItem('candidate_roll')
   const timeCheck = selectedAssessment ? isAssessmentTimeWindowValid(selectedAssessment) : { valid: false, message: '' }
 
   // Metrics calculation
