@@ -97,7 +97,7 @@ const DEFAULT_ASSESSMENTS: Assessment[] = [
     start_time: new Date().toISOString(),
     end_time: new Date(Date.now() + 7 * 24 * 3600 * 1000).toISOString(), // 7 days from now
     passing_score: 70,
-    allowed_languages: ['python', 'javascript', 'java'],
+    allowed_languages: ['python', 'javascript', 'java', 'cpp', 'c'],
     status: 'Published',
     target_batch: 'CSE_C',
     created_at: new Date().toISOString(),
@@ -112,7 +112,7 @@ const DEFAULT_ASSESSMENTS: Assessment[] = [
     start_time: new Date().toISOString(),
     end_time: new Date(Date.now() + 2 * 24 * 3600 * 1000).toISOString(),
     passing_score: 75,
-    allowed_languages: ['javascript', 'python'],
+    allowed_languages: ['javascript', 'python', 'java', 'cpp', 'c'],
     status: 'Draft',
     target_batch: 'CSE_C',
     created_at: new Date().toISOString(),

@@ -28,7 +28,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
   const [startTime, setStartTime] = useState('')
   const [endTime, setEndTime] = useState(new Date(Date.now() + 7 * 24 * 3600 * 1000).toISOString().slice(0, 16))
   const [passingScore, setPassingScore] = useState(70)
-  const [languages, setLanguages] = useState<string[]>(['python', 'javascript', 'java'])
+  const [languages, setLanguages] = useState<string[]>(['python', 'javascript', 'java', 'cpp', 'c'])
   const [status, setStatus] = useState<'Draft' | 'Published' | 'Closed'>('Draft')
   const [targetBatch, setTargetBatch] = useState('CSE_C')
 
@@ -63,7 +63,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
     setStartTime(toLocalISOString(new Date()))
     setEndTime(toLocalISOString(new Date(Date.now() + 7 * 24 * 3600 * 1000)))
     setPassingScore(70)
-    setLanguages(['python', 'javascript'])
+    setLanguages(['python', 'javascript', 'java', 'cpp', 'c'])
     setStatus('Draft')
   }
 
@@ -379,7 +379,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                           onChange={() => toggleLanguage(lang)}
                           className="w-4 h-4 rounded border-white/5 text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer"
                         />
-                        <span className="text-xs uppercase sys-text-body font-mono">{lang === 'javascript' ? 'JS (ES6)' : lang === 'cpp' ? 'C++' : lang}</span>
+                        <span className="text-xs uppercase sys-text-body font-mono">{lang === 'javascript' ? 'JS (ES6)' : lang === 'cpp' ? 'C++' : lang === 'c' ? 'C' : lang}</span>
                       </label>
                     ))}
                   </div>
