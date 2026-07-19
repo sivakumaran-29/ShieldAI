@@ -167,6 +167,7 @@ export default function ExamShell() {
   const [showWarningModal, setShowWarningModal] = useState(false)
   const [warningModalText, setWarningModalText] = useState('')
   const [localStream, setLocalStream] = useState<MediaStream | null>(null)
+  const [isWebRTCSocketOpen, setIsWebRTCSocketOpen] = useState(false)
   
   // Platform Settings
   const settings = useSettingsStore()
@@ -723,10 +724,35 @@ export default function ExamShell() {
   }, [loading])
 
   // ==========================================
+  // WEBRTC LAZY-LOADING POLLER
+  // ==========================================
+  useEffect(() => {
+    if (loading || !user?.id || !assessment?.id || isWebRTCSocketOpen) return
+    
+    const pollWebRTC = async () => {
+      try {
+        const { data } = await supabase.from('integrity_audits').select('violation_logs').eq('student_id', user.id).single()
+        if (data && data.violation_logs && data.violation_logs.includes('[WEBRTC_CONNECT]')) {
+          console.log('[WebRTC] Admin requested live feed. Opening WebSocket...')
+          setIsWebRTCSocketOpen(true)
+          
+          const cleanedLogs = data.violation_logs.filter((l: string) => l !== '[WEBRTC_CONNECT]')
+          await supabase.from('integrity_audits').update({ violation_logs: cleanedLogs }).eq('student_id', user.id)
+        }
+      } catch (err) {
+        // Ignore polling errors
+      }
+    }
+    
+    const pollInterval = setInterval(pollWebRTC, 10000)
+    return () => clearInterval(pollInterval)
+  }, [loading, user, assessment, isWebRTCSocketOpen])
+
+  // ==========================================
   // WEBRTC SIGNALING HANDSHAKE HOOKS
   // ==========================================
   useEffect(() => {
-    if (loading || !user?.id || !assessment?.id) return
+    if (loading || !user?.id || !assessment?.id || !isWebRTCSocketOpen) return
 
     const channelName = `webrtc_stream_${user.id}_${assessment.id}`
     console.log(`[WebRTC] Subscribing candidate to signaling channel: ${channelName}`)
@@ -805,7 +831,7 @@ export default function ExamShell() {
       channel.unsubscribe()
       if (pc) pc.close()
     }
-  }, [loading, user, assessment])
+  }, [loading, user, assessment, isWebRTCSocketOpen])
 
   // ==========================================
   // PROCTORING LOGS LOGGER

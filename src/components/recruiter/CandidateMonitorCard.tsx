@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Video, VideoOff } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { CandidateSession } from '../../lib/assessmentEngine'
 import { getIceServers } from '../../lib/webrtcConfig'
 import { supabase } from '../../lib/supabaseClient'
@@ -18,14 +19,27 @@ export default function CandidateMonitorCard({ s, isCritical }: CandidateMonitor
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('disconnected')
   const pcRef = useRef<RTCPeerConnection | null>(null)
   const [isWatching, setIsWatching] = useState<boolean>(false)
+  const [isLive, setIsLive] = useState(false)
   
   const shouldWatch = isCritical || isWatching
 
   useEffect(() => {
-    if (!shouldWatch) {
+    if (!shouldWatch || !isLive) {
       if (pcRef.current) pcRef.current.close()
       return
     }
+
+    // Ping the candidate to open their WebRTC signaling socket
+    supabase.from('integrity_audits').select('violation_logs').eq('student_id', s.student_id).single().then(({ data }) => {
+      if (data) {
+        const logs = data.violation_logs || []
+        if (!logs.includes('[WEBRTC_CONNECT]')) {
+          supabase.from('integrity_audits').update({
+            violation_logs: [...logs, '[WEBRTC_CONNECT]']
+          }).eq('student_id', s.student_id).then()
+        }
+      }
+    })
 
     const channelName = `webrtc_stream_${s.student_id}_${s.assessment_id}`
     console.log(`[WebRTC Recruiter] Joining signaling: ${channelName}`)
@@ -131,7 +145,7 @@ export default function CandidateMonitorCard({ s, isCritical }: CandidateMonitor
         pcRef.current.close()
       }
     }
-  }, [s.student_id, s.assessment_id, shouldWatch])
+  }, [s.student_id, s.assessment_id, shouldWatch, isLive])
 
   return (
     <Card className={`bg-card border flex flex-col overflow-hidden max-w-sm rounded-2xl transition-all duration-300 shadow-none relative group ${
@@ -139,18 +153,33 @@ export default function CandidateMonitorCard({ s, isCritical }: CandidateMonitor
     }`}>
       
       {/* Camera Feed Container */}
-      <div className="bg-black aspect-video w-full relative flex items-center justify-center overflow-hidden border-b border-divider">
+      <div className="bg-black aspect-video w-full relative flex items-center justify-center overflow-hidden border-b border-divider group/cam">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_50%,rgba(0,0,0,0.8))] z-10 pointer-events-none" />
         
-        <video 
-          ref={videoRef} 
-          autoPlay 
-          playsInline 
-          muted 
-          className={`w-full h-full object-cover transition-opacity duration-500 z-0 ${
-            connectionStatus === 'connected' ? 'opacity-90' : 'opacity-0 absolute'
-          }`} 
-        />
+        {!isLive ? (
+          <div className="z-20 flex flex-col items-center justify-center gap-2">
+            <VideoOff className="w-8 h-8 text-tertiary mb-1 opacity-50" />
+            <span className="text-[10px] sys-text-body font-mono uppercase tracking-widest opacity-70">Stream Offline</span>
+            <Button 
+              onClick={() => setIsLive(true)}
+              variant="outline" 
+              size="sm" 
+              className="mt-2 h-7 px-3 text-[10px] font-bold border-[#5B8CFF]/30 text-[#5B8CFF] hover:bg-[#5B8CFF]/10 transition-colors"
+            >
+              Start Live Feed
+            </Button>
+          </div>
+        ) : (
+          <video 
+            ref={videoRef} 
+            autoPlay 
+            playsInline 
+            muted 
+            className={`w-full h-full object-cover transition-opacity duration-500 z-0 ${
+              connectionStatus === 'connected' ? 'opacity-100' : 'opacity-30 blur-sm'
+            }`}
+          />
+        )}
 
         {connectionStatus !== 'connected' && (
           <div className="flex flex-col items-center gap-2.5 z-20 text-center p-4 select-none">
@@ -208,6 +237,11 @@ export default function CandidateMonitorCard({ s, isCritical }: CandidateMonitor
           <div>
             <h4 className="font-bold text-sm text-foreground font-heading">{s.name}</h4>
             <div className="text-[10px] sys-text-body font-sans font-semibold mt-1 uppercase tracking-wider">Roll: {s.roll_number || 'N/A'}</div>
+            <ul className="text-[10px] space-y-1 mt-2 font-mono">
+              {(s.violation_logs || []).filter(l => !l.includes('[WEBRTC_CONNECT]')).slice(-3).map((log, i) => (
+                <li key={i} className="truncate">- {log}</li>
+              ))}
+            </ul>
           </div>
           <button 
             onClick={() => setIsWatching(!isWatching)}
