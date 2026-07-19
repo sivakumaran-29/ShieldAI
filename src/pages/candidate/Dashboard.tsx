@@ -313,7 +313,7 @@ export default function CandidateDashboard() {
                 <Shield className="w-4 h-4 text-[#5B8CFF]" strokeWidth={1.5} />
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-xs tracking-wide text-primary font-heading">ShieldAI</span>
+                <span className="font-bold text-xs tracking-wide text-primary font-heading">Shield<span className="text-[#5B8CFF]">AI</span></span>
                 <span className="text-[7.5px] font-mono sys-text-body uppercase tracking-widest leading-none mt-0.5">Candidate</span>
               </div>
             </div>
@@ -399,7 +399,7 @@ export default function CandidateDashboard() {
             <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(true)} className="w-8 h-8 rounded-lg sys-text-body hover:text-primary">
               <Menu className="w-5 h-5" />
             </Button>
-            <span className="font-bold text-sm tracking-wide text-primary font-heading">ShieldAI</span>
+            <span className="font-bold text-sm tracking-wide text-primary font-heading">Shield<span className="text-[#5B8CFF]">AI</span></span>
           </div>
           <div className="flex items-center gap-2">
             <Button onClick={handleSync} disabled={isSyncing} variant="ghost" size="icon" className="w-8 h-8 rounded-lg sys-text-body">
@@ -432,58 +432,66 @@ export default function CandidateDashboard() {
           {activeTab === 'overview' && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
               {/* Hero Section */}
-              <div className="p-6 md:p-8 rounded-3xl sys-bg border border-transparent shadow-2xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-[#5B8CFF]/10 rounded-full blur-[80px] -mr-16 -mt-16 transition-opacity group-hover:opacity-100 opacity-50" />
-                <div className="relative z-10">
-                  <h1 className="text-3xl font-heading font-extrabold text-primary mb-2 tracking-tight">
-                    Welcome back, <span className="text-transparent bg-clip-text sys-bg">{name.charAt(0).toUpperCase() + name.slice(1)}</span>
+              <div className="p-8 md:p-10 rounded-3xl bg-gradient-to-br from-panel to-background border border-divider shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#5B8CFF]/20 via-[#5B8CFF]/5 to-transparent rounded-full blur-[80px] -mr-20 -mt-20 opacity-70 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-[#5B8CFF]/10 to-transparent rounded-full blur-[60px] -ml-20 -mb-20 opacity-50" />
+                <div className="relative z-10 flex flex-col justify-center min-h-[120px]">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-background border border-divider mb-6 shadow-sm w-fit">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#5B8CFF] opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-[#5B8CFF]"></span>
+                    </span>
+                    <span className="text-[10px] font-mono font-bold tracking-widest uppercase sys-text-body">Secure Session Active</span>
+                  </div>
+                  <h1 className="text-4xl md:text-5xl font-heading font-extrabold text-primary mb-4 tracking-tight">
+                    Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5B8CFF] to-[#3B66CC]">{name.charAt(0).toUpperCase() + name.slice(1)}</span>
                   </h1>
-                  <p className="text-sm sys-text-body max-w-xl leading-relaxed">
-                    Access your secure assessment lobby, review past performance, and prepare for your upcoming scheduled evaluations.
+                  <p className="text-[15px] md:text-base sys-text-body max-w-2xl leading-relaxed">
+                    Access your secure assessment lobby, review past performance, and prepare for your upcoming scheduled evaluations in a strictly monitored environment.
                   </p>
                 </div>
               </div>
 
               {/* Metrics Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="p-6 rounded-2xl sys-bg/50 border border-transparent  flex flex-col gap-4 hover:-translate-y-1 hover:border-[#5B8CFF]/30 transition-all duration-300 group shadow-lg">
+                <div className="p-6 md:p-8 rounded-2xl bg-panel backdrop-blur-[16px] border border-divider flex flex-col gap-5 hover:-translate-y-1.5 hover:shadow-[0_10px_40px_rgba(91,140,255,0.08)] hover:border-[#5B8CFF]/30 transition-all duration-300 group">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-widest">Completed</span>
-                    <div className="p-2 rounded-lg bg-[#5B8CFF]/10 text-[#5B8CFF] group-hover:bg-[#5B8CFF]/20 transition-colors">
-                      <CheckCircle2 className="w-4 h-4" strokeWidth={1.5} />
+                    <span className="text-[11px] font-mono font-bold sys-text-body uppercase tracking-widest">Completed</span>
+                    <div className="p-2.5 rounded-xl bg-background border border-divider text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors shadow-sm">
+                      <CheckCircle2 className="w-4.5 h-4.5" strokeWidth={1.5} />
                     </div>
                   </div>
                   <div>
-                    <div className="text-3xl font-heading font-bold text-primary">{completedExams}</div>
-                    <div className="text-xs sys-text-body mt-1">Total Exams Taken</div>
+                    <div className="text-4xl font-heading font-bold text-primary mb-1">{completedExams}</div>
+                    <div className="text-[13px] sys-text-body">Total Exams Taken</div>
                   </div>
                 </div>
 
-                <div className="p-6 rounded-2xl sys-bg/50 border border-transparent  flex flex-col gap-4 hover:-translate-y-1 hover:border-[#5B8CFF]/20 transition-all duration-300 group shadow-lg">
+                <div className="p-6 md:p-8 rounded-2xl bg-panel backdrop-blur-[16px] border border-divider flex flex-col gap-5 hover:-translate-y-1.5 hover:shadow-[0_10px_40px_rgba(91,140,255,0.08)] hover:border-[#5B8CFF]/30 transition-all duration-300 group">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-widest">Integrity Avg</span>
-                    <div className="p-2 rounded-lg bg-[#5B8CFF]/10 text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors">
-                      <Shield className="w-4 h-4" strokeWidth={1.5} />
+                    <span className="text-[11px] font-mono font-bold sys-text-body uppercase tracking-widest">Integrity Avg</span>
+                    <div className="p-2.5 rounded-xl bg-background border border-divider text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors shadow-sm">
+                      <Shield className="w-4.5 h-4.5" strokeWidth={1.5} />
                     </div>
                   </div>
                   <div>
-                    <div className="text-3xl font-heading font-bold text-primary flex items-baseline gap-1">
-                      {avgIntegrity} <span className="text-sm sys-text-body font-medium">%</span>
+                    <div className="text-4xl font-heading font-bold text-primary flex items-baseline gap-1 mb-1">
+                      {avgIntegrity} <span className="text-lg sys-text-body font-medium">%</span>
                     </div>
-                    <div className="text-xs sys-text-body mt-1">Average Trust Score</div>
+                    <div className="text-[13px] sys-text-body">Average Trust Score</div>
                   </div>
                 </div>
 
-                <div className="p-6 rounded-2xl sys-bg/50 border border-transparent  flex flex-col gap-4 hover:-translate-y-1 hover:border-[#5B8CFF]/20 transition-all duration-300 group shadow-lg">
+                <div className="p-6 md:p-8 rounded-2xl bg-panel backdrop-blur-[16px] border border-divider flex flex-col gap-5 hover:-translate-y-1.5 hover:shadow-[0_10px_40px_rgba(91,140,255,0.08)] hover:border-[#5B8CFF]/30 transition-all duration-300 group">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-widest">Available</span>
-                    <div className="p-2 rounded-lg bg-[#5B8CFF]/10 text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors">
-                      <Calendar className="w-4 h-4" strokeWidth={1.5} />
+                    <span className="text-[11px] font-mono font-bold sys-text-body uppercase tracking-widest">Available</span>
+                    <div className="p-2.5 rounded-xl bg-background border border-divider text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors shadow-sm">
+                      <Calendar className="w-4.5 h-4.5" strokeWidth={1.5} />
                     </div>
                   </div>
                   <div>
-                    <div className="text-3xl font-heading font-bold text-primary">{activeExams}</div>
-                    <div className="text-xs sys-text-body mt-1">Pending Assessments</div>
+                    <div className="text-4xl font-heading font-bold text-primary mb-1">{activeExams}</div>
+                    <div className="text-[13px] sys-text-body">Pending Assessments</div>
                   </div>
                 </div>
               </div>
@@ -494,30 +502,30 @@ export default function CandidateDashboard() {
                   <Activity className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Recent Activity
                 </div>
                 
-                <div className="sys-bg/40 border border-transparent rounded-2xl p-6  shadow-lg">
+                <div className="bg-panel backdrop-blur-[16px] border border-divider rounded-2xl p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)]">
                   {pastSessions.length > 0 ? (
                     <div className="space-y-6">
                       {pastSessions.slice(0, 3).map((s, idx) => (
-                        <div key={s.id} className="flex gap-4 relative">
+                        <div key={s.id} className="flex gap-5 relative group">
                           {idx !== pastSessions.slice(0, 3).length - 1 && (
-                            <div className="absolute top-6 bottom-0 left-[15px] w-[1px] bg-hover" />
+                            <div className="absolute top-8 bottom-0 left-[19px] w-[2px] bg-gradient-to-b from-divider to-transparent" />
                           )}
-                          <div className="w-8 h-8 rounded-full sys-card border border-transparent flex items-center justify-center shrink-0 z-10">
+                          <div className="w-10 h-10 rounded-full bg-background border border-divider flex items-center justify-center shrink-0 z-10 shadow-sm group-hover:scale-110 group-hover:border-[#5B8CFF]/50 transition-all duration-300">
                             {s.status === 'submitted' ? (
-                              <Check className="w-4 h-4 text-[#5B8CFF]" strokeWidth={2} />
+                              <Check className="w-5 h-5 text-[#5B8CFF]" strokeWidth={2} />
                             ) : (
-                              <CircleDot className="w-4 h-4 text-[#5B8CFF]" strokeWidth={2} />
+                              <CircleDot className="w-5 h-5 text-[#5B8CFF]" strokeWidth={2} />
                             )}
                           </div>
-                          <div className="flex-1 pb-1">
+                          <div className="flex-1 pb-2">
                             <h4 className="text-sm font-semibold sys-text-primary">{s.status === 'submitted' ? 'Completed Assessment' : 'Started Assessment'}</h4>
                             <p className="text-xs sys-text-body mt-1">ID: {s.assessment_id.slice(0,8).toUpperCase()} • {new Date(s.startedAt || 0).toLocaleString()}</p>
                             {s.status === 'submitted' && (
-                              <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md sys-card border border-transparent text-[10px] font-mono">
-                                <span className="sys-text-body">Score:</span>
+                              <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-background border border-divider text-[10.5px] font-mono shadow-sm">
+                                <span className="sys-text-body uppercase tracking-wider">Score:</span>
                                 <span className="text-primary font-bold">{s.score} pts</span>
-                                <span className="mx-1 sys-text-body">|</span>
-                                <span className="sys-text-body">Trust:</span>
+                                <span className="mx-1.5 sys-text-body">|</span>
+                                <span className="sys-text-body uppercase tracking-wider">Trust:</span>
                                 <span className="text-[#5B8CFF] font-bold">{s.integrity_score}%</span>
                               </div>
                             )}
@@ -554,10 +562,10 @@ export default function CandidateDashboard() {
                       <div 
                         key={a.id} 
                         onClick={() => handleSelectAssessment(a)}
-                        className={`p-5 rounded-2xl border text-left cursor-pointer transition-all duration-300 relative group overflow-hidden ${
+                        className={`p-5 md:p-6 rounded-2xl border text-left cursor-pointer transition-all duration-300 relative group overflow-hidden ${
                           isActive 
-                            ? 'sys-bg/80 border-[#5B8CFF]/50 text-foreground shadow-[0_8px_30px_rgba(91,140,255,0.12)]  -translate-y-1' 
-                            : 'sys-bg/30 border-transparent text-muted hover:border-white/20 hover:sys-card/50 '
+                            ? 'bg-gradient-to-br from-panel to-background border-[#5B8CFF]/50 shadow-[0_8px_30px_rgba(91,140,255,0.12)] -translate-y-1 scale-[1.02]' 
+                            : 'bg-panel backdrop-blur-[16px] border-divider hover:border-[#5B8CFF]/30 hover:shadow-lg hover:-translate-y-0.5'
                         }`}
                       >
                         {/* Purple accent border block */}
@@ -599,11 +607,11 @@ export default function CandidateDashboard() {
               {/* Details & Setup Form */}
               <section className="lg:col-span-8">
                 {selectedAssessment ? (
-                  <Card className="sys-bg border-transparent rounded-3xl shadow-2xl relative overflow-hidden ">
-                    <div className="absolute top-0 left-0 right-0 h-1 sys-bg" />
+                  <Card className="bg-panel backdrop-blur-[16px] border-divider rounded-3xl shadow-[0_8px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_40px_rgba(0,0,0,0.4)] relative overflow-hidden">
+                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#5B8CFF] to-[#3B66CC]" />
                     
-                    <CardHeader className="pb-5 border-b border-transparent select-none pt-6 px-6 md:pt-8 md:px-8">
-                      <CardTitle className="text-lg font-bold text-primary flex items-center gap-3 font-heading">
+                    <CardHeader className="pb-6 border-b border-divider select-none pt-8 px-6 md:pt-10 md:px-10">
+                      <CardTitle className="text-xl font-bold text-primary flex items-center gap-3 font-heading">
                         <BookOpen className="w-5 h-5 text-[#5B8CFF]" strokeWidth={2} /> Assessment Preparation
                       </CardTitle>
                       <CardDescription className="text-xs sys-text-body mt-2">
@@ -629,10 +637,10 @@ export default function CandidateDashboard() {
                           
                           <div className="space-y-4 pt-1">
                             {/* Name */}
-                            <div className="sys-card/50 border border-transparent rounded-xl p-4 flex flex-col opacity-60 cursor-not-allowed">
+                            <div className="bg-background shadow-inner border border-divider rounded-xl p-4 flex flex-col opacity-70 cursor-not-allowed">
                               <div className="flex items-center justify-between select-none">
-                                <label className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                                  <User className="w-3 h-3" strokeWidth={1.5} /> Candidate Full Name (Locked)
+                                <label className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                  <User className="w-3.5 h-3.5" strokeWidth={1.5} /> Candidate Full Name (Locked)
                                 </label>
                                 <Lock className="w-3 h-3 sys-text-body" strokeWidth={1.5} />
                               </div>
@@ -641,15 +649,15 @@ export default function CandidateDashboard() {
                                 value={name} 
                                 readOnly
                                 disabled
-                                className="bg-transparent border-0 p-0 text-xs sys-text-primary focus:outline-none focus:ring-0 font-semibold cursor-not-allowed select-none"
+                                className="bg-transparent border-0 p-0 text-sm sys-text-primary focus:outline-none focus:ring-0 font-semibold cursor-not-allowed select-none"
                               />
                             </div>
 
                             {/* Email */}
-                            <div className="sys-card/50 border border-transparent rounded-xl p-4 flex flex-col opacity-60 cursor-not-allowed">
+                            <div className="bg-background shadow-inner border border-divider rounded-xl p-4 flex flex-col opacity-70 cursor-not-allowed">
                               <div className="flex items-center justify-between select-none">
-                                <label className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                                  <Mail className="w-3 h-3" strokeWidth={1.5} /> Institutional Email
+                                <label className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                  <Mail className="w-3.5 h-3.5" strokeWidth={1.5} /> Institutional Email
                                 </label>
                                 <Lock className="w-3 h-3 sys-text-body" strokeWidth={1.5} />
                               </div>
@@ -658,17 +666,17 @@ export default function CandidateDashboard() {
                                 value={email} 
                                 readOnly
                                 disabled
-                                className="bg-transparent border-0 p-0 text-xs sys-text-primary focus:outline-none focus:ring-0 font-semibold cursor-not-allowed select-none"
+                                className="bg-transparent border-0 p-0 text-sm sys-text-primary focus:outline-none focus:ring-0 font-semibold cursor-not-allowed select-none"
                               />
                             </div>
 
                             {/* Roll */}
-                            <div className={`sys-card/50 border border-transparent rounded-xl p-4 flex flex-col transition-colors ${
-                              isRollDisabled ? 'opacity-60 cursor-not-allowed border-transparent' : 'hover:border-white/20 focus-within:border-[#5B8CFF]/50 focus-within:ring-1 focus-within:ring-[#5B8CFF]/50 shadow-inner'
+                            <div className={`bg-background shadow-inner border border-divider rounded-xl p-4 flex flex-col transition-all duration-300 ${
+                              isRollDisabled ? 'opacity-70 cursor-not-allowed' : 'hover:border-[#5B8CFF]/40 focus-within:border-[#5B8CFF] focus-within:ring-1 focus-within:ring-[#5B8CFF]/30 hover:shadow-[0_0_15px_rgba(91,140,255,0.1)]'
                             }`}>
                               <div className="flex items-center justify-between select-none">
-                                <label className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                                  <Hash className="w-3 h-3" strokeWidth={1.5} /> Candidate Roll Number
+                                <label className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                  <Hash className="w-3.5 h-3.5" strokeWidth={1.5} /> Candidate Roll Number
                                 </label>
                                 {isRollDisabled && <Lock className="w-3 h-3 sys-text-body" strokeWidth={1.5} />}
                               </div>
@@ -678,7 +686,7 @@ export default function CandidateDashboard() {
                                 onChange={(e) => setRollNumber(e.target.value.toUpperCase())} 
                                 readOnly={isRollDisabled}
                                 disabled={isRollDisabled}
-                                className={`bg-transparent border-0 p-0 text-xs focus:outline-none focus:ring-0 font-mono font-bold ${
+                                className={`bg-transparent border-0 p-0 text-sm focus:outline-none focus:ring-0 font-mono font-bold ${
                                   isRollDisabled ? 'sys-text-body cursor-not-allowed select-none' : 'text-primary placeholder:sys-text-body'
                                 }`}
                                 placeholder="U4CSE25XXX..." 
@@ -693,7 +701,7 @@ export default function CandidateDashboard() {
                             <HelpCircle className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Proctor Rules Checklist
                           </div>
 
-                          <div className="sys-card/40 border border-transparent p-5 rounded-xl sys-text-body text-[11.5px] space-y-4 flex-1 select-none leading-relaxed shadow-inner">
+                          <div className="bg-background shadow-inner border border-divider p-6 rounded-xl sys-text-body text-xs space-y-5 flex-1 select-none leading-relaxed">
                             <div className="flex gap-3">
                               <CheckCircle2 className="w-4 h-4 text-[#5B8CFF] shrink-0 mt-0.5" strokeWidth={2} />
                               <p><strong>Timer Limits:</strong> A countdown of <span className="text-[#5B8CFF] font-bold font-number">{selectedAssessment.duration} minutes</span> runs globally. Automatic force-submission triggers upon expiry.</p>
@@ -757,14 +765,14 @@ export default function CandidateDashboard() {
                       </label>
 
                       {/* Launch Button */}
-                      <div className="flex justify-end pt-6 border-t border-transparent select-none">
+                      <div className="flex justify-end pt-8 border-t border-divider select-none">
                         <Button 
                           onClick={handleLaunchAssessment}
                           disabled={isSubmitting || !timeCheck.valid}
-                          className={`w-full md:w-auto h-12 px-6 md:px-8 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 flex items-center justify-center gap-2.5 select-none shadow-lg ${
+                          className={`w-full md:w-auto h-14 px-8 md:px-10 rounded-2xl font-bold text-sm tracking-wide transition-all duration-300 flex items-center justify-center gap-2.5 select-none shadow-lg ${
                             timeCheck.valid 
-                              ? 'sys-bg hover:from-blue-500 hover:to-[#5B8CFF] text-primary font-extrabold cursor-pointer active:scale-95 hover:shadow-[0_0_20px_rgba(91,140,255,0.4)]' 
-                              : 'sys-card sys-text-body border border-transparent cursor-not-allowed shadow-none'
+                              ? 'bg-[#0070F3] hover:bg-[#005bb5] text-white cursor-pointer active:scale-95 hover:shadow-[0_0_30px_rgba(0,112,243,0.5)] hover:-translate-y-0.5' 
+                              : 'bg-hover text-tertiary cursor-not-allowed shadow-none'
                           }`}
                         >
                           {isSubmitting ? (
@@ -801,23 +809,23 @@ export default function CandidateDashboard() {
                 <History className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Past Records & Submissions
               </div>
               
-              <div className="sys-bg/50 border border-transparent rounded-2xl overflow-hidden  shadow-xl">
+              <div className="bg-panel backdrop-blur-[16px] border border-divider rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)]">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-sm whitespace-nowrap">
-                    <thead className="sys-card border-b border-transparent">
+                    <thead className="bg-background/50 border-b border-divider">
                       <tr>
-                        <th className="px-6 py-4 font-mono text-[10px] uppercase sys-text-body tracking-wider">Session ID</th>
-                        <th className="px-6 py-4 font-mono text-[10px] uppercase sys-text-body tracking-wider">Assessment</th>
-                        <th className="px-6 py-4 font-mono text-[10px] uppercase sys-text-body tracking-wider">Date</th>
-                        <th className="px-6 py-4 font-mono text-[10px] uppercase sys-text-body tracking-wider">Status</th>
-                        <th className="px-6 py-4 font-mono text-[10px] uppercase sys-text-body tracking-wider">Score</th>
-                        <th className="px-6 py-4 font-mono text-[10px] uppercase sys-text-body tracking-wider">Integrity</th>
+                        <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Session ID</th>
+                        <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Assessment</th>
+                        <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Date</th>
+                        <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Status</th>
+                        <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Score</th>
+                        <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Integrity</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-divider">
                       {pastSessions.length > 0 ? (
                         pastSessions.map(session => (
-                          <tr key={session.id} className="hover:sys-table-row transition-colors">
+                          <tr key={session.id} className="hover:bg-background/50 transition-colors duration-300">
                             <td className="px-6 py-4 font-mono text-xs sys-text-body">{session.id.slice(0, 8)}</td>
                             <td className="px-6 py-4 font-heading font-semibold sys-text-primary">{session.assessment_id.slice(0, 12)}...</td>
                             <td className="px-6 py-4 text-xs sys-text-body">{new Date(session.startedAt || 0).toLocaleDateString()}</td>

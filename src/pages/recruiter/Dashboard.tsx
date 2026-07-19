@@ -147,7 +147,7 @@ export default function RecruiterDashboard() {
               </div>
               {!(isCollapsed && !isMobileSidebarOpen) && (
                 <div className="flex flex-col">
-                  <span className="font-heading font-extrabold text-sm tracking-tight text-primary">ShieldAI</span>
+                  <span className="font-heading font-extrabold text-sm tracking-tight text-primary">Shield<span className="text-[#5B8CFF]">AI</span></span>
                   <span className="text-[8px] font-mono sys-text-body uppercase tracking-widest leading-none mt-0.5">V2 Enterprise</span>
                 </div>
               )}
