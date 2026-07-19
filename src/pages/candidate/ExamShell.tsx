@@ -127,7 +127,6 @@ export default function ExamShell() {
     setConsoleOutput(compilerProgress === 0 ? `Initializing ${targetLang === 'cpp' ? 'C++' : 'C'} Compiler Engine... Fetching dependencies (35MB)...` : `Resuming compiler download...`)
     
     const startProgress = compilerProgress
-    const startMB = compilerDownloadedMB
     const totalSimulatedTime = compilerTotalTimeRef.current || 15000;
     const timeForRemaining = totalSimulatedTime * ((100 - startProgress) / 100);
     
