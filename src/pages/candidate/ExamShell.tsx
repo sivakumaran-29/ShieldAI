@@ -664,11 +664,20 @@ export default function ExamShell() {
       if (
         e.key === 'F12' || 
         (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
-        (e.ctrlKey && e.key === 'U')
+        (e.ctrlKey && e.key === 'U') ||
+        e.key === 'PrintScreen' ||
+        (e.metaKey && e.shiftKey && ['3', '4', '5', 's', 'S'].includes(e.key)) ||
+        (e.ctrlKey && e.shiftKey && ['s', 'S'].includes(e.key))
       ) {
         e.preventDefault()
-        logViolation('Attempted shortcut for Developer Tools or View Source.')
-        triggerWarningModal('Prohibited Action: Inspect tools are restricted during execution.')
+        logViolation('Screenshot or dev tools attempt intercepted.')
+        triggerWarningModal('Prohibited Action: Screenshots, copying, and inspect tools are strictly restricted during the assessment.')
+        
+        try {
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText('')
+          }
+        } catch (err) {}
       }
     }
 
@@ -1098,7 +1107,7 @@ export default function ExamShell() {
   }
 
   return (
-    <div className="h-screen w-full flex flex-col font-sans antialiased overflow-hidden bg-background text-primary relative">
+    <div className="h-screen w-full flex flex-col font-sans antialiased overflow-hidden bg-background text-primary relative select-none">
       
       {/* Ambient Background Layer */}
       <AmbientGlow />
