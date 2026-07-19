@@ -267,7 +267,7 @@ export default function CandidateDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen sys-bg flex items-center justify-center text-white font-mono text-xs relative overflow-hidden">
+      <div className="min-h-screen sys-bg flex items-center justify-center text-primary font-mono text-xs relative overflow-hidden">
         <AmbientGlow />
         <div className="flex flex-col items-center gap-3 relative z-10">
           <Shield className="w-6 h-6 animate-pulse text-[#5B8CFF]" strokeWidth={1.5} />
@@ -303,7 +303,7 @@ export default function CandidateDashboard() {
       )}
 
       {/* ================= LEFT SIDEBAR ================= */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 h-screen bg-[#09090B] border-r border-white/5 flex flex-col justify-between p-6 shrink-0 select-none shadow-2xl transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 h-screen bg-background border-r border-divider flex flex-col justify-between p-6 shrink-0 select-none shadow-2xl transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="space-y-8">
           
           {/* Header Brand & Theme Toggle */}
@@ -313,7 +313,7 @@ export default function CandidateDashboard() {
                 <Shield className="w-4 h-4 text-[#5B8CFF]" strokeWidth={1.5} />
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-xs tracking-wide text-white font-heading">ShieldAI</span>
+                <span className="font-bold text-xs tracking-wide text-primary font-heading">ShieldAI</span>
                 <span className="text-[7.5px] font-mono sys-text-body uppercase tracking-widest leading-none mt-0.5">Candidate</span>
               </div>
             </div>
@@ -323,7 +323,7 @@ export default function CandidateDashboard() {
                 disabled={isSyncing}
                 variant="ghost"
                 size="icon"
-                className="w-7 h-7 rounded-lg sys-text-body hover:text-white hover:hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 transition"
+                className="w-7 h-7 rounded-lg sys-text-body hover:text-primary hover:hover:bg-panel backdrop-blur-[16px]/80 transition"
                 title="Sync Assessments"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-[#5B8CFF]' : ''}`} />
@@ -336,7 +336,7 @@ export default function CandidateDashboard() {
           <nav className="flex flex-col gap-2">
             <button 
               onClick={() => { setActiveTab('overview'); setIsSidebarOpen(false); }}
-              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'overview' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 border border-transparent'}`}
+              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'overview' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-panel backdrop-blur-[16px]/80 border border-transparent'}`}
             >
               <div className="flex items-center gap-2.5">
                 <Home className="w-4 h-4" strokeWidth={1.5} />
@@ -347,7 +347,7 @@ export default function CandidateDashboard() {
 
             <button 
               onClick={() => { setActiveTab('lobby'); setIsSidebarOpen(false); }}
-              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'lobby' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 border border-transparent'}`}
+              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'lobby' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-panel backdrop-blur-[16px]/80 border border-transparent'}`}
             >
               <div className="flex items-center gap-2.5">
                 <LayoutGrid className="w-4 h-4" strokeWidth={1.5} />
@@ -358,7 +358,7 @@ export default function CandidateDashboard() {
 
             <button 
               onClick={() => { setActiveTab('history'); setIsSidebarOpen(false); }}
-              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'history' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 border border-transparent'}`}
+              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'history' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-panel backdrop-blur-[16px]/80 border border-transparent'}`}
             >
               <div className="flex items-center gap-2.5">
                 <History className="w-4 h-4" strokeWidth={1.5} />
@@ -376,14 +376,14 @@ export default function CandidateDashboard() {
               <User className="w-4 h-4 sys-text-body" strokeWidth={1.5} />
             </div>
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-semibold text-white truncate font-heading">{user?.name || 'Candidate'}</span>
+              <span className="text-xs font-semibold text-primary truncate font-heading">{user?.name || 'Candidate'}</span>
               <span className="text-[10px] sys-text-body font-mono truncate">{user?.email}</span>
             </div>
           </div>
           <Button 
             onClick={logout} 
             variant="outline" 
-            className="w-full border-transparent sys-bg/40 !bg-[#00000066] hover:!bg-[rgba(28,28,30,0.72)] hover:border-white/20 sys-text-body hover:text-white text-xs h-9 justify-center cursor-pointer transition-all duration-300 rounded-xl !shadow-none hover:!shadow-none"
+            className="w-full border-transparent sys-bg/40 !bg-[#00000066] hover:!bg-panel hover:border-white/20 sys-text-body hover:text-primary text-xs h-9 justify-center cursor-pointer transition-all duration-300 rounded-xl !shadow-none hover:!shadow-none"
           >
             <LogOut className="w-3.5 h-3.5 mr-2" strokeWidth={1.5} />
             <span>Sign Out</span>
@@ -394,12 +394,12 @@ export default function CandidateDashboard() {
       {/* ================= RIGHT MAIN CONTENT AREA ================= */}
       <main className="flex-1 h-screen overflow-y-auto bg-transparent p-4 md:p-8 lg:p-12 z-10 relative custom-scrollbar">
         {/* Mobile Header Toggle */}
-        <div className="md:hidden flex items-center justify-between mb-6 sys-bg p-3 rounded-2xl border border-white/5">
+        <div className="md:hidden flex items-center justify-between mb-6 sys-bg p-3 rounded-2xl border border-divider">
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(true)} className="w-8 h-8 rounded-lg sys-text-body hover:text-white">
+            <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(true)} className="w-8 h-8 rounded-lg sys-text-body hover:text-primary">
               <Menu className="w-5 h-5" />
             </Button>
-            <span className="font-bold text-sm tracking-wide text-white font-heading">ShieldAI</span>
+            <span className="font-bold text-sm tracking-wide text-primary font-heading">ShieldAI</span>
           </div>
           <div className="flex items-center gap-2">
             <Button onClick={handleSync} disabled={isSyncing} variant="ghost" size="icon" className="w-8 h-8 rounded-lg sys-text-body">
@@ -435,7 +435,7 @@ export default function CandidateDashboard() {
               <div className="p-6 md:p-8 rounded-3xl sys-bg border border-transparent shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-[#5B8CFF]/10 rounded-full blur-[80px] -mr-16 -mt-16 transition-opacity group-hover:opacity-100 opacity-50" />
                 <div className="relative z-10">
-                  <h1 className="text-3xl font-heading font-extrabold text-white mb-2 tracking-tight">
+                  <h1 className="text-3xl font-heading font-extrabold text-primary mb-2 tracking-tight">
                     Welcome back, <span className="text-transparent bg-clip-text sys-bg">{name.charAt(0).toUpperCase() + name.slice(1)}</span>
                   </h1>
                   <p className="text-sm sys-text-body max-w-xl leading-relaxed">
@@ -454,7 +454,7 @@ export default function CandidateDashboard() {
                     </div>
                   </div>
                   <div>
-                    <div className="text-3xl font-heading font-bold text-white">{completedExams}</div>
+                    <div className="text-3xl font-heading font-bold text-primary">{completedExams}</div>
                     <div className="text-xs sys-text-body mt-1">Total Exams Taken</div>
                   </div>
                 </div>
@@ -467,7 +467,7 @@ export default function CandidateDashboard() {
                     </div>
                   </div>
                   <div>
-                    <div className="text-3xl font-heading font-bold text-white flex items-baseline gap-1">
+                    <div className="text-3xl font-heading font-bold text-primary flex items-baseline gap-1">
                       {avgIntegrity} <span className="text-sm sys-text-body font-medium">%</span>
                     </div>
                     <div className="text-xs sys-text-body mt-1">Average Trust Score</div>
@@ -482,7 +482,7 @@ export default function CandidateDashboard() {
                     </div>
                   </div>
                   <div>
-                    <div className="text-3xl font-heading font-bold text-white">{activeExams}</div>
+                    <div className="text-3xl font-heading font-bold text-primary">{activeExams}</div>
                     <div className="text-xs sys-text-body mt-1">Pending Assessments</div>
                   </div>
                 </div>
@@ -515,7 +515,7 @@ export default function CandidateDashboard() {
                             {s.status === 'submitted' && (
                               <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md sys-card border border-transparent text-[10px] font-mono">
                                 <span className="sys-text-body">Score:</span>
-                                <span className="text-white font-bold">{s.score} pts</span>
+                                <span className="text-primary font-bold">{s.score} pts</span>
                                 <span className="mx-1 sys-text-body">|</span>
                                 <span className="sys-text-body">Trust:</span>
                                 <span className="text-[#5B8CFF] font-bold">{s.integrity_score}%</span>
@@ -565,7 +565,7 @@ export default function CandidateDashboard() {
                           isActive ? 'bg-[#5B8CFF] shadow-[0_0_12px_rgba(91,140,255,0.8)]' : 'bg-transparent'
                         }`} />
 
-                        <h3 className="font-bold text-sm text-white group-hover:text-[#5B8CFF] transition duration-300 font-heading pr-2">
+                        <h3 className="font-bold text-sm text-primary group-hover:text-[#5B8CFF] transition duration-300 font-heading pr-2">
                           {a.title}
                         </h3>
                         <p className="text-[11px] sys-text-body mt-2 line-clamp-2 leading-relaxed">
@@ -603,11 +603,11 @@ export default function CandidateDashboard() {
                     <div className="absolute top-0 left-0 right-0 h-1 sys-bg" />
                     
                     <CardHeader className="pb-5 border-b border-transparent select-none pt-6 px-6 md:pt-8 md:px-8">
-                      <CardTitle className="text-lg font-bold text-white flex items-center gap-3 font-heading">
+                      <CardTitle className="text-lg font-bold text-primary flex items-center gap-3 font-heading">
                         <BookOpen className="w-5 h-5 text-[#5B8CFF]" strokeWidth={2} /> Assessment Preparation
                       </CardTitle>
                       <CardDescription className="text-xs sys-text-body mt-2">
-                        You are launching: <span className="text-white font-bold hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 px-2 py-1 rounded-md ml-1">{selectedAssessment.title}</span>
+                        You are launching: <span className="text-primary font-bold hover:bg-panel backdrop-blur-[16px]/80 px-2 py-1 rounded-md ml-1">{selectedAssessment.title}</span>
                       </CardDescription>
                     </CardHeader>
                     
@@ -679,7 +679,7 @@ export default function CandidateDashboard() {
                                 readOnly={isRollDisabled}
                                 disabled={isRollDisabled}
                                 className={`bg-transparent border-0 p-0 text-xs focus:outline-none focus:ring-0 font-mono font-bold ${
-                                  isRollDisabled ? 'sys-text-body cursor-not-allowed select-none' : 'text-white placeholder:sys-text-body'
+                                  isRollDisabled ? 'sys-text-body cursor-not-allowed select-none' : 'text-primary placeholder:sys-text-body'
                                 }`}
                                 placeholder="U4CSE25XXX..." 
                               />
@@ -723,10 +723,10 @@ export default function CandidateDashboard() {
                         <div className="space-y-1.5">
                           <p className="sys-text-body font-bold font-mono text-[9px] uppercase tracking-widest mb-2">Evaluation Window Scheduling limits</p>
                           <p className="sys-text-body flex items-center gap-2">
-                            <span className="w-12 sys-text-body">Starts:</span> <span className="text-white font-semibold font-mono hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 px-2 py-0.5 rounded">{new Date(selectedAssessment.start_time).toLocaleString()}</span>
+                            <span className="w-12 sys-text-body">Starts:</span> <span className="text-primary font-semibold font-mono hover:bg-panel backdrop-blur-[16px]/80 px-2 py-0.5 rounded">{new Date(selectedAssessment.start_time).toLocaleString()}</span>
                           </p>
                           <p className="sys-text-body flex items-center gap-2">
-                            <span className="w-12 sys-text-body">Ends:</span> <span className="text-white font-semibold font-mono hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 px-2 py-0.5 rounded">{new Date(selectedAssessment.end_time).toLocaleString()}</span>
+                            <span className="w-12 sys-text-body">Ends:</span> <span className="text-primary font-semibold font-mono hover:bg-panel backdrop-blur-[16px]/80 px-2 py-0.5 rounded">{new Date(selectedAssessment.end_time).toLocaleString()}</span>
                           </p>
                         </div>
                         <div className="text-right">
@@ -749,7 +749,7 @@ export default function CandidateDashboard() {
                             onChange={(e) => setReadInstructions(e.target.checked)} 
                             className="peer appearance-none w-5 h-5 rounded border border-[#5B8CFF]/50 sys-bg/50 checked:bg-[#5B8CFF] checked:border-[#5B8CFF] transition-all cursor-pointer" 
                           />
-                          <Check className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" strokeWidth={3} />
+                          <Check className="absolute w-3.5 h-3.5 text-primary opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" strokeWidth={3} />
                         </div>
                         <span className="text-[11px] sys-text-body group-hover:sys-text-primary leading-relaxed font-sans transition-colors">
                           I acknowledge that I have read the security policies, consent to activation of my camera device, and understand that tab switching will log violations against my exam submission.
@@ -763,19 +763,19 @@ export default function CandidateDashboard() {
                           disabled={isSubmitting || !timeCheck.valid}
                           className={`w-full md:w-auto h-12 px-6 md:px-8 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 flex items-center justify-center gap-2.5 select-none shadow-lg ${
                             timeCheck.valid 
-                              ? 'sys-bg hover:from-blue-500 hover:to-[#5B8CFF] text-white font-extrabold cursor-pointer active:scale-95 hover:shadow-[0_0_20px_rgba(91,140,255,0.4)]' 
+                              ? 'sys-bg hover:from-blue-500 hover:to-[#5B8CFF] text-primary font-extrabold cursor-pointer active:scale-95 hover:shadow-[0_0_20px_rgba(91,140,255,0.4)]' 
                               : 'sys-card sys-text-body border border-transparent cursor-not-allowed shadow-none'
                           }`}
                         >
                           {isSubmitting ? (
                             <>
-                              <Shield className="w-5 h-5 animate-spin text-white" strokeWidth={2} />
+                              <Shield className="w-5 h-5 animate-spin text-primary" strokeWidth={2} />
                               <span>Initializing Security Modules...</span>
                             </>
                           ) : (
                             <>
                               <span>Acknowledge & Launch Environment</span>
-                              <Play className="w-4 h-4 fill-current text-white" strokeWidth={2} />
+                              <Play className="w-4 h-4 fill-current text-primary" strokeWidth={2} />
                             </>
                           )}
                         </Button>
@@ -814,7 +814,7 @@ export default function CandidateDashboard() {
                         <th className="px-6 py-4 font-mono text-[10px] uppercase sys-text-body tracking-wider">Integrity</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5">
+                    <tbody className="divide-y divide-divider">
                       {pastSessions.length > 0 ? (
                         pastSessions.map(session => (
                           <tr key={session.id} className="hover:sys-table-row transition-colors">
@@ -830,12 +830,12 @@ export default function CandidateDashboard() {
                                 {session.status === 'submitted' ? 'Submitted' : 'Abandoned'}
                               </span>
                             </td>
-                            <td className="px-6 py-4 font-mono font-bold text-white">{session.score || 0}</td>
+                            <td className="px-6 py-4 font-mono font-bold text-primary">{session.score || 0}</td>
                             <td className="px-6 py-4">
                               <div className="flex items-center gap-2">
                                 <div className="w-16 h-1.5 sys-card rounded-full overflow-hidden">
                                   <div 
-                                    className={`h-full rounded-full ${session.integrity_score >= 80 ? 'bg-[#5B8CFF]' : session.integrity_score >= 50 ? 'bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]' : 'bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]'}`}
+                                    className={`h-full rounded-full ${session.integrity_score >= 80 ? 'bg-[#5B8CFF]' : session.integrity_score >= 50 ? 'bg-panel backdrop-blur-[16px]' : 'bg-panel backdrop-blur-[16px]'}`}
                                     style={{ width: `${session.integrity_score || 0}%` }}
                                   />
                                 </div>

@@ -8,11 +8,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-[#3f6ad5] hover:bg-[#3254a8] text-white hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] font-semibold h-[52px] px-6 rounded-[20px] cursor-pointer transition-all duration-300 shadow-lg hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:scale-[0.98] active:shadow-[0_0_8px_rgba(63,106,213,0.4)]",
-        outline: "bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] hover:bg-[#3f6ad5] border border-white/5 text-white font-medium h-[52px] px-6 rounded-[20px] cursor-pointer transition-all duration-300 hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:scale-[0.98] active:shadow-[0_0_8px_rgba(63,106,213,0.4)]",
-        secondary: "bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] hover:bg-[#3f6ad5] border border-white/5 text-white font-medium h-[52px] px-6 rounded-[20px] cursor-pointer transition-all duration-300 hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:scale-[0.98] active:shadow-[0_0_8px_rgba(63,106,213,0.4)]",
-        ghost: "hover:bg-[#3f6ad5] backdrop-blur-[16px] text-white transition-colors rounded-2xl hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:scale-[0.98]",
-        destructive: "bg-[#F87171]/10 border border-[#F87171]/50 text-[#F87171] hover:bg-[#F87171] hover:text-white transition-all duration-300 hover:shadow-[0_0_15px_rgba(248,113,113,0.6)] active:scale-[0.98]",
+        default: "bg-[#3f6ad5] hover:bg-[#3254a8] text-primary hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] font-semibold h-[52px] px-6 rounded-[20px] cursor-pointer transition-all duration-300 shadow-lg hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:scale-[0.98] active:shadow-[0_0_8px_rgba(63,106,213,0.4)]",
+        outline: "bg-panel backdrop-blur-[16px] hover:bg-[#3f6ad5] border border-divider text-primary font-medium h-[52px] px-6 rounded-[20px] cursor-pointer transition-all duration-300 hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:scale-[0.98] active:shadow-[0_0_8px_rgba(63,106,213,0.4)]",
+        secondary: "bg-panel backdrop-blur-[16px] hover:bg-[#3f6ad5] border border-divider text-primary font-medium h-[52px] px-6 rounded-[20px] cursor-pointer transition-all duration-300 hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:scale-[0.98] active:shadow-[0_0_8px_rgba(63,106,213,0.4)]",
+        ghost: "hover:bg-[#3f6ad5] backdrop-blur-[16px] text-primary transition-colors rounded-2xl hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:scale-[0.98]",
+        destructive: "bg-[#F87171]/10 border border-[#F87171]/50 text-[#F87171] hover:bg-[#F87171] hover:text-primary transition-all duration-300 hover:shadow-[0_0_15px_rgba(248,113,113,0.6)] active:scale-[0.98]",
         link: "text-[#3f6ad5] underline-offset-4 hover:underline hover:text-[#3254a8]",
       },
       size: {

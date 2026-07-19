@@ -993,7 +993,7 @@ export default function ExamShell() {
 
   if (loading || !assessment) {
     return (
-      <div className="min-h-screen sys-bg flex items-center justify-center text-white font-mono text-xs relative">
+      <div className="min-h-screen sys-bg flex items-center justify-center text-primary font-mono text-xs relative">
         <AmbientGlow />
         <div className="flex flex-col items-center gap-3 relative z-10">
           <RefreshCw className="w-6 h-6 animate-spin sys-text-body" />
@@ -1012,9 +1012,9 @@ export default function ExamShell() {
       
       <div className="flex-1 flex flex-col z-10 relative">
       {/* EXAM PANEL HEADER */}
-      <header className="px-6 py-3 flex items-center justify-between sticky top-0 z-50 border-b border-white/5 bg-card/65 ">
+      <header className="px-6 py-3 flex items-center justify-between sticky top-0 z-50 border-b border-divider bg-card/65 ">
         <div className="flex items-center space-x-3 select-none">
-          <div className="p-1 px-2 border rounded sys-bg/65 border-transparent text-white flex items-center gap-1.5 font-bold tracking-tight text-[10px] font-mono">
+          <div className="p-1 px-2 border rounded sys-bg/65 border-transparent text-primary flex items-center gap-1.5 font-bold tracking-tight text-[10px] font-mono">
             <Lock className="w-3.5 h-3.5 animate-pulse" strokeWidth={1.5} /> Protected Environment
           </div>
           <span className="font-bold text-xs tracking-wider uppercase font-mono text-muted hidden md:inline-block">
@@ -1025,7 +1025,7 @@ export default function ExamShell() {
         {/* TIMER ALERT */}
         {timerAlert && (
           <div className="hidden lg:flex items-center gap-2 p-1.5 px-3 sys-card border border-transparent rounded-xl sys-text-primary font-mono text-[9px] font-bold tracking-wide animate-pulse">
-            <AlertTriangle className="w-4 h-4 text-white shrink-0" strokeWidth={1.5} /> {timerAlert}
+            <AlertTriangle className="w-4 h-4 text-primary shrink-0" strokeWidth={1.5} /> {timerAlert}
           </div>
         )}
 
@@ -1034,7 +1034,7 @@ export default function ExamShell() {
           <div className={`flex items-center space-x-2 border px-2.5 py-1 rounded ${
             integrityScore > 75 
               ? 'sys-bg border-transparent sys-text-primary' 
-              : 'sys-card border-transparent text-white animate-pulse'
+              : 'sys-card border-transparent text-primary animate-pulse'
           }`}>
             <Activity className="w-4 h-4" strokeWidth={1.5} />
             <span className="text-[10px] font-mono font-bold">INTEGRITY: {integrityScore}%</span>
@@ -1043,8 +1043,8 @@ export default function ExamShell() {
           {/* TIMER */}
           <div className={`p-1.5 px-3 border rounded text-xs font-mono font-bold ${
             timeLeft < 300 
-              ? 'sys-card border-transparent text-white animate-pulse' 
-              : 'sys-bg border-transparent text-white'
+              ? 'sys-card border-transparent text-primary animate-pulse' 
+              : 'sys-bg border-transparent text-primary'
           }`}>
             <Clock className="w-3.5 h-3.5 inline mr-1.5" strokeWidth={1.5} />
             {formatTimerString(timeLeft)}
@@ -1055,7 +1055,7 @@ export default function ExamShell() {
             disabled={isSyncing}
             variant="outline"
             size="icon"
-            className="w-8 h-8 rounded-lg sys-bg border-transparent sys-text-body hover:text-white transition shadow-sm"
+            className="w-8 h-8 rounded-lg sys-bg border-transparent sys-text-body hover:text-primary transition shadow-sm"
             title="Sync Latest Changes"
           >
             <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-[#5B8CFF]' : ''}`} />
@@ -1066,14 +1066,14 @@ export default function ExamShell() {
           {activePart === 'menu' ? (
             <Button 
               onClick={handleFinishAssessment} 
-              className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white font-extrabold px-4 h-8 rounded-xl text-xs tracking-wider cursor-pointer select-none active:scale-95 transition"
+              className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-primary font-extrabold px-4 h-8 rounded-xl text-xs tracking-wider cursor-pointer select-none active:scale-95 transition"
             >
               Submit Exam
             </Button>
           ) : (
             <Button 
               onClick={handleSubmitPart} 
-              className="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-4 h-8 rounded-xl text-xs tracking-wider cursor-pointer select-none active:scale-95 transition"
+              className="bg-emerald-600 hover:bg-emerald-500 text-primary font-extrabold px-4 h-8 rounded-xl text-xs tracking-wider cursor-pointer select-none active:scale-95 transition"
             >
               {isSingleTypeExam ? 'Final Submit' : 'Submit Section'}
             </Button>
@@ -1085,7 +1085,7 @@ export default function ExamShell() {
       {activePart === 'menu' ? (
         <main className="flex-1 overflow-y-auto p-12 flex flex-col items-center justify-center animate-fade-in relative z-10">
           <div className="max-w-2xl w-full text-center space-y-6">
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">Assessment Overview</h1>
+            <h1 className="text-3xl font-extrabold text-primary tracking-tight">Assessment Overview</h1>
             <p className="sys-text-body text-sm font-mono">Select a section to begin. Once a section is submitted, you cannot return to it.</p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
@@ -1093,17 +1093,17 @@ export default function ExamShell() {
               <div className={`p-8 border rounded-2xl flex flex-col items-center text-center transition ${
                 currentSession?.completedParts?.includes('mcq') 
                   ? 'sys-bg/50 border-transparent opacity-60' 
-                  : 'bg-card/60 border-white/5 hover:border-[#5B8CFF]/50 shadow-xl hover:-translate-y-1'
+                  : 'bg-card/60 border-divider hover:border-[#5B8CFF]/50 shadow-xl hover:-translate-y-1'
               }`}>
                 <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4 border border-transparent">
                   <span className="font-mono font-bold text-[#14B8A6]">P1</span>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">Multiple Choice</h3>
+                <h3 className="text-lg font-bold text-primary mb-2">Multiple Choice</h3>
                 <p className="text-xs sys-text-body mb-6 flex-1">Core conceptual knowledge and scenario analysis.</p>
                 {currentSession?.completedParts?.includes('mcq') ? (
                   <Button disabled className="w-full sys-card sys-text-body font-bold">SUBMITTED</Button>
                 ) : (
-                  <Button onClick={() => handleStartPart('mcq')} className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white font-bold cursor-pointer transition">
+                  <Button onClick={() => handleStartPart('mcq')} className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-primary font-bold cursor-pointer transition">
                     START SECTION
                   </Button>
                 )}
@@ -1113,17 +1113,17 @@ export default function ExamShell() {
               <div className={`p-8 border rounded-2xl flex flex-col items-center text-center transition ${
                 currentSession?.completedParts?.includes('coding') 
                   ? 'sys-bg/50 border-transparent opacity-60' 
-                  : 'bg-card/60 border-white/5 hover:border-[#5B8CFF]/50 shadow-xl hover:-translate-y-1'
+                  : 'bg-card/60 border-divider hover:border-[#5B8CFF]/50 shadow-xl hover:-translate-y-1'
               }`}>
                 <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4 border border-transparent">
                   <span className="font-mono font-bold text-[#5B8CFF]">P2</span>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">Coding Challenges</h3>
+                <h3 className="text-lg font-bold text-primary mb-2">Coding Challenges</h3>
                 <p className="text-xs sys-text-body mb-6 flex-1">Algorithmic problem solving and secure logic implementation.</p>
                 {currentSession?.completedParts?.includes('coding') ? (
                   <Button disabled className="w-full sys-card sys-text-body font-bold">SUBMITTED</Button>
                 ) : (
-                  <Button onClick={() => handleStartPart('coding')} className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white font-bold cursor-pointer transition">
+                  <Button onClick={() => handleStartPart('coding')} className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-primary font-bold cursor-pointer transition">
                     START SECTION
                   </Button>
                 )}
@@ -1132,7 +1132,7 @@ export default function ExamShell() {
 
             {currentSession?.completedParts?.includes('mcq') && currentSession?.completedParts?.includes('coding') && (
               <div className="mt-8">
-                <Button onClick={handleFinishAssessment} className="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-8 h-12 rounded-xl tracking-widest text-sm shadow-lg animate-pulse">
+                <Button onClick={handleFinishAssessment} className="bg-emerald-600 hover:bg-emerald-500 text-primary font-extrabold px-8 h-12 rounded-xl tracking-widest text-sm shadow-lg animate-pulse">
                   FINALIZE EXAM
                 </Button>
               </div>
@@ -1143,10 +1143,10 @@ export default function ExamShell() {
       <main className="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden h-[calc(100vh-57px)] animate-fade-in relative z-10">
         
         {/* LEFT COLUMN: Problem Description & Telemetry */}
-        <section className={`p-5 flex flex-col space-y-4 overflow-y-auto border-r border-white/5 bg-card/30 ${activePart === 'mcq' ? 'lg:col-span-3' : 'lg:col-span-5'}`}>
+        <section className={`p-5 flex flex-col space-y-4 overflow-y-auto border-r border-divider bg-card/30 ${activePart === 'mcq' ? 'lg:col-span-3' : 'lg:col-span-5'}`}>
           
           {/* QUESTION SELECTOR */}
-          <div className="flex items-center justify-between border-b border-white/5 pb-3 select-none">
+          <div className="flex items-center justify-between border-b border-divider pb-3 select-none">
             <h3 className="text-[10px] font-bold font-mono tracking-widest text-muted uppercase">Part: {activePart === 'mcq' ? 'MCQ' : 'Coding'}</h3>
             <div className="flex items-center gap-1.5">
               <Button 
@@ -1154,7 +1154,7 @@ export default function ExamShell() {
                 size="sm" 
                 disabled={selectedQIndex === 0} 
                 onClick={() => setSelectedQIndex(p => p - 1)}
-                className="h-7 px-2 border border-white/5 bg-card/45 hover:sys-card"
+                className="h-7 px-2 border border-divider bg-card/45 hover:sys-card"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
               </Button>
@@ -1166,7 +1166,7 @@ export default function ExamShell() {
                 size="sm" 
                 disabled={selectedQIndex === filteredQuestions.length - 1} 
                 onClick={() => setSelectedQIndex(p => p + 1)}
-                className="h-7 px-2 border border-white/5 bg-card/45 hover:sys-card"
+                className="h-7 px-2 border border-divider bg-card/45 hover:sys-card"
               >
                 <ChevronRight className="w-3.5 h-3.5" />
               </Button>
@@ -1174,7 +1174,7 @@ export default function ExamShell() {
           </div>
 
           <div className="py-2 flex gap-2">
-            <Button onClick={handleSubmitPart} className="flex-1 bg-[#3f6ad5] hover:bg-[#3254a8] text-white hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] border-none hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-[10px] font-mono tracking-widest uppercase transition h-8">
+            <Button onClick={handleSubmitPart} className="flex-1 bg-[#3f6ad5] hover:bg-[#3254a8] text-primary hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] border-none hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-[10px] font-mono tracking-widest uppercase transition h-8">
               {isSingleTypeExam ? 'Final Submit' : `Submit ${activePart === 'mcq' ? 'MCQ' : 'Coding'} Section`}
             </Button>
           </div>
@@ -1184,7 +1184,7 @@ export default function ExamShell() {
               {activePart !== 'mcq' && (
                 <>
                   <div>
-                    <span className="px-2 py-0.5 rounded text-[9px] font-mono bg-background border border-white/5 text-muted font-bold uppercase tracking-wider">
+                    <span className="px-2 py-0.5 rounded text-[9px] font-mono bg-background border border-divider text-muted font-bold uppercase tracking-wider">
                       DIFFICULTY: {activeQuestion.difficulty}
                     </span>
                     <h1 className="text-base font-extrabold tracking-tight mt-2.5 flex items-center gap-1.5 text-foreground">
@@ -1200,15 +1200,15 @@ export default function ExamShell() {
               )}
               
               {activePart === 'mcq' && (
-                <div className="mt-4 p-4 border border-white/5 bg-card/20 rounded-xl space-y-3">
-                  <h4 className="text-[10px] font-mono font-bold text-foreground uppercase tracking-widest border-b border-white/5 pb-2">Question Navigator</h4>
+                <div className="mt-4 p-4 border border-divider bg-card/20 rounded-xl space-y-3">
+                  <h4 className="text-[10px] font-mono font-bold text-foreground uppercase tracking-widest border-b border-divider pb-2">Question Navigator</h4>
                   <div className="flex flex-wrap gap-2">
                     {filteredQuestions.map((q, idx) => {
                       const isAnswered = currentSession?.submissions?.[q.id]?.code !== undefined
                       const isMarked = reviewMarked[q.id]
                       const isActive = selectedQIndex === idx
                       
-                      let btnColor = 'sys-card sys-text-body border-white/5 hover:sys-card' // Unanswered default
+                      let btnColor = 'sys-card sys-text-body border-divider hover:sys-card' // Unanswered default
                       if (isActive) btnColor = 'bg-foreground text-background border-foreground shadow-[0_0_10px_rgba(255,255,255,0.2)]'
                       else if (isMarked) btnColor = 'bg-yellow-500/10 text-yellow-500 border-yellow-500/30'
                       else if (isAnswered) btnColor = 'bg-[#5B8CFF]/15 text-[#5B8CFF] border-[#5B8CFF]/30'
@@ -1224,7 +1224,7 @@ export default function ExamShell() {
                       )
                     })}
                   </div>
-                  <div className="flex flex-wrap gap-x-4 gap-y-2 mt-2 pt-2 border-t border-white/5/50 text-[9px] font-mono sys-text-body">
+                  <div className="flex flex-wrap gap-x-4 gap-y-2 mt-2 pt-2 border-t border-divider/50 text-[9px] font-mono sys-text-body">
                     <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded bg-foreground"></div> Current</div>
                     <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded bg-[#5B8CFF]/60"></div> Answered</div>
                     <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded bg-yellow-500/60"></div> Review</div>
@@ -1238,25 +1238,25 @@ export default function ExamShell() {
                   {/* Tags */}
                   <div className="flex flex-wrap gap-1.5">
                     {activeQuestion.tags?.map((tag, idx) => (
-                      <span key={idx} className="bg-background text-muted border border-white/5 text-[9px] px-2 py-0.5 rounded font-mono">
+                      <span key={idx} className="bg-background text-muted border border-divider text-[9px] px-2 py-0.5 rounded font-mono">
                         {tag}
                       </span>
                     ))}
                   </div>
 
                   {/* Constraints */}
-                  <div className="p-4 rounded-xl border bg-card/40 border-white/5">
+                  <div className="p-4 rounded-xl border bg-card/40 border-divider">
                     <h4 className="text-[9px] font-mono font-bold text-foreground uppercase tracking-widest mb-1.5">Constraints</h4>
                     <pre className="text-xs leading-relaxed font-mono whitespace-pre-wrap sys-text-body">{activeQuestion.constraints}</pre>
                   </div>
 
                   {/* Format specs */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-3.5 rounded-xl border bg-card/40 border-white/5">
+                    <div className="p-3.5 rounded-xl border bg-card/40 border-divider">
                       <h4 className="text-[9px] font-mono font-bold text-muted uppercase tracking-wider mb-1">Input Format</h4>
                       <p className="text-[11px] sys-text-body">{activeQuestion.input_format}</p>
                     </div>
-                    <div className="p-3.5 rounded-xl border bg-card/40 border-white/5">
+                    <div className="p-3.5 rounded-xl border bg-card/40 border-divider">
                       <h4 className="text-[9px] font-mono font-bold text-muted uppercase tracking-wider mb-1">Output Format</h4>
                       <p className="text-[11px] sys-text-body">{activeQuestion.output_format}</p>
                     </div>
@@ -1266,16 +1266,16 @@ export default function ExamShell() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
                     <div className="space-y-1.5 flex flex-col">
                       <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-wider px-1">Sample Input</span>
-                      <pre className="bg-background p-3 rounded border border-white/5 text-[11px] font-mono text-muted min-h-16 whitespace-pre-wrap">{activeQuestion.sample_input}</pre>
+                      <pre className="bg-background p-3 rounded border border-divider text-[11px] font-mono text-muted min-h-16 whitespace-pre-wrap">{activeQuestion.sample_input}</pre>
                     </div>
                     <div className="space-y-1.5 flex flex-col">
                       <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-wider px-1">Sample Output</span>
-                      <pre className="bg-background p-3 rounded border border-white/5 text-[11px] font-mono text-foreground min-h-16 whitespace-pre-wrap">{activeQuestion.sample_output}</pre>
+                      <pre className="bg-background p-3 rounded border border-divider text-[11px] font-mono text-foreground min-h-16 whitespace-pre-wrap">{activeQuestion.sample_output}</pre>
                     </div>
                   </div>
 
                   {activeQuestion.explanation && (
-                    <div className="text-[11px] sys-text-body leading-normal italic bg-background border border-white/5 p-3 rounded-xl">
+                    <div className="text-[11px] sys-text-body leading-normal italic bg-background border border-divider p-3 rounded-xl">
                       <strong>Explanation:</strong> {activeQuestion.explanation}
                     </div>
                   )}
@@ -1289,12 +1289,12 @@ export default function ExamShell() {
           )}
 
           {/* PROCTORING TELEMETRY SIDEBAR DRAWER */}
-          <div className="pt-4 border-t border-white/5 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="pt-4 border-t border-divider grid grid-cols-1 md:grid-cols-2 gap-4">
             
             {/* Visual camera radar card */}
-            <Card className="bg-background border-white/5 overflow-hidden relative shadow-none min-h-28 rounded-xl flex items-center justify-center">
+            <Card className="bg-background border-divider overflow-hidden relative shadow-none min-h-28 rounded-xl flex items-center justify-center">
               {isAnomalyActive && (
-                <div className="absolute top-2 right-2 z-30 bg-[#EF4444] text-white font-mono font-bold text-[8px] px-1.5 py-0.5 rounded flex items-center animate-bounce">
+                <div className="absolute top-2 right-2 z-30 bg-[#EF4444] text-primary font-mono font-bold text-[8px] px-1.5 py-0.5 rounded flex items-center animate-bounce">
                   <EyeOff className="w-2.5 h-2.5 mr-1" strokeWidth={1.5} /> {anomalyType}
                 </div>
               )}
@@ -1306,7 +1306,7 @@ export default function ExamShell() {
                 </div>
                 <canvas ref={canvasRef} width="160" height="120" className="hidden" />
                 
-                <div className="absolute inset-0 border border-white/5 pointer-events-none z-20">
+                <div className="absolute inset-0 border border-divider pointer-events-none z-20">
                   <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t border-l border-white/60" />
                   <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t border-r border-white/60" />
                   <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b border-l border-white/60" />
@@ -1316,13 +1316,13 @@ export default function ExamShell() {
             </Card>
 
             {/* Telemetry timeline logs */}
-            <Card className="bg-[#0B0B0D] border-white/5 flex flex-col shadow-none overflow-hidden h-28 rounded-xl">
-              <div className="bg-background border-b border-white/5 px-2.5 py-1.5 text-[8.5px] uppercase font-bold sys-text-body tracking-wider">
+            <Card className="bg-card border-divider flex flex-col shadow-none overflow-hidden h-28 rounded-xl">
+              <div className="bg-background border-b border-divider px-2.5 py-1.5 text-[8.5px] uppercase font-bold sys-text-body tracking-wider">
                 Telemetry Log
               </div>
               <div className="p-2 font-mono text-[9px] space-y-1.5 overflow-y-auto flex-1 sys-text-body max-h-[80px]">
                 {proctorLogs.slice(-20).map((log, idx) => (
-                  <div key={idx} className={log.includes('ALERT') ? 'text-white font-bold bg-[#EF4444]/15 border border-[#EF4444]/30 px-1 rounded' : 'sys-text-body'}>
+                  <div key={idx} className={log.includes('ALERT') ? 'text-primary font-bold bg-[#EF4444]/15 border border-[#EF4444]/30 px-1 rounded' : 'sys-text-body'}>
                     {log}
                   </div>
                 ))}
@@ -1336,7 +1336,7 @@ export default function ExamShell() {
           
           {/* EDITOR SUB-HEADER */}
           {activeQuestion?.type !== 'mcq' && (
-            <div className="px-4 py-2 flex items-center justify-between border-b border-white/5 bg-card">
+            <div className="px-4 py-2 flex items-center justify-between border-b border-divider bg-card">
               <span className="text-[10px] font-mono font-bold text-muted flex items-center gap-1.5 uppercase select-none">
                 <Terminal className="w-3.5 h-3.5 sys-text-body" strokeWidth={1.5} /> Compiler Workspace Node
               </span>
@@ -1344,7 +1344,7 @@ export default function ExamShell() {
                 <select 
                   value={language} 
                   onChange={(e) => setLanguage(e.target.value)} 
-                  className="border border-white/5 bg-background text-foreground rounded text-xs px-2 py-1 font-semibold outline-none cursor-pointer"
+                  className="border border-divider bg-background text-foreground rounded text-xs px-2 py-1 font-semibold outline-none cursor-pointer"
                 >
                   {assessment.allowed_languages.includes('python') && settings.allowedLangs.includes('python') && <option value="python">Python 3.10</option>}
                   {assessment.allowed_languages.includes('javascript') && settings.allowedLangs.includes('javascript') && <option value="javascript">JavaScript (ES6)</option>}
@@ -1361,9 +1361,9 @@ export default function ExamShell() {
                 <div className="flex flex-col h-full">
                   <div className="flex-1 p-8 max-w-4xl mx-auto w-full space-y-6 overflow-y-auto pb-24">
                     
-                    <div className="flex items-center gap-4 mb-4 border-b border-white/5/50 pb-4 flex-wrap">
+                    <div className="flex items-center gap-4 mb-4 border-b border-divider/50 pb-4 flex-wrap">
                       <h2 className="text-xl font-extrabold text-foreground font-sans">Question {selectedQIndex + 1}</h2>
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-background border border-white/5 text-muted font-bold uppercase tracking-wider">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-background border border-divider text-muted font-bold uppercase tracking-wider">
                         DIFFICULTY: {activeQuestion.difficulty}
                       </span>
                       <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#34D399]/10 border border-[#34D399]/30 text-[#34D399] font-bold uppercase tracking-wider">
@@ -1376,7 +1376,7 @@ export default function ExamShell() {
                       )}
                     </div>
 
-                    <h1 className="text-[17px] font-extrabold tracking-tight mt-2.5 mb-4 flex items-center gap-2 text-white">
+                    <h1 className="text-[17px] font-extrabold tracking-tight mt-2.5 mb-4 flex items-center gap-2 text-primary">
                       <CornerDownRight className="w-4 h-4 text-[#5B8CFF]" strokeWidth={2} /> <Latex>{activeQuestion.title || ''}</Latex>
                     </h1>
                     
@@ -1400,8 +1400,8 @@ export default function ExamShell() {
                           >
                             <div className={`flex shrink-0 items-center justify-center w-7 h-7 rounded-full mr-4 font-bold font-mono text-[10px] border transition-all duration-200 ${
                               isSelected 
-                                ? 'bg-[#5B8CFF] text-white border-[#5B8CFF]' 
-                                : 'bg-transparent text-[#8E93A5] border-white/10 group-hover:border-white/20 group-hover:text-white'
+                                ? 'bg-[#5B8CFF] text-primary border-[#5B8CFF]' 
+                                : 'bg-transparent text-[#8E93A5] border-border-strong group-hover:border-white/20 group-hover:text-primary'
                             }`}>
                               {String.fromCharCode(65 + idx)}
                             </div>
@@ -1415,19 +1415,19 @@ export default function ExamShell() {
                   </div>
 
                   {/* BOTTOM ACTION BAR FOR MCQ */}
-                  <div className="h-20 bg-card border-t border-white/5 flex items-center justify-between px-8 absolute bottom-0 left-0 right-0 z-20 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+                  <div className="h-20 bg-card border-t border-divider flex items-center justify-between px-8 absolute bottom-0 left-0 right-0 z-20 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
                     <div className="flex items-center gap-3">
                       <Button 
                         onClick={handleClearResponse}
                         variant="outline"
-                        className="h-10 px-5 text-xs font-mono font-bold bg-background sys-text-body border-white/5 hover:sys-card hover:text-white uppercase tracking-widest"
+                        className="h-10 px-5 text-xs font-mono font-bold bg-background sys-text-body border-divider hover:sys-card hover:text-primary uppercase tracking-widest"
                       >
                         Clear Response
                       </Button>
                       <Button 
                         onClick={() => setReviewMarked(prev => ({ ...prev, [activeQuestion.id]: !prev[activeQuestion.id] }))}
                         variant="outline"
-                        className={`h-10 px-5 text-xs font-mono font-bold uppercase tracking-widest transition ${reviewMarked[activeQuestion.id] ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30' : 'bg-background sys-text-body border-white/5 hover:sys-card hover:text-white'}`}
+                        className={`h-10 px-5 text-xs font-mono font-bold uppercase tracking-widest transition ${reviewMarked[activeQuestion.id] ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30' : 'bg-background sys-text-body border-divider hover:sys-card hover:text-primary'}`}
                       >
                         {reviewMarked[activeQuestion.id] ? 'Unmark Review' : 'Mark for Review'}
                       </Button>
@@ -1438,14 +1438,14 @@ export default function ExamShell() {
                         onClick={() => setSelectedQIndex(p => p - 1)}
                         disabled={selectedQIndex === 0}
                         variant="outline"
-                        className="h-10 px-5 text-xs font-mono font-bold bg-background sys-text-body border-white/5 hover:sys-card hover:text-white uppercase tracking-widest disabled:opacity-30"
+                        className="h-10 px-5 text-xs font-mono font-bold bg-background sys-text-body border-divider hover:sys-card hover:text-primary uppercase tracking-widest disabled:opacity-30"
                       >
                         Previous
                       </Button>
                       <Button 
                         onClick={handleSaveAndNext}
                         disabled={selectedQIndex === filteredQuestions.length - 1}
-                        className="h-10 px-6 text-xs font-mono font-bold bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white uppercase tracking-widest shadow-lg"
+                        className="h-10 px-6 text-xs font-mono font-bold bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-primary uppercase tracking-widest shadow-lg"
                       >
                         Save & Next <ChevronRight className="w-4 h-4 ml-2" />
                       </Button>
@@ -1480,9 +1480,9 @@ export default function ExamShell() {
 
           {/* SPLIT CONSOLE PANEL */}
           {activeQuestion?.type !== 'mcq' && (
-            <div className="h-64 flex flex-col border-t border-white/5 bg-card">
+            <div className="h-64 flex flex-col border-t border-divider bg-card">
               {/* Control Bar */}
-              <div className="px-4 py-2 flex items-center justify-between text-xs border-b border-white/5 bg-card/40 select-none">
+              <div className="px-4 py-2 flex items-center justify-between text-xs border-b border-divider bg-card/40 select-none">
                 <div className="flex items-center gap-4">
                   <button 
                     onClick={() => setTerminalTab('console')}
@@ -1502,7 +1502,7 @@ export default function ExamShell() {
                     onClick={handleResetCode} 
                     variant="outline" 
                     size="sm"
-                    className="h-6 text-[9px] font-bold font-mono border border-white/5 bg-background hover:sys-card px-2.5 rounded text-muted hover:text-foreground"
+                    className="h-6 text-[9px] font-bold font-mono border border-divider bg-background hover:sys-card px-2.5 rounded text-muted hover:text-foreground"
                   >
                     <RefreshCw className="w-3 h-3 mr-1" strokeWidth={1.5} /> RESET TEMPLATE
                   </Button>
@@ -1510,7 +1510,7 @@ export default function ExamShell() {
                     onClick={() => setConsoleOutput('Execution console reports cleared.')} 
                   variant="outline" 
                   size="sm"
-                  className="h-6 text-[9px] font-bold font-mono border border-white/5 bg-background hover:sys-card px-2.5 rounded text-muted hover:text-foreground"
+                  className="h-6 text-[9px] font-bold font-mono border border-divider bg-background hover:sys-card px-2.5 rounded text-muted hover:text-foreground"
                 >
                   <Trash2 className="w-3.5 h-3.5 mr-1" strokeWidth={1.5} /> CLEAR OUTPUT
                 </Button>
@@ -1524,7 +1524,7 @@ export default function ExamShell() {
                 <Button 
                   onClick={handleSubmitQuestion} 
                   disabled={isRunning || isSubmitting} 
-                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white font-extrabold h-6 px-3.5 text-[9px] font-mono tracking-wider active:scale-95 transition rounded-xl cursor-pointer"
+                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-primary font-extrabold h-6 px-3.5 text-[9px] font-mono tracking-wider active:scale-95 transition rounded-xl cursor-pointer"
                 >
                   {isSubmitting ? 'EVALUATING...' : 'SUBMIT CODE'}
                 </Button>
@@ -1535,7 +1535,7 @@ export default function ExamShell() {
             <div className="flex-1 flex overflow-hidden">
               
               {terminalTab === 'testcases' && (
-                <div className="w-64 border-r border-white/5 p-3 bg-[#0B0B0D]/80 flex flex-col">
+                <div className="w-64 border-r border-divider p-3 bg-card/80 flex flex-col">
                   <span className="text-[9px] font-mono sys-text-body uppercase mb-2 font-bold tracking-widest">Custom STDIN Input</span>
                   <textarea 
                     value={customInput}
@@ -1552,28 +1552,28 @@ export default function ExamShell() {
 
               {/* Case Verdict Sidebar */}
               {testResults && (
-                <div className="w-64 border-l border-white/5 p-3 bg-[#050507]/60 overflow-y-auto max-h-full space-y-2 select-none">
-                  <div className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest border-b border-white/5 pb-1 flex items-center justify-between">
+                <div className="w-64 border-l border-divider p-3 bg-[#050507]/60 overflow-y-auto max-h-full space-y-2 select-none">
+                  <div className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest border-b border-divider pb-1 flex items-center justify-between">
                     <span>{testResults.isSubmit ? 'Final Verdict' : 'Run Verdict'}</span>
                     <span className={`px-1.5 py-0.5 rounded text-[8px] font-extrabold ${
-                      testResults.verdict === 'Accepted' ? 'sys-card border border-transparent text-white' : 'sys-bg border border-white/5 sys-text-body animate-pulse'
+                      testResults.verdict === 'Accepted' ? 'sys-card border border-transparent text-primary' : 'sys-bg border border-divider sys-text-body animate-pulse'
                     }`}>{testResults.verdict}</span>
                   </div>
 
                   {testResults.isSubmit && (
-                    <div className="text-[10px] sys-text-body space-y-0.5 border-t border-white/5 pt-1.5">
-                      <div>Score Obtained: <span className="text-white font-bold font-mono">{testResults.score}%</span></div>
-                      <div>Passed Cases: <span className="text-white font-bold font-mono">{testResults.passedCount} / {testResults.totalCount}</span></div>
+                    <div className="text-[10px] sys-text-body space-y-0.5 border-t border-divider pt-1.5">
+                      <div>Score Obtained: <span className="text-primary font-bold font-mono">{testResults.score}%</span></div>
+                      <div>Passed Cases: <span className="text-primary font-bold font-mono">{testResults.passedCount} / {testResults.totalCount}</span></div>
                     </div>
                   )}
 
-                  <div className="space-y-1.5 pt-1.5 border-t border-white/5">
+                  <div className="space-y-1.5 pt-1.5 border-t border-divider">
                     {testResults.cases?.map((c: any, index: number) => (
-                      <div key={index} className="p-2 bg-background border border-white/5 rounded text-[9px] flex flex-col space-y-1 font-mono">
+                      <div key={index} className="p-2 bg-background border border-divider rounded text-[9px] flex flex-col space-y-1 font-mono">
                         <div className="flex justify-between items-center">
                           <span className="sys-text-body font-bold">Case #{index + 1}</span>
                           <span className={`p-3 rounded-xl border text-[10px] ${
-                            c.passed ? 'sys-card text-white border-transparent' : 'bg-[#1A1C20] shadow-inner shadow-black/20 sys-text-body border-white/[0.03]'
+                            c.passed ? 'sys-card text-primary border-transparent' : 'bg-input shadow-inner shadow-black/20 sys-text-body border-divider'
                           }`}>
                             {c.verdict}
                           </span>
@@ -1598,7 +1598,7 @@ export default function ExamShell() {
       {/* WARNING POPUP SCREEN */}
       {showWarningModal && (
         <div className="fixed inset-0 bg-black/90  flex items-center justify-center z-[9000] p-4">
-          <Card className="w-full max-w-md bg-card border border-white/5 p-6 text-center shadow-none relative rounded-2xl">
+          <Card className="w-full max-w-md bg-card border border-divider p-6 text-center shadow-none relative rounded-2xl">
             <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#EF4444]" />
             <AlertTriangle className="w-12 h-12 text-[#EF4444] mx-auto mb-4 animate-bounce" strokeWidth={1.5} />
             <h3 className="text-base font-bold text-foreground tracking-tight uppercase font-mono">Workspace Violation Alert</h3>
@@ -1608,7 +1608,7 @@ export default function ExamShell() {
             <div className="mt-6 flex flex-col gap-2">
               <Button 
                 onClick={enterFullscreen} 
-                className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white font-extrabold text-xs h-10 rounded-xl cursor-pointer"
+                className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-primary font-extrabold text-xs h-10 rounded-xl cursor-pointer"
               >
                 Re-enter Secure Fullscreen Mode
               </Button>

@@ -90,7 +90,7 @@ export default function RecruiterDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#000000] flex items-center justify-center text-white font-mono text-xs relative overflow-hidden">
+      <div className="min-h-screen bg-background flex items-center justify-center text-primary font-mono text-xs relative overflow-hidden">
         <div className="grain-overlay" />
         <div className="flex flex-col items-center gap-3 relative z-10">
           <Shield className="w-6 h-6 animate-pulse text-[#5B8CFF]" strokeWidth={1.5} />
@@ -133,7 +133,7 @@ export default function RecruiterDashboard() {
 
       {/* ================= LEFT SIDEBAR (COLLAPSIBLE OS DOCK) ================= */}
       <aside 
-        className={`fixed inset-y-0 left-0 z-50 h-screen bg-[#000000]/80 md:bg-[#000000]/40 backdrop-blur-3xl border-r border-white/5 flex flex-col justify-between p-5 shrink-0 select-none transition-all duration-300 md:relative md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 h-screen bg-background/80 md:bg-background/40 backdrop-blur-3xl border-r border-divider flex flex-col justify-between p-5 shrink-0 select-none transition-all duration-300 md:relative md:translate-x-0 ${
           isMobileSidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full w-64'
         } ${isCollapsed ? 'md:w-20' : 'md:w-64'}`}
       >
@@ -142,12 +142,12 @@ export default function RecruiterDashboard() {
           {/* Header Workspace Picker */}
           <div className="flex items-center justify-between select-none">
             <div className="flex items-center space-x-3 overflow-hidden">
-              <div className="p-2 bg-background border border-white/5 rounded-xl shrink-0">
+              <div className="p-2 bg-background border border-divider rounded-xl shrink-0">
                 <Shield className="w-5 h-5 text-[#5B8CFF]" strokeWidth={1.5} />
               </div>
               {!(isCollapsed && !isMobileSidebarOpen) && (
                 <div className="flex flex-col">
-                  <span className="font-heading font-extrabold text-sm tracking-tight text-white">ShieldAI</span>
+                  <span className="font-heading font-extrabold text-sm tracking-tight text-primary">ShieldAI</span>
                   <span className="text-[8px] font-mono sys-text-body uppercase tracking-widest leading-none mt-0.5">V2 Enterprise</span>
                 </div>
               )}
@@ -160,11 +160,11 @@ export default function RecruiterDashboard() {
           {!(isCollapsed && !isMobileSidebarOpen) && (
             <div 
               onClick={() => { setShowPalette(true); setIsMobileSidebarOpen(false); }}
-              className="flex bg-[#1A1C20] border border-white/5 rounded-xl px-3 py-2 items-center gap-2 hover:border-[#5B8CFF]/30 cursor-pointer transition select-none"
+              className="flex bg-input border border-divider rounded-xl px-3 py-2 items-center gap-2 hover:border-[#5B8CFF]/30 cursor-pointer transition select-none"
             >
               <Search className="w-3.5 h-3.5 sys-text-body" strokeWidth={1.5} />
               <span className="text-[11px] sys-text-body font-medium flex-1">Command Search...</span>
-              <span className="text-[8px] font-mono sys-text-body bg-[#0B0B0D] shadow-inner shadow-black/20 backdrop-blur-[16px] border border-white/[0.03] px-1.5 py-0.2 rounded">⌘K</span>
+              <span className="text-[8px] font-mono sys-text-body bg-card shadow-inner shadow-black/20 backdrop-blur-[16px] border border-divider px-1.5 py-0.2 rounded">⌘K</span>
             </div>
           )}
 
@@ -172,7 +172,7 @@ export default function RecruiterDashboard() {
             <div className="flex justify-center">
               <button 
                 onClick={() => { setShowPalette(true); setIsMobileSidebarOpen(false); }}
-                className="p-2 rounded-xl bg-[#1A1C20] border border-white/5 sys-text-body hover:text-white transition"
+                className="p-2 rounded-xl bg-input border border-divider sys-text-body hover:text-primary transition"
               >
                 <Command className="w-4 h-4" strokeWidth={1.5} />
               </button>
@@ -195,7 +195,7 @@ export default function RecruiterDashboard() {
                   className={`flex items-center gap-3 px-3 py-2.5 text-xs font-medium rounded-xl border transition-all duration-300 cursor-pointer ${
                     isActive 
                       ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border-[#5B8CFF]/20 font-semibold' 
-                      : 'sys-text-body hover:text-white border-transparent hover:bg-[#1A1C20] backdrop-blur-[16px]/20'
+                      : 'sys-text-body hover:text-primary border-transparent hover:bg-input backdrop-blur-[16px]/20'
                   } ${(isCollapsed && !isMobileSidebarOpen) ? 'justify-center' : ''}`}
                   title={item.label}
                 >
@@ -207,7 +207,7 @@ export default function RecruiterDashboard() {
 
             {/* AI Generator navigation link (if active & assessment selected) */}
             {selectedAssessment && !(isCollapsed && !isMobileSidebarOpen) && (activeSection === 'questions' || activeSection === 'ai-generate') && (
-              <div className="pl-4 mt-1 border-l border-white/5 flex flex-col gap-1">
+              <div className="pl-4 mt-1 border-l border-divider flex flex-col gap-1">
                 <button 
                   onClick={() => { setActiveSection('questions'); setIsMobileSidebarOpen(false); }}
                   className={`flex items-center gap-2 py-1.5 px-3 text-[11px] rounded-lg transition ${
@@ -232,7 +232,7 @@ export default function RecruiterDashboard() {
         </div>
 
         {/* Footer Profile & Dock Toggle */}
-        <div className="space-y-4 pt-4 border-t border-white/5">
+        <div className="space-y-4 pt-4 border-t border-divider">
           {(isCollapsed && !isMobileSidebarOpen) && (
             <div className="flex justify-center pb-2">
               <ThemeToggle />
@@ -241,12 +241,12 @@ export default function RecruiterDashboard() {
 
           {/* User profile details */}
           <div className={`flex items-center gap-3 px-1 ${(isCollapsed && !isMobileSidebarOpen) ? 'justify-center' : ''}`}>
-            <div className="p-2 bg-[#0B0B0D]/80 backdrop-blur-[16px]/40 border border-white/5 rounded-xl shrink-0">
+            <div className="p-2 bg-card/80 backdrop-blur-[16px]/40 border border-divider rounded-xl shrink-0">
               <User className="w-4 h-4 sys-text-body" strokeWidth={1.5} />
             </div>
             {!(isCollapsed && !isMobileSidebarOpen) && (
               <div className="flex flex-col min-w-0">
-                <span className="text-xs font-semibold text-white truncate font-heading">{user?.name || 'Recruiter'}</span>
+                <span className="text-xs font-semibold text-primary truncate font-heading">{user?.name || 'Recruiter'}</span>
                 <span className="text-[9.5px] sys-text-body font-mono truncate">{user?.email}</span>
               </div>
             )}
@@ -256,7 +256,7 @@ export default function RecruiterDashboard() {
             <Button 
               onClick={logout} 
               variant="outline" 
-              className={`border-white/5 bg-[#1A1C20]/20 !shadow-none hover:!bg-[#1A1C20] hover:!shadow-none sys-text-body hover:text-white text-xs h-9 justify-center cursor-pointer transition rounded-xl flex-1 ${
+              className={`border-divider bg-input/20 !shadow-none hover:!bg-input hover:!shadow-none sys-text-body hover:text-primary text-xs h-9 justify-center cursor-pointer transition rounded-xl flex-1 ${
                 (isCollapsed && !isMobileSidebarOpen) ? 'p-0' : ''
               }`}
               title="Sign Out"
@@ -268,7 +268,7 @@ export default function RecruiterDashboard() {
             {/* Collapsible toggle button */}
             <button 
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="hidden md:block p-2 border border-white/5 bg-[#1A1C20]/20 hover:bg-[#1A1C20] sys-text-body hover:text-white rounded-xl cursor-pointer transition focus:outline-none"
+              className="hidden md:block p-2 border border-divider bg-input/20 hover:bg-input sys-text-body hover:text-primary rounded-xl cursor-pointer transition focus:outline-none"
             >
               {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
             </button>
@@ -280,10 +280,10 @@ export default function RecruiterDashboard() {
       <div className="flex-1 flex flex-col h-screen overflow-hidden relative z-10">
         
         {/* TOP BAR FLOATING COMMAND WORKSPACE */}
-        <header className="h-16 border-b border-white/5 bg-[#0B0B0D]/80 backdrop-blur-[16px] flex items-center justify-between px-4 md:px-8 z-25 ">
+        <header className="h-16 border-b border-divider bg-card/80 backdrop-blur-[16px] flex items-center justify-between px-4 md:px-8 z-25 ">
           {/* Breadcrumbs trail */}
           <div className="flex items-center gap-1 md:gap-2 text-[10px] font-heading font-semibold uppercase tracking-widest select-none text-white/60">
-            <Button variant="ghost" size="icon" onClick={() => setIsMobileSidebarOpen(true)} className="md:hidden mr-2 -ml-2 h-8 w-8 text-white hover:bg-white/10">
+            <Button variant="ghost" size="icon" onClick={() => setIsMobileSidebarOpen(true)} className="md:hidden mr-2 -ml-2 h-8 w-8 text-primary hover:bg-white/10">
               <Menu className="w-4 h-4" />
             </Button>
             <span className="hidden sm:inline">SHIELD_OS</span>
@@ -301,10 +301,10 @@ export default function RecruiterDashboard() {
           <div className="flex items-center gap-4">
             <button 
               onClick={handleSync}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/5 sys-bg/40 hover:sys-card transition-all cursor-pointer group"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-divider sys-bg/40 hover:sys-card transition-all cursor-pointer group"
             >
-              <RefreshCw className={`w-3.5 h-3.5 sys-text-body group-hover:text-white ${isSyncing ? 'animate-spin text-[#5B8CFF]' : ''}`} />
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider sys-text-body group-hover:text-white">
+              <RefreshCw className={`w-3.5 h-3.5 sys-text-body group-hover:text-primary ${isSyncing ? 'animate-spin text-[#5B8CFF]' : ''}`} />
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider sys-text-body group-hover:text-primary">
                 {isSyncing ? 'Syncing...' : 'Sync'}
               </span>
             </button>
@@ -374,14 +374,14 @@ export default function RecruiterDashboard() {
           <div className="w-full max-w-xl command-dialog rounded-2xl p-4 shadow-2xl space-y-4 animate-fade-in relative">
             <div className="absolute top-0 left-0 right-0 h-[2px] sys-bg rounded-t-2xl" />
             
-            <div className="flex items-center gap-3 border-b border-white/5 pb-3">
+            <div className="flex items-center gap-3 border-b border-divider pb-3">
               <Search className="w-5 h-5 sys-text-body" strokeWidth={1.5} />
               <input 
                 type="text" 
                 value={paletteSearch}
                 onChange={e => setPaletteSearch(e.target.value)}
                 placeholder="Type a command or query assessments..."
-                className="bg-transparent border-0 p-0 text-sm text-white focus:outline-none focus:ring-0 w-full placeholder:sys-text-body"
+                className="bg-transparent border-0 p-0 text-sm text-primary focus:outline-none focus:ring-0 w-full placeholder:sys-text-body"
                 autoFocus
               />
               <Button 
@@ -400,21 +400,21 @@ export default function RecruiterDashboard() {
                 <span className="text-[9px] font-mono sys-text-body uppercase tracking-widest block px-2">Navigation Shortcuts</span>
                 <button 
                   onClick={() => { setActiveSection('overview'); setShowPalette(false); }}
-                  className="w-full text-left px-3 py-2 rounded-xl sys-text-body hover:text-white hover:sys-bg/40 flex justify-between items-center"
+                  className="w-full text-left px-3 py-2 rounded-xl sys-text-body hover:text-primary hover:sys-bg/40 flex justify-between items-center"
                 >
                   <span>Go to Overview Dashboard</span>
                   <span className="text-[9px] font-mono sys-text-body sys-card px-1.5 py-0.5 rounded">G O</span>
                 </button>
                 <button 
                   onClick={() => { setActiveSection('analytics'); setShowPalette(false); }}
-                  className="w-full text-left px-3 py-2 rounded-xl sys-text-body hover:text-white hover:sys-bg/40 flex justify-between items-center"
+                  className="w-full text-left px-3 py-2 rounded-xl sys-text-body hover:text-primary hover:sys-bg/40 flex justify-between items-center"
                 >
                   <span>Go to Analytics Leaderboard</span>
                   <span className="text-[9px] font-mono sys-text-body sys-card px-1.5 py-0.5 rounded">G A</span>
                 </button>
                 <button 
                   onClick={() => { setActiveSection('users'); setShowPalette(false); }}
-                  className="w-full text-left px-3 py-2 rounded-xl sys-text-body hover:text-white hover:sys-bg/40 flex justify-between items-center"
+                  className="w-full text-left px-3 py-2 rounded-xl sys-text-body hover:text-primary hover:sys-bg/40 flex justify-between items-center"
                 >
                   <span>Open Users & Proctor feeds</span>
                   <span className="text-[9px] font-mono sys-text-body sys-card px-1.5 py-0.5 rounded">G U</span>
@@ -422,7 +422,7 @@ export default function RecruiterDashboard() {
               </div>
 
               {filteredPaletteAssessments.length > 0 && (
-                <div className="space-y-1 pt-2 border-t border-white/5">
+                <div className="space-y-1 pt-2 border-t border-divider">
                   <span className="text-[9px] font-mono sys-text-body uppercase tracking-widest block px-2">Filter Assessments</span>
                   {filteredPaletteAssessments.map(a => (
                     <button 
@@ -431,7 +431,7 @@ export default function RecruiterDashboard() {
                         handleSelectAssessment(a);
                         setShowPalette(false);
                       }}
-                      className="w-full text-left px-3 py-2 rounded-xl sys-text-body hover:text-white hover:sys-bg/40 flex justify-between items-center"
+                      className="w-full text-left px-3 py-2 rounded-xl sys-text-body hover:text-primary hover:sys-bg/40 flex justify-between items-center"
                     >
                       <span className="truncate">{a.title}</span>
                       <span className="text-[9px] font-mono text-[#5B8CFF] uppercase font-bold">{a.status}</span>

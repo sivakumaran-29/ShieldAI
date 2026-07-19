@@ -130,11 +130,11 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
 
   return (
     <Card className={`bg-card border flex flex-col overflow-hidden max-w-sm rounded-2xl transition-all duration-300 shadow-none relative group ${
-      isCritical ? 'border-[#F87171]' : 'border-white/5 hover:border-[#5B8CFF]/45'
+      isCritical ? 'border-[#F87171]' : 'border-divider hover:border-[#5B8CFF]/45'
     }`}>
       
       {/* Camera Feed Container */}
-      <div className="bg-black aspect-video w-full relative flex items-center justify-center overflow-hidden border-b border-white/5">
+      <div className="bg-black aspect-video w-full relative flex items-center justify-center overflow-hidden border-b border-divider">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_50%,rgba(0,0,0,0.8))] z-10 pointer-events-none" />
         
         <video 
@@ -150,7 +150,7 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
         {connectionStatus !== 'connected' && (
           <div className="flex flex-col items-center gap-2.5 z-20 text-center p-4 select-none">
             <div 
-              className="p-3.5 rounded-full border border-white/5 sys-bg cursor-pointer hover:bg-white/10 transition-colors"
+              className="p-3.5 rounded-full border border-divider sys-bg cursor-pointer hover:bg-white/10 transition-colors"
               onClick={() => !isCritical && setIsWatching(true)}
             >
               {connectionStatus === 'connecting' ? (
@@ -175,7 +175,7 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
 
         {/* Score & Stream status badges */}
         <div className="absolute top-3 left-3 z-30 flex flex-col items-start gap-1.5 select-none font-mono">
-          <span className="px-2 py-0.5 rounded text-[8px] font-bold uppercase flex items-center gap-1 sys-bg border border-white/5 sys-text-primary">
+          <span className="px-2 py-0.5 rounded text-[8px] font-bold uppercase flex items-center gap-1 sys-bg border border-divider sys-text-primary">
             <span className={`w-1.5 h-1.5 rounded-full ${connectionStatus === 'connected' ? 'bg-[#34D399] animate-ping' : 'sys-card'}`} />
             {connectionStatus === 'connected' ? 'Live Stream' : 'Live Channel'}
           </span>
@@ -190,7 +190,7 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
           <span className={`px-2 py-0.5 rounded border text-[9px] font-mono font-bold ${
             isCritical 
               ? 'bg-[#F87171]/20 text-[#F87171] border-[#F87171]/35' 
-              : 'sys-bg sys-text-primary border-white/5'
+              : 'sys-bg sys-text-primary border-divider'
           }`}>
             INTEGRITY: {s.integrity_score}%
           </span>
@@ -208,8 +208,8 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
             onClick={() => setIsWatching(!isWatching)}
             disabled={isCritical}
             className={`text-[9px] px-2 py-1 rounded font-bold uppercase border transition-colors ${
-              isCritical ? 'opacity-50 cursor-not-allowed bg-black/40 text-white/50 border-white/5' :
-              isWatching ? 'bg-[#5B8CFF]/20 text-[#5B8CFF] border-[#5B8CFF]/40 hover:bg-[#5B8CFF]/30' : 'sys-bg text-white hover:bg-white/10 border-white/10'
+              isCritical ? 'opacity-50 cursor-not-allowed bg-black/40 text-white/50 border-divider' :
+              isWatching ? 'bg-[#5B8CFF]/20 text-[#5B8CFF] border-[#5B8CFF]/40 hover:bg-[#5B8CFF]/30' : 'sys-bg text-primary hover:bg-white/10 border-border-strong'
             }`}
           >
             {isWatching || isCritical ? 'Stop Feed' : 'Watch Feed'}
@@ -217,22 +217,22 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
         </div>
 
         {/* Live infractions */}
-        <div className="flex gap-4 border-t border-white/5 pt-3 select-none">
+        <div className="flex gap-4 border-t border-divider pt-3 select-none">
           <div className="space-y-1 w-1/2">
             <span className="text-[10px] sys-text-body block uppercase tracking-wider font-sans font-bold">Infractions</span>
-            <span className={`text-[11px] font-sans font-semibold ${isCritical ? 'text-[#F87171]' : 'text-white'}`}>{violationCount} warning(s)</span>
+            <span className={`text-[11px] font-sans font-semibold ${isCritical ? 'text-[#F87171]' : 'text-primary'}`}>{violationCount} warning(s)</span>
           </div>
-          <div className="space-y-1 border-l border-white/5 pl-4 w-1/2">
+          <div className="space-y-1 border-l border-divider pl-4 w-1/2">
             <span className="text-[10px] sys-text-body block uppercase tracking-wider font-sans font-bold">Exam Status</span>
-            <span className="text-[11px] font-sans font-semibold text-white capitalize">{s.status}...</span>
+            <span className="text-[11px] font-sans font-semibold text-primary capitalize">{s.status}...</span>
           </div>
         </div>
 
         {/* Terminal warning timeline */}
-        <div className="bg-black/65 border border-white/5 rounded-xl p-2.5 font-mono text-[8px] sys-text-body space-y-1.5 select-text overflow-y-auto max-h-16">
-          <span className="text-[7.5px] uppercase font-bold sys-text-body tracking-widest block select-none border-b border-white/5 pb-1 mb-1">// Infraction logs</span>
+        <div className="bg-black/65 border border-divider rounded-xl p-2.5 font-mono text-[8px] sys-text-body space-y-1.5 select-text overflow-y-auto max-h-16">
+          <span className="text-[7.5px] uppercase font-bold sys-text-body tracking-widest block select-none border-b border-divider pb-1 mb-1">// Infraction logs</span>
           {(s.violation_logs || []).slice(-3).map((log, idx) => (
-            <div key={idx} className={log.includes('ALERT') || log.includes('lost') || log.includes('switch') ? 'text-white bg-[#F87171]/15 px-1 rounded border border-[#F87171]/25' : 'sys-text-body'}>
+            <div key={idx} className={log.includes('ALERT') || log.includes('lost') || log.includes('switch') ? 'text-primary bg-[#F87171]/15 px-1 rounded border border-[#F87171]/25' : 'sys-text-body'}>
               {log}
             </div>
           ))}

@@ -67,7 +67,7 @@ export default function Login() {
   }
 
   return (
-    <div className="w-screen h-screen flex font-sans antialiased overflow-hidden bg-[#000000] text-[#f5f5f7]">
+    <div className="w-screen h-screen flex font-sans antialiased overflow-hidden bg-background text-[#f5f5f7]">
       
       {/* Subtle Apple-style Glow in background */}
       <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#5B8CFF]/10 rounded-full blur-[150px] pointer-events-none" />
@@ -76,33 +76,33 @@ export default function Login() {
       <div className="flex w-full h-full relative z-10">
         
         {/* LEFT PANEL: Branding & Visuals (Apple style clean typography) */}
-        <div className="hidden lg:flex w-1/2 flex-col justify-between p-12 lg:p-20 border-r border-[#ffffff0a] bg-[#000000]/40 backdrop-blur-3xl">
+        <div className="hidden lg:flex w-1/2 flex-col justify-between p-12 lg:p-20 border-r border-[#ffffff0a] bg-background/40 backdrop-blur-3xl">
           
           <div className="flex items-center space-x-3 select-none">
             <div className="p-2 bg-[#1c1c1e] rounded-xl border border-[#38383a]">
               <Shield className="w-5 h-5 text-[#5B8CFF]" strokeWidth={1.5} />
             </div>
-            <span className="text-xl font-bold tracking-tight text-white font-sans">
+            <span className="text-xl font-bold tracking-tight text-primary font-sans">
               ShieldAI
             </span>
           </div>
 
           <div className="max-w-md space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#1c1c1e] border border-[#38383a] text-[10px] font-semibold tracking-widest uppercase text-white rounded-full">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#1c1c1e] border border-[#38383a] text-[10px] font-semibold tracking-widest uppercase text-primary rounded-full">
               <span className="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse" /> Live Telemetry Active
             </div>
             
-            <h1 className="text-4xl lg:text-5xl font-semibold tracking-[-0.04em] leading-[1.1] text-white">
+            <h1 className="text-4xl lg:text-5xl font-semibold tracking-[-0.04em] leading-[1.1] text-primary">
               Intelligent integrity <br />
-              <span className="text-[#86868b]">verification frameworks.</span>
+              <span className="text-tertiary">verification frameworks.</span>
             </h1>
             
-            <p className="text-[15px] text-[#86868b] font-medium leading-relaxed max-w-sm">
+            <p className="text-[15px] text-tertiary font-medium leading-relaxed max-w-sm">
               High-fidelity behavior telemetry and secure localized coding environments designed to verify talent authenticity.
             </p>
 
-            <div className="mt-8 border border-[#38383a] rounded-2xl bg-[#1c1c1e]/50 p-5 font-mono text-[10px] text-[#86868b] space-y-2.5 backdrop-blur-xl">
-              <div className="flex items-center gap-2 text-white border-b border-[#38383a] pb-3 mb-3">
+            <div className="mt-8 border border-[#38383a] rounded-2xl bg-[#1c1c1e]/50 p-5 font-mono text-[10px] text-tertiary space-y-2.5 backdrop-blur-xl">
+              <div className="flex items-center gap-2 text-primary border-b border-[#38383a] pb-3 mb-3">
                 <Terminal className="w-4 h-4" />
                 <span className="font-semibold tracking-widest uppercase">System Terminal</span>
               </div>
@@ -114,7 +114,7 @@ export default function Login() {
             </div>
           </div>
 
-          <div className="text-[11px] font-medium tracking-widest text-[#86868b] uppercase select-none">
+          <div className="text-[11px] font-medium tracking-widest text-tertiary uppercase select-none">
             ShieldAI Enterprise v4.0
           </div>
         </div>
@@ -124,15 +124,15 @@ export default function Login() {
           <div className="w-full max-w-[380px] space-y-8">
             
             <div className="text-center space-y-2 select-none">
-              <h2 className="text-3xl font-semibold tracking-tight text-white">
+              <h2 className="text-3xl font-semibold tracking-tight text-primary">
                 Gateway Access
               </h2>
-              <p className="text-[14px] text-[#86868b] font-medium">Verify credentials for secure institutional assessment.</p>
+              <p className="text-[14px] text-tertiary font-medium">Verify credentials for secure institutional assessment.</p>
             </div>
 
             <form onSubmit={handleFormSubmit} className="space-y-5">
               {errorMessage && (
-                <div className="text-[13px] text-white bg-[#F87171]/20 p-4 rounded-2xl border border-[#F87171]/30 flex items-center space-x-3">
+                <div className="text-[13px] text-primary bg-[#F87171]/20 p-4 rounded-2xl border border-[#F87171]/30 flex items-center space-x-3">
                   <AlertCircle className="w-4 h-4 shrink-0 text-[#F87171]" />
                   <span className="font-medium">{errorMessage}</span>
                 </div>
@@ -141,16 +141,16 @@ export default function Login() {
               <div className="space-y-4">
                 <div className="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-4 flex flex-col focus-within:border-[#5B8CFF] focus-within:ring-1 focus-within:ring-[#5B8CFF] transition-all">
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-[10px] font-semibold text-[#86868b] uppercase tracking-widest">
+                    <label className="text-[10px] font-semibold text-tertiary uppercase tracking-widest">
                       Institutional Email
                     </label>
-                    <Mail className="w-4 h-4 text-[#86868b]" />
+                    <Mail className="w-4 h-4 text-tertiary" />
                   </div>
                   <input 
                     type="email" 
                     value={email} 
                     onChange={e => setEmail(e.target.value)}
-                    className="w-full bg-transparent border-0 p-0 text-[15px] text-white focus:outline-none focus:ring-0 placeholder:text-[#48484a] font-medium" 
+                    className="w-full bg-transparent border-0 p-0 text-[15px] text-primary focus:outline-none focus:ring-0 placeholder:text-[#48484a] font-medium" 
                     placeholder="name@institution.edu" 
                     required 
                   />
@@ -158,16 +158,16 @@ export default function Login() {
 
                 <div className="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-4 flex flex-col focus-within:border-[#5B8CFF] focus-within:ring-1 focus-within:ring-[#5B8CFF] transition-all">
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-[10px] font-semibold text-[#86868b] uppercase tracking-widest">
+                    <label className="text-[10px] font-semibold text-tertiary uppercase tracking-widest">
                       Security Token PIN
                     </label>
-                    <Lock className="w-4 h-4 text-[#86868b]" />
+                    <Lock className="w-4 h-4 text-tertiary" />
                   </div>
                   <input 
                     type="password" 
                     value={password} 
                     onChange={e => setPassword(e.target.value)}
-                    className="w-full bg-transparent border-0 p-0 text-[15px] text-white focus:outline-none focus:ring-0 placeholder:text-[#48484a] font-medium tracking-widest" 
+                    className="w-full bg-transparent border-0 p-0 text-[15px] text-primary focus:outline-none focus:ring-0 placeholder:text-[#48484a] font-medium tracking-widest" 
                     placeholder="••••••••" 
                     required 
                   />

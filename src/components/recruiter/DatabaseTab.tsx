@@ -233,7 +233,7 @@ export default function DatabaseTab() {
     <div className="space-y-8 select-none animate-fade-in pb-20">
       
       {/* Header */}
-      <div className="flex justify-between items-center border-b border-white/5 pb-4">
+      <div className="flex justify-between items-center border-b border-divider pb-4">
         <div>
           <h2 className="text-3xl font-semibold tracking-tight text-[#6f8eff] mb-2">
             // CANDIDATE DATABASE REGISTRY
@@ -245,7 +245,7 @@ export default function DatabaseTab() {
 
         <Button 
           onClick={() => setIsCreating(true)}
-          className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white text-xs h-9 px-4 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-md"
+          className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-primary text-xs h-9 px-4 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-md"
         >
           <Plus className="w-4 h-4" strokeWidth={1.5} /> Inject Batch
         </Button>
@@ -270,7 +270,7 @@ export default function DatabaseTab() {
               placeholder="Search candidate roll or email..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full sys-bg/50 border border-white/5 text-white text-xs rounded-xl pl-9 pr-4 py-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition"
+              className="w-full sys-bg/50 border border-divider text-primary text-xs rounded-xl pl-9 pr-4 py-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition"
             />
           </div>
 
@@ -283,14 +283,14 @@ export default function DatabaseTab() {
               const deptBatches = Array.from(new Set(deptUsers.map(u => u.batch))).sort()
 
               return (
-                <Card key={dept} className={`bg-[rgba(28,28,30,0.3)] backdrop-blur-[24px] border-white/5 rounded-[24px] overflow-hidden shadow-2xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] hover:border-white/10 ${isDeptExpanded ? 'col-span-1 md:col-span-2 lg:col-span-4' : ''}`}>
+                <Card key={dept} className={`bg-[rgba(28,28,30,0.3)] backdrop-blur-[24px] border-divider rounded-[24px] overflow-hidden shadow-2xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] hover:border-border-strong ${isDeptExpanded ? 'col-span-1 md:col-span-2 lg:col-span-4' : ''}`}>
                   <div 
                     onClick={() => toggleDept(dept)}
-                    className="p-5 bg-transparent hover:bg-white/[0.02] cursor-pointer flex items-center justify-between transition-colors duration-300 group"
+                    className="p-5 bg-transparent hover:bg-hover cursor-pointer flex items-center justify-between transition-colors duration-300 group"
                   >
                     <div className="flex items-center gap-3">
                       {isDeptExpanded ? <ChevronDown className="w-4 h-4 sys-text-body" /> : <ChevronRight className="w-4 h-4 sys-text-body" />}
-                      <div className="flex items-center gap-3"><div className="p-2 bg-[#5B8CFF]/10 rounded-xl group-hover:scale-110 transition-transform duration-300"><Folder className="w-4 h-4 text-[#5B8CFF]" /></div><h3 className="font-bold text-base text-white font-heading tracking-wide">{dept} Department</h3>
+                      <div className="flex items-center gap-3"><div className="p-2 bg-[#5B8CFF]/10 rounded-xl group-hover:scale-110 transition-transform duration-300"><Folder className="w-4 h-4 text-[#5B8CFF]" /></div><h3 className="font-bold text-base text-primary font-heading tracking-wide">{dept} Department</h3>
                         <span className="px-2 py-0.5 sys-card sys-text-body text-[9px] font-mono rounded font-bold ml-2">
                           {deptUsers.length} Users
                         </span>
@@ -309,21 +309,21 @@ export default function DatabaseTab() {
                   </div>
 
                   {isDeptExpanded && (
-                    <div className="border-t border-white/5 bg-black/20 p-6 space-y-4">
+                    <div className="border-t border-divider bg-black/20 p-6 space-y-4">
                       {deptBatches.map(batchName => {
                         const batchUsers = deptUsers.filter(c => c.batch === batchName)
                         const isBatchExpanded = expandedBatches[batchName]
 
                         return (
-                          <div key={batchName} className="border border-white/5 rounded-2xl overflow-hidden bg-[rgba(28,28,30,0.4)] backdrop-blur-md shadow-sm transition-all duration-300 hover:border-white/10">
+                          <div key={batchName} className="border border-divider rounded-2xl overflow-hidden bg-panel backdrop-blur-md shadow-sm transition-all duration-300 hover:border-border-strong">
                             <div 
                               onClick={() => toggleBatch(batchName)}
-                              className="p-4 hover:bg-white/[0.02] cursor-pointer flex items-center justify-between transition-colors duration-300 group/batch"
+                              className="p-4 hover:bg-hover cursor-pointer flex items-center justify-between transition-colors duration-300 group/batch"
                             >
                               <div className="flex items-center gap-2.5">
                                 {isBatchExpanded ? <ChevronDown className="w-3.5 h-3.5 sys-text-body" /> : <ChevronRight className="w-3.5 h-3.5 sys-text-body" />}
                                 <Database className="w-3.5 h-3.5 sys-text-body" />
-                                <span className="font-bold text-sm text-white font-heading tracking-wide">{batchName}</span>
+                                <span className="font-bold text-sm text-primary font-heading tracking-wide">{batchName}</span>
                                 <span className="px-1.5 py-0.5 bg-[#5B8CFF]/10 text-[#5B8CFF] text-[9px] font-mono rounded font-bold ml-1">
                                   {batchUsers.length}
                                 </span>
@@ -340,19 +340,19 @@ export default function DatabaseTab() {
                             </div>
 
                             {isBatchExpanded && (
-                              <div className="border-t border-white/5 pb-2"><div className="overflow-x-auto px-4 pt-4"><table className="w-full text-left text-xs border-collapse block lg:table">
+                              <div className="border-t border-divider pb-2"><div className="overflow-x-auto px-4 pt-4"><table className="w-full text-left text-xs border-collapse block lg:table">
                                   <thead className="hidden lg:table-header-group">
-                                    <tr className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider"><th className="py-3 px-5 rounded-l-2xl border-y border-l border-white/5">Roll Number</th><th className="py-3 px-5 border-y border-white/5">Email Address</th><th className="py-3 px-5 rounded-r-2xl border-y border-r border-white/5 text-right">Actions</th></tr>
+                                    <tr className="bg-panel backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider"><th className="py-3 px-5 rounded-l-2xl border-y border-l border-divider">Roll Number</th><th className="py-3 px-5 border-y border-divider">Email Address</th><th className="py-3 px-5 rounded-r-2xl border-y border-r border-divider text-right">Actions</th></tr>
                                   </thead>
-                                  <tbody className="block lg:table-row-group divide-y lg:divide-white/[0.02]"><tr className="hidden lg:table-row h-2"></tr>
+                                  <tbody className="block lg:table-row-group divide-y lg:divide-divider"><tr className="hidden lg:table-row h-2"></tr>
                                     {batchUsers.map(user => (
-                                      <tr key={user.id} className="hover:bg-white/[0.02] transition-colors duration-200 group/row block lg:table-row p-4 lg:p-0 mb-4 lg:mb-0 border border-white/5 lg:border-transparent rounded-2xl lg:rounded-none bg-[rgba(28,28,30,0.4)] lg:bg-transparent">
-                                        <td className="py-2 lg:py-3 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell font-semibold font-heading text-white max-w-xs truncate border-b border-white/5 lg:border-none">
-                                          <span className="lg:hidden text-[10px] uppercase font-bold text-[#8A9099] mb-1 sm:mb-0">Roll Number</span>
+                                      <tr key={user.id} className="hover:bg-hover transition-colors duration-200 group/row block lg:table-row p-4 lg:p-0 mb-4 lg:mb-0 border border-divider lg:border-transparent rounded-2xl lg:rounded-none bg-panel lg:bg-transparent">
+                                        <td className="py-2 lg:py-3 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell font-semibold font-heading text-primary max-w-xs truncate border-b border-divider lg:border-none">
+                                          <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Roll Number</span>
                                           <span>{user.name}</span>
                                         </td>
-                                        <td className="py-2 lg:py-3 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell sys-text-body font-sans border-b border-white/5 lg:border-none">
-                                          <span className="lg:hidden text-[10px] uppercase font-bold text-[#8A9099] mb-1 sm:mb-0">Email Address</span>
+                                        <td className="py-2 lg:py-3 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell sys-text-body font-sans border-b border-divider lg:border-none">
+                                          <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Email Address</span>
                                           <span>{user.email}</span>
                                         </td>
                                         <td className="py-3 lg:py-2 px-1 lg:px-5 flex justify-end lg:table-cell">
@@ -393,9 +393,9 @@ export default function DatabaseTab() {
       {/* CREATE BATCH MODAL */}
       {isCreating && (
         <div className="fixed inset-0 bg-black/80  z-[9999] flex items-center justify-center p-4">
-          <Card className="w-full max-w-md bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 rounded-2xl overflow-hidden shadow-2xl animate-fade-in">
-            <div className="p-4 border-b border-white/5 flex justify-between items-center sys-bg/40">
-              <h3 className="font-bold text-sm text-white font-heading flex items-center gap-2">
+          <Card className="w-full max-w-md bg-panel backdrop-blur-[16px] border-divider rounded-2xl overflow-hidden shadow-2xl animate-fade-in">
+            <div className="p-4 border-b border-divider flex justify-between items-center sys-bg/40">
+              <h3 className="font-bold text-sm text-primary font-heading flex items-center gap-2">
                 <Database className="w-4 h-4 text-[#5B8CFF]" /> Add New Batch
               </h3>
             </div>
@@ -407,7 +407,7 @@ export default function DatabaseTab() {
                   type="text" 
                   value={newBatchName}
                   onChange={e => setNewBatchName(e.target.value)}
-                  className="w-full bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-bold"
+                  className="w-full bg-panel backdrop-blur-[16px] border border-divider text-primary text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-bold"
                   required
                 />
               </div>
@@ -419,7 +419,7 @@ export default function DatabaseTab() {
                     type="text" 
                     value={startRoll}
                     onChange={e => setStartRoll(e.target.value)}
-                    className="w-full bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-mono"
+                    className="w-full bg-panel backdrop-blur-[16px] border border-divider text-primary text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-mono"
                     required
                   />
                 </div>
@@ -429,7 +429,7 @@ export default function DatabaseTab() {
                     type="text" 
                     value={endRoll}
                     onChange={e => setEndRoll(e.target.value)}
-                    className="w-full bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-mono"
+                    className="w-full bg-panel backdrop-blur-[16px] border border-divider text-primary text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-mono"
                     required
                   />
                 </div>
@@ -441,7 +441,7 @@ export default function DatabaseTab() {
                   type="text" 
                   value={emailSuffix}
                   onChange={e => setEmailSuffix(e.target.value)}
-                  className="w-full bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-mono"
+                  className="w-full bg-panel backdrop-blur-[16px] border border-divider text-primary text-xs rounded-xl p-2.5 focus:outline-none focus:border-[#5B8CFF]/50 transition font-mono"
                   required
                 />
               </div>
@@ -468,7 +468,7 @@ export default function DatabaseTab() {
                 <Button 
                   type="submit" 
                   disabled={createLoading}
-                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white text-xs h-9 px-5 rounded-xl font-bold cursor-pointer transition shadow-md flex items-center gap-2"
+                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-primary text-xs h-9 px-5 rounded-xl font-bold cursor-pointer transition shadow-md flex items-center gap-2"
                 >
                   {createLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   {createLoading ? 'Injecting...' : 'Confirm Injection'}

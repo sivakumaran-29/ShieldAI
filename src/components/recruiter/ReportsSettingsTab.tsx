@@ -438,7 +438,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
     <div className="space-y-6 select-none">
       
       {/* Header Info */}
-      <div className="flex items-center justify-between select-none border-b border-white/5 pb-4">
+      <div className="flex items-center justify-between select-none border-b border-divider pb-4">
         <div>
           <h2 className="text-3xl font-semibold tracking-tight text-[#6f8eff] mb-2">
             // {activeSub === 'reports' ? 'COMPLIANCE AUDIT REPORTS' : activeSub === 'settings' ? 'GLOBAL PLATFORM CONFIG' : 'Telemetry Network Logs'}
@@ -458,7 +458,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
             onClick={handleRefreshLogs} 
             disabled={isRefreshingLogs}
             variant="outline" 
-            className="border-white/5 sys-bg/20 h-8 text-[11px] font-bold sys-text-body hover:text-white rounded-xl transition cursor-pointer"
+            className="border-divider bg-hover h-8 text-[11px] font-bold sys-text-body hover:text-primary rounded-xl transition cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${isRefreshingLogs ? 'animate-spin' : ''}`} strokeWidth={1.5} /> Update terminal
           </Button>
@@ -469,21 +469,21 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
       {activeSub === 'reports' && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           
-          <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-8 rounded-2xl flex flex-col justify-between min-h-[420px]">
+          <Card className="bg-panel backdrop-blur-[16px] border-divider p-8 rounded-2xl flex flex-col justify-between min-h-[420px]">
             <div className="space-y-4">
               <div className="p-3 bg-[#5B8CFF]/10 rounded-2xl w-12 h-12 flex items-center justify-center">
                 <FileText className="w-6 h-6 text-[#5B8CFF]" strokeWidth={1.5} />
               </div>
-              <h4 className="font-bold text-base text-white font-heading">Cohort Integrity Summary</h4>
+              <h4 className="font-bold text-base text-primary font-heading">Cohort Integrity Summary</h4>
               <p className="text-sm sys-text-body leading-relaxed font-sans">
                 Full list details of all registered candidates, overall integrity rating indices, compiler scores, and timing parameters.
               </p>
             </div>
-            <div className="pt-4 border-t border-white/5 flex flex-col gap-2">
+            <div className="pt-4 border-t border-divider flex flex-col gap-2">
               <select 
                 value={pdfExportExamId} 
                 onChange={e => setPdfExportExamId(e.target.value)}
-                className="border border-white/5 bg-[rgba(28,28,30,0.72)] text-foreground rounded-xl text-xs px-3 py-1.5 outline-none cursor-pointer w-full focus:border-[#5B8CFF]/50"
+                className="border border-divider bg-panel text-foreground rounded-xl text-xs px-3 py-1.5 outline-none cursor-pointer w-full focus:border-[#5B8CFF]/50"
               >
                 {assessments.length === 0 && <option value="">No Assessments</option>}
                 {assessments.map(a => (
@@ -493,28 +493,28 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
               <Button 
                 onClick={handleDownloadPDF}
                 disabled={isExportingPDF || !pdfExportExamId}
-                className="bg-[#3f6ad5] hover:bg-[#3254a8] text-white hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md w-full disabled:opacity-50 transition"
+                className="bg-[#3f6ad5] hover:bg-[#3254a8] text-primary hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md w-full disabled:opacity-50 transition"
               >
                 <Download className="w-3.5 h-3.5" /> {isExportingPDF ? 'Generating...' : 'Download PDF'}
               </Button>
             </div>
           </Card>
 
-          <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-8 rounded-2xl flex flex-col justify-between min-h-[420px]">
+          <Card className="bg-panel backdrop-blur-[16px] border-divider p-8 rounded-2xl flex flex-col justify-between min-h-[420px]">
             <div className="space-y-4">
               <div className="p-3 bg-[#14B8A6]/10 rounded-2xl w-12 h-12 flex items-center justify-center">
                 <Database className="w-6 h-6 text-[#14B8A6]" strokeWidth={1.5} />
               </div>
-              <h4 className="font-bold text-base text-white font-heading">Raw CSV Database Audit</h4>
+              <h4 className="font-bold text-base text-primary font-heading">Raw CSV Database Audit</h4>
               <p className="text-sm sys-text-body leading-relaxed font-sans">
                 Compile spreadsheet row listings containing student identifiers, active socket connection logs, and compiler test-case details.
               </p>
             </div>
-            <div className="pt-4 border-t border-white/5 flex flex-col gap-2">
+            <div className="pt-4 border-t border-divider flex flex-col gap-2">
               <select 
                 value={exportExamId} 
                 onChange={e => setExportExamId(e.target.value)}
-                className="border border-white/5 bg-[rgba(28,28,30,0.72)] text-foreground rounded-xl text-xs px-3 py-1.5 outline-none cursor-pointer w-full focus:border-[#5B8CFF]/50"
+                className="border border-divider bg-panel text-foreground rounded-xl text-xs px-3 py-1.5 outline-none cursor-pointer w-full focus:border-[#5B8CFF]/50"
               >
                 {assessments.length === 0 && <option value="">No Assessments</option>}
                 {assessments.map(a => (
@@ -525,7 +525,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                 <Button 
                   onClick={() => handleExportCSV('mcq')}
                   disabled={isExporting || !exportExamId}
-                  className="flex-1 bg-[#3f6ad5] hover:bg-[#3254a8] text-white hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
+                  className="flex-1 bg-[#3f6ad5] hover:bg-[#3254a8] text-primary hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
                 >
                   <Download className="w-3.5 h-3.5" /> 
                   {isExporting ? '...' : 'MCQ Data'}
@@ -533,7 +533,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                 <Button 
                   onClick={() => handleExportCSV('coding')}
                   disabled={isExporting || !exportExamId}
-                  className="flex-1 bg-[#3f6ad5] hover:bg-[#3254a8] text-white hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
+                  className="flex-1 bg-[#3f6ad5] hover:bg-[#3254a8] text-primary hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
                 >
                   <Download className="w-3.5 h-3.5" /> 
                   {isExporting ? '...' : 'Coding Data'}
@@ -542,21 +542,21 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
             </div>
           </Card>
 
-          <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-8 rounded-2xl flex flex-col justify-between min-h-[420px]">
+          <Card className="bg-panel backdrop-blur-[16px] border-divider p-8 rounded-2xl flex flex-col justify-between min-h-[420px]">
             <div className="space-y-4">
               <div className="p-3 bg-[#A855F7]/10 rounded-2xl w-12 h-12 flex items-center justify-center">
                 <FileText className="w-6 h-6 text-[#A855F7]" strokeWidth={1.5} />
               </div>
-              <h4 className="font-bold text-base text-white font-heading">Assessment Question Bank</h4>
+              <h4 className="font-bold text-base text-primary font-heading">Assessment Question Bank</h4>
               <p className="text-sm sys-text-body leading-relaxed font-sans">
                 Export a beautifully formatted PDF containing all MCQs with answers, and coding challenges with complete constraints and test cases.
               </p>
             </div>
-            <div className="pt-4 border-t border-white/5 flex flex-col gap-2">
+            <div className="pt-4 border-t border-divider flex flex-col gap-2">
               <select 
                 value={pdfQuestionBankExamId} 
                 onChange={e => setPdfQuestionBankExamId(e.target.value)}
-                className="border border-white/5 bg-[rgba(28,28,30,0.72)] text-foreground rounded-xl text-xs px-3 py-1.5 outline-none cursor-pointer w-full focus:border-[#5B8CFF]/50"
+                className="border border-divider bg-panel text-foreground rounded-xl text-xs px-3 py-1.5 outline-none cursor-pointer w-full focus:border-[#5B8CFF]/50"
               >
                 {assessments.length === 0 && <option value="">No Assessments</option>}
                 {assessments.map(a => (
@@ -566,7 +566,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
               <Button 
                 onClick={handleDownloadQuestionBankPDF}
                 disabled={isExportingQuestionBank || !pdfQuestionBankExamId}
-                className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] text-white hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
+                className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] text-primary hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] rounded-xl text-xs h-9 px-4 flex items-center justify-center gap-1.5 shadow-md transition disabled:opacity-50"
               >
                 <Download className="w-3.5 h-3.5" /> {isExportingQuestionBank ? 'Generating...' : 'Download PDF'}
               </Button>
@@ -578,14 +578,14 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
 
       {/* ================= SETTINGS SECTION (macOS PANELS STYLE) ================= */}
       {activeSub === 'settings' && (
-        <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 rounded-2xl overflow-hidden shadow-xl grid grid-cols-1 md:grid-cols-12 min-h-[350px]">
+        <Card className="bg-panel backdrop-blur-[16px] border-divider rounded-2xl overflow-hidden shadow-xl grid grid-cols-1 md:grid-cols-12 min-h-[350px]">
           
           {/* macOS settings sub sidebar (3 cols) */}
-          <div className="md:col-span-3 sys-bg/20 border-r border-white/5 p-4 flex flex-col gap-1.5">
+          <div className="md:col-span-3 bg-hover border-r border-divider p-4 flex flex-col gap-1.5">
             <button 
               onClick={() => setSettingsCategory('general')}
               className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center gap-2.5 transition ${
-                settingsCategory === 'general' ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] font-bold' : 'sys-text-body hover:text-white hover:sys-bg/20'
+                settingsCategory === 'general' ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] font-bold' : 'sys-text-body hover:text-primary hover:bg-hover'
               }`}
             >
               <GearIcon className="w-4.5 h-4.5" />
@@ -595,7 +595,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
             <button 
               onClick={() => setSettingsCategory('proctor')}
               className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center gap-2.5 transition ${
-                settingsCategory === 'proctor' ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] font-bold' : 'sys-text-body hover:text-white hover:sys-bg/20'
+                settingsCategory === 'proctor' ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] font-bold' : 'sys-text-body hover:text-primary hover:bg-hover'
               }`}
             >
               <Shield className="w-4.5 h-4.5" />
@@ -605,7 +605,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
             <button 
               onClick={() => setSettingsCategory('compilers')}
               className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center gap-2.5 transition ${
-                settingsCategory === 'compilers' ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] font-bold' : 'sys-text-body hover:text-white hover:sys-bg/20'
+                settingsCategory === 'compilers' ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] font-bold' : 'sys-text-body hover:text-primary hover:bg-hover'
               }`}
             >
               <Cpu className="w-4.5 h-4.5" />
@@ -622,7 +622,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                   <div className="space-y-4 animate-fade-in">
                     <span className="text-[9px] font-mono sys-text-body uppercase tracking-widest block mb-2">GENERAL CONFIGURATIONS</span>
                     
-                    <div className="p-4 sys-bg/40 border border-white/5 rounded-xl flex items-center justify-between">
+                    <div className="p-4 sys-bg/40 border border-divider rounded-xl flex items-center justify-between">
                       <div className="space-y-0.5">
                         <span className="text-xs font-bold sys-text-primary block">Workspace Identifier Node</span>
                         <span className="text-[10px] sys-text-body font-sans">Active recruitment cluster location.</span>
@@ -640,7 +640,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                     <div className="space-y-2">
                       <div className="flex justify-between select-none">
                         <span className="sys-text-body font-bold">Minimum Integrity Threshold</span>
-                        <span className="text-white font-mono font-bold">{integrityThreshold}%</span>
+                        <span className="text-primary font-mono font-bold">{integrityThreshold}%</span>
                       </div>
                       <input 
                         type="range" 
@@ -657,7 +657,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
 
                     {/* Checkbox toggle params */}
                     <div className="space-y-3 pt-2">
-                      <label className="flex items-center justify-between p-3.5 sys-bg/40 border border-white/5 rounded-xl cursor-pointer select-none">
+                      <label className="flex items-center justify-between p-3.5 sys-bg/40 border border-divider rounded-xl cursor-pointer select-none">
                         <div className="space-y-0.5 pr-4">
                           <span className="text-xs font-bold sys-text-primary block">Hardware Camera Verification</span>
                           <span className="text-[10px] sys-text-body font-sans">Require active WebRTC camera monitoring feeds.</span>
@@ -666,11 +666,11 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                           type="checkbox" 
                           checked={proctorCamera} 
                           onChange={e => setProctorCamera(e.target.checked)}
-                          className="w-4 h-4 rounded border-white/5 text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer" 
+                          className="w-4 h-4 rounded border-divider text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer" 
                         />
                       </label>
 
-                      <label className="flex items-center justify-between p-3.5 sys-bg/40 border border-white/5 rounded-xl cursor-pointer select-none">
+                      <label className="flex items-center justify-between p-3.5 sys-bg/40 border border-divider rounded-xl cursor-pointer select-none">
                         <div className="space-y-0.5 pr-4">
                           <span className="text-xs font-bold sys-text-primary block">Strict Tab-Switch Blocking</span>
                           <span className="text-[10px] sys-text-body font-sans">Log violations immediately when user loses focus of exam browser.</span>
@@ -679,7 +679,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                           type="checkbox" 
                           checked={proctorTabs} 
                           onChange={e => setProctorTabs(e.target.checked)}
-                          className="w-4 h-4 rounded border-white/5 text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer" 
+                          className="w-4 h-4 rounded border-divider text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer" 
                         />
                       </label>
                     </div>
@@ -693,25 +693,25 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                     
                     <div className="space-y-3">
                       {['python', 'javascript', 'java', 'cpp', 'c'].map(lang => (
-                        <label key={lang} className="flex items-center justify-between p-3 sys-bg/40 border border-white/5 rounded-xl cursor-pointer select-none">
+                        <label key={lang} className="flex items-center justify-between p-3 sys-bg/40 border border-divider rounded-xl cursor-pointer select-none">
                           <span className="text-xs uppercase font-mono font-bold sys-text-primary">{lang}</span>
                           <input 
                             type="checkbox" 
                             checked={allowedLangs.includes(lang)}
                             onChange={() => handleToggleLang(lang)}
-                            className="w-4 h-4 rounded border-white/5 text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer"
+                            className="w-4 h-4 rounded border-divider text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer"
                           />
                         </label>
                       ))}
                     </div>
 
-                    <div className="mt-8 pt-6 border-t border-white/5 space-y-4">
+                    <div className="mt-8 pt-6 border-t border-divider space-y-4">
                       <span className="text-[9px] font-mono sys-text-body uppercase tracking-widest block mb-2">SANDBOX LIMITS</span>
                       
                       <div className="space-y-2">
                         <div className="flex justify-between select-none">
                           <span className="sys-text-body font-bold">Max Execution Time</span>
-                          <span className="text-white font-mono font-bold">{maxExecutionTime}ms</span>
+                          <span className="text-primary font-mono font-bold">{maxExecutionTime}ms</span>
                         </div>
                         <input 
                           type="range" 
@@ -727,7 +727,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                       <div className="space-y-2 pt-4">
                         <div className="flex justify-between select-none">
                           <span className="sys-text-body font-bold">Max Memory Allocation</span>
-                          <span className="text-white font-mono font-bold">{maxMemoryLimit}MB</span>
+                          <span className="text-primary font-mono font-bold">{maxMemoryLimit}MB</span>
                         </div>
                         <input 
                           type="range" 
@@ -745,7 +745,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
               </div>
 
               {/* Form submit actions */}
-              <div className="pt-6 border-t border-white/5 flex justify-end items-center gap-3">
+              <div className="pt-6 border-t border-divider flex justify-end items-center gap-3">
                 {saveSuccess && (
                   <span className="text-xs text-[#34D399] font-semibold flex items-center gap-1">
                     <Check className="w-3.5 h-3.5" /> Settings Saved
@@ -754,7 +754,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                 
                 <Button 
                   type="submit"
-                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white rounded-xl text-xs h-10 px-6 font-bold cursor-pointer transition shadow-md"
+                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-primary rounded-xl text-xs h-10 px-6 font-bold cursor-pointer transition shadow-md"
                 >
                   <Save className="w-4 h-4 mr-1.5" /> Save Changes
                 </Button>
@@ -768,35 +768,35 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
 
       {/* ================= LOGS SECTION (HIGH FIDELITY TERMINAL) ================= */}
       {activeSub === 'logs' && (
-        <Card className="bg-[#000000] border-white/5 rounded-2xl overflow-hidden shadow-2xl flex flex-col min-h-[380px]">
+        <Card className="bg-background border-divider rounded-2xl overflow-hidden shadow-2xl flex flex-col min-h-[380px]">
           
           {/* Terminal header controls */}
-          <div className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-b border-white/5 px-4 py-2.5 flex justify-between items-center select-none text-[10px]">
+          <div className="bg-panel backdrop-blur-[16px] border-b border-divider px-4 py-2.5 flex justify-between items-center select-none text-[10px]">
             <span className="flex items-center sys-text-body font-mono font-bold">
               <TermIcon className="w-4.5 h-4.5 mr-2 sys-text-body" /> SYSTEM MONITOR TERMINAL
             </span>
 
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5 p-1 px-3 sys-bg border border-white/5 rounded-xl">
+              <div className="flex items-center gap-1.5 p-1 px-3 sys-bg border border-divider rounded-xl">
                 <Search className="w-3.5 h-3.5 sys-text-body" />
                 <input 
                   type="text" 
                   value={logsSearch}
                   onChange={e => setLogsSearch(e.target.value)}
                   placeholder="Filter logs..."
-                  className="bg-transparent border-0 p-0 text-[10px] text-white focus:outline-none focus:ring-0 placeholder:sys-text-body w-28 font-mono"
+                  className="bg-transparent border-0 p-0 text-[10px] text-primary focus:outline-none focus:ring-0 placeholder:sys-text-body w-28 font-mono"
                 />
               </div>
             </div>
           </div>
 
           {/* Terminal viewport window */}
-          <div className="flex-1 p-4 font-mono text-[10px] sys-text-body overflow-y-auto space-y-2 select-text bg-[#000000]/50 leading-relaxed max-h-[300px]">
+          <div className="flex-1 p-4 font-mono text-[10px] sys-text-body overflow-y-auto space-y-2 select-text bg-background/50 leading-relaxed max-h-[300px]">
             {filteredLogs.map((log, index) => {
               let colorClass = 'sys-text-body'
               if (log.includes('[WEBRTC]') || log.includes('[COMPILER]')) colorClass = 'text-[#5B8CFF]'
               if (log.includes('[SECURITY]')) colorClass = 'text-[#34D399]'
-              if (log.includes('[SYSTEM]')) colorClass = 'text-white font-bold'
+              if (log.includes('[SYSTEM]')) colorClass = 'text-primary font-bold'
               
               return (
                 <div key={index} className={`truncate ${colorClass}`}>

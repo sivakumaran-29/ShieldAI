@@ -143,7 +143,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
         {!isEditing && (
           <Button 
             onClick={handleOpenCreateForm} 
-            className="bg-[#0070F3] hover:bg-[#005bb5] text-white text-xs h-10 px-5 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,112,243,0.4)]"
+            className="bg-[#0070F3] hover:bg-[#005bb5] text-primary text-xs h-10 px-5 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,112,243,0.4)]"
           >
             <Plus className="w-4 h-4" strokeWidth={1.5} /> Create Assessment
           </Button>
@@ -153,17 +153,17 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
       {!isEditing ? (
         <div className="space-y-8">
           
-          <div className="group p-8 flex flex-col items-center justify-center text-center space-y-4 border border-white/5 rounded-[24px] bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] mb-8 hover:shadow-[0_0_40px_rgba(91,140,255,0.08)] hover:border-white/10 transition-all duration-500 cursor-pointer">
+          <div className="group p-8 flex flex-col items-center justify-center text-center space-y-4 border border-divider rounded-[24px] bg-panel backdrop-blur-[16px] mb-8 hover:shadow-[0_0_40px_rgba(91,140,255,0.08)] hover:border-border-strong transition-all duration-500 cursor-pointer">
             <div className="p-4 bg-[#5B8CFF]/10 rounded-full mb-2 group-hover:scale-110 transition-transform duration-500">
               <Sparkles className="w-8 h-8 text-[#5B8CFF]" strokeWidth={1.5} />
             </div>
-            <h3 className="text-xl font-bold text-white font-heading">Assessment Creation Engine</h3>
+            <h3 className="text-xl font-bold text-primary font-heading">Assessment Creation Engine</h3>
             <p className="text-sm sys-text-body max-w-xl leading-relaxed">
               Build and deploy robust technical assessments instantly. Configure the hosting department, set the strict evaluation timeline, and configure the code playground constraints.
             </p>
             <Button 
               onClick={handleOpenCreateForm}
-              className="mt-4 bg-[#0070F3] text-white hover:bg-[#0070F3]/90 text-sm h-11 px-8 rounded-full font-bold cursor-pointer transition-all duration-300 shadow-[0_0_20px_rgba(0,112,243,0.3)] hover:shadow-[0_0_40px_rgba(0,112,243,0.6)] hover:-translate-y-0.5 flex items-center gap-2"
+              className="mt-4 bg-[#0070F3] text-primary hover:bg-[#0070F3]/90 text-sm h-11 px-8 rounded-full font-bold cursor-pointer transition-all duration-300 shadow-[0_0_20px_rgba(0,112,243,0.3)] hover:shadow-[0_0_40px_rgba(0,112,243,0.6)] hover:-translate-y-0.5 flex items-center gap-2"
             >
               <Plus className="w-4 h-4" strokeWidth={2} /> Initialize New Assessment
             </Button>
@@ -174,10 +174,10 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
             <span className="text-[11px] font-heading font-semibold sys-text-body uppercase tracking-wider block mb-4">Active Assessment Tracks</span>
             
             <div className="overflow-x-auto pb-4">
-              <div className="border border-white/5 rounded-2xl overflow-hidden bg-[rgba(28,28,30,0.2)]">
+              <div className="border border-divider rounded-2xl overflow-hidden bg-panel">
                 <table className="w-full text-left text-xs block lg:table">
                   <thead className="hidden lg:table-header-group">
-                    <tr className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider border-b border-white/5">
+                    <tr className="bg-panel backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider border-b border-divider">
                       <th className="py-4 px-5">Evaluation Title</th>
                       <th className="py-4 px-5">Duration</th>
                       <th className="py-4 px-5">Allowed Languages</th>
@@ -185,33 +185,33 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                       <th className="py-4 px-5 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="block lg:table-row-group divide-y lg:divide-white/[0.02]">
+                  <tbody className="block lg:table-row-group divide-y lg:divide-divider">
                   {assessments.map((a) => (
                     <tr 
                       key={a.id} 
                       onClick={() => onSelectInspector?.(a)}
-                      className="hover:bg-white/[0.02] cursor-pointer transition duration-200 group/row block lg:table-row p-4 lg:p-0 mb-4 lg:mb-0 border border-white/5 lg:border-transparent rounded-2xl lg:rounded-none bg-[rgba(28,28,30,0.4)] lg:bg-transparent"
+                      className="hover:bg-hover cursor-pointer transition duration-200 group/row block lg:table-row p-4 lg:p-0 mb-4 lg:mb-0 border border-divider lg:border-transparent rounded-2xl lg:rounded-none bg-panel lg:bg-transparent"
                     >
-                      <td className="py-2 lg:py-4 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell font-semibold text-white font-heading truncate border-b border-white/5 lg:border-none">
-                        <span className="lg:hidden text-[10px] uppercase font-bold text-[#8A9099] mb-1 sm:mb-0">Evaluation Title</span>
+                      <td className="py-2 lg:py-4 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell font-semibold text-primary font-heading truncate border-b border-divider lg:border-none">
+                        <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Evaluation Title</span>
                         <span>{a.title}</span>
                       </td>
-                      <td className="py-2 lg:py-4 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell sys-text-body font-sans border-b border-white/5 lg:border-none">
-                        <span className="lg:hidden text-[10px] uppercase font-bold text-[#8A9099] mb-1 sm:mb-0">Duration</span>
+                      <td className="py-2 lg:py-4 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell sys-text-body font-sans border-b border-divider lg:border-none">
+                        <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Duration</span>
                         <span>{a.duration} mins</span>
                       </td>
-                      <td className="py-2 lg:py-4 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell sys-text-body capitalize font-sans font-medium border-b border-white/5 lg:border-none">
-                        <span className="lg:hidden text-[10px] uppercase font-bold text-[#8A9099] mb-1 sm:mb-0">Languages</span>
+                      <td className="py-2 lg:py-4 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell sys-text-body capitalize font-sans font-medium border-b border-divider lg:border-none">
+                        <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Languages</span>
                         <span>{a.allowed_languages.join(', ')}</span>
                       </td>
-                      <td className="py-2 lg:py-4 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell border-b border-white/5 lg:border-none">
-                        <span className="lg:hidden text-[10px] uppercase font-bold text-[#8A9099] mb-1 sm:mb-0">Status</span>
+                      <td className="py-2 lg:py-4 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell border-b border-divider lg:border-none">
+                        <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Status</span>
                         <span className={`px-2.5 py-1 rounded-md text-[9px] font-mono font-bold uppercase tracking-wider inline-flex items-center gap-1.5 ${
                           a.status === 'Published' 
                             ? 'bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/20 shadow-[0_0_10px_rgba(52,211,153,0.1)]' 
                             : a.status === 'Draft'
                             ? 'bg-[#FBBF24]/10 text-[#FBBF24] border border-[#FBBF24]/20 shadow-[0_0_10px_rgba(251,191,36,0.1)]'
-                            : 'bg-white/5 text-white/50 border border-white/5'
+                            : 'bg-white/5 text-white/50 border border-divider'
                         }`}>
                           <span className={`w-1.5 h-1.5 rounded-full ${
                             a.status === 'Published' ? 'bg-[#34D399] shadow-[0_0_5px_#34D399]' : 
@@ -236,7 +236,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                             onClick={() => handleOpenEditForm(a)}
                             variant="ghost" 
                             size="sm"
-                            className="h-8 w-8 p-0 hover:bg-white/5 sys-text-body hover:text-white rounded-lg cursor-pointer transition-colors"
+                            className="h-8 w-8 p-0 hover:bg-hover sys-text-body hover:text-primary rounded-lg cursor-pointer transition-colors"
                             title="Edit Parameters"
                           >
                             <Edit className="w-4 h-4" />
@@ -245,7 +245,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                             onClick={() => handleDuplicate(a.id)}
                             variant="ghost" 
                             size="sm"
-                            className="h-8 w-8 p-0 hover:bg-white/5 sys-text-body hover:text-white rounded-lg cursor-pointer transition-colors"
+                            className="h-8 w-8 p-0 hover:bg-hover sys-text-body hover:text-primary rounded-lg cursor-pointer transition-colors"
                             title="Duplicate"
                           >
                             <Copy className="w-4 h-4" />
@@ -280,10 +280,10 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
         </div>
       ) : (
         /* Glass-morphic Edit / Create Form overlay */
-        <Card className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-white/5 p-8 rounded-2xl relative overflow-hidden animate-fade-in shadow-2xl">
+        <Card className="bg-panel backdrop-blur-[16px] border-divider p-8 rounded-2xl relative overflow-hidden animate-fade-in shadow-2xl">
           <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-[#5B8CFF]" />
           
-          <h3 className="text-sm font-bold text-white mb-6 font-heading flex items-center gap-2">
+          <h3 className="text-sm font-bold text-primary mb-6 font-heading flex items-center gap-2">
             <Sliders className="w-4.5 h-4.5 text-[#5B8CFF]" /> 
             {editId ? 'Configure Assessment Parameters' : 'Draft New Evaluation'}
           </h3>
@@ -299,7 +299,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                     type="text" 
                     value={title} 
                     onChange={e => setTitle(e.target.value)}
-                    className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50" 
+                    className="sys-bg border border-divider text-primary rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50" 
                     placeholder="e.g. Software Engineer Evaluation"
                     required
                   />
@@ -310,7 +310,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                   <textarea 
                     value={description} 
                     onChange={e => setDescription(e.target.value)}
-                    className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24" 
+                    className="sys-bg border border-divider text-primary rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24" 
                     placeholder="Provide overview details..."
                   />
                 </div>
@@ -320,7 +320,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                   <textarea 
                     value={instructions} 
                     onChange={e => setInstructions(e.target.value)}
-                    className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24" 
+                    className="sys-bg border border-divider text-primary rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24" 
                     placeholder="Rules for the proctored sandbox..."
                   />
                 </div>
@@ -336,7 +336,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                       type="number" 
                       value={duration} 
                       onChange={e => setDuration(Number(e.target.value))}
-                      className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="sys-bg border border-divider text-primary rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                       min={1}
                       required
                     />
@@ -347,7 +347,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                       type="number" 
                       value={passingScore} 
                       onChange={e => setPassingScore(Number(e.target.value))}
-                      className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="sys-bg border border-divider text-primary rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                       min={0}
                       max={100}
                       required
@@ -362,7 +362,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                       type="datetime-local" 
                       value={startTime} 
                       onChange={e => setStartTime(e.target.value)}
-                      className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="sys-bg border border-divider text-primary rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                       required
                     />
                   </div>
@@ -372,7 +372,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                       type="datetime-local" 
                       value={endTime} 
                       onChange={e => setEndTime(e.target.value)}
-                      className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
+                      className="sys-bg border border-divider text-primary rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#5B8CFF]/50"
                       required
                     />
                   </div>
@@ -387,7 +387,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                           type="checkbox" 
                           checked={languages.includes(lang)}
                           onChange={() => toggleLanguage(lang)}
-                          className="w-4 h-4 rounded border-white/5 text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer"
+                          className="w-4 h-4 rounded border-divider text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer"
                         />
                         <span className="text-xs uppercase sys-text-body font-mono">{lang === 'javascript' ? 'JS (ES6)' : lang === 'cpp' ? 'C++' : lang === 'c' ? 'C' : lang}</span>
                       </label>
@@ -400,7 +400,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                   <select 
                     value={status} 
                     onChange={e => setStatus(e.target.value as any)}
-                    className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
+                    className="sys-bg border border-divider text-primary rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
                   >
                     <option value="Draft">Draft</option>
                     <option value="Published">Published</option>
@@ -413,7 +413,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                   <select 
                     value={targetBatch} 
                     onChange={e => setTargetBatch(e.target.value)}
-                    className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
+                    className="sys-bg border border-divider text-primary rounded-xl p-3 text-xs font-semibold focus:outline-none focus:border-[#5B8CFF]/50 cursor-pointer"
                   >
                     <optgroup label="Entire Departments">
                       {availableDepartments.map(d => (
@@ -435,18 +435,18 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
             </div>
 
             {/* Form actions */}
-            <div className="flex justify-end gap-3 pt-6 border-t border-white/5">
+            <div className="flex justify-end gap-3 pt-6 border-t border-divider">
               <Button 
                 type="button" 
                 onClick={() => setIsEditing(false)}
                 variant="outline"
-                className="border-white/5 sys-bg/20 sys-text-body hover:text-white rounded-xl text-xs h-10 px-6 cursor-pointer"
+                className="border-divider bg-hover sys-text-body hover:text-primary rounded-xl text-xs h-10 px-6 cursor-pointer"
               >
                 Cancel
               </Button>
               <Button 
                 type="submit" 
-                className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white rounded-xl text-xs h-10 px-6 font-bold cursor-pointer transition shadow-md"
+                className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-primary rounded-xl text-xs h-10 px-6 font-bold cursor-pointer transition shadow-md"
               >
                 Save Configuration
               </Button>

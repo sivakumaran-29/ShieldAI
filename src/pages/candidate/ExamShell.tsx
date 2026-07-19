@@ -1087,7 +1087,7 @@ export default function ExamShell() {
 
   if (loading || !assessment) {
     return (
-      <div className="min-h-screen sys-bg flex items-center justify-center text-white font-mono text-xs relative">
+      <div className="min-h-screen sys-bg flex items-center justify-center text-primary font-mono text-xs relative">
         <AmbientGlow />
         <div className="flex flex-col items-center gap-3 relative z-10">
           <RefreshCw className="w-6 h-6 animate-spin sys-text-body" />
@@ -1098,7 +1098,7 @@ export default function ExamShell() {
   }
 
   return (
-    <div className="h-screen w-full flex flex-col font-sans antialiased overflow-hidden bg-[#09090B] text-[#F5F5F5] relative">
+    <div className="h-screen w-full flex flex-col font-sans antialiased overflow-hidden bg-background text-primary relative">
       
       {/* Ambient Background Layer */}
       <AmbientGlow />
@@ -1106,18 +1106,18 @@ export default function ExamShell() {
       
       <div className="flex-1 flex flex-col z-10 relative h-full">
         {/* PREMIUM TOP BAR */}
-        <header className="px-4 lg:px-8 py-3 lg:py-4 flex items-center justify-between sticky top-0 z-50 border-b border-[rgba(255,255,255,0.06)] bg-[#09090B]/80 backdrop-blur-xl">
+        <header className="px-4 lg:px-8 py-3 lg:py-4 flex items-center justify-between sticky top-0 z-50 border-b border-divider bg-background/80 backdrop-blur-xl">
           <div className="flex items-center space-x-2 md:space-x-4 select-none">
             {activePart !== 'menu' && (
               <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="lg:hidden w-8 h-8 rounded-lg">
-                <Menu className="w-4 h-4 text-[#B8BDC7]" />
+                <Menu className="w-4 h-4 text-secondary" />
               </Button>
             )}
-            <div className="px-2 md:px-3 py-1.5 rounded-full bg-[#111216] border border-[rgba(255,255,255,0.06)] text-[#F5F5F5] flex items-center gap-2 font-medium text-[10px] md:text-xs shadow-sm">
+            <div className="px-2 md:px-3 py-1.5 rounded-full bg-surface border border-divider text-primary flex items-center gap-2 font-medium text-[10px] md:text-xs shadow-sm">
               <Lock className="w-3 md:w-3.5 h-3 md:h-3.5 text-emerald-400" strokeWidth={2} /> 
               <span className="hidden sm:inline">Protected Environment</span>
             </div>
-            <span className="font-semibold text-[10px] md:text-sm tracking-wide text-[#B8BDC7] hidden md:inline-block">
+            <span className="font-semibold text-[10px] md:text-sm tracking-wide text-secondary hidden md:inline-block">
               {assessment.title}
             </span>
           </div>
@@ -1132,7 +1132,7 @@ export default function ExamShell() {
             {/* INTEGRITY SCALE */}
             <div className={`hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full border ${
               integrityScore > 75 
-                ? 'bg-[#111216] border-[rgba(255,255,255,0.06)] text-[#B8BDC7]' 
+                ? 'bg-surface border-divider text-secondary' 
                 : 'bg-red-500/10 border-red-500/20 text-red-400 animate-pulse'
             }`}>
               <Activity className="w-3.5 h-3.5" strokeWidth={2} />
@@ -1143,7 +1143,7 @@ export default function ExamShell() {
             <div className={`flex items-center space-x-2 px-4 py-1.5 rounded-full border ${
               timeLeft < 300 
                 ? 'bg-red-500/10 border-red-500/20 text-red-400 animate-pulse' 
-                : 'bg-[#111216] border-[rgba(255,255,255,0.06)] text-[#F5F5F5]'
+                : 'bg-surface border-divider text-primary'
             }`}>
               <Clock className="w-3.5 h-3.5" strokeWidth={2} />
               <span className="text-xs font-bold font-mono tracking-wider">{formatTimerString(timeLeft)}</span>
@@ -1154,7 +1154,7 @@ export default function ExamShell() {
               disabled={isSyncing}
               variant="ghost"
               size="icon"
-              className="w-8 h-8 rounded-full hover:bg-[rgba(255,255,255,0.04)] text-[#8A9099] hover:text-[#F5F5F5] transition-colors"
+              className="w-8 h-8 rounded-full hover:bg-hover text-tertiary hover:text-primary transition-colors"
               title="Sync Latest Changes"
             >
               <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-[#5B8CFF]' : ''}`} />
@@ -1186,25 +1186,25 @@ export default function ExamShell() {
         {activePart === 'menu' ? (
           <main className="flex-1 overflow-y-auto p-12 flex flex-col items-center justify-center animate-fade-in relative z-10">
             <div className="max-w-3xl w-full text-center space-y-4">
-              <h1 className="text-4xl font-bold text-[#F5F5F5] tracking-tight">Assessment Overview</h1>
-              <p className="text-[#8A9099] text-base">Select a section to begin. Submitted sections are locked.</p>
+              <h1 className="text-4xl font-bold text-primary tracking-tight">Assessment Overview</h1>
+              <p className="text-tertiary text-base">Select a section to begin. Submitted sections are locked.</p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
                 {/* Part 1: MCQ */}
                 <div className={`p-8 border rounded-[20px] flex flex-col items-center text-center transition-all duration-300 ${
                   currentSession?.completedParts?.includes('mcq') 
-                    ? 'bg-[#111216]/50 border-transparent opacity-50' 
-                    : 'bg-[#15171B] border-[rgba(255,255,255,0.06)] hover:border-[#5B8CFF]/30 hover:bg-[#1B1D22] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5B8CFF]/5'
+                    ? 'bg-surface/50 border-transparent opacity-50' 
+                    : 'bg-[#15171B] border-divider hover:border-[#5B8CFF]/30 hover:bg-[#1B1D22] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5B8CFF]/5'
                 }`}>
-                  <div className="w-14 h-14 bg-[#111216] rounded-2xl flex items-center justify-center mb-6 border border-[rgba(255,255,255,0.06)] shadow-sm">
+                  <div className="w-14 h-14 bg-surface rounded-2xl flex items-center justify-center mb-6 border border-divider shadow-sm">
                     <span className="font-bold text-emerald-400 text-lg">P1</span>
                   </div>
-                  <h3 className="text-xl font-semibold text-[#F5F5F5] mb-3">Multiple Choice</h3>
-                  <p className="text-sm text-[#8A9099] mb-8 flex-1 leading-relaxed">Core conceptual knowledge, logical reasoning, and scenario analysis.</p>
+                  <h3 className="text-xl font-semibold text-primary mb-3">Multiple Choice</h3>
+                  <p className="text-sm text-tertiary mb-8 flex-1 leading-relaxed">Core conceptual knowledge, logical reasoning, and scenario analysis.</p>
                   {currentSession?.completedParts?.includes('mcq') ? (
-                    <Button disabled className="w-full bg-[#111216] text-[#8A9099] font-medium rounded-xl h-12">Submitted</Button>
+                    <Button disabled className="w-full bg-surface text-tertiary font-medium rounded-xl h-12">Submitted</Button>
                   ) : (
-                    <Button onClick={() => handleStartPart('mcq')} className="w-full bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white font-semibold h-12 rounded-xl transition-all shadow-lg shadow-[#3f6ad5]/20">
+                    <Button onClick={() => handleStartPart('mcq')} className="w-full bg-[#3f6ad5] hover:bg-[#5B8CFF] text-primary font-semibold h-12 rounded-xl transition-all shadow-lg shadow-[#3f6ad5]/20">
                       Start Section
                     </Button>
                   )}
@@ -1213,18 +1213,18 @@ export default function ExamShell() {
                 {/* Part 2: Coding */}
                 <div className={`p-8 border rounded-[20px] flex flex-col items-center text-center transition-all duration-300 ${
                   currentSession?.completedParts?.includes('coding') 
-                    ? 'bg-[#111216]/50 border-transparent opacity-50' 
-                    : 'bg-[#15171B] border-[rgba(255,255,255,0.06)] hover:border-[#5B8CFF]/30 hover:bg-[#1B1D22] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5B8CFF]/5'
+                    ? 'bg-surface/50 border-transparent opacity-50' 
+                    : 'bg-[#15171B] border-divider hover:border-[#5B8CFF]/30 hover:bg-[#1B1D22] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5B8CFF]/5'
                 }`}>
-                  <div className="w-14 h-14 bg-[#111216] rounded-2xl flex items-center justify-center mb-6 border border-[rgba(255,255,255,0.06)] shadow-sm">
+                  <div className="w-14 h-14 bg-surface rounded-2xl flex items-center justify-center mb-6 border border-divider shadow-sm">
                     <span className="font-bold text-[#5B8CFF] text-lg">P2</span>
                   </div>
-                  <h3 className="text-xl font-semibold text-[#F5F5F5] mb-3">Coding Challenges</h3>
-                  <p className="text-sm text-[#8A9099] mb-8 flex-1 leading-relaxed">Algorithmic problem solving and secure logic implementation.</p>
+                  <h3 className="text-xl font-semibold text-primary mb-3">Coding Challenges</h3>
+                  <p className="text-sm text-tertiary mb-8 flex-1 leading-relaxed">Algorithmic problem solving and secure logic implementation.</p>
                   {currentSession?.completedParts?.includes('coding') ? (
-                    <Button disabled className="w-full bg-[#111216] text-[#8A9099] font-medium rounded-xl h-12">Submitted</Button>
+                    <Button disabled className="w-full bg-surface text-tertiary font-medium rounded-xl h-12">Submitted</Button>
                   ) : (
-                    <Button onClick={() => handleStartPart('coding')} className="w-full bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white font-semibold h-12 rounded-xl transition-all shadow-lg shadow-[#3f6ad5]/20">
+                    <Button onClick={() => handleStartPart('coding')} className="w-full bg-[#3f6ad5] hover:bg-[#5B8CFF] text-primary font-semibold h-12 rounded-xl transition-all shadow-lg shadow-[#3f6ad5]/20">
                       Start Section
                     </Button>
                   )}
@@ -1232,7 +1232,7 @@ export default function ExamShell() {
               </div>
 
               {currentSession?.completedParts?.includes('mcq') && currentSession?.completedParts?.includes('coding') && (
-                <div className="mt-12 pt-8 border-t border-[rgba(255,255,255,0.06)]">
+                <div className="mt-12 pt-8 border-t border-divider">
                   <Button onClick={handleFinishAssessment} className="bg-emerald-500 hover:bg-emerald-400 text-[#09090B] font-bold px-10 h-14 rounded-2xl text-sm shadow-[0_0_30px_rgba(16,185,129,0.2)] transition-all">
                     Finish Exam
                   </Button>
@@ -1253,15 +1253,15 @@ export default function ExamShell() {
           )}
 
           {/* LEFT COLUMN: Sidebar & Telemetry */}
-          <aside className={`absolute lg:relative z-40 inset-y-0 left-0 w-[280px] lg:w-80 flex-shrink-0 flex flex-col border-r border-[rgba(255,255,255,0.06)] bg-[#09090B] overflow-y-auto transform transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+          <aside className={`absolute lg:relative z-40 inset-y-0 left-0 w-[280px] lg:w-80 flex-shrink-0 flex flex-col border-r border-divider bg-background overflow-y-auto transform transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
             
             {/* PROGRESS HEADER */}
-            <div className="p-6 border-b border-[rgba(255,255,255,0.06)] bg-[#111216]/50">
+            <div className="p-6 border-b border-divider bg-surface/50">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xs font-semibold text-[#8A9099] uppercase tracking-wider">
+                <h3 className="text-xs font-semibold text-tertiary uppercase tracking-wider">
                   {activePart === 'mcq' ? 'Multiple Choice' : 'Coding Problems'}
                 </h3>
-                <span className="text-xs font-bold text-[#F5F5F5] bg-[#15171B] px-2 py-1 rounded-md border border-[rgba(255,255,255,0.06)]">
+                <span className="text-xs font-bold text-primary bg-[#15171B] px-2 py-1 rounded-md border border-divider">
                   {selectedQIndex + 1} / {filteredQuestions.length}
                 </span>
               </div>
@@ -1283,7 +1283,7 @@ export default function ExamShell() {
                   const isMarked = reviewMarked[q.id]
                   const isActive = selectedQIndex === idx
                   
-                  let btnStyle = 'bg-[#111216] border-[rgba(255,255,255,0.06)] text-[#8A9099] hover:bg-[rgba(255,255,255,0.04)] hover:text-[#F5F5F5]'
+                  let btnStyle = 'bg-surface border-divider text-tertiary hover:bg-hover hover:text-primary'
                   if (isActive) btnStyle = 'bg-[#F5F5F5] border-transparent text-[#09090B] shadow-[0_0_15px_rgba(255,255,255,0.1)]'
                   else if (isMarked) btnStyle = 'bg-amber-500/10 border-amber-500/30 text-amber-500 hover:bg-amber-500/20'
                   else if (isAnswered) btnStyle = 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20'
@@ -1301,26 +1301,26 @@ export default function ExamShell() {
               </div>
               
               {/* LEGEND */}
-              <div className="space-y-3 text-xs text-[#8A9099]">
+              <div className="space-y-3 text-xs text-tertiary">
                 <div className="flex items-center gap-3"><div className="w-2.5 h-2.5 rounded-full bg-[#F5F5F5]"></div> <span className="font-medium">Current</span></div>
                 <div className="flex items-center gap-3"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div> <span className="font-medium">Answered</span></div>
                 <div className="flex items-center gap-3"><div className="w-2.5 h-2.5 rounded-full bg-amber-500"></div> <span className="font-medium">Review</span></div>
-                <div className="flex items-center gap-3"><div className="w-2.5 h-2.5 rounded-full border border-[rgba(255,255,255,0.2)] bg-[#111216]"></div> <span className="font-medium">Unanswered</span></div>
+                <div className="flex items-center gap-3"><div className="w-2.5 h-2.5 rounded-full border border-[rgba(255,255,255,0.2)] bg-surface"></div> <span className="font-medium">Unanswered</span></div>
               </div>
             </div>
 
             {/* PROCTORING & TELEMETRY SECTION */}
-            <div className="p-6 border-t border-[rgba(255,255,255,0.06)] space-y-4 bg-[#111216]/30">
+            <div className="p-6 border-t border-divider space-y-4 bg-surface/30">
               
               {/* Premium Proctor Camera Card */}
-              <div className="bg-[#15171B] border border-[rgba(255,255,255,0.06)] p-3 rounded-[20px] shadow-sm relative overflow-hidden group">
+              <div className="bg-[#15171B] border border-divider p-3 rounded-[20px] shadow-sm relative overflow-hidden group">
                 {isAnomalyActive && (
-                  <div className="absolute top-4 right-4 z-30 bg-red-500 text-white font-semibold text-[10px] px-2 py-1 rounded-md flex items-center shadow-lg animate-pulse">
+                  <div className="absolute top-4 right-4 z-30 bg-red-500 text-primary font-semibold text-[10px] px-2 py-1 rounded-md flex items-center shadow-lg animate-pulse">
                     <EyeOff className="w-3 h-3 mr-1.5" strokeWidth={2} /> {anomalyType}
                   </div>
                 )}
                 
-                <div className="w-full h-32 relative overflow-hidden bg-[#09090B] rounded-[12px] border border-[rgba(255,255,255,0.03)]">
+                <div className="w-full h-32 relative overflow-hidden bg-background rounded-[12px] border border-divider">
                   <div id="candidate-video-container" className="absolute inset-0 w-full h-full z-[100]">
                     {localStream && <StreamVideo stream={localStream} />}
                     <video id="candidate-video" className="hidden" playsInline muted autoPlay />
@@ -1345,10 +1345,10 @@ export default function ExamShell() {
               </div>
 
               {/* Telemetry Console */}
-              <div className="bg-[#111216] border border-[rgba(255,255,255,0.06)] rounded-2xl overflow-hidden shadow-sm flex flex-col h-40">
-                <div className="bg-[#15171B] border-b border-[rgba(255,255,255,0.06)] px-4 py-2.5 flex items-center gap-2">
-                  <Terminal className="w-3.5 h-3.5 text-[#8A9099]" />
-                  <span className="text-[10px] uppercase font-semibold text-[#8A9099] tracking-wider">Telemetry Log</span>
+              <div className="bg-surface border border-divider rounded-2xl overflow-hidden shadow-sm flex flex-col h-40">
+                <div className="bg-[#15171B] border-b border-divider px-4 py-2.5 flex items-center gap-2">
+                  <Terminal className="w-3.5 h-3.5 text-tertiary" />
+                  <span className="text-[10px] uppercase font-semibold text-tertiary tracking-wider">Telemetry Log</span>
                 </div>
                 <div className="p-3 font-mono text-[10px] space-y-2 overflow-y-auto flex-1">
                   {proctorLogs.slice(-30).map((log, idx) => {
@@ -1357,7 +1357,7 @@ export default function ExamShell() {
                     return (
                       <div key={idx} className={`leading-relaxed break-words ${
                         isAlert ? 'text-red-400 bg-red-500/10 px-1.5 py-0.5 rounded' : 
-                        isSystem ? 'text-[#8A9099]' : 'text-[#B8BDC7]'
+                        isSystem ? 'text-tertiary' : 'text-secondary'
                       }`}>
                         <span className="opacity-50 mr-2 text-[9px]">{new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute:'2-digit', second:'2-digit' })}</span>
                         {log}
@@ -1371,11 +1371,11 @@ export default function ExamShell() {
           </aside>
 
           {/* RIGHT COLUMN: Code Workspace & Terminal or MCQ View */}
-          <section className="flex-1 flex flex-col h-full overflow-hidden bg-[#09090B] relative">
+          <section className="flex-1 flex flex-col h-full overflow-hidden bg-background relative">
             
             {activeQuestion?.type !== 'mcq' && (
-              <div className="px-6 py-3 flex items-center justify-between border-b border-[rgba(255,255,255,0.06)] bg-[#111216]">
-                <span className="text-xs font-semibold text-[#8A9099] flex items-center gap-2 uppercase tracking-wide">
+              <div className="px-6 py-3 flex items-center justify-between border-b border-divider bg-surface">
+                <span className="text-xs font-semibold text-tertiary flex items-center gap-2 uppercase tracking-wide">
                   <Terminal className="w-4 h-4 text-[#5B8CFF]" strokeWidth={2} /> Compiler Node
                 </span>
                 <select 
@@ -1391,7 +1391,7 @@ export default function ExamShell() {
                       setLanguage(newLang)
                     }
                   }} 
-                  className="bg-[#15171B] border border-[rgba(255,255,255,0.06)] text-[#F5F5F5] rounded-lg text-xs px-3 py-1.5 font-medium outline-none focus:border-[#5B8CFF]/50 transition-colors cursor-pointer"
+                  className="bg-[#15171B] border border-divider text-primary rounded-lg text-xs px-3 py-1.5 font-medium outline-none focus:border-[#5B8CFF]/50 transition-colors cursor-pointer"
                 >
                   {assessment.allowed_languages.includes('python') && settings.allowedLangs.includes('python') && <option value="python">Python 3.10</option>}
                   {assessment.allowed_languages.includes('javascript') && settings.allowedLangs.includes('javascript') && <option value="javascript">JavaScript (ES6)</option>}
@@ -1403,13 +1403,13 @@ export default function ExamShell() {
             )}
 
             {/* MAIN CONTENT AREA */}
-            <div className="flex-1 overflow-y-auto min-h-0 bg-[#09090B]">
+            <div className="flex-1 overflow-y-auto min-h-0 bg-background">
               {activeQuestion ? (
                 activeQuestion.type === 'mcq' ? (
                   <div className="p-10 max-w-4xl mx-auto w-full pb-12">
                       
                       <div className="flex items-center gap-3 mb-8 flex-wrap">
-                        <span className="px-3 py-1 rounded-md text-[10px] font-semibold bg-[#111216] border border-[rgba(255,255,255,0.06)] text-[#8A9099] uppercase tracking-wider">
+                        <span className="px-3 py-1 rounded-md text-[10px] font-semibold bg-surface border border-divider text-tertiary uppercase tracking-wider">
                           Difficulty: <span className={activeQuestion.difficulty === 'Hard' ? 'text-red-400' : activeQuestion.difficulty === 'Medium' ? 'text-amber-400' : 'text-emerald-400'}>{activeQuestion.difficulty}</span>
                         </span>
                         <span className="px-3 py-1 rounded-md text-[10px] font-semibold bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 uppercase tracking-wider">
@@ -1422,11 +1422,11 @@ export default function ExamShell() {
                         )}
                       </div>
 
-                      <h1 className="text-2xl font-bold text-[#F5F5F5] mb-6 leading-tight">
+                      <h1 className="text-2xl font-bold text-primary mb-6 leading-tight">
                         <Latex>{activeQuestion.title || ''}</Latex>
                       </h1>
                       
-                      <div className="text-lg font-semibold leading-relaxed text-[#F5F5F5] mb-12">
+                      <div className="text-lg font-semibold leading-relaxed text-primary mb-12">
                         <Latex>{activeQuestion.description || ''}</Latex>
                       </div>
 
@@ -1442,17 +1442,17 @@ export default function ExamShell() {
                               className={`group w-full flex items-center text-left p-5 rounded-[16px] border transition-all duration-200 cursor-pointer ${
                                 isSelected 
                                   ? 'bg-[#5B8CFF]/[0.04] border-[#5B8CFF]/60 shadow-[0_4px_24px_rgba(91,140,255,0.08)]' 
-                                  : 'bg-[#111216] hover:bg-[#15171B] border-[rgba(255,255,255,0.06)] hover:border-[rgba(255,255,255,0.12)]'
+                                  : 'bg-surface hover:bg-hover border-divider hover:border-[rgba(255,255,255,0.12)]'
                               }`}
                             >
                               <div className={`flex shrink-0 items-center justify-center w-8 h-8 rounded-full mr-5 font-semibold text-xs border transition-all duration-200 ${
                                 isSelected 
-                                  ? 'bg-[#5B8CFF] text-white border-[#5B8CFF] shadow-[0_0_12px_rgba(91,140,255,0.4)]' 
-                                  : 'bg-[#15171B] text-[#8A9099] border-[rgba(255,255,255,0.06)] group-hover:border-[rgba(255,255,255,0.15)] group-hover:text-[#F5F5F5]'
+                                  ? 'bg-[#5B8CFF] text-primary border-[#5B8CFF] shadow-[0_0_12px_rgba(91,140,255,0.4)]' 
+                                  : 'bg-[#15171B] text-tertiary border-divider group-hover:border-[rgba(255,255,255,0.15)] group-hover:text-primary'
                               }`}>
                                 {String.fromCharCode(65 + idx)}
                               </div>
-                              <span className={`text-[15px] font-medium leading-relaxed ${isSelected ? 'text-[#F5F5F5]' : 'text-[#B8BDC7] group-hover:text-[#F5F5F5]'}`}>
+                              <span className={`text-[15px] font-medium leading-relaxed ${isSelected ? 'text-primary' : 'text-secondary group-hover:text-primary'}`}>
                                 <Latex>{opt || ''}</Latex>
                               </span>
                             </button>
@@ -1463,75 +1463,75 @@ export default function ExamShell() {
                 ) : (
                   <div className="flex flex-col lg:flex-row h-full w-full min-h-0 overflow-y-auto lg:overflow-hidden">
                     {/* ... Coding UI will remain conceptually similar but with dark theme colors if needed. */}
-                    <div className="w-full lg:w-1/2 h-[50vh] lg:h-full border-b lg:border-b-0 lg:border-r border-[rgba(255,255,255,0.06)] bg-[#09090B] flex flex-col">
+                    <div className="w-full lg:w-1/2 h-[50vh] lg:h-full border-b lg:border-b-0 lg:border-r border-divider bg-background flex flex-col">
                       <div className="p-6 overflow-y-auto flex-1 space-y-6">
                         <div>
-                           <span className="px-3 py-1 rounded-md text-[10px] font-semibold bg-[#111216] border border-[rgba(255,255,255,0.06)] text-emerald-400 uppercase tracking-wider mb-4 inline-block">
+                           <span className="px-3 py-1 rounded-md text-[10px] font-semibold bg-surface border border-divider text-emerald-400 uppercase tracking-wider mb-4 inline-block">
                              Difficulty: {activeQuestion.difficulty}
                            </span>
-                           <h1 className="text-xl font-bold text-[#F5F5F5] leading-tight">
+                           <h1 className="text-xl font-bold text-primary leading-tight">
                              <Latex>{activeQuestion.title || ''}</Latex>
                            </h1>
                         </div>
-                        <div className="text-sm leading-relaxed text-[#B8BDC7] whitespace-pre-wrap">
+                        <div className="text-sm leading-relaxed text-secondary whitespace-pre-wrap">
                           {activeQuestion.description}
                         </div>
                         {activeQuestion.tags && activeQuestion.tags.length > 0 && (
                           <div className="flex flex-wrap gap-2 pt-2">
                             {activeQuestion.tags.map((tag, idx) => (
-                              <span key={idx} className="bg-[#111216] text-[#8A9099] border border-[rgba(255,255,255,0.06)] text-[10px] px-2 py-1 rounded-md font-medium">
+                              <span key={idx} className="bg-surface text-tertiary border border-divider text-[10px] px-2 py-1 rounded-md font-medium">
                                 {tag}
                               </span>
                             ))}
                           </div>
                         )}
-                        <div className="p-4 rounded-xl border border-[rgba(255,255,255,0.06)] bg-[#111216]/50">
-                          <h4 className="text-[10px] font-semibold text-[#8A9099] uppercase tracking-widest mb-2">Constraints</h4>
-                          <pre className="text-xs leading-relaxed font-mono whitespace-pre-wrap text-[#B8BDC7]">{activeQuestion.constraints}</pre>
+                        <div className="p-4 rounded-xl border border-divider bg-surface/50">
+                          <h4 className="text-[10px] font-semibold text-tertiary uppercase tracking-widest mb-2">Constraints</h4>
+                          <pre className="text-xs leading-relaxed font-mono whitespace-pre-wrap text-secondary">{activeQuestion.constraints}</pre>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="p-4 rounded-xl border border-[rgba(255,255,255,0.06)] bg-[#111216]/50">
-                            <h4 className="text-[10px] font-semibold text-[#8A9099] uppercase tracking-wider mb-2">Input Format</h4>
-                            <p className="text-xs text-[#B8BDC7]">{activeQuestion.input_format}</p>
+                          <div className="p-4 rounded-xl border border-divider bg-surface/50">
+                            <h4 className="text-[10px] font-semibold text-tertiary uppercase tracking-wider mb-2">Input Format</h4>
+                            <p className="text-xs text-secondary">{activeQuestion.input_format}</p>
                           </div>
-                          <div className="p-4 rounded-xl border border-[rgba(255,255,255,0.06)] bg-[#111216]/50">
-                            <h4 className="text-[10px] font-semibold text-[#8A9099] uppercase tracking-wider mb-2">Output Format</h4>
-                            <p className="text-xs text-[#B8BDC7]">{activeQuestion.output_format}</p>
+                          <div className="p-4 rounded-xl border border-divider bg-surface/50">
+                            <h4 className="text-[10px] font-semibold text-tertiary uppercase tracking-wider mb-2">Output Format</h4>
+                            <p className="text-xs text-secondary">{activeQuestion.output_format}</p>
                           </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="space-y-2 flex flex-col">
-                            <span className="text-[10px] font-semibold text-[#8A9099] uppercase tracking-wider px-1">Sample Input</span>
-                            <pre className="bg-[#111216] p-4 rounded-xl border border-[rgba(255,255,255,0.06)] text-xs font-mono text-[#B8BDC7] min-h-[80px] whitespace-pre-wrap">{activeQuestion.sample_input}</pre>
+                            <span className="text-[10px] font-semibold text-tertiary uppercase tracking-wider px-1">Sample Input</span>
+                            <pre className="bg-surface p-4 rounded-xl border border-divider text-xs font-mono text-secondary min-h-[80px] whitespace-pre-wrap">{activeQuestion.sample_input}</pre>
                           </div>
                           <div className="space-y-2 flex flex-col">
-                            <span className="text-[10px] font-semibold text-[#8A9099] uppercase tracking-wider px-1">Sample Output</span>
-                            <pre className="bg-[#111216] p-4 rounded-xl border border-[rgba(255,255,255,0.06)] text-xs font-mono text-[#F5F5F5] min-h-[80px] whitespace-pre-wrap">{activeQuestion.sample_output}</pre>
+                            <span className="text-[10px] font-semibold text-tertiary uppercase tracking-wider px-1">Sample Output</span>
+                            <pre className="bg-surface p-4 rounded-xl border border-divider text-xs font-mono text-primary min-h-[80px] whitespace-pre-wrap">{activeQuestion.sample_output}</pre>
                           </div>
                         </div>
                         {activeQuestion.explanation && (
-                          <div className="text-xs text-[#B8BDC7] leading-relaxed italic bg-[#5B8CFF]/5 border border-[#5B8CFF]/20 p-4 rounded-xl">
+                          <div className="text-xs text-secondary leading-relaxed italic bg-[#5B8CFF]/5 border border-[#5B8CFF]/20 p-4 rounded-xl">
                             <strong className="text-[#5B8CFF] font-semibold not-italic">Explanation:</strong> <br/> {activeQuestion.explanation}
                           </div>
                         )}
                       </div>
                     </div>
                     
-                    <div className="w-full lg:w-1/2 h-1/2 lg:h-full flex flex-col bg-[#09090B] relative">
+                    <div className="w-full lg:w-1/2 h-1/2 lg:h-full flex flex-col bg-background relative">
                       {isCompilerLoading && (
-                        <div className="absolute inset-0 z-50 bg-[#09090B]/90 backdrop-blur-sm flex flex-col items-center justify-center p-8 text-center">
+                        <div className="absolute inset-0 z-50 bg-background/90 backdrop-blur-sm flex flex-col items-center justify-center p-8 text-center">
                           {!compilerShowExtensionPrompt ? (
                             <>
                               <div className="w-12 h-12 border-4 border-[#5B8CFF]/30 border-t-[#5B8CFF] rounded-full animate-spin mb-6"></div>
-                              <h3 className="text-[#F5F5F5] font-bold text-lg mb-2">Loading {isCompilerLoading === 'cpp' ? 'C++' : 'C'} Compiler Engine</h3>
-                              <p className="text-[#8A9099] text-sm max-w-xs leading-relaxed mb-4">
+                              <h3 className="text-primary font-bold text-lg mb-2">Loading {isCompilerLoading === 'cpp' ? 'C++' : 'C'} Compiler Engine</h3>
+                              <p className="text-tertiary text-sm max-w-xs leading-relaxed mb-4">
                                 {compilerStatusText}
                               </p>
                               
                               <div className="w-64 h-2 bg-white/5 rounded-full overflow-hidden mb-2">
                                 <div className="h-full bg-[#5B8CFF] rounded-full transition-all duration-200" style={{ width: `${compilerProgress}%` }}></div>
                               </div>
-                              <div className="flex justify-between w-64 text-[10px] text-[#8A9099] font-mono mb-4">
+                              <div className="flex justify-between w-64 text-[10px] text-tertiary font-mono mb-4">
                                 <span>{compilerProgress}%</span>
                                 <span>{compilerDownloadedMB}MB / 35.0MB</span>
                               </div>
@@ -1539,7 +1539,7 @@ export default function ExamShell() {
                               <div className="text-[#5B8CFF] font-mono font-bold text-3xl mb-4">
                                 {compilerCountdown}s
                               </div>
-                              <p className="text-[#8A9099]/60 text-[11px] max-w-xs leading-relaxed">
+                              <p className="text-tertiary/60 text-[11px] max-w-xs leading-relaxed">
                                 Downloading compiler core and dependencies. This 35MB payload is only fetched once per session. Max threshold: 20s.
                               </p>
                             </>
@@ -1548,17 +1548,17 @@ export default function ExamShell() {
                               <div className="w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-6">
                                 <span className="text-amber-400 font-bold text-xl">!</span>
                               </div>
-                              <h3 className="text-[#F5F5F5] font-bold text-lg mb-2">Connection is slow.</h3>
-                              <p className="text-[#8A9099] text-sm max-w-xs leading-relaxed mb-4">
+                              <h3 className="text-primary font-bold text-lg mb-2">Connection is slow.</h3>
+                              <p className="text-tertiary text-sm max-w-xs leading-relaxed mb-4">
                                 The compiler package is taking longer than expected to download. 
                               </p>
-                              <div className="w-64 p-3 bg-white/5 rounded-lg border border-white/5 mb-6 text-left">
+                              <div className="w-64 p-3 bg-white/5 rounded-lg border border-divider mb-6 text-left">
                                 <div className="flex justify-between text-xs mb-1">
-                                  <span className="text-white">Current Progress:</span>
+                                  <span className="text-primary">Current Progress:</span>
                                   <span className="text-[#5B8CFF] font-mono">{compilerProgress}%</span>
                                 </div>
                                 <div className="flex justify-between text-xs">
-                                  <span className="text-white">Downloaded:</span>
+                                  <span className="text-primary">Downloaded:</span>
                                   <span className="text-[#5B8CFF] font-mono">{compilerDownloadedMB}MB / 35.0MB</span>
                                 </div>
                               </div>
@@ -1571,13 +1571,13 @@ export default function ExamShell() {
                                     setConsoleOutput(`${isCompilerLoading === 'cpp' ? 'C++' : 'C'} compiler payload aborted. Falling back to Server-side execution.`)
                                     setLanguage(isCompilerLoading as string)
                                   }}
-                                  className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-medium transition-colors"
+                                  className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-border-strong text-primary text-xs font-medium transition-colors"
                                 >
                                   Abort & Use Server-Side Compiler
                                 </button>
                                 <button 
                                   onClick={() => triggerCompilerDownload(isCompilerLoading as string, 20)}
-                                  className="px-4 py-2 rounded-lg bg-[#5B8CFF] hover:bg-[#4A7CEB] text-white text-xs font-medium transition-colors shadow-[0_0_15px_rgba(91,140,255,0.3)]"
+                                  className="px-4 py-2 rounded-lg bg-[#5B8CFF] hover:bg-[#4A7CEB] text-primary text-xs font-medium transition-colors shadow-[0_0_15px_rgba(91,140,255,0.3)]"
                                 >
                                   Wait 20 more seconds
                                 </button>
@@ -1609,7 +1609,7 @@ export default function ExamShell() {
                   </div>
                 )
               ) : (
-                <div className="h-full flex items-center justify-center text-sm font-medium text-[#8A9099] bg-[#09090B]">
+                <div className="h-full flex items-center justify-center text-sm font-medium text-tertiary bg-background">
                   No questions linked to assessment lobby.
                 </div>
               )}
@@ -1617,18 +1617,18 @@ export default function ExamShell() {
 
             {/* SPLIT CONSOLE PANEL (Coding Only) */}
             {activeQuestion?.type !== 'mcq' && activeQuestion && (
-              <div className="h-72 flex flex-col border-t border-[rgba(255,255,255,0.06)] bg-[#09090B] relative z-20 shadow-[0_-10px_30px_rgba(0,0,0,0.2)]">
-                <div className="px-6 py-3 flex items-center justify-between text-xs border-b border-[rgba(255,255,255,0.06)] bg-[#111216] select-none">
+              <div className="h-72 flex flex-col border-t border-divider bg-background relative z-20 shadow-[0_-10px_30px_rgba(0,0,0,0.2)]">
+                <div className="px-6 py-3 flex items-center justify-between text-xs border-b border-divider bg-surface select-none">
                   <div className="flex items-center gap-6">
                     <button 
                       onClick={() => setTerminalTab('console')}
-                      className={`flex items-center uppercase font-semibold tracking-wider text-[11px] pb-1 border-b-2 transition-all ${terminalTab === 'console' ? 'text-emerald-400 border-emerald-400' : 'text-[#8A9099] border-transparent hover:text-[#B8BDC7]'}`}
+                      className={`flex items-center uppercase font-semibold tracking-wider text-[11px] pb-1 border-b-2 transition-all ${terminalTab === 'console' ? 'text-emerald-400 border-emerald-400' : 'text-tertiary border-transparent hover:text-secondary'}`}
                     >
                       <Terminal className="w-4 h-4 mr-2" strokeWidth={2} /> Console
                     </button>
                     <button 
                       onClick={() => setTerminalTab('testcases')}
-                      className={`flex items-center uppercase font-semibold tracking-wider text-[11px] pb-1 border-b-2 transition-all ${terminalTab === 'testcases' ? 'text-emerald-400 border-emerald-400' : 'text-[#8A9099] border-transparent hover:text-[#B8BDC7]'}`}
+                      className={`flex items-center uppercase font-semibold tracking-wider text-[11px] pb-1 border-b-2 transition-all ${terminalTab === 'testcases' ? 'text-emerald-400 border-emerald-400' : 'text-tertiary border-transparent hover:text-secondary'}`}
                     >
                       Custom Input
                     </button>
@@ -1638,62 +1638,62 @@ export default function ExamShell() {
                       onClick={handleResetCode} 
                       disabled={!!currentSession?.submissions?.[activeQuestion.id]}
                       variant="ghost" 
-                      className="h-8 text-[11px] font-semibold text-[#8A9099] hover:bg-[#15171B] hover:text-[#F5F5F5] rounded-lg transition-colors px-3 disabled:opacity-50 disabled:pointer-events-none"
+                      className="h-8 text-[11px] font-semibold text-tertiary hover:bg-hover hover:text-primary rounded-lg transition-colors px-3 disabled:opacity-50 disabled:pointer-events-none"
                     >
                       <RefreshCw className="w-3.5 h-3.5 mr-2" /> Reset
                     </Button>
                     <Button
                       onClick={() => setConsoleOutput('Execution console reports cleared.')} 
                       variant="ghost" 
-                      className="h-8 text-[11px] font-semibold text-[#8A9099] hover:bg-[#15171B] hover:text-[#F5F5F5] rounded-lg transition-colors px-3"
+                      className="h-8 text-[11px] font-semibold text-tertiary hover:bg-hover hover:text-primary rounded-lg transition-colors px-3"
                     >
                       <Trash2 className="w-3.5 h-3.5 mr-2" /> Clear
                     </Button>
                     <Button 
                       onClick={handleRunCode} 
                       disabled={isRunning || isSubmitting || !!currentSession?.submissions?.[activeQuestion.id]} 
-                      className="bg-[#111216] hover:bg-[#15171B] text-emerald-400 border border-[rgba(255,255,255,0.06)] hover:border-emerald-500/30 font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50 disabled:pointer-events-none"
+                      className="bg-surface hover:bg-hover text-emerald-400 border border-divider hover:border-emerald-500/30 font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50 disabled:pointer-events-none"
                     >
                       {isRunning ? 'Running...' : 'Run Code'}
                     </Button>
                     <Button 
                       onClick={handleCheckTestCases} 
                       disabled={isRunning || isSubmitting || !!currentSession?.submissions?.[activeQuestion.id]} 
-                      className="bg-[#111216] hover:bg-[#15171B] text-[#5B8CFF] border border-[#5B8CFF]/30 hover:border-[#5B8CFF] font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50 disabled:pointer-events-none"
+                      className="bg-surface hover:bg-hover text-[#5B8CFF] border border-[#5B8CFF]/30 hover:border-[#5B8CFF] font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50 disabled:pointer-events-none"
                     >
                       {isSubmitting ? 'Evaluating...' : 'Check Test Cases'}
                     </Button>
                     <Button 
                       onClick={handleSubmitQuestion} 
                       disabled={isRunning || isSubmitting || !!currentSession?.submissions?.[activeQuestion.id]} 
-                      className="bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50 disabled:pointer-events-none"
+                      className="bg-[#3f6ad5] hover:bg-[#5B8CFF] text-primary shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50 disabled:pointer-events-none"
                     >
                       {!!currentSession?.submissions?.[activeQuestion.id] ? 'Submitted' : isSubmitting ? 'Evaluating...' : 'Submit Code'}
                     </Button>
                   </div>
                 </div>
 
-                <div className="flex-1 flex overflow-hidden bg-[#09090B]">
+                <div className="flex-1 flex overflow-hidden bg-background">
                   
                   {terminalTab === 'testcases' && (
-                    <div className="w-80 border-r border-[rgba(255,255,255,0.06)] p-4 bg-[#111216]/50 flex flex-col">
-                      <span className="text-[10px] font-semibold text-[#8A9099] uppercase mb-3 tracking-widest">Custom STDIN Input</span>
+                    <div className="w-80 border-r border-divider p-4 bg-surface/50 flex flex-col">
+                      <span className="text-[10px] font-semibold text-tertiary uppercase mb-3 tracking-widest">Custom STDIN Input</span>
                       <textarea 
                         value={customInput}
                         onChange={(e) => setCustomInput(e.target.value)}
-                        className="flex-1 bg-[#09090B] border border-[rgba(255,255,255,0.06)] rounded-xl p-3 text-xs font-mono text-[#F5F5F5] focus:outline-none focus:border-[#5B8CFF]/50 resize-none transition-colors"
+                        className="flex-1 bg-background border border-divider rounded-xl p-3 text-xs font-mono text-primary focus:outline-none focus:border-[#5B8CFF]/50 resize-none transition-colors"
                         placeholder="Enter custom input for 'Run Code' here..."
                       />
                     </div>
                   )}
 
-                  <pre className="flex-1 p-6 font-mono text-[11px] text-[#B8BDC7] overflow-y-auto whitespace-pre-wrap leading-relaxed select-text bg-[#09090B]">
+                  <pre className="flex-1 p-6 font-mono text-[11px] text-secondary overflow-y-auto whitespace-pre-wrap leading-relaxed select-text bg-background">
                     {consoleOutput}
                   </pre>
 
                   {testResults && (
-                    <div className="w-80 border-l border-[rgba(255,255,255,0.06)] p-4 bg-[#111216]/50 overflow-y-auto h-full space-y-4 select-none">
-                      <div className="text-xs font-semibold text-[#8A9099] uppercase tracking-widest border-b border-[rgba(255,255,255,0.06)] pb-2 flex items-center justify-between">
+                    <div className="w-80 border-l border-divider p-4 bg-surface/50 overflow-y-auto h-full space-y-4 select-none">
+                      <div className="text-xs font-semibold text-tertiary uppercase tracking-widest border-b border-divider pb-2 flex items-center justify-between">
                         <span>{testResults.isSubmit ? 'Final Verdict' : 'Run Verdict'}</span>
                         <span className={`px-2 py-1 rounded-md text-[10px] font-bold ${
                           testResults.verdict === 'Accepted' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
@@ -1701,26 +1701,26 @@ export default function ExamShell() {
                       </div>
 
                       {testResults.isSubmit && (
-                        <div className="text-xs text-[#B8BDC7] space-y-1.5 border-b border-[rgba(255,255,255,0.06)] pb-4">
-                          <div className="flex justify-between">Score: <span className="text-white font-bold font-mono">{testResults.score}%</span></div>
-                          <div className="flex justify-between">Passed Cases: <span className="text-white font-bold font-mono">{testResults.passedCount} / {testResults.totalCount}</span></div>
+                        <div className="text-xs text-secondary space-y-1.5 border-b border-divider pb-4">
+                          <div className="flex justify-between">Score: <span className="text-primary font-bold font-mono">{testResults.score}%</span></div>
+                          <div className="flex justify-between">Passed Cases: <span className="text-primary font-bold font-mono">{testResults.passedCount} / {testResults.totalCount}</span></div>
                         </div>
                       )}
 
                       <div className="space-y-3">
                         {testResults.cases?.map((c: any, index: number) => (
-                          <div key={index} className="p-3 bg-[#09090B] border border-[rgba(255,255,255,0.06)] rounded-xl text-[10px] flex flex-col space-y-1.5 font-mono">
+                          <div key={index} className="p-3 bg-background border border-divider rounded-xl text-[10px] flex flex-col space-y-1.5 font-mono">
                             <div className="flex justify-between items-center mb-1">
-                              <span className="text-[#8A9099] font-bold tracking-wider">CASE #{index + 1}</span>
+                              <span className="text-tertiary font-bold tracking-wider">CASE #{index + 1}</span>
                               <span className={`px-2 py-1 rounded-md font-semibold ${
                                 c.passed ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'
                               }`}>
                                 {c.verdict}
                               </span>
                             </div>
-                            <div className="text-[#B8BDC7] truncate max-w-full">Input: <span className="text-[#F5F5F5]">{c.input?.replace(/\n/g, ' ')}</span></div>
-                            <div className="text-[#B8BDC7] truncate max-w-full">Expected: <span className="text-[#F5F5F5]">{c.expected}</span></div>
-                            <div className="text-[#B8BDC7] truncate max-w-full font-bold">Actual: <span className={c.passed ? "text-emerald-400" : "text-red-400"}>{c.actual || '(None)'}</span></div>
+                            <div className="text-secondary truncate max-w-full">Input: <span className="text-primary">{c.input?.replace(/\n/g, ' ')}</span></div>
+                            <div className="text-secondary truncate max-w-full">Expected: <span className="text-primary">{c.expected}</span></div>
+                            <div className="text-secondary truncate max-w-full font-bold">Actual: <span className={c.passed ? "text-emerald-400" : "text-red-400"}>{c.actual || '(None)'}</span></div>
                           </div>
                         ))}
                       </div>
@@ -1732,12 +1732,12 @@ export default function ExamShell() {
             
             {/* PERSISTENT BOTTOM ACTION BAR (MCQ Only) */}
             {activeQuestion && activeQuestion.type === 'mcq' && (
-              <div className="flex-none h-24 bg-[#09090B] border-t border-[rgba(255,255,255,0.06)] flex items-center justify-between px-10 z-20 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+              <div className="flex-none h-24 bg-background border-t border-divider flex items-center justify-between px-10 z-20 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
                 <div className="flex items-center gap-4">
                   <Button 
                     onClick={handleClearResponse}
                     variant="ghost"
-                    className="h-11 px-6 rounded-xl text-xs font-semibold text-[#8A9099] hover:bg-[#111216] hover:text-[#F5F5F5] transition-colors"
+                    className="h-11 px-6 rounded-xl text-xs font-semibold text-tertiary hover:bg-surface hover:text-primary transition-colors"
                   >
                     Clear Response
                   </Button>
@@ -1746,7 +1746,7 @@ export default function ExamShell() {
                     className={`h-11 px-6 rounded-xl text-xs font-semibold transition-all ${
                       reviewMarked[activeQuestion.id] 
                         ? 'bg-amber-500/10 text-amber-500 border border-amber-500/30 hover:bg-amber-500/20' 
-                        : 'bg-[#111216] text-[#B8BDC7] border border-[rgba(255,255,255,0.06)] hover:bg-[#15171B] hover:text-[#F5F5F5]'
+                        : 'bg-surface text-secondary border border-divider hover:bg-hover hover:text-primary'
                     }`}
                   >
                     {reviewMarked[activeQuestion.id] ? 'Unmark Review' : 'Mark for Review'}
@@ -1757,14 +1757,14 @@ export default function ExamShell() {
                   <Button 
                     onClick={() => setSelectedQIndex(p => p - 1)}
                     disabled={selectedQIndex === 0}
-                    className="h-11 px-8 rounded-xl text-xs font-semibold bg-[#111216] text-[#B8BDC7] border border-[rgba(255,255,255,0.06)] hover:bg-[#15171B] hover:text-[#F5F5F5] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="h-11 px-8 rounded-xl text-xs font-semibold bg-surface text-secondary border border-divider hover:bg-hover hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     Previous
                   </Button>
                   <Button 
                     onClick={handleSaveAndNext}
                     disabled={selectedQIndex === filteredQuestions.length - 1}
-                    className="h-11 px-8 rounded-xl text-xs font-bold bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center"
+                    className="h-11 px-8 rounded-xl text-xs font-bold bg-[#3f6ad5] hover:bg-[#5B8CFF] text-primary shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center"
                   >
                     Save & Next <ChevronRight className="w-4 h-4 ml-2" />
                   </Button>
@@ -1779,22 +1779,22 @@ export default function ExamShell() {
  
       {/* WARNING POPUP SCREEN */}
       {showWarningModal && (
-        <div className="fixed inset-0 bg-[#09090B]/95 backdrop-blur-md flex items-center justify-center z-[9000] p-4">
-          <Card className="w-full max-w-md bg-[#111216] border border-red-500/30 p-8 text-center shadow-[0_0_50px_rgba(239,68,68,0.15)] relative rounded-[24px]">
+        <div className="fixed inset-0 bg-background/95 backdrop-blur-md flex items-center justify-center z-[9000] p-4">
+          <Card className="w-full max-w-md bg-surface border border-red-500/30 p-8 text-center shadow-[0_0_50px_rgba(239,68,68,0.15)] relative rounded-[24px]">
             <div className="absolute top-0 left-0 right-0 h-1 bg-red-500 rounded-t-[24px]" />
             <AlertTriangle className="w-14 h-14 text-red-500 mx-auto mb-6 animate-pulse" strokeWidth={1.5} />
-            <h3 className="text-xl font-bold text-[#F5F5F5] tracking-tight mb-2">Workspace Violation Alert</h3>
-            <p className="text-sm text-[#B8BDC7] leading-relaxed">
+            <h3 className="text-xl font-bold text-primary tracking-tight mb-2">Workspace Violation Alert</h3>
+            <p className="text-sm text-secondary leading-relaxed">
               {warningModalText}
             </p>
             <div className="mt-8 flex flex-col gap-3">
               <Button 
                 onClick={enterFullscreen} 
-                className="w-full bg-red-500 hover:bg-red-400 text-white font-bold h-12 rounded-xl transition-all shadow-lg shadow-red-500/20"
+                className="w-full bg-red-500 hover:bg-red-400 text-primary font-bold h-12 rounded-xl transition-all shadow-lg shadow-red-500/20"
               >
                 Re-enter Secure Fullscreen Mode
               </Button>
-              <p className="text-[11px] text-[#8A9099] font-medium mt-2 select-none">
+              <p className="text-[11px] text-tertiary font-medium mt-2 select-none">
                 Multiple infractions will negatively affect your overall assessment score metrics.
               </p>
             </div>

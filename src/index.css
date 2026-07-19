@@ -1,24 +1,79 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
-@theme {
-  --font-sans: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Monaco, monospace;
-}
-
 @layer base {
+  :root {
+    /* Dark Mode Defaults */
+    --color-bg-base: #000000;
+    --color-bg-surface: #09090B;
+    --color-bg-panel: rgba(28, 28, 30, 0.72);
+    --color-bg-panel-solid: #111216;
+    --color-bg-card: rgba(11, 11, 13, 0.8);
+    --color-bg-input: #1A1C20;
+    --color-bg-hover: rgba(255, 255, 255, 0.05);
+    
+    --color-border-subtle: rgba(255, 255, 255, 0.06);
+    --color-border-strong: rgba(255, 255, 255, 0.15);
+    
+    --color-text-primary: #F5F5F5;
+    --color-text-secondary: #B8B8BC;
+    --color-text-tertiary: #8A9099;
+    --color-text-inverted: #09090B;
+  }
+
+  html.light {
+    /* Light Mode Overrides */
+    --color-bg-base: #F8F9FA;
+    --color-bg-surface: #FFFFFF;
+    --color-bg-panel: rgba(255, 255, 255, 0.9);
+    --color-bg-panel-solid: #F1F3F5;
+    --color-bg-card: rgba(255, 255, 255, 0.8);
+    --color-bg-input: #FFFFFF;
+    --color-bg-hover: rgba(0, 0, 0, 0.05);
+    
+    --color-border-subtle: rgba(0, 0, 0, 0.08);
+    --color-border-strong: rgba(0, 0, 0, 0.15);
+    
+    --color-text-primary: #1A1A1A;
+    --color-text-secondary: #4A4A4A;
+    --color-text-tertiary: #6B7280;
+    --color-text-inverted: #FFFFFF;
+  }
+
   html, body, #root {
     margin: 0;
     padding: 0;
     width: 100vw;
     min-height: 100vh;
-    background-color: #000000;
-    color: #f5f5f7;
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
     overflow-x: hidden;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
+}
+
+@theme {
+  --font-sans: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Monaco, monospace;
+  
+  --color-background: var(--color-bg-base);
+  --color-surface: var(--color-bg-surface);
+  --color-panel: var(--color-bg-panel);
+  --color-panel-solid: var(--color-bg-panel-solid);
+  --color-card: var(--color-bg-card);
+  --color-input: var(--color-bg-input);
+  --color-hover: var(--color-bg-hover);
+  
+  --color-divider: var(--color-border-subtle);
+  --color-border-strong: var(--color-border-strong);
+  
+  --color-primary: var(--color-text-primary);
+  --color-secondary: var(--color-text-secondary);
+  --color-tertiary: var(--color-text-tertiary);
+  --color-inverted: var(--color-text-inverted);
 }
 
 @layer components {
@@ -29,77 +84,77 @@
 
   /* 1. TYPOGRAPHY SYSTEM */
   .sys-title-display {
-    @apply text-4xl lg:text-5xl font-semibold tracking-[-0.04em] leading-[1.1] text-white;
+    @apply text-4xl lg:text-5xl font-semibold tracking-[-0.04em] leading-[1.1] text-primary;
   }
   .sys-title-h2 {
-    @apply text-3xl font-semibold tracking-tight text-white;
+    @apply text-3xl font-semibold tracking-tight text-primary;
   }
   .sys-title-h3 {
-    @apply text-xl font-bold tracking-tight text-white;
+    @apply text-xl font-bold tracking-tight text-primary;
   }
   .sys-title-card {
-    @apply text-[15px] font-semibold text-white tracking-tight;
+    @apply text-[15px] font-semibold text-primary tracking-tight;
   }
   .sys-text-body {
-    @apply text-[15px] text-[#B8B8BC] font-medium leading-relaxed;
+    @apply text-[15px] text-secondary font-medium leading-relaxed;
   }
   .sys-text-primary {
-    @apply text-white font-medium;
+    @apply text-primary font-medium;
   }
   .sys-label {
-    @apply text-[10px] font-semibold tracking-widest uppercase text-[#86868b];
+    @apply text-[10px] font-semibold tracking-widest uppercase text-tertiary;
   }
   .sys-mono {
-    @apply font-mono text-[10px] text-[#86868b] uppercase tracking-widest;
+    @apply font-mono text-[10px] text-tertiary uppercase tracking-widest;
   }
 
   /* 2. CARD & SURFACE SYSTEM */
   .sys-card {
-    @apply bg-[#0B0B0D]/80 backdrop-blur-[16px] border border-white/5 rounded-[24px] p-6 transition-all duration-300 shadow-sm;
+    @apply bg-card backdrop-blur-[16px] border border-divider rounded-[24px] p-6 transition-all duration-300 shadow-sm;
   }
   .sys-card-interactive {
-    @apply bg-[#0B0B0D]/80 backdrop-blur-[16px] border border-white/5 rounded-[24px] p-6 transition-all duration-300 shadow-sm cursor-pointer hover:border-white/10 hover:bg-[#101114]/90 hover:-translate-y-0.5 active:scale-[0.99];
+    @apply bg-card backdrop-blur-[16px] border border-divider rounded-[24px] p-6 transition-all duration-300 shadow-sm cursor-pointer hover:border-border-strong hover:bg-hover hover:-translate-y-0.5 active:scale-[0.99];
   }
   .sys-panel {
-    @apply bg-[#08080A]/80 backdrop-blur-[24px] border border-white/5 rounded-[28px];
+    @apply bg-panel backdrop-blur-[24px] border border-divider rounded-[28px];
   }
   .sys-bg {
-    @apply bg-[#000000];
+    @apply bg-background;
   }
 
   /* 3. INPUT SYSTEM */
   .sys-input-group {
-    @apply bg-[#1A1C20] border border-white/[0.03] shadow-inner shadow-black/40 rounded-[20px] p-4 flex flex-col focus-within:border-[#5B8CFF] focus-within:ring-1 focus-within:ring-[#5B8CFF] transition-all;
+    @apply bg-input border border-divider shadow-sm rounded-[20px] p-4 flex flex-col focus-within:border-[#5B8CFF] focus-within:ring-1 focus-within:ring-[#5B8CFF] transition-all;
   }
   .sys-input {
-    @apply w-full bg-transparent border-0 p-0 text-[15px] text-white focus:outline-none focus:ring-0 placeholder:text-[#A1A1AA] font-medium;
+    @apply w-full bg-transparent border-0 p-0 text-[15px] text-primary focus:outline-none focus:ring-0 placeholder:text-tertiary font-medium;
   }
 
   /* 4. BUTTON SYSTEM */
   .sys-btn-primary {
-    @apply bg-[#f5f5f7] hover:bg-white text-black font-semibold h-[52px] px-6 rounded-[20px] cursor-pointer transition-all duration-300 disabled:opacity-50 text-[14px] shadow-lg hover:shadow-xl active:scale-[0.98] select-none inline-flex items-center justify-center gap-2;
+    @apply bg-primary hover:opacity-90 text-inverted font-semibold h-[52px] px-6 rounded-[20px] cursor-pointer transition-all duration-300 disabled:opacity-50 text-[14px] shadow-lg hover:shadow-xl active:scale-[0.98] select-none inline-flex items-center justify-center gap-2;
   }
   .sys-btn-secondary {
-    @apply bg-[#1A1C20] backdrop-blur-[16px] hover:bg-[#23252a] border border-white/[0.03] text-white font-medium h-[52px] px-6 rounded-[20px] cursor-pointer transition-all duration-300 disabled:opacity-50 text-[14px] active:scale-[0.98] shadow-inner shadow-black/20 select-none inline-flex items-center justify-center gap-2;
+    @apply bg-panel backdrop-blur-[16px] hover:bg-hover border border-divider text-primary font-medium h-[52px] px-6 rounded-[20px] cursor-pointer transition-all duration-300 disabled:opacity-50 text-[14px] active:scale-[0.98] shadow-inner select-none inline-flex items-center justify-center gap-2;
   }
   .sys-btn-icon {
-    @apply p-2 bg-[#1A1C20] rounded-[18px] border border-white/[0.03] shadow-inner shadow-black/20 hover:bg-[#23252a] transition-all cursor-pointer text-[#86868b] hover:text-white active:scale-[0.95];
+    @apply p-2 bg-input rounded-[18px] border border-divider shadow-inner hover:bg-hover transition-all cursor-pointer text-tertiary hover:text-primary active:scale-[0.95];
   }
 
   /* 5. BADGE SYSTEM */
   .sys-badge {
-    @apply inline-flex items-center gap-2 px-3 py-1 bg-[rgba(28,28,30,0.72)] border border-white/5 text-[10px] font-semibold tracking-widest uppercase text-white rounded-full select-none;
+    @apply inline-flex items-center gap-2 px-3 py-1 bg-panel border border-divider text-[10px] font-semibold tracking-widest uppercase text-primary rounded-full select-none;
   }
 
   /* 6. TABLE SYSTEM */
   .sys-table {
-    @apply w-full text-left text-sm text-[#f5f5f7];
+    @apply w-full text-left text-sm text-primary;
   }
   .sys-table-header {
-    @apply text-[10px] font-semibold tracking-widest uppercase text-[#86868b] border-b border-white/5 bg-[#0B0B0D]/80 backdrop-blur-[16px];
+    @apply text-[10px] font-semibold tracking-widest uppercase text-tertiary border-b border-divider bg-panel backdrop-blur-[16px];
   }
   .sys-table-row {
-    @apply border-b border-white/5 hover:bg-white/[0.03] transition-colors;
+    @apply border-b border-divider hover:bg-hover transition-colors;
   }
   .sys-table-cell {
     @apply px-4 py-4;
@@ -121,14 +176,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: var(--color-bg-base);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #38383a;
+  background: var(--color-border-strong);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #86868b;
+  background: var(--color-text-tertiary);
 }
