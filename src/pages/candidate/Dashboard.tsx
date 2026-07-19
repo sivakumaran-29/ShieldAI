@@ -6,6 +6,7 @@ import {
   Home, History, Activity, Check, CircleDot, Search, Menu
 } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
+import { useSettingsStore } from '../../store/settingsStore'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { fetchAssessments, fetchCandidateSessions, saveCandidateSession, Assessment, CandidateSession } from '../../lib/assessmentEngine'
@@ -32,6 +33,8 @@ export default function CandidateDashboard() {
   const [errorMsg, setErrorMsg] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
+  const [showSebModal, setShowSebModal] = useState(false)
+  const [showSuccessToast, setShowSuccessToast] = useState(false)
 
   // Fetch assessments and check pending params
   useEffect(() => {
@@ -77,6 +80,14 @@ export default function CandidateDashboard() {
           }
         } else if (unsubmittedActiveList.length > 0) {
           setSelectedAssessment(unsubmittedActiveList[0])
+        }
+
+        const params = new URLSearchParams(window.location.search)
+        if (params.get('status') === 'submitted') {
+          setShowSuccessToast(true)
+          // Clean URL
+          window.history.replaceState({}, '', '/candidate')
+          setTimeout(() => setShowSuccessToast(false), 5000)
         }
 
         // No cached roll overriding required, we hardcode it from email prefix above.
@@ -189,6 +200,14 @@ export default function CandidateDashboard() {
     if (!timeCheck.valid) {
       setErrorMsg(timeCheck.message)
       return
+    }
+
+    const settings = useSettingsStore.getState()
+    if (settings.requireKiosk) {
+      if (!navigator.userAgent.includes('SEB')) {
+        setShowSebModal(true)
+        return
+      }
     }
 
     setIsSubmitting(true)
@@ -840,9 +859,84 @@ export default function CandidateDashboard() {
               </div>
             </div>
           )}
-
         </div>
       </main>
+
+      {/* SEB Required Modal */}
+      {showSebModal && (
+        <div className="fixed inset-0 z-[100] bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-panel border border-divider shadow-2xl rounded-2xl p-6 max-w-md w-full relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-red-500" />
+            
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center">
+                <Lock className="w-6 h-6 text-red-500" />
+              </div>
+              
+              <div className="space-y-2">
+                <h3 className="text-lg font-bold text-primary tracking-tight">Safe Exam Browser Required</h3>
+                <p className="text-sm text-secondary leading-relaxed">
+                  This assessment is strictly configured to run only in Kiosk Mode. You must launch it using Safe Exam Browser.
+                </p>
+              </div>
+
+              <div className="w-full space-y-3 pt-4">
+                <Button 
+                  onClick={() => {
+                    const sebContent = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>startURL</key>
+  <string>${window.location.origin}/candidate</string>
+  <key>sendBrowserExamKey</key>
+  <true/>
+</dict>
+</plist>`
+                    const blob = new Blob([sebContent], { type: 'application/xml' })
+                    const url = URL.createObjectURL(blob)
+                    const a = document.createElement('a')
+                    a.href = url
+                    a.download = 'assessment_kiosk.seb'
+                    document.body.appendChild(a)
+                    a.click()
+                    document.body.removeChild(a)
+                    URL.revokeObjectURL(url)
+                  }}
+                  className="w-full bg-[#5B8CFF] hover:bg-[#5B8CFF]/90 text-white font-medium"
+                >
+                  Download .seb Configuration
+                </Button>
+                
+                <p className="text-[11px] text-tertiary">
+                  Don't have SEB installed? <a href="https://safeexambrowser.org/download_en.html" target="_blank" rel="noreferrer" className="text-[#5B8CFF] hover:underline">Download it here</a>.
+                </p>
+                
+                <Button 
+                  variant="ghost" 
+                  onClick={() => setShowSebModal(false)}
+                  className="w-full text-xs"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Toast */}
+      {showSuccessToast && (
+        <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300">
+          <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-6 py-4 rounded-xl shadow-lg flex items-center space-x-3">
+            <CheckCircle2 className="w-5 h-5" />
+            <div className="space-y-0.5">
+              <p className="text-sm font-bold">Assessment Submitted Successfully!</p>
+              <p className="text-[11px] opacity-80 font-sans">You can safely close the Safe Exam Browser now.</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

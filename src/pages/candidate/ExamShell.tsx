@@ -1083,14 +1083,14 @@ export default function ExamShell() {
         // Clean cache
         localStorage.removeItem(`code_cache_${finalSnapshot.assessment_id}`)
         // Redirect back to dashboard to display completion card
-        navigate('/candidate')
+        navigate('/candidate?status=submitted')
       } else {
         alert('Cloud sync failed. The browser has cached your results locally. You may exit the window safely.')
-        navigate('/candidate')
+        navigate('/candidate?status=submitted')
       }
     } catch (err) {
       console.error(err)
-      navigate('/candidate')
+      navigate('/candidate?status=submitted')
     }
   }
 
