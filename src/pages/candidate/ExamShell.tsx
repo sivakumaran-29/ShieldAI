@@ -58,7 +58,8 @@ const codeTemplates: Record<string, string> = {
   python: `def solve():\n    # Read input from standard input\n    # Write your solution here\n    # For Example:\n    # nums = list(map(int, input().split(',')))\n    # target = int(input())\n    # print(two_sum(nums, target))\n    pass\n\nif __name__ == '__main__':\n    solve()`,
   javascript: `function solve() {\n    // Write your solution here\n    // Use console.log() to output results\n}\n\nsolve();`,
   java: `import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // Write your solution here\n    }\n}`,
-  cpp: `#include <iostream>\nusing namespace std;\n\nint main() {\n    // Write your solution here\n    return 0;\n}`
+  cpp: `#include <iostream>\nusing namespace std;\n\nint main() {\n    // Write your solution here\n    return 0;\n}`,
+  c: `#include <stdio.h>\n\nint main() {\n    // Write your solution here\n    return 0;\n}`
 }
 
 export default function ExamShell() {
@@ -84,7 +85,7 @@ export default function ExamShell() {
   const [isRunning, setIsRunning] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [testResults, setTestResults] = useState<any>(null)
-  const [isCompilerLoading, setIsCompilerLoading] = useState(false)
+  const [isCompilerLoading, setIsCompilerLoading] = useState<string | false>(false)
   
   // Section Navigation States
   const [activePart, setActivePart] = useState<'menu' | 'mcq' | 'coding'>('menu')
@@ -227,7 +228,8 @@ export default function ExamShell() {
             python: codeTemplates.python,
             javascript: codeTemplates.javascript,
             java: codeTemplates.java,
-            cpp: codeTemplates.cpp
+            cpp: codeTemplates.cpp,
+            c: codeTemplates.c
           }
 
           if (existing?.submissions?.[q.id]) {
@@ -1311,13 +1313,13 @@ export default function ExamShell() {
                   value={language} 
                   onChange={(e) => {
                     const newLang = e.target.value
-                    if (newLang === 'cpp' && !(window as any).hasLoadedCppCompiler) {
-                      setIsCompilerLoading(true)
-                      setConsoleOutput('Initializing C++ WebAssembly Compiler... Fetching dependencies (35MB)...')
+                    if ((newLang === 'cpp' || newLang === 'c') && !(window as any).hasLoadedCppCompiler) {
+                      setIsCompilerLoading(newLang)
+                      setConsoleOutput(`Initializing ${newLang === 'cpp' ? 'C++' : 'C'} WebAssembly Compiler... Fetching dependencies (35MB)...`)
                       setTimeout(() => {
                          (window as any).hasLoadedCppCompiler = true
                          setIsCompilerLoading(false)
-                         setConsoleOutput('C++ WebAssembly Compiler ready.')
+                         setConsoleOutput(`${newLang === 'cpp' ? 'C++' : 'C'} WebAssembly Compiler ready.`)
                          setLanguage(newLang)
                       }, 2500)
                     } else {
@@ -1330,6 +1332,7 @@ export default function ExamShell() {
                   {assessment.allowed_languages.includes('javascript') && settings.allowedLangs.includes('javascript') && <option value="javascript">JavaScript (ES6)</option>}
                   {assessment.allowed_languages.includes('java') && settings.allowedLangs.includes('java') && <option value="java">Java (JDK 17)</option>}
                   {assessment.allowed_languages.includes('cpp') && settings.allowedLangs.includes('cpp') && <option value="cpp">C++ (GCC)</option>}
+                  {assessment.allowed_languages.includes('c') && settings.allowedLangs.includes('c') && <option value="c">C (GCC)</option>}
                 </select>
               </div>
             )}
@@ -1453,7 +1456,7 @@ export default function ExamShell() {
                       {isCompilerLoading && (
                         <div className="absolute inset-0 z-50 bg-[#09090B]/90 backdrop-blur-sm flex flex-col items-center justify-center p-8 text-center">
                           <div className="w-12 h-12 border-4 border-[#5B8CFF]/30 border-t-[#5B8CFF] rounded-full animate-spin mb-6"></div>
-                          <h3 className="text-[#F5F5F5] font-bold text-lg mb-2">Lazy-Loading C++ Compiler</h3>
+                          <h3 className="text-[#F5F5F5] font-bold text-lg mb-2">Lazy-Loading {isCompilerLoading === 'cpp' ? 'C++' : 'C'} Compiler</h3>
                           <p className="text-[#8A9099] text-sm max-w-xs leading-relaxed">
                             Downloading WebAssembly Clang toolchain and libc headers. This 35MB payload is only fetched once per session.
                           </p>
@@ -1461,7 +1464,7 @@ export default function ExamShell() {
                       )}
                       <Editor 
                         height="100%" 
-                        language={language === 'java' ? 'java' : language === 'cpp' ? 'cpp' : language === 'javascript' ? 'javascript' : 'python'} 
+                        language={language === 'java' ? 'java' : language === 'cpp' ? 'cpp' : language === 'c' ? 'c' : language === 'javascript' ? 'javascript' : 'python'} 
                         theme="vs-dark"
                         value={getActiveCode()} 
                         onChange={handleCodeChange}
