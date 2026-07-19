@@ -182,7 +182,7 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
             <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest block select-none">// SYSTEM ACCESS CAPABILITY MATRIX</span>
 
             <div className="overflow-hidden">
-              <table className="w-full text-left border-collapse text-xs select-none table-fixed">
+              <table className="w-full text-left border-collapse text-xs select-none table-auto">
                 <thead className="table-header-group">
                   <tr className="border-b border-divider sys-text-body font-mono text-[9px] uppercase tracking-wider">
                     <th className="py-2 lg:py-3 px-2 lg:px-4">Permission Node</th>

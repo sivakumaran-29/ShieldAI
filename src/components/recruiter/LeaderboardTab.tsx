@@ -123,7 +123,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center gap-4 border-b border-divider pb-4">
         <div>
-          <h2 className="text-3xl font-semibold tracking-tight text-[#6f8eff] mb-2">// COHORT ANALYTICS & LEADERBOARD</h2>
+          <h2 className="text-3xl font-semibold tracking-tight text-[#6f8eff] mb-2">// ANALYTICS & LEADERBOARD</h2>
           <span className="text-[11px] sys-text-body font-sans mt-1 block font-medium">Inspect student performance, compiler scores, and sandboxed infraction timelines</span>
         </div>
 
@@ -189,7 +189,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
         
         {/* Table controls */}
         <div className="flex flex-wrap justify-between items-center gap-4 select-none">
-          <span className="text-[12px] font-heading font-bold text-[#6f8eff] uppercase tracking-wider">// COHORT ANALYTICS & LEADERBOARD</span>
+          <span className="text-[12px] font-heading font-bold text-[#6f8eff] uppercase tracking-wider">// ANALYTICS & LEADERBOARD</span>
           
           <div className="flex items-center gap-2 max-w-sm w-full sys-bg/40 border border-divider rounded-xl px-3 py-1.5">
             <Search className="w-3.5 h-3.5 sys-text-body" />
@@ -205,7 +205,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
 
         <div className="overflow-hidden pb-4">
           <div className="border border-divider rounded-2xl overflow-hidden bg-panel w-full">
-            <table className="w-full text-left text-xs table-fixed">
+            <table className="w-full text-left text-xs table-auto">
               <thead className="table-header-group">
                 <tr className="bg-panel backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[8px] md:text-[10px] uppercase tracking-wider border-b border-divider select-none">
                   <th className="py-2 lg:py-4 px-2 lg:px-5">Rank</th>
@@ -227,22 +227,22 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                     key={s.id} 
                     className="hover:bg-hover transition duration-150 group/row table-row p-4 p-0 mb-4 mb-0 border border-divider  rounded-2xl  bg-panel "
                   >
-                    <td className="py-2 lg:py-4 px-2 lg:px-5 font-mono font-bold text-primary table-cell border-b border-divider align-middle text-[10px] lg:text-xs w-[10%]">
+                    <td className="py-2 lg:py-4 px-2 lg:px-5 font-mono font-bold text-primary table-cell border-b border-divider align-middle text-[10px] lg:text-xs">
                       
                       <span>#{s.rank}</span>
                     </td>
-                    <td className="py-2 lg:py-4 px-2 lg:px-5 table-cell border-b border-divider align-middle w-[25%]">
+                    <td className="py-2 lg:py-4 px-2 lg:px-5 table-cell border-b border-divider align-middle">
                       
                       <div className="flex flex-col sm:text-right lg:text-left">
                         <span className="font-semibold text-primary font-heading truncate max-w-[100px] lg:max-w-[180px] text-[10px] lg:text-xs">{s.name}</span>
                         <span className="text-[9px] lg:text-[11px] sys-text-body font-sans mt-0.5 truncate max-w-[100px] lg:max-w-[180px] inline-block" title={s.email}>{s.email}</span>
                       </div>
                     </td>
-                    <td className="py-2 lg:py-4 px-2 lg:px-5 font-mono font-semibold sys-text-body uppercase table-cell border-b border-divider align-middle text-[9px] lg:text-[11px] w-[18%] whitespace-nowrap">
+                    <td className="py-2 lg:py-4 px-2 lg:px-5 font-mono font-semibold sys-text-body uppercase table-cell border-b border-divider align-middle text-[9px] lg:text-[11px] whitespace-nowrap">
                       
                       <span className="block">{s.roll_number || 'N/A'}</span>
                     </td>
-                    <td className="py-2 lg:py-4 px-2 lg:px-5 table-cell border-b border-divider align-middle w-[15%]">
+                    <td className="py-2 lg:py-4 px-2 lg:px-5 table-cell border-b border-divider align-middle">
                       
                       {isComp ? (
                         <div className="flex items-center gap-1.5 flex-wrap">
@@ -255,7 +255,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                         <span className="sys-text-body font-sans font-semibold text-[9px] lg:text-[11px]">Unattempted</span>
                       )}
                     </td>
-                    <td className="py-2 lg:py-4 px-2 lg:px-5 table-cell border-b border-divider align-middle w-[15%]">
+                    <td className="py-2 lg:py-4 px-2 lg:px-5 table-cell border-b border-divider align-middle">
                       
                       <div className="flex items-center gap-1 lg:gap-2 flex-wrap">
                         <span className={`font-mono font-bold text-[10px] lg:text-sm ${s.integrity_score < 75 ? 'text-[#F87171]' : 'text-primary'}`}>
@@ -264,7 +264,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                         <span className="text-[7px] lg:text-[8px] sys-text-body font-mono font-semibold">({s.violationsCount} warnings)</span>
                       </div>
                     </td>
-                    <td className="py-2 lg:py-4 px-2 lg:px-5 table-cell border-b border-divider align-middle w-[10%]">
+                    <td className="py-2 lg:py-4 px-2 lg:px-5 table-cell border-b border-divider align-middle">
                       
                       <span className={`px-1.5 py-0.5 rounded text-[7px] lg:text-[9px] font-mono font-bold uppercase tracking-wider inline-block ${
                         s.status === 'submitted' ? 'bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/20' : 
@@ -274,7 +274,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                         {s.status}
                       </span>
                     </td>
-                    <td className="py-2 lg:py-4 px-2 lg:px-5 text-center table-cell align-middle whitespace-nowrap w-[10%]">
+                    <td className="py-2 lg:py-4 px-2 lg:px-5 text-center table-cell align-middle whitespace-nowrap">
                       <Button 
                         onClick={() => setSelectedSession(s)}
                         variant="ghost" 

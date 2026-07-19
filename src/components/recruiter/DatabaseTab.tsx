@@ -346,7 +346,7 @@ export default function DatabaseTab() {
                             </div>
 
                             {isBatchExpanded && (
-                              <div className="border-t border-divider pb-2"><div className="overflow-hidden px-2 lg:px-4 pt-4"><table className="w-full text-left text-xs border-collapse table-fixed">
+                              <div className="border-t border-divider pb-2"><div className="overflow-hidden px-2 lg:px-4 pt-4"><table className="w-full text-left text-xs border-collapse table-auto">
                                   <thead className="table-header-group">
                                     <tr className="bg-panel backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[8px] md:text-[10px] uppercase tracking-wider"><th className="py-2 lg:py-3 px-2 lg:px-5 rounded-l-2xl border-y border-l border-divider">Roll Number</th><th className="py-2 lg:py-3 px-2 lg:px-5 border-y border-divider">Email Address</th><th className="py-2 lg:py-3 px-2 lg:px-5 rounded-r-2xl border-y border-r border-divider text-right">Actions</th></tr>
                                   </thead>

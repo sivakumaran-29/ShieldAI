@@ -178,7 +178,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
             
             <div className="overflow-hidden pb-4">
               <div className="border border-divider rounded-2xl overflow-hidden bg-panel w-full">
-                <table className="w-full text-left text-xs table-fixed">
+                <table className="w-full text-left text-xs table-auto">
                   <thead className="table-header-group">
                     <tr className="bg-panel backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[8px] md:text-[10px] uppercase tracking-wider border-b border-divider">
                       <th className="py-2 lg:py-4 px-2 lg:px-5">Evaluation Title</th>
