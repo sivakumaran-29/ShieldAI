@@ -26,7 +26,6 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
   const [integrityThreshold, setIntegrityThreshold] = useState(settings.integrityThreshold)
   const [proctorCamera, setProctorCamera] = useState(settings.requireCamera)
   const [proctorTabs, setProctorTabs] = useState(settings.requireTabFocus)
-  const [requireKiosk, setRequireKiosk] = useState(settings.requireKiosk)
   const [allowedLangs, setAllowedLangs] = useState(settings.allowedLangs)
   const [maxExecutionTime, setMaxExecutionTime] = useState(settings.maxExecutionTime)
   const [maxMemoryLimit, setMaxMemoryLimit] = useState(settings.maxMemoryLimit)
@@ -83,7 +82,6 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
       integrityThreshold,
       requireCamera: proctorCamera,
       requireTabFocus: proctorTabs,
-      requireKiosk,
       allowedLangs,
       maxExecutionTime,
       maxMemoryLimit
@@ -681,19 +679,6 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                           type="checkbox" 
                           checked={proctorTabs} 
                           onChange={e => setProctorTabs(e.target.checked)}
-                          className="w-4 h-4 rounded border-divider text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer" 
-                        />
-                      </label>
-
-                      <label className="flex items-center justify-between p-3.5 sys-bg/40 border border-divider rounded-xl cursor-pointer select-none">
-                        <div className="space-y-0.5 pr-4">
-                          <span className="text-xs font-bold sys-text-primary block">Require SEB Kiosk Mode</span>
-                          <span className="text-[10px] sys-text-body font-sans">Force candidates to use Safe Exam Browser to launch assessments.</span>
-                        </div>
-                        <input 
-                          type="checkbox" 
-                          checked={requireKiosk} 
-                          onChange={e => setRequireKiosk(e.target.checked)}
                           className="w-4 h-4 rounded border-divider text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer" 
                         />
                       </label>

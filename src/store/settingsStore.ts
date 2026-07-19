@@ -9,7 +9,6 @@ export interface PlatformSettings {
   allowedLangs: string[]
   maxExecutionTime: number
   maxMemoryLimit: number
-  requireKiosk: boolean
 }
 
 interface SettingsStore extends PlatformSettings {
@@ -26,7 +25,6 @@ export const useSettingsStore = create<SettingsStore>()(
   allowedLangs: ['python', 'javascript', 'java', 'cpp', 'c'],
   maxExecutionTime: 2500,
   maxMemoryLimit: 256,
-  requireKiosk: false,
   
   updateSettings: (newSettings) => set((state) => ({ ...state, ...newSettings }))
     }),

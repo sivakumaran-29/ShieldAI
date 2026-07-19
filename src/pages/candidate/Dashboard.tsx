@@ -6,7 +6,6 @@ import {
   Home, History, Activity, Check, CircleDot, Search, Menu
 } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
-import { useSettingsStore } from '../../store/settingsStore'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { fetchAssessments, fetchCandidateSessions, saveCandidateSession, Assessment, CandidateSession } from '../../lib/assessmentEngine'
@@ -202,8 +201,7 @@ export default function CandidateDashboard() {
       return
     }
 
-    const settings = useSettingsStore.getState()
-    if (settings.requireKiosk) {
+    if (selectedAssessment.exam_mode === 'kiosk') {
       if (!navigator.userAgent.includes('SEB')) {
         setShowSebModal(true)
         return
@@ -530,48 +528,103 @@ export default function CandidateDashboard() {
                   <LayoutGrid className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Available Assessments
                 </div>
 
-                <div className="space-y-4 overflow-y-auto pt-2 px-1 pr-2 custom-scrollbar flex-1 pb-10">
-                  {assessments.map((a) => {
-                    const isActive = selectedAssessment?.id === a.id
-                    const windowCheck = isAssessmentTimeWindowValid(a)
-                    
-                    return (
-                      <div 
-                        key={a.id} 
-                        onClick={() => handleSelectAssessment(a)}
-                        className={`p-5 md:p-6 rounded-2xl border text-left cursor-pointer transition-all duration-300 relative group overflow-hidden ${
-                          isActive 
-                            ? 'bg-gradient-to-br from-panel to-background border-[#5B8CFF]/50 shadow-[0_8px_30px_rgba(91,140,255,0.12)] -translate-y-1 scale-[1.02]' 
-                            : 'bg-panel backdrop-blur-[16px] border-divider hover:border-[#5B8CFF]/30 hover:shadow-lg hover:-translate-y-0.5'
-                        }`}
-                      >
-                        {/* Purple accent border block */}
-                        <div className={`absolute top-0 left-0 bottom-0 w-1 transition-all duration-300 ${
-                          isActive ? 'bg-[#5B8CFF] shadow-[0_0_12px_rgba(91,140,255,0.8)]' : 'bg-transparent'
-                        }`} />
+                <div className="space-y-6 overflow-y-auto pt-2 px-1 pr-2 custom-scrollbar flex-1 pb-10">
+                  
+                  {/* Standard Assessments */}
+                  {assessments.filter(a => a.exam_mode !== 'kiosk').length > 0 && (
+                    <div className="space-y-3">
+                      <h4 className="text-[10px] font-bold sys-text-body uppercase tracking-wider mb-2">Standard Assessments</h4>
+                      {assessments.filter(a => a.exam_mode !== 'kiosk').map((a) => {
+                        const isActive = selectedAssessment?.id === a.id
+                        const windowCheck = isAssessmentTimeWindowValid(a)
+                        
+                        return (
+                          <div 
+                            key={a.id} 
+                            onClick={() => handleSelectAssessment(a)}
+                            className={`p-5 md:p-6 rounded-2xl border text-left cursor-pointer transition-all duration-300 relative group overflow-hidden ${
+                              isActive 
+                                ? 'bg-gradient-to-br from-panel to-background border-[#5B8CFF]/50 shadow-[0_8px_30px_rgba(91,140,255,0.12)] -translate-y-1 scale-[1.02]' 
+                                : 'bg-panel backdrop-blur-[16px] border-divider hover:border-[#5B8CFF]/30 hover:shadow-lg hover:-translate-y-0.5'
+                            }`}
+                          >
+                            <div className={`absolute top-0 left-0 bottom-0 w-1 transition-all duration-300 ${
+                              isActive ? 'bg-[#5B8CFF] shadow-[0_0_12px_rgba(91,140,255,0.8)]' : 'bg-transparent'
+                            }`} />
 
-                        <h3 className="font-bold text-sm text-primary group-hover:text-[#5B8CFF] transition duration-300 font-heading pr-2">
-                          {a.title}
-                        </h3>
-                        <p className="text-[11px] sys-text-body mt-2 line-clamp-2 leading-relaxed">
-                          {a.description}
-                        </p>
+                            <h3 className="font-bold text-sm text-primary group-hover:text-[#5B8CFF] transition duration-300 font-heading pr-2">
+                              {a.title}
+                            </h3>
+                            <p className="text-[11px] sys-text-body mt-2 line-clamp-2 leading-relaxed">
+                              {a.description}
+                            </p>
 
-                        <div className="flex flex-wrap items-center gap-3 mt-5 pt-4 border-t border-transparent text-[9px] font-mono select-none">
-                          <span className="flex items-center gap-1.5 sys-text-body font-bold sys-card px-2 py-1 rounded-md border border-transparent">
-                            <Clock className="w-3.5 h-3.5 sys-text-body" strokeWidth={1.5} /> {a.duration} MINS
-                          </span>
-                          <span className={`px-2 py-1 rounded-md border text-[9px] font-bold ${
-                            windowCheck.valid 
-                              ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border-[#5B8CFF]/30 shadow-[0_0_10px_rgba(91,140,255,0.1)]' 
-                              : 'sys-bg sys-text-body border-transparent'
-                          }`}>
-                            {windowCheck.valid ? 'OPEN SCHEDULE' : 'UNAVAILABLE'}
-                          </span>
-                        </div>
-                      </div>
-                    )
-                  })}
+                            <div className="flex flex-wrap items-center gap-3 mt-5 pt-4 border-t border-transparent text-[9px] font-mono select-none">
+                              <span className="flex items-center gap-1.5 sys-text-body font-bold sys-card px-2 py-1 rounded-md border border-transparent">
+                                <Clock className="w-3.5 h-3.5 sys-text-body" strokeWidth={1.5} /> {a.duration} MINS
+                              </span>
+                              <span className={`px-2 py-1 rounded-md border text-[9px] font-bold ${
+                                windowCheck.valid 
+                                  ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border-[#5B8CFF]/30 shadow-[0_0_10px_rgba(91,140,255,0.1)]' 
+                                  : 'sys-bg sys-text-body border-transparent'
+                              }`}>
+                                {windowCheck.valid ? 'OPEN SCHEDULE' : 'UNAVAILABLE'}
+                              </span>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
+
+                  {/* Kiosk Assessments */}
+                  {assessments.filter(a => a.exam_mode === 'kiosk').length > 0 && (
+                    <div className="space-y-3 pt-4 border-t border-divider">
+                      <h4 className="text-[10px] font-bold text-red-500/80 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <Lock className="w-3 h-3" /> Secure Kiosk Assessments
+                      </h4>
+                      {assessments.filter(a => a.exam_mode === 'kiosk').map((a) => {
+                        const isActive = selectedAssessment?.id === a.id
+                        const windowCheck = isAssessmentTimeWindowValid(a)
+                        
+                        return (
+                          <div 
+                            key={a.id} 
+                            onClick={() => handleSelectAssessment(a)}
+                            className={`p-5 md:p-6 rounded-2xl border text-left cursor-pointer transition-all duration-300 relative group overflow-hidden ${
+                              isActive 
+                                ? 'bg-gradient-to-br from-panel to-background border-[#5B8CFF]/50 shadow-[0_8px_30px_rgba(91,140,255,0.12)] -translate-y-1 scale-[1.02]' 
+                                : 'bg-panel backdrop-blur-[16px] border-divider hover:border-[#5B8CFF]/30 hover:shadow-lg hover:-translate-y-0.5'
+                            }`}
+                          >
+                            <div className={`absolute top-0 left-0 bottom-0 w-1 transition-all duration-300 ${
+                              isActive ? 'bg-[#5B8CFF] shadow-[0_0_12px_rgba(91,140,255,0.8)]' : 'bg-transparent'
+                            }`} />
+
+                            <h3 className="font-bold text-sm text-primary group-hover:text-[#5B8CFF] transition duration-300 font-heading pr-2">
+                              {a.title}
+                            </h3>
+                            <p className="text-[11px] sys-text-body mt-2 line-clamp-2 leading-relaxed">
+                              {a.description}
+                            </p>
+
+                            <div className="flex flex-wrap items-center gap-3 mt-5 pt-4 border-t border-transparent text-[9px] font-mono select-none">
+                              <span className="flex items-center gap-1.5 sys-text-body font-bold sys-card px-2 py-1 rounded-md border border-transparent">
+                                <Clock className="w-3.5 h-3.5 sys-text-body" strokeWidth={1.5} /> {a.duration} MINS
+                              </span>
+                              <span className={`px-2 py-1 rounded-md border text-[9px] font-bold ${
+                                windowCheck.valid 
+                                  ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border-[#5B8CFF]/30 shadow-[0_0_10px_rgba(91,140,255,0.1)]' 
+                                  : 'sys-bg sys-text-body border-transparent'
+                              }`}>
+                                {windowCheck.valid ? 'OPEN SCHEDULE' : 'UNAVAILABLE'}
+                              </span>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
 
                   {assessments.length === 0 && (
                     <div className="p-8 text-center sys-bg/40 border border-transparent  rounded-2xl text-xs sys-text-body font-mono select-none">

@@ -48,6 +48,7 @@ export interface Assessment {
   allowed_languages: string[]
   status: 'Draft' | 'Published' | 'Closed'
   target_batch?: string
+  exam_mode?: 'standard' | 'kiosk'
   created_at: string
   created_by: string
 }

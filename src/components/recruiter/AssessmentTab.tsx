@@ -31,6 +31,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
   const [languages, setLanguages] = useState<string[]>(['python', 'javascript', 'java', 'cpp', 'c'])
   const [status, setStatus] = useState<'Draft' | 'Published' | 'Closed'>('Draft')
   const [targetBatch, setTargetBatch] = useState('CSE_C')
+  const [examMode, setExamMode] = useState<'standard' | 'kiosk'>('standard')
 
   const toLocalISOString = (date: Date) => {
     const pad = (n: number) => n.toString().padStart(2, '0')
@@ -80,6 +81,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
     setLanguages(a.allowed_languages)
     setStatus(a.status)
     setTargetBatch(a.target_batch || 'CSE_C')
+    setExamMode(a.exam_mode || 'standard')
   }
 
   const handleSave = async (e: React.FormEvent) => {
@@ -99,6 +101,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
       allowed_languages: languages,
       status,
       target_batch: targetBatch,
+      exam_mode: examMode,
       created_at: new Date().toISOString(),
       created_by: 'recruiter'
     }
@@ -431,7 +434,34 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                   </select>
                 </div>
 
-              </div>
+                  <div className="flex flex-col gap-1.5 mt-2">
+                    <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Exam Security Mode</label>
+                    <div className="flex gap-4">
+                      <label className="flex items-center gap-2 cursor-pointer sys-text-primary text-xs font-semibold">
+                        <input 
+                          type="radio" 
+                          name="examMode" 
+                          value="standard" 
+                          checked={examMode === 'standard'}
+                          onChange={() => setExamMode('standard')}
+                          className="w-4 h-4 accent-[#5B8CFF]"
+                        />
+                        Standard Web Browser
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer sys-text-primary text-xs font-semibold">
+                        <input 
+                          type="radio" 
+                          name="examMode" 
+                          value="kiosk" 
+                          checked={examMode === 'kiosk'}
+                          onChange={() => setExamMode('kiosk')}
+                          className="w-4 h-4 accent-[#5B8CFF]"
+                        />
+                        Safe Exam Browser (Kiosk)
+                      </label>
+                    </div>
+                  </div>
+                </div>
             </div>
 
             {/* Form actions */}
