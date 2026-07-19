@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export interface PlatformSettings {
   workspaceIdentifier: string
@@ -15,7 +16,9 @@ interface SettingsStore extends PlatformSettings {
   updateSettings: (settings: Partial<PlatformSettings>) => void
 }
 
-export const useSettingsStore = create<SettingsStore>((set) => ({
+export const useSettingsStore = create<SettingsStore>()(
+  persist(
+    (set) => ({
   workspaceIdentifier: 'AMRITA_BATCH_2026',
   integrityThreshold: 75,
   requireCamera: true,
@@ -26,4 +29,9 @@ export const useSettingsStore = create<SettingsStore>((set) => ({
   requireKiosk: false,
   
   updateSettings: (newSettings) => set((state) => ({ ...state, ...newSettings }))
-}))
+    }),
+    {
+      name: 'shieldai-platform-settings', // unique name
+    }
+  )
+)
