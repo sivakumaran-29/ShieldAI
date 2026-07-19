@@ -6,6 +6,7 @@ import {
   Sparkles, BrainCircuit, AlertCircle, Terminal, Check, Plus
 } from 'lucide-react'
 import { CodingQuestion, saveQuestion, Assessment } from '../../lib/assessmentEngine'
+import Latex from 'react-latex-next'
 
 interface AIGenerationTabProps {
   selectedAssessment: Assessment
@@ -407,7 +408,9 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                       className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white mt-1 p-2 rounded-lg w-full h-24 text-xs font-sans focus:outline-none focus:border-[#5B8CFF]/50"
                     />
                   ) : (
-                    <p className="sys-text-body font-sans leading-relaxed">{q.description}</p>
+                    <div className="sys-text-body font-sans leading-relaxed whitespace-pre-wrap">
+                      <Latex>{q.description || ''}</Latex>
+                    </div>
                   )}
                 </div>
 
@@ -429,7 +432,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                               className="bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 text-white p-1.5 rounded w-full focus:outline-none focus:border-[#5B8CFF]/50"
                             />
                           ) : (
-                            <div>{opt}</div>
+                            <div><Latex>{opt || ''}</Latex></div>
                           )}
                         </div>
                       ))}

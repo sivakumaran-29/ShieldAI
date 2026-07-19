@@ -17,6 +17,7 @@ import { useAuthStore } from '../../store/authStore'
 import { getIceServers } from '../../lib/webrtcConfig'
 import { supabase } from '../../lib/supabaseClient'
 import { useSettingsStore } from '../../store/settingsStore'
+import Latex from 'react-latex-next'
 
 const StreamVideo = ({ stream }: { stream: MediaStream | null }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -1376,7 +1377,7 @@ export default function ExamShell() {
                     </div>
                     
                     <div className="text-[15px] leading-relaxed sys-text-primary font-sans whitespace-pre-wrap mb-8">
-                      {activeQuestion.description}
+                      <Latex>{activeQuestion.description || ''}</Latex>
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 mt-8">
@@ -1397,7 +1398,7 @@ export default function ExamShell() {
                               {String.fromCharCode(65 + idx)}
                             </div>
                             <span className={`text-[15px] font-sans ${isSelected ? 'text-white font-semibold' : 'sys-text-primary'}`}>
-                              {opt}
+                              <Latex>{opt || ''}</Latex>
                             </span>
                           </button>
                         )

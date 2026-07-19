@@ -5,6 +5,7 @@ import {
   Plus, Edit, Trash2, ArrowLeft, X, SlidersHorizontal, Terminal
 } from 'lucide-react'
 import { CodingQuestion, TestCase, saveQuestion, deleteQuestion, fetchQuestions, Assessment } from '../../lib/assessmentEngine'
+import Latex from 'react-latex-next'
 
 interface QuestionTabProps {
   selectedAssessment: Assessment
@@ -422,9 +423,15 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                         value={description} 
                         onChange={e => setDescription(e.target.value)}
                         className="sys-bg border border-white/5 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-[#5B8CFF]/50 min-h-24 font-sans leading-relaxed" 
-                        placeholder="Describe problem goals, parameters and context..."
+                        placeholder="Describe problem goals, parameters and context. You can use LaTeX math block: $$E=mc^2$$ or inline $x^2$."
                         required
                       />
+                      {description.trim() && (
+                        <div className="mt-2 p-3 bg-[#0B0B0D] rounded-lg border border-[#5B8CFF]/30 text-xs text-white">
+                          <span className="text-[#5B8CFF] text-[8px] font-bold uppercase mb-1 block">Live Preview</span>
+                          <Latex>{description}</Latex>
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex flex-col gap-1.5">
@@ -667,17 +674,24 @@ export default function QuestionTab({ selectedAssessment, onBack }: QuestionTabP
                       <div className="flex items-center justify-center w-8 h-8 rounded-lg sys-card border border-white/5 sys-text-body font-bold font-mono text-[10px]">
                         {String.fromCharCode(65 + idx)}
                       </div>
-                      <input 
-                        type="text" 
-                        value={opt} 
-                        onChange={e => {
-                          const newOps = [...mcqOptions]
-                          newOps[idx] = e.target.value
-                          setMcqOptions(newOps)
-                        }}
-                        className="flex-1 sys-bg border border-white/5 text-white rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
-                        placeholder={`Option ${String.fromCharCode(65 + idx)} text...`}
-                      />
+                      <div className="flex-1 flex flex-col gap-2">
+                        <input 
+                          type="text" 
+                          value={opt} 
+                          onChange={e => {
+                            const newOps = [...mcqOptions]
+                            newOps[idx] = e.target.value
+                            setMcqOptions(newOps)
+                          }}
+                          className="w-full bg-[#1A1C20] shadow-inner shadow-black/40 border border-white/[0.03] text-white rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#5B8CFF]/50"
+                          placeholder={`Option ${String.fromCharCode(65 + idx)} text (LaTeX supported)...`}
+                        />
+                        {opt.trim() && (
+                          <div className="p-2 bg-[#0B0B0D] rounded-lg border border-white/5 text-xs text-white">
+                            <Latex>{opt}</Latex>
+                          </div>
+                        )}
+                      </div>
                       <label className="flex items-center gap-2 text-[10px] font-semibold cursor-pointer select-none sys-text-body hover:text-white shrink-0 ml-4">
                         <input 
                           type="radio" 
