@@ -21,7 +21,7 @@ export default function CandidateDashboard() {
   const [pastSessions, setPastSessions] = useState<CandidateSession[]>([])
   const [selectedAssessment, setSelectedAssessment] = useState<Assessment | null>(null)
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<'overview' | 'lobby' | 'history' | 'results'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'standard_lobby' | 'safe_lobby' | 'history' | 'results'>('overview')
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   // Details form
@@ -72,7 +72,7 @@ export default function CandidateDashboard() {
           const match = unsubmittedActiveList.find(a => a.id === pendingId)
           if (match) {
             setSelectedAssessment(match)
-            setActiveTab('lobby')
+            setActiveTab(match.exam_mode === 'kiosk' ? 'safe_lobby' : 'standard_lobby')
           } else if (unsubmittedActiveList.length > 0) {
             setSelectedAssessment(unsubmittedActiveList[0])
             localStorage.removeItem('pending_exam_id')
@@ -355,14 +355,25 @@ export default function CandidateDashboard() {
             </button>
 
             <button 
-              onClick={() => { setActiveTab('lobby'); setIsSidebarOpen(false); }}
-              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'lobby' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-panel backdrop-blur-[16px]/80 border border-transparent'}`}
+              onClick={() => { setActiveTab('standard_lobby'); setIsSidebarOpen(false); }}
+              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'standard_lobby' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-panel backdrop-blur-[16px]/80 border border-transparent'}`}
             >
               <div className="flex items-center gap-2.5">
                 <LayoutGrid className="w-4 h-4" strokeWidth={1.5} />
-                <span>Assessment Lobby</span>
+                <span>Standard Assessments</span>
               </div>
-              {activeTab === 'lobby' && <ChevronRight className="w-3 h-3" strokeWidth={1.5} />}
+              {activeTab === 'standard_lobby' && <ChevronRight className="w-3 h-3" strokeWidth={1.5} />}
+            </button>
+
+            <button 
+              onClick={() => { setActiveTab('safe_lobby'); setIsSidebarOpen(false); }}
+              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'safe_lobby' ? 'bg-red-500/15 text-red-500 border border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.1)]' : 'sys-text-body hover:text-red-500 hover:hover:bg-panel backdrop-blur-[16px]/80 border border-transparent'}`}
+            >
+              <div className="flex items-center gap-2.5">
+                <Lock className="w-4 h-4" strokeWidth={1.5} />
+                <span>Safe Assessments</span>
+              </div>
+              {activeTab === 'safe_lobby' && <ChevronRight className="w-3 h-3" strokeWidth={1.5} />}
             </button>
 
             <button 
@@ -437,9 +448,9 @@ export default function CandidateDashboard() {
               <span>CANDIDATE PANEL</span>
               <span>/</span>
               <span className="text-[#5B8CFF] font-bold">
-                {activeTab === 'overview' ? 'DASHBOARD' : activeTab === 'lobby' ? 'LOBBY' : activeTab === 'history' ? 'HISTORY' : 'RESULTS'}
+                {activeTab === 'overview' ? 'DASHBOARD' : activeTab === 'standard_lobby' ? 'STANDARD ASSESSMENTS' : activeTab === 'safe_lobby' ? 'SAFE ASSESSMENTS' : activeTab === 'history' ? 'HISTORY' : 'RESULTS'}
               </span>
-              {activeTab === 'lobby' && selectedAssessment && (
+              {(activeTab === 'standard_lobby' || activeTab === 'safe_lobby') && selectedAssessment && (
                 <>
                   <span>/</span>
                   <span className="text-muted">{selectedAssessment.title}</span>
@@ -519,7 +530,7 @@ export default function CandidateDashboard() {
           )}
 
           {/* ================= LOBBY TAB ================= */}
-          {activeTab === 'lobby' && (
+          {(activeTab === 'standard_lobby' || activeTab === 'safe_lobby') && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 h-[calc(100vh-160px)] animate-in fade-in slide-in-from-bottom-4 duration-500">
               
               {/* Available Assessments */}
@@ -531,7 +542,7 @@ export default function CandidateDashboard() {
                 <div className="space-y-6 overflow-y-auto pt-2 px-1 pr-2 custom-scrollbar flex-1 pb-10">
                   
                   {/* Standard Assessments */}
-                  {assessments.filter(a => a.exam_mode !== 'kiosk').length > 0 && (
+                  {activeTab === 'standard_lobby' && assessments.filter(a => a.exam_mode !== 'kiosk').length > 0 && (
                     <div className="space-y-3">
                       <h4 className="text-[10px] font-bold sys-text-body uppercase tracking-wider mb-2">Standard Assessments</h4>
                       {assessments.filter(a => a.exam_mode !== 'kiosk').map((a) => {
@@ -578,7 +589,7 @@ export default function CandidateDashboard() {
                   )}
 
                   {/* Kiosk Assessments */}
-                  {assessments.filter(a => a.exam_mode === 'kiosk').length > 0 && (
+                  {activeTab === 'safe_lobby' && assessments.filter(a => a.exam_mode === 'kiosk').length > 0 && (
                     <div className="space-y-3 pt-4 border-t border-divider">
                       <h4 className="text-[10px] font-bold text-red-500/80 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                         <Lock className="w-3 h-3" /> Secure Kiosk Assessments
@@ -626,9 +637,10 @@ export default function CandidateDashboard() {
                     </div>
                   )}
 
-                  {assessments.length === 0 && (
+                  {((activeTab === 'standard_lobby' && assessments.filter(a => a.exam_mode !== 'kiosk').length === 0) || 
+                    (activeTab === 'safe_lobby' && assessments.filter(a => a.exam_mode === 'kiosk').length === 0)) && (
                     <div className="p-8 text-center sys-bg/40 border border-transparent  rounded-2xl text-xs sys-text-body font-mono select-none">
-                      No active published assessments available in candidate registry.
+                      NO ASSESSMENTS AVAILABLE IN THIS CATEGORY.
                     </div>
                   )}
                 </div>
