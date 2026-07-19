@@ -55,25 +55,28 @@ export default function CandidateDashboard() {
           
           return target === candidateBatch
         })
-        setAssessments(activeList)
-
         // Fetch past sessions for history
         const mySessions = await fetchCandidateSessions(undefined, user?.id)
         setPastSessions(mySessions.sort((a, b) => new Date(b.startedAt || 0).getTime() - new Date(a.startedAt || 0).getTime()))
 
+        // Filter out assessments that the candidate has already submitted
+        const submittedIds = new Set(mySessions.filter(s => s.status === 'submitted').map(s => s.assessment_id))
+        const unsubmittedActiveList = activeList.filter(a => !submittedIds.has(a.id))
+        setAssessments(unsubmittedActiveList)
+
         // Check if there is a pending assessment ID cached
         const pendingId = localStorage.getItem('pending_exam_id')
         if (pendingId) {
-          const match = activeList.find(a => a.id === pendingId)
+          const match = unsubmittedActiveList.find(a => a.id === pendingId)
           if (match) {
             setSelectedAssessment(match)
             setActiveTab('lobby')
-          } else if (activeList.length > 0) {
-            setSelectedAssessment(activeList[0])
+          } else if (unsubmittedActiveList.length > 0) {
+            setSelectedAssessment(unsubmittedActiveList[0])
             localStorage.removeItem('pending_exam_id')
           }
-        } else if (activeList.length > 0) {
-          setSelectedAssessment(activeList[0])
+        } else if (unsubmittedActiveList.length > 0) {
+          setSelectedAssessment(unsubmittedActiveList[0])
         }
 
         // No cached roll overriding required, we hardcode it from email prefix above.
@@ -103,17 +106,19 @@ export default function CandidateDashboard() {
         }
         return target === candidateBatch
       })
-      setAssessments(activeList)
-
       const mySessions = await fetchCandidateSessions(undefined, user?.id)
       setPastSessions(mySessions.sort((a, b) => new Date(b.startedAt || 0).getTime() - new Date(a.startedAt || 0).getTime()))
 
+      const submittedIds = new Set(mySessions.filter(s => s.status === 'submitted').map(s => s.assessment_id))
+      const unsubmittedActiveList = activeList.filter(a => !submittedIds.has(a.id))
+      setAssessments(unsubmittedActiveList)
+
       const pendingId = localStorage.getItem('pending_exam_id')
       if (pendingId) {
-        const match = activeList.find(a => a.id === pendingId)
+        const match = unsubmittedActiveList.find(a => a.id === pendingId)
         if (match) setSelectedAssessment(match)
-      } else if (activeList.length > 0) {
-        setSelectedAssessment(activeList[0])
+      } else if (unsubmittedActiveList.length > 0) {
+        setSelectedAssessment(unsubmittedActiveList[0])
       }
     } catch (err) {
       console.error(err)
