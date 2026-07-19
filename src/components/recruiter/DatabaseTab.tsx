@@ -357,9 +357,9 @@ export default function DatabaseTab() {
                                           
                                           <span>{user.name}</span>
                                         </td>
-                                        <td className="py-2 py-2 lg:py-3 px-1 px-2 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell sys-text-body font-sans border-b border-divider ">
+                                        <td className="py-2 py-2 lg:py-3 px-1 px-2 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell sys-text-body font-sans border-b border-divider w-[50%]">
                                           
-                                          <span>{user.email}</span>
+                                          <span className="truncate max-w-[120px] lg:max-w-[250px] inline-block" title={user.email}>{user.email}</span>
                                         </td>
                                         <td className="py-2 lg:py-3 lg:py-2 px-1 px-2 lg:px-5 flex justify-end table-cell">
                                           <div className="flex justify-end gap-1.5 w-full w-auto">
