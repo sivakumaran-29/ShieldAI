@@ -1262,7 +1262,7 @@ export default function ExamShell() {
           </aside>
 
           {/* RIGHT COLUMN: Code Workspace & Terminal or MCQ View */}
-          <section className="flex-1 flex flex-col h-full bg-[#09090B] relative">
+          <section className="flex-1 flex flex-col h-full overflow-hidden bg-[#09090B] relative">
             
             {activeQuestion?.type !== 'mcq' && (
               <div className="px-6 py-3 flex items-center justify-between border-b border-[rgba(255,255,255,0.06)] bg-[#111216]">
@@ -1282,13 +1282,13 @@ export default function ExamShell() {
             )}
 
             {/* MAIN CONTENT AREA */}
-            <div className="flex-1 min-h-0 relative bg-[#09090B]">
+            <div className="flex-1 flex flex-col min-h-0 bg-[#09090B]">
               {activeQuestion ? (
                 activeQuestion.type === 'mcq' ? (
-                  <div className="absolute inset-0 flex flex-col">
+                  <div className="flex-1 flex flex-col min-h-0">
                     
                     {/* MCQ QUESTION BODY */}
-                    <div className="flex-1 p-10 max-w-4xl mx-auto w-full overflow-y-auto pb-[120px]">
+                    <div className="flex-1 p-10 max-w-4xl mx-auto w-full overflow-y-auto pb-12">
                       
                       <div className="flex items-center gap-3 mb-8 flex-wrap">
                         <span className="px-3 py-1 rounded-md text-[10px] font-semibold bg-[#111216] border border-[rgba(255,255,255,0.06)] text-[#8A9099] uppercase tracking-wider">
@@ -1344,7 +1344,7 @@ export default function ExamShell() {
                     </div>
 
                     {/* BOTTOM ACTION BAR */}
-                    <div className="h-24 absolute bottom-0 left-0 right-0 w-full bg-[#09090B]/90 backdrop-blur-md border-t border-[rgba(255,255,255,0.06)] flex items-center justify-between px-10 z-20">
+                    <div className="flex-none h-24 bg-[#09090B]/90 backdrop-blur-md border-t border-[rgba(255,255,255,0.06)] flex items-center justify-between px-10 z-20">
                       <div className="flex items-center gap-4">
                         <Button 
                           onClick={handleClearResponse}
@@ -1384,7 +1384,7 @@ export default function ExamShell() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex h-full w-full">
+                  <div className="flex-1 flex min-h-0 w-full">
                     {/* ... Coding UI will remain conceptually similar but with dark theme colors if needed. Wait, coding UI needs to be preserved exactly as requested? "The current interface is to be discarded entirely... DO NOT modify any business logic... Keep every feature and wiring exactly the same." I'll update the colors slightly to match the global theme. */}
                     <div className="w-1/2 h-full border-r border-[rgba(255,255,255,0.06)] bg-[#09090B] flex flex-col">
                       <div className="p-6 overflow-y-auto flex-1 space-y-6">
