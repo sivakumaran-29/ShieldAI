@@ -88,6 +88,10 @@ export default function ExamShell() {
   const [isCompilerLoading, setIsCompilerLoading] = useState<string | false>(false)
   const [compilerCountdown, setCompilerCountdown] = useState<number>(20)
   const [compilerStatusText, setCompilerStatusText] = useState('Starting...')
+  const [compilerProgress, setCompilerProgress] = useState(0)
+  const [compilerDownloadedMB, setCompilerDownloadedMB] = useState(0)
+  const [compilerShowExtensionPrompt, setCompilerShowExtensionPrompt] = useState(false)
+  const compilerIntervalRef = useRef<any>(null)
   
   // Section Navigation States
   const [activePart, setActivePart] = useState<'menu' | 'mcq' | 'coding'>('menu')
@@ -110,6 +114,54 @@ export default function ExamShell() {
   ])
   const [isAnomalyActive, setIsAnomalyActive] = useState(false)
   const [anomalyType, setAnomalyType] = useState('')
+
+  const triggerCompilerDownload = (targetLang: string, remainingTime: number) => {
+    setIsCompilerLoading(targetLang)
+    setCompilerCountdown(remainingTime)
+    setCompilerShowExtensionPrompt(false)
+    
+    if (compilerIntervalRef.current) clearInterval(compilerIntervalRef.current)
+    
+    setCompilerStatusText(compilerProgress === 0 ? 'Starting download...' : 'Resuming download...')
+    setConsoleOutput(compilerProgress === 0 ? `Initializing ${targetLang === 'cpp' ? 'C++' : 'C'} WebAssembly Compiler... Fetching dependencies (35MB)...` : `Resuming compiler download...`)
+    
+    const startProgress = compilerProgress
+    const startMB = compilerDownloadedMB
+    const targetSimProgress = startProgress === 0 ? (Math.floor(Math.random() * 10) + 85) : 100;
+    const targetSimMB = (targetSimProgress / 100) * 35;
+    
+    const startTime = Date.now()
+    
+    compilerIntervalRef.current = setInterval(() => {
+      const elapsedMs = Date.now() - startTime
+      const elapsedSec = Math.floor(elapsedMs / 1000)
+      const currentRemaining = Math.max(0, remainingTime - elapsedSec)
+      
+      setCompilerCountdown(currentRemaining)
+      
+      const currentSimProgress = Math.min(100, startProgress + ((targetSimProgress - startProgress) * (elapsedMs / (remainingTime * 1000))))
+      const currentSimMB = Math.min(35, startMB + ((targetSimMB - startMB) * (elapsedMs / (remainingTime * 1000))))
+      
+      setCompilerProgress(Math.floor(currentSimProgress))
+      setCompilerDownloadedMB(Number(currentSimMB.toFixed(1)))
+      
+      if (currentSimProgress < 30) setCompilerStatusText('Fetching WASM modules...')
+      else if (currentSimProgress < 70) setCompilerStatusText('Linking libc headers...')
+      else setCompilerStatusText('Finalising the user programming language...')
+      
+      if (currentSimProgress >= 100) {
+        clearInterval(compilerIntervalRef.current)
+        ;(window as any).hasLoadedCppCompiler = true
+        ;(window as any).cppFallbackMode = false
+        setIsCompilerLoading(false)
+        setConsoleOutput(`${targetLang === 'cpp' ? 'C++' : 'C'} WebAssembly Compiler ready. (Client-side execution initialized)`)
+        setLanguage(targetLang)
+      } else if (currentRemaining === 0) {
+        clearInterval(compilerIntervalRef.current)
+        setCompilerShowExtensionPrompt(true)
+      }
+    }, 150)
+  }
   const [showWarningModal, setShowWarningModal] = useState(false)
   const [warningModalText, setWarningModalText] = useState('')
   const [localStream, setLocalStream] = useState<MediaStream | null>(null)
@@ -1316,44 +1368,9 @@ export default function ExamShell() {
                   onChange={(e) => {
                     const newLang = e.target.value
                     if ((newLang === 'cpp' || newLang === 'c') && !(window as any).hasLoadedCppCompiler) {
-                      setIsCompilerLoading(newLang)
-                      setCompilerCountdown(20)
-                      setCompilerStatusText('Starting download...')
-                      setConsoleOutput(`Initializing ${newLang === 'cpp' ? 'C++' : 'C'} WebAssembly Compiler... Fetching dependencies (35MB)...`)
-                      
-                      // Simulate a download that takes between 5 and 25 seconds
-                      const simulatedDownloadTime = Math.floor(Math.random() * 20000) + 5000;
-                      const startTime = Date.now();
-                      
-                      const interval = setInterval(() => {
-                        const elapsed = Math.floor((Date.now() - startTime) / 1000);
-                        const remaining = Math.max(0, 20 - elapsed);
-                        setCompilerCountdown(remaining);
-                        
-                        if (elapsed < 5) {
-                          setCompilerStatusText('Fetching WASM modules...')
-                        } else if (elapsed < 10) {
-                          setCompilerStatusText('Linking libc headers...')
-                        } else {
-                          setCompilerStatusText('Finalising the user programming language...')
-                        }
-                        
-                        if (Date.now() - startTime >= simulatedDownloadTime && remaining > 0) {
-                          clearInterval(interval)
-                          ;(window as any).hasLoadedCppCompiler = true
-                          ;(window as any).cppFallbackMode = false
-                          setIsCompilerLoading(false)
-                          setConsoleOutput(`${newLang === 'cpp' ? 'C++' : 'C'} WebAssembly Compiler ready. (Client-side execution initialized)`)
-                          setLanguage(newLang)
-                        } else if (remaining === 0) {
-                          clearInterval(interval)
-                          ;(window as any).hasLoadedCppCompiler = true 
-                          ;(window as any).cppFallbackMode = true
-                          setIsCompilerLoading(false)
-                          setConsoleOutput(`${newLang === 'cpp' ? 'C++' : 'C'} WebAssembly payload timed out (>20s). Falling back to Piston API (Server-side).`)
-                          setLanguage(newLang)
-                        }
-                      }, 1000)
+                      setCompilerProgress(0)
+                      setCompilerDownloadedMB(0)
+                      triggerCompilerDownload(newLang, 20)
                     } else {
                       setLanguage(newLang)
                     }
@@ -1487,17 +1504,70 @@ export default function ExamShell() {
                     <div className="w-1/2 h-full flex flex-col bg-[#09090B] relative">
                       {isCompilerLoading && (
                         <div className="absolute inset-0 z-50 bg-[#09090B]/90 backdrop-blur-sm flex flex-col items-center justify-center p-8 text-center">
-                          <div className="w-12 h-12 border-4 border-[#5B8CFF]/30 border-t-[#5B8CFF] rounded-full animate-spin mb-6"></div>
-                          <h3 className="text-[#F5F5F5] font-bold text-lg mb-2">Lazy-Loading {isCompilerLoading === 'cpp' ? 'C++' : 'C'} Compiler</h3>
-                          <p className="text-[#8A9099] text-sm max-w-xs leading-relaxed mb-4">
-                            {compilerStatusText}
-                          </p>
-                          <div className="text-[#5B8CFF] font-mono font-bold text-3xl mb-4">
-                            {compilerCountdown}s
-                          </div>
-                          <p className="text-[#8A9099]/60 text-[11px] max-w-xs leading-relaxed">
-                            Downloading WebAssembly Clang toolchain and libc headers. This 35MB payload is only fetched once per session. Max threshold: 20s.
-                          </p>
+                          {!compilerShowExtensionPrompt ? (
+                            <>
+                              <div className="w-12 h-12 border-4 border-[#5B8CFF]/30 border-t-[#5B8CFF] rounded-full animate-spin mb-6"></div>
+                              <h3 className="text-[#F5F5F5] font-bold text-lg mb-2">Lazy-Loading {isCompilerLoading === 'cpp' ? 'C++' : 'C'} Compiler</h3>
+                              <p className="text-[#8A9099] text-sm max-w-xs leading-relaxed mb-4">
+                                {compilerStatusText}
+                              </p>
+                              
+                              <div className="w-64 h-2 bg-white/5 rounded-full overflow-hidden mb-2">
+                                <div className="h-full bg-[#5B8CFF] rounded-full transition-all duration-200" style={{ width: `${compilerProgress}%` }}></div>
+                              </div>
+                              <div className="flex justify-between w-64 text-[10px] text-[#8A9099] font-mono mb-4">
+                                <span>{compilerProgress}%</span>
+                                <span>{compilerDownloadedMB}MB / 35.0MB</span>
+                              </div>
+
+                              <div className="text-[#5B8CFF] font-mono font-bold text-3xl mb-4">
+                                {compilerCountdown}s
+                              </div>
+                              <p className="text-[#8A9099]/60 text-[11px] max-w-xs leading-relaxed">
+                                Downloading WebAssembly Clang toolchain and libc headers. This 35MB payload is only fetched once per session. Max threshold: 20s.
+                              </p>
+                            </>
+                          ) : (
+                            <div className="flex flex-col items-center">
+                              <div className="w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-6">
+                                <span className="text-amber-400 font-bold text-xl">!</span>
+                              </div>
+                              <h3 className="text-[#F5F5F5] font-bold text-lg mb-2">Connection is slow.</h3>
+                              <p className="text-[#8A9099] text-sm max-w-xs leading-relaxed mb-4">
+                                The compiler package is taking longer than expected to download. 
+                              </p>
+                              <div className="w-64 p-3 bg-white/5 rounded-lg border border-white/5 mb-6 text-left">
+                                <div className="flex justify-between text-xs mb-1">
+                                  <span className="text-white">Current Progress:</span>
+                                  <span className="text-[#5B8CFF] font-mono">{compilerProgress}%</span>
+                                </div>
+                                <div className="flex justify-between text-xs">
+                                  <span className="text-white">Downloaded:</span>
+                                  <span className="text-[#5B8CFF] font-mono">{compilerDownloadedMB}MB / 35.0MB</span>
+                                </div>
+                              </div>
+                              <div className="flex gap-3">
+                                <button 
+                                  onClick={() => {
+                                    ;(window as any).hasLoadedCppCompiler = true 
+                                    ;(window as any).cppFallbackMode = true
+                                    setIsCompilerLoading(false)
+                                    setConsoleOutput(`${isCompilerLoading === 'cpp' ? 'C++' : 'C'} WebAssembly payload aborted. Falling back to Piston API (Server-side).`)
+                                    setLanguage(isCompilerLoading as string)
+                                  }}
+                                  className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-medium transition-colors"
+                                >
+                                  Abort & Use Server-Side Compiler
+                                </button>
+                                <button 
+                                  onClick={() => triggerCompilerDownload(isCompilerLoading as string, 20)}
+                                  className="px-4 py-2 rounded-lg bg-[#5B8CFF] hover:bg-[#4A7CEB] text-white text-xs font-medium transition-colors shadow-[0_0_15px_rgba(91,140,255,0.3)]"
+                                >
+                                  Wait 20 more seconds
+                                </button>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       )}
                       <Editor 
