@@ -150,7 +150,7 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
         {connectionStatus !== 'connected' && (
           <div className="flex flex-col items-center gap-2.5 z-20 text-center p-4 select-none">
             <div 
-              className="p-3.5 rounded-full border border-divider sys-bg cursor-pointer hover:bg-white/10 transition-colors"
+              className="p-3.5 rounded-full border border-divider sys-bg cursor-pointer hover:bg-hover transition-colors"
               onClick={() => !isCritical && setIsWatching(true)}
             >
               {connectionStatus === 'connecting' ? (
@@ -208,8 +208,8 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
             onClick={() => setIsWatching(!isWatching)}
             disabled={isCritical}
             className={`text-[9px] px-2 py-1 rounded font-bold uppercase border transition-colors ${
-              isCritical ? 'opacity-50 cursor-not-allowed bg-surface/50 text-white/50 border-divider' :
-              isWatching ? 'bg-[#5B8CFF]/20 text-[#5B8CFF] border-[#5B8CFF]/40 hover:bg-[#5B8CFF]/30' : 'sys-bg text-primary hover:bg-white/10 border-border-strong'
+              isCritical ? 'opacity-50 cursor-not-allowed bg-surface/50 text-tertiary border-divider' :
+              isWatching ? 'bg-[#5B8CFF]/20 text-[#5B8CFF] border-[#5B8CFF]/40 hover:bg-[#5B8CFF]/30' : 'sys-bg text-primary hover:bg-hover border-border-strong'
             }`}
           >
             {isWatching || isCritical ? 'Stop Feed' : 'Watch Feed'}

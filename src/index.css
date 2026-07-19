@@ -23,20 +23,20 @@
 
   html.light {
     /* Light Mode Overrides */
-    --color-bg-base: #F0F2F5;
-    --color-bg-surface: #FFFFFF;
-    --color-bg-panel: rgba(255, 255, 255, 0.9);
-    --color-bg-panel-solid: #F1F3F5;
-    --color-bg-card: rgba(255, 255, 255, 0.8);
+    --color-bg-base: #E2E4E9;
+    --color-bg-surface: #F4F6F8;
+    --color-bg-panel: rgba(244, 246, 248, 0.9);
+    --color-bg-panel-solid: #EAECEF;
+    --color-bg-card: rgba(244, 246, 248, 0.85);
     --color-bg-input: #FFFFFF;
-    --color-bg-hover: rgba(0, 0, 0, 0.05);
+    --color-bg-hover: rgba(0, 0, 0, 0.06);
     
-    --color-border-subtle: rgba(0, 0, 0, 0.08);
-    --color-border-strong: rgba(0, 0, 0, 0.15);
+    --color-border-subtle: rgba(0, 0, 0, 0.1);
+    --color-border-strong: rgba(0, 0, 0, 0.2);
     
-    --color-text-primary: #1A1A1A;
-    --color-text-secondary: #4A4A4A;
-    --color-text-tertiary: #6B7280;
+    --color-text-primary: #000000;
+    --color-text-secondary: #111111;
+    --color-text-tertiary: #333333;
     --color-text-inverted: #FFFFFF;
   }
 

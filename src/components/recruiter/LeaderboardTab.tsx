@@ -151,7 +151,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
       {/* Bento grid metric summary cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 select-none">
         <div className="bg-card backdrop-blur-[24px] border border-divider p-6 rounded-2xl flex flex-col justify-between min-h-32 shadow-xl hover:shadow-[0_0_30px_rgba(255,255,255,0.03)] hover:border-border-strong transition-all duration-300">
-          <span className="text-[11px] font-heading font-semibold text-white/60 uppercase tracking-widest">Invited Cohort</span>
+          <span className="text-[11px] font-heading font-semibold text-tertiary uppercase tracking-widest">Invited Cohort</span>
           <div className="mt-4">
             <div className="text-4xl font-extrabold text-primary font-number">{totalInvited}</div>
             <span className="text-xs sys-text-body font-sans mt-1 block">Candidates registered</span>
@@ -159,7 +159,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
         </div>
 
         <div className="bg-card backdrop-blur-[24px] border border-divider p-6 rounded-2xl flex flex-col justify-between min-h-32 shadow-xl hover:shadow-[0_0_30px_rgba(255,255,255,0.03)] hover:border-border-strong transition-all duration-300">
-          <span className="text-[11px] font-heading font-semibold text-white/60 uppercase tracking-widest">Completions</span>
+          <span className="text-[11px] font-heading font-semibold text-tertiary uppercase tracking-widest">Completions</span>
           <div className="mt-4">
             <div className="text-4xl font-extrabold text-primary font-number">{completions.length}</div>
             <span className="text-xs sys-text-body font-sans mt-1 block">Submissions logged</span>
@@ -167,7 +167,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
         </div>
 
         <div className="bg-card backdrop-blur-[24px] border border-divider p-6 rounded-2xl flex flex-col justify-between min-h-32 shadow-xl hover:shadow-[0_0_30px_rgba(255,255,255,0.03)] hover:border-border-strong transition-all duration-300">
-          <span className="text-[11px] font-heading font-semibold text-white/60 uppercase tracking-widest">Average Score</span>
+          <span className="text-[11px] font-heading font-semibold text-tertiary uppercase tracking-widest">Average Score</span>
           <div className="mt-4">
             <div className="text-4xl font-extrabold text-primary font-number">{avgScore}%</div>
             <span className="text-xs sys-text-body font-sans mt-1 block">Compiler marks avg</span>
@@ -175,7 +175,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
         </div>
 
         <div className="bg-card backdrop-blur-[24px] border border-divider p-6 rounded-2xl flex flex-col justify-between min-h-32 shadow-xl hover:shadow-[0_0_30px_rgba(255,255,255,0.03)] hover:border-border-strong transition-all duration-300">
-          <span className="text-[11px] font-heading font-semibold text-white/60 uppercase tracking-widest">Pass Rate</span>
+          <span className="text-[11px] font-heading font-semibold text-tertiary uppercase tracking-widest">Pass Rate</span>
           <div className="mt-4">
             <div className="text-4xl font-extrabold text-[#34D399] font-number">{passRate}%</div>
             <span className="text-xs sys-text-body font-sans mt-1 block">Above {passThreshold}% passing marks</span>
@@ -268,7 +268,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                       <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider inline-block ${
                         s.status === 'submitted' ? 'bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/20' : 
                         s.status === 'testing' ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border border-[#5B8CFF]/20 animate-pulse' :
-                        'bg-white/5 text-white/40 border border-divider'
+                        'bg-divider text-tertiary border border-divider'
                       }`}>
                         {s.status}
                       </span>
@@ -278,7 +278,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                         onClick={() => setSelectedSession(s)}
                         variant="ghost" 
                         size="sm"
-                        className="h-8 px-3 hover:bg-hover text-white/60 hover:text-primary rounded-lg cursor-pointer transition-colors"
+                        className="h-8 px-3 hover:bg-hover text-tertiary hover:text-primary rounded-lg cursor-pointer transition-colors"
                       >
                         <ChevronRight className="w-4 h-4 mr-1" /> View Profile
                       </Button>
@@ -289,7 +289,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
 
               {filteredRanks.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-white/30 font-mono text-xs">
+                  <td colSpan={7} className="py-8 text-center text-tertiary font-mono text-xs">
                     No matching records found in student database ranks.
                   </td>
                 </tr>

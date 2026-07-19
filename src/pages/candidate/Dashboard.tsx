@@ -500,7 +500,7 @@ export default function CandidateDashboard() {
                       {pastSessions.slice(0, 3).map((s, idx) => (
                         <div key={s.id} className="flex gap-4 relative">
                           {idx !== pastSessions.slice(0, 3).length - 1 && (
-                            <div className="absolute top-6 bottom-0 left-[15px] w-[1px] bg-white/10" />
+                            <div className="absolute top-6 bottom-0 left-[15px] w-[1px] bg-hover" />
                           )}
                           <div className="w-8 h-8 rounded-full sys-card border border-transparent flex items-center justify-center shrink-0 z-10">
                             {s.status === 'submitted' ? (

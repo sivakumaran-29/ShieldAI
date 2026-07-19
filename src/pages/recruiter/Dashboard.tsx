@@ -280,10 +280,10 @@ export default function RecruiterDashboard() {
       <div className="flex-1 flex flex-col h-screen overflow-hidden relative z-10">
         
         {/* TOP BAR FLOATING COMMAND WORKSPACE */}
-        <header className="h-16 border-b border-divider bg-card/80 backdrop-blur-[16px] flex items-center justify-between px-4 md:px-8 z-25 ">
+        <header className="h-16 border-b border-divider bg-background/80 backdrop-blur-[16px] flex items-center justify-between px-4 md:px-8 z-25 ">
           {/* Breadcrumbs trail */}
-          <div className="flex items-center gap-1 md:gap-2 text-[10px] font-heading font-semibold uppercase tracking-widest select-none text-white/60">
-            <Button variant="ghost" size="icon" onClick={() => setIsMobileSidebarOpen(true)} className="md:hidden mr-2 -ml-2 h-8 w-8 text-primary hover:bg-white/10">
+          <div className="flex items-center gap-1 md:gap-2 text-[10px] font-heading font-semibold uppercase tracking-widest select-none text-tertiary">
+            <Button variant="ghost" size="icon" onClick={() => setIsMobileSidebarOpen(true)} className="md:hidden mr-2 -ml-2 h-8 w-8 text-primary hover:bg-hover">
               <Menu className="w-4 h-4" />
             </Button>
             <span className="hidden sm:inline">SHIELD_OS</span>

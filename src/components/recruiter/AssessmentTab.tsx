@@ -211,12 +211,12 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                             ? 'bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/20 shadow-[0_0_10px_rgba(52,211,153,0.1)]' 
                             : a.status === 'Draft'
                             ? 'bg-[#FBBF24]/10 text-[#FBBF24] border border-[#FBBF24]/20 shadow-[0_0_10px_rgba(251,191,36,0.1)]'
-                            : 'bg-white/5 text-white/50 border border-divider'
+                            : 'bg-divider text-tertiary border border-divider'
                         }`}>
                           <span className={`w-1.5 h-1.5 rounded-full ${
                             a.status === 'Published' ? 'bg-[#34D399] shadow-[0_0_5px_#34D399]' : 
                             a.status === 'Draft' ? 'bg-[#FBBF24] shadow-[0_0_5px_#FBBF24]' : 
-                            'bg-white/30'
+                            'bg-divider'
                           }`} />
                           {a.status}
                         </span>

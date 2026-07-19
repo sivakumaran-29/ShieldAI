@@ -1528,7 +1528,7 @@ export default function ExamShell() {
                                 {compilerStatusText}
                               </p>
                               
-                              <div className="w-64 h-2 bg-white/5 rounded-full overflow-hidden mb-2">
+                              <div className="w-64 h-2 bg-divider rounded-full overflow-hidden mb-2">
                                 <div className="h-full bg-[#5B8CFF] rounded-full transition-all duration-200" style={{ width: `${compilerProgress}%` }}></div>
                               </div>
                               <div className="flex justify-between w-64 text-[10px] text-tertiary font-mono mb-4">
@@ -1552,7 +1552,7 @@ export default function ExamShell() {
                               <p className="text-tertiary text-sm max-w-xs leading-relaxed mb-4">
                                 The compiler package is taking longer than expected to download. 
                               </p>
-                              <div className="w-64 p-3 bg-white/5 rounded-lg border border-divider mb-6 text-left">
+                              <div className="w-64 p-3 bg-divider rounded-lg border border-divider mb-6 text-left">
                                 <div className="flex justify-between text-xs mb-1">
                                   <span className="text-primary">Current Progress:</span>
                                   <span className="text-[#5B8CFF] font-mono">{compilerProgress}%</span>
@@ -1571,7 +1571,7 @@ export default function ExamShell() {
                                     setConsoleOutput(`${isCompilerLoading === 'cpp' ? 'C++' : 'C'} compiler payload aborted. Falling back to Server-side execution.`)
                                     setLanguage(isCompilerLoading as string)
                                   }}
-                                  className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-border-strong text-primary text-xs font-medium transition-colors"
+                                  className="px-4 py-2 rounded-lg bg-divider hover:bg-hover border border-border-strong text-primary text-xs font-medium transition-colors"
                                 >
                                   Abort & Use Server-Side Compiler
                                 </button>
