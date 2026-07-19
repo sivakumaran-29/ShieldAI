@@ -353,7 +353,7 @@ export default function DatabaseTab() {
                                   <tbody className="table-row-group divide-y lg:divide-divider"><tr className="table-row h-2"></tr>
                                     {batchUsers.map(user => (
                                       <tr key={user.id} className="hover:bg-hover transition-colors duration-200 group/row table-row p-4 p-0 mb-4 mb-0 border border-divider  rounded-2xl  bg-panel ">
-                                        <td className="py-2 py-2 lg:py-3 px-1 px-2 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell font-semibold font-heading text-primary max-w-xs truncate border-b border-divider ">
+                                        <td className="py-2 py-2 lg:py-3 px-1 px-2 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell font-semibold font-heading text-primary border-b border-divider whitespace-nowrap">
                                           
                                           <span>{user.name}</span>
                                         </td>

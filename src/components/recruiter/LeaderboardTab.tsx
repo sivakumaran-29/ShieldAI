@@ -238,9 +238,9 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                         <span className="text-[9px] lg:text-[11px] sys-text-body font-sans mt-0.5 truncate max-w-[100px] lg:max-w-[180px] inline-block" title={s.email}>{s.email}</span>
                       </div>
                     </td>
-                    <td className="py-2 lg:py-4 px-2 lg:px-5 font-mono font-semibold sys-text-body uppercase table-cell border-b border-divider align-middle text-[9px] lg:text-[11px] w-[15%] truncate">
+                    <td className="py-2 lg:py-4 px-2 lg:px-5 font-mono font-semibold sys-text-body uppercase table-cell border-b border-divider align-middle text-[9px] lg:text-[11px] w-[18%] whitespace-nowrap">
                       
-                      <span className="truncate block" title={s.roll_number || 'N/A'}>{s.roll_number || 'N/A'}</span>
+                      <span className="block">{s.roll_number || 'N/A'}</span>
                     </td>
                     <td className="py-2 lg:py-4 px-2 lg:px-5 table-cell border-b border-divider align-middle w-[15%]">
                       
