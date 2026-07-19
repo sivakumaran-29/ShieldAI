@@ -13,7 +13,7 @@ interface CandidateMonitorCardProps {
 
 type ConnectionStatus = 'disconnected' | 'connecting' | 'connected' | 'failed'
 
-export default function CandidateMonitorCard({ s, isCritical, violationCount }: CandidateMonitorCardProps) {
+export default function CandidateMonitorCard({ s, isCritical }: CandidateMonitorCardProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('disconnected')
   const pcRef = useRef<RTCPeerConnection | null>(null)
@@ -216,26 +216,12 @@ export default function CandidateMonitorCard({ s, isCritical, violationCount }: 
           </button>
         </div>
 
-        {/* Live infractions */}
-        <div className="flex gap-4 border-t border-divider pt-3 select-none">
-          <div className="space-y-1 w-1/2">
-            <span className="text-[10px] sys-text-body block uppercase tracking-wider font-sans font-bold">Infractions</span>
-            <span className={`text-[11px] font-sans font-semibold ${isCritical ? 'text-[#F87171]' : 'text-primary'}`}>{violationCount} warning(s)</span>
-          </div>
-          <div className="space-y-1 border-l border-divider pl-4 w-1/2">
+        {/* Exam Status */}
+        <div className="flex border-t border-divider pt-3 select-none">
+          <div className="space-y-1 w-full">
             <span className="text-[10px] sys-text-body block uppercase tracking-wider font-sans font-bold">Exam Status</span>
             <span className="text-[11px] font-sans font-semibold text-primary capitalize">{s.status}...</span>
           </div>
-        </div>
-
-        {/* Terminal warning timeline */}
-        <div className="bg-black/65 border border-divider rounded-xl p-2.5 font-mono text-[8px] sys-text-body space-y-1.5 select-text overflow-y-auto max-h-16">
-          <span className="text-[7.5px] uppercase font-bold sys-text-body tracking-widest block select-none border-b border-divider pb-1 mb-1">// Infraction logs</span>
-          {(s.violation_logs || []).slice(-3).map((log, idx) => (
-            <div key={idx} className={log.includes('ALERT') || log.includes('lost') || log.includes('switch') ? 'text-primary bg-[#F87171]/15 px-1 rounded border border-[#F87171]/25' : 'sys-text-body'}>
-              {log}
-            </div>
-          ))}
         </div>
       </div>
     </Card>
