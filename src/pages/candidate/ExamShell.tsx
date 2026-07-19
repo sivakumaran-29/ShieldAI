@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Editor from '@monaco-editor/react'
 import { 
-  Terminal, Activity, EyeOff, AlertTriangle, RefreshCw, Trash2, Clock, ChevronRight,
-  CornerDownRight, ChevronLeft, Lock
+  Terminal, Activity, EyeOff, AlertTriangle, RefreshCw, Trash2, Clock, ChevronRight, Lock
 } from 'lucide-react'
 import ThemeToggle from '../../components/ThemeToggle'
 import { AmbientGlow } from '../../components/AmbientGlow'
@@ -1004,615 +1003,601 @@ export default function ExamShell() {
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col font-sans antialiased overflow-hidden sys-bg text-foreground relative">
+    <div className="min-h-screen w-full flex flex-col font-sans antialiased overflow-hidden bg-[#09090B] text-[#F5F5F5] relative">
       
       {/* Ambient Background Layer */}
       <AmbientGlow />
-      <div className="grain-overlay" />
+      <div className="grain-overlay opacity-30" />
       
-      <div className="flex-1 flex flex-col z-10 relative">
-      {/* EXAM PANEL HEADER */}
-      <header className="px-6 py-3 flex items-center justify-between sticky top-0 z-50 border-b border-white/5 bg-card/65 ">
-        <div className="flex items-center space-x-3 select-none">
-          <div className="p-1 px-2 border rounded sys-bg/65 border-transparent text-white flex items-center gap-1.5 font-bold tracking-tight text-[10px] font-mono">
-            <Lock className="w-3.5 h-3.5 animate-pulse" strokeWidth={1.5} /> Protected Environment
-          </div>
-          <span className="font-bold text-xs tracking-wider uppercase font-mono text-muted hidden md:inline-block">
-            {assessment.title}
-          </span>
-        </div>
-
-        {/* TIMER ALERT */}
-        {timerAlert && (
-          <div className="hidden lg:flex items-center gap-2 p-1.5 px-3 sys-card border border-transparent rounded-xl sys-text-primary font-mono text-[9px] font-bold tracking-wide animate-pulse">
-            <AlertTriangle className="w-4 h-4 text-white shrink-0" strokeWidth={1.5} /> {timerAlert}
-          </div>
-        )}
-
-        <div className="flex items-center space-x-4">
-          {/* INTEGRITY SCALE */}
-          <div className={`flex items-center space-x-2 border px-2.5 py-1 rounded ${
-            integrityScore > 75 
-              ? 'sys-bg border-transparent sys-text-primary' 
-              : 'sys-card border-transparent text-white animate-pulse'
-          }`}>
-            <Activity className="w-4 h-4" strokeWidth={1.5} />
-            <span className="text-[10px] font-mono font-bold">INTEGRITY: {integrityScore}%</span>
+      <div className="flex-1 flex flex-col z-10 relative h-full">
+        {/* PREMIUM TOP BAR */}
+        <header className="px-8 py-4 flex items-center justify-between sticky top-0 z-50 border-b border-[rgba(255,255,255,0.06)] bg-[#09090B]/80 backdrop-blur-xl">
+          <div className="flex items-center space-x-4 select-none">
+            <div className="px-3 py-1.5 rounded-full bg-[#111216] border border-[rgba(255,255,255,0.06)] text-[#F5F5F5] flex items-center gap-2 font-medium text-xs shadow-sm">
+              <Lock className="w-3.5 h-3.5 text-emerald-400" strokeWidth={2} /> 
+              <span>Protected Environment</span>
+            </div>
+            <span className="font-semibold text-sm tracking-wide text-[#B8BDC7] hidden md:inline-block">
+              {assessment.title}
+            </span>
           </div>
 
-          {/* TIMER */}
-          <div className={`p-1.5 px-3 border rounded text-xs font-mono font-bold ${
-            timeLeft < 300 
-              ? 'sys-card border-transparent text-white animate-pulse' 
-              : 'sys-bg border-transparent text-white'
-          }`}>
-            <Clock className="w-3.5 h-3.5 inline mr-1.5" strokeWidth={1.5} />
-            {formatTimerString(timeLeft)}
-          </div>
-
-          <Button
-            onClick={handleSync}
-            disabled={isSyncing}
-            variant="outline"
-            size="icon"
-            className="w-8 h-8 rounded-lg sys-bg border-transparent sys-text-body hover:text-white transition shadow-sm"
-            title="Sync Latest Changes"
-          >
-            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-[#5B8CFF]' : ''}`} />
-          </Button>
-
-          <ThemeToggle />
-
-          {activePart === 'menu' ? (
-            <Button 
-              onClick={handleFinishAssessment} 
-              className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white font-extrabold px-4 h-8 rounded-xl text-xs tracking-wider cursor-pointer select-none active:scale-95 transition"
-            >
-              Submit Exam
-            </Button>
-          ) : (
-            <Button 
-              onClick={handleSubmitPart} 
-              className="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-4 h-8 rounded-xl text-xs tracking-wider cursor-pointer select-none active:scale-95 transition"
-            >
-              {isSingleTypeExam ? 'Final Submit' : 'Submit Section'}
-            </Button>
+          {timerAlert && (
+            <div className="hidden lg:flex items-center gap-2 px-4 py-1.5 bg-amber-500/10 border border-amber-500/20 rounded-full text-amber-500 font-medium text-xs animate-pulse">
+              <AlertTriangle className="w-3.5 h-3.5" strokeWidth={2} /> {timerAlert}
+            </div>
           )}
-        </div>
-      </header>
 
-      {/* CORE WORKSPACE GRID */}
-      {activePart === 'menu' ? (
-        <main className="flex-1 overflow-y-auto p-12 flex flex-col items-center justify-center animate-fade-in relative z-10">
-          <div className="max-w-2xl w-full text-center space-y-6">
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">Assessment Overview</h1>
-            <p className="sys-text-body text-sm font-mono">Select a section to begin. Once a section is submitted, you cannot return to it.</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-              {/* Part 1: MCQ */}
-              <div className={`p-8 border rounded-2xl flex flex-col items-center text-center transition ${
-                currentSession?.completedParts?.includes('mcq') 
-                  ? 'sys-bg/50 border-transparent opacity-60' 
-                  : 'bg-card/60 border-white/5 hover:border-[#5B8CFF]/50 shadow-xl hover:-translate-y-1'
-              }`}>
-                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4 border border-transparent">
-                  <span className="font-mono font-bold text-[#14B8A6]">P1</span>
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2">Multiple Choice</h3>
-                <p className="text-xs sys-text-body mb-6 flex-1">Core conceptual knowledge and scenario analysis.</p>
-                {currentSession?.completedParts?.includes('mcq') ? (
-                  <Button disabled className="w-full sys-card sys-text-body font-bold">SUBMITTED</Button>
-                ) : (
-                  <Button onClick={() => handleStartPart('mcq')} className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white font-bold cursor-pointer transition">
-                    START SECTION
-                  </Button>
-                )}
-              </div>
-
-              {/* Part 2: Coding */}
-              <div className={`p-8 border rounded-2xl flex flex-col items-center text-center transition ${
-                currentSession?.completedParts?.includes('coding') 
-                  ? 'sys-bg/50 border-transparent opacity-60' 
-                  : 'bg-card/60 border-white/5 hover:border-[#5B8CFF]/50 shadow-xl hover:-translate-y-1'
-              }`}>
-                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4 border border-transparent">
-                  <span className="font-mono font-bold text-[#5B8CFF]">P2</span>
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2">Coding Challenges</h3>
-                <p className="text-xs sys-text-body mb-6 flex-1">Algorithmic problem solving and secure logic implementation.</p>
-                {currentSession?.completedParts?.includes('coding') ? (
-                  <Button disabled className="w-full sys-card sys-text-body font-bold">SUBMITTED</Button>
-                ) : (
-                  <Button onClick={() => handleStartPart('coding')} className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white font-bold cursor-pointer transition">
-                    START SECTION
-                  </Button>
-                )}
-              </div>
+          <div className="flex items-center space-x-3">
+            {/* INTEGRITY SCALE */}
+            <div className={`flex items-center space-x-2 px-3 py-1.5 rounded-full border ${
+              integrityScore > 75 
+                ? 'bg-[#111216] border-[rgba(255,255,255,0.06)] text-[#B8BDC7]' 
+                : 'bg-red-500/10 border-red-500/20 text-red-400 animate-pulse'
+            }`}>
+              <Activity className="w-3.5 h-3.5" strokeWidth={2} />
+              <span className="text-xs font-semibold">Integrity: {integrityScore}%</span>
             </div>
 
-            {currentSession?.completedParts?.includes('mcq') && currentSession?.completedParts?.includes('coding') && (
-              <div className="mt-8">
-                <Button onClick={handleFinishAssessment} className="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-8 h-12 rounded-xl tracking-widest text-sm shadow-lg animate-pulse">
-                  FINALIZE EXAM
-                </Button>
-              </div>
+            {/* TIMER */}
+            <div className={`flex items-center space-x-2 px-4 py-1.5 rounded-full border ${
+              timeLeft < 300 
+                ? 'bg-red-500/10 border-red-500/20 text-red-400 animate-pulse' 
+                : 'bg-[#111216] border-[rgba(255,255,255,0.06)] text-[#F5F5F5]'
+            }`}>
+              <Clock className="w-3.5 h-3.5" strokeWidth={2} />
+              <span className="text-xs font-bold font-mono tracking-wider">{formatTimerString(timeLeft)}</span>
+            </div>
+
+            <Button
+              onClick={handleSync}
+              disabled={isSyncing}
+              variant="ghost"
+              size="icon"
+              className="w-8 h-8 rounded-full hover:bg-[rgba(255,255,255,0.04)] text-[#8A9099] hover:text-[#F5F5F5] transition-colors"
+              title="Sync Latest Changes"
+            >
+              <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-[#5B8CFF]' : ''}`} />
+            </Button>
+
+            <div className="opacity-50 hover:opacity-100 transition-opacity">
+               <ThemeToggle />
+            </div>
+
+            {activePart === 'menu' ? (
+              <Button 
+                onClick={handleFinishAssessment} 
+                className="bg-[#F5F5F5] hover:bg-white text-[#09090B] font-bold px-6 h-9 rounded-full text-xs shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all ml-2"
+              >
+                Submit Exam
+              </Button>
+            ) : (
+              <Button 
+                onClick={handleSubmitPart} 
+                className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 font-semibold px-6 h-9 rounded-full text-xs transition-all ml-2"
+              >
+                {isSingleTypeExam ? 'Final Submit' : 'Submit Section'}
+              </Button>
             )}
           </div>
-        </main>
-      ) : (
-      <main className="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden h-[calc(100vh-57px)] animate-fade-in relative z-10">
-        
-        {/* LEFT COLUMN: Problem Description & Telemetry */}
-        <section className={`p-5 flex flex-col space-y-4 overflow-y-auto border-r border-white/5 bg-card/30 ${activePart === 'mcq' ? 'lg:col-span-3' : 'lg:col-span-5'}`}>
-          
-          {/* QUESTION SELECTOR */}
-          <div className="flex items-center justify-between border-b border-white/5 pb-3 select-none">
-            <h3 className="text-[10px] font-bold font-mono tracking-widest text-muted uppercase">Part: {activePart === 'mcq' ? 'MCQ' : 'Coding'}</h3>
-            <div className="flex items-center gap-1.5">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                disabled={selectedQIndex === 0} 
-                onClick={() => setSelectedQIndex(p => p - 1)}
-                className="h-7 px-2 border border-white/5 bg-card/45 hover:sys-card"
-              >
-                <ChevronLeft className="w-3.5 h-3.5" />
-              </Button>
-              <span className="text-[10px] font-mono font-bold px-2">
-                {selectedQIndex + 1} / {filteredQuestions.length}
-              </span>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                disabled={selectedQIndex === filteredQuestions.length - 1} 
-                onClick={() => setSelectedQIndex(p => p + 1)}
-                className="h-7 px-2 border border-white/5 bg-card/45 hover:sys-card"
-              >
-                <ChevronRight className="w-3.5 h-3.5" />
-              </Button>
-            </div>
-          </div>
+        </header>
 
-          <div className="py-2 flex gap-2">
-            <Button onClick={handleSubmitPart} className="flex-1 bg-[#3f6ad5] hover:bg-[#3254a8] text-white hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] border-none hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-[10px] font-mono tracking-widest uppercase transition h-8">
-              {isSingleTypeExam ? 'Final Submit' : `Submit ${activePart === 'mcq' ? 'MCQ' : 'Coding'} Section`}
-            </Button>
-          </div>
-
-          {activeQuestion ? (
-            <div className="space-y-5 flex-1 flex flex-col">
-              {activePart !== 'mcq' && (
-                <>
-                  <div>
-                    <span className="px-2 py-0.5 rounded text-[9px] font-mono bg-background border border-white/5 text-muted font-bold uppercase tracking-wider">
-                      DIFFICULTY: {activeQuestion.difficulty}
-                    </span>
-                    <h1 className="text-base font-extrabold tracking-tight mt-2.5 flex items-center gap-1.5 text-foreground">
-                      <CornerDownRight className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> <Latex>{activeQuestion.title || ''}</Latex>
-                    </h1>
-                  </div>
-
-                  {/* Description */}
-                  <div className="space-y-4 text-xs leading-relaxed text-muted font-sans whitespace-pre-wrap">
-                    {activeQuestion.description}
-                  </div>
-                </>
-              )}
+        {/* CORE WORKSPACE GRID */}
+        {activePart === 'menu' ? (
+          <main className="flex-1 overflow-y-auto p-12 flex flex-col items-center justify-center animate-fade-in relative z-10">
+            <div className="max-w-3xl w-full text-center space-y-4">
+              <h1 className="text-4xl font-bold text-[#F5F5F5] tracking-tight">Assessment Overview</h1>
+              <p className="text-[#8A9099] text-base">Select a section to begin. Submitted sections are locked.</p>
               
-              {activePart === 'mcq' && (
-                <div className="mt-4 p-4 border border-white/5 bg-card/20 rounded-xl space-y-3">
-                  <h4 className="text-[10px] font-mono font-bold text-foreground uppercase tracking-widest border-b border-white/5 pb-2">Question Navigator</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {filteredQuestions.map((q, idx) => {
-                      const isAnswered = currentSession?.submissions?.[q.id]?.code !== undefined
-                      const isMarked = reviewMarked[q.id]
-                      const isActive = selectedQIndex === idx
-                      
-                      let btnColor = 'sys-card sys-text-body border-white/5 hover:sys-card' // Unanswered default
-                      if (isActive) btnColor = 'bg-foreground text-background border-foreground shadow-[0_0_10px_rgba(255,255,255,0.2)]'
-                      else if (isMarked) btnColor = 'bg-yellow-500/10 text-yellow-500 border-yellow-500/30'
-                      else if (isAnswered) btnColor = 'bg-[#5B8CFF]/15 text-[#5B8CFF] border-[#5B8CFF]/30'
-
-                      return (
-                        <button
-                          key={q.id}
-                          onClick={() => setSelectedQIndex(idx)}
-                          className={`w-8 h-8 rounded border flex items-center justify-center text-[10px] font-mono font-bold transition-all ${btnColor}`}
-                        >
-                          {idx + 1}
-                        </button>
-                      )
-                    })}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
+                {/* Part 1: MCQ */}
+                <div className={`p-8 border rounded-[20px] flex flex-col items-center text-center transition-all duration-300 ${
+                  currentSession?.completedParts?.includes('mcq') 
+                    ? 'bg-[#111216]/50 border-transparent opacity-50' 
+                    : 'bg-[#15171B] border-[rgba(255,255,255,0.06)] hover:border-[#5B8CFF]/30 hover:bg-[#1B1D22] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5B8CFF]/5'
+                }`}>
+                  <div className="w-14 h-14 bg-[#111216] rounded-2xl flex items-center justify-center mb-6 border border-[rgba(255,255,255,0.06)] shadow-sm">
+                    <span className="font-bold text-emerald-400 text-lg">P1</span>
                   </div>
-                  <div className="flex flex-wrap gap-x-4 gap-y-2 mt-2 pt-2 border-t border-white/5/50 text-[9px] font-mono sys-text-body">
-                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded bg-foreground"></div> Current</div>
-                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded bg-[#5B8CFF]/60"></div> Answered</div>
-                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded bg-yellow-500/60"></div> Review</div>
-                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded sys-card"></div> Unanswered</div>
-                  </div>
-                </div>
-              )}
-
-              {activePart !== 'mcq' && (
-                <>
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5">
-                    {activeQuestion.tags?.map((tag, idx) => (
-                      <span key={idx} className="bg-background text-muted border border-white/5 text-[9px] px-2 py-0.5 rounded font-mono">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Constraints */}
-                  <div className="p-4 rounded-xl border bg-card/40 border-white/5">
-                    <h4 className="text-[9px] font-mono font-bold text-foreground uppercase tracking-widest mb-1.5">Constraints</h4>
-                    <pre className="text-xs leading-relaxed font-mono whitespace-pre-wrap sys-text-body">{activeQuestion.constraints}</pre>
-                  </div>
-
-                  {/* Format specs */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-3.5 rounded-xl border bg-card/40 border-white/5">
-                      <h4 className="text-[9px] font-mono font-bold text-muted uppercase tracking-wider mb-1">Input Format</h4>
-                      <p className="text-[11px] sys-text-body">{activeQuestion.input_format}</p>
-                    </div>
-                    <div className="p-3.5 rounded-xl border bg-card/40 border-white/5">
-                      <h4 className="text-[9px] font-mono font-bold text-muted uppercase tracking-wider mb-1">Output Format</h4>
-                      <p className="text-[11px] sys-text-body">{activeQuestion.output_format}</p>
-                    </div>
-                  </div>
-
-                  {/* Samples */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-                    <div className="space-y-1.5 flex flex-col">
-                      <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-wider px-1">Sample Input</span>
-                      <pre className="bg-background p-3 rounded border border-white/5 text-[11px] font-mono text-muted min-h-16 whitespace-pre-wrap">{activeQuestion.sample_input}</pre>
-                    </div>
-                    <div className="space-y-1.5 flex flex-col">
-                      <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-wider px-1">Sample Output</span>
-                      <pre className="bg-background p-3 rounded border border-white/5 text-[11px] font-mono text-foreground min-h-16 whitespace-pre-wrap">{activeQuestion.sample_output}</pre>
-                    </div>
-                  </div>
-
-                  {activeQuestion.explanation && (
-                    <div className="text-[11px] sys-text-body leading-normal italic bg-background border border-white/5 p-3 rounded-xl">
-                      <strong>Explanation:</strong> {activeQuestion.explanation}
-                    </div>
+                  <h3 className="text-xl font-semibold text-[#F5F5F5] mb-3">Multiple Choice</h3>
+                  <p className="text-sm text-[#8A9099] mb-8 flex-1 leading-relaxed">Core conceptual knowledge, logical reasoning, and scenario analysis.</p>
+                  {currentSession?.completedParts?.includes('mcq') ? (
+                    <Button disabled className="w-full bg-[#111216] text-[#8A9099] font-medium rounded-xl h-12">Submitted</Button>
+                  ) : (
+                    <Button onClick={() => handleStartPart('mcq')} className="w-full bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white font-semibold h-12 rounded-xl transition-all shadow-lg shadow-[#3f6ad5]/20">
+                      Start Section
+                    </Button>
                   )}
-                </>
-              )}
-            </div>
-          ) : (
-            <div className="flex-1 flex items-center justify-center text-xs font-mono sys-text-body">
-              No questions linked to assessment lobby.
-            </div>
-          )}
+                </div>
 
-          {/* PROCTORING TELEMETRY SIDEBAR DRAWER */}
-          <div className="pt-4 border-t border-white/5 grid grid-cols-1 md:grid-cols-2 gap-4">
-            
-            {/* Visual camera radar card */}
-            <Card className="bg-background border-white/5 overflow-hidden relative shadow-none min-h-28 rounded-xl flex items-center justify-center">
-              {isAnomalyActive && (
-                <div className="absolute top-2 right-2 z-30 bg-[#EF4444] text-white font-mono font-bold text-[8px] px-1.5 py-0.5 rounded flex items-center animate-bounce">
-                  <EyeOff className="w-2.5 h-2.5 mr-1" strokeWidth={1.5} /> {anomalyType}
-                </div>
-              )}
-              
-              <div className="w-full h-28 relative overflow-hidden flex items-center justify-center sys-card rounded-lg">
-                <div id="candidate-video-container" className="absolute inset-0 w-full h-full z-[100]">
-                  {localStream && <StreamVideo stream={localStream} />}
-                  <video id="candidate-video" className="hidden" playsInline muted autoPlay />
-                </div>
-                <canvas ref={canvasRef} width="160" height="120" className="hidden" />
-                
-                <div className="absolute inset-0 border border-white/5 pointer-events-none z-20">
-                  <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t border-l border-white/60" />
-                  <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t border-r border-white/60" />
-                  <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b border-l border-white/60" />
-                  <div className="absolute bottom-2 right-2 w-3.5 h-3.5 border-b border-r border-white/60" />
-                </div>
-              </div>
-            </Card>
-
-            {/* Telemetry timeline logs */}
-            <Card className="bg-[#0B0B0D] border-white/5 flex flex-col shadow-none overflow-hidden h-28 rounded-xl">
-              <div className="bg-background border-b border-white/5 px-2.5 py-1.5 text-[8.5px] uppercase font-bold sys-text-body tracking-wider">
-                Telemetry Log
-              </div>
-              <div className="p-2 font-mono text-[9px] space-y-1.5 overflow-y-auto flex-1 sys-text-body max-h-[80px]">
-                {proctorLogs.slice(-20).map((log, idx) => (
-                  <div key={idx} className={log.includes('ALERT') ? 'text-white font-bold bg-[#EF4444]/15 border border-[#EF4444]/30 px-1 rounded' : 'sys-text-body'}>
-                    {log}
+                {/* Part 2: Coding */}
+                <div className={`p-8 border rounded-[20px] flex flex-col items-center text-center transition-all duration-300 ${
+                  currentSession?.completedParts?.includes('coding') 
+                    ? 'bg-[#111216]/50 border-transparent opacity-50' 
+                    : 'bg-[#15171B] border-[rgba(255,255,255,0.06)] hover:border-[#5B8CFF]/30 hover:bg-[#1B1D22] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5B8CFF]/5'
+                }`}>
+                  <div className="w-14 h-14 bg-[#111216] rounded-2xl flex items-center justify-center mb-6 border border-[rgba(255,255,255,0.06)] shadow-sm">
+                    <span className="font-bold text-[#5B8CFF] text-lg">P2</span>
                   </div>
-                ))}
+                  <h3 className="text-xl font-semibold text-[#F5F5F5] mb-3">Coding Challenges</h3>
+                  <p className="text-sm text-[#8A9099] mb-8 flex-1 leading-relaxed">Algorithmic problem solving and secure logic implementation.</p>
+                  {currentSession?.completedParts?.includes('coding') ? (
+                    <Button disabled className="w-full bg-[#111216] text-[#8A9099] font-medium rounded-xl h-12">Submitted</Button>
+                  ) : (
+                    <Button onClick={() => handleStartPart('coding')} className="w-full bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white font-semibold h-12 rounded-xl transition-all shadow-lg shadow-[#3f6ad5]/20">
+                      Start Section
+                    </Button>
+                  )}
+                </div>
               </div>
-            </Card>
-          </div>
-        </section>
 
-        {/* RIGHT COLUMN: Code Workspace & Terminal or MCQ View */}
-        <section className={`flex flex-col h-full overflow-hidden bg-background ${activePart === 'mcq' ? 'lg:col-span-9' : 'lg:col-span-7'}`}>
+              {currentSession?.completedParts?.includes('mcq') && currentSession?.completedParts?.includes('coding') && (
+                <div className="mt-12 pt-8 border-t border-[rgba(255,255,255,0.06)]">
+                  <Button onClick={handleFinishAssessment} className="bg-emerald-500 hover:bg-emerald-400 text-[#09090B] font-bold px-10 h-14 rounded-2xl text-sm shadow-[0_0_30px_rgba(16,185,129,0.2)] transition-all">
+                    Finish Exam
+                  </Button>
+                </div>
+              )}
+            </div>
+          </main>
+        ) : (
+        <main className="flex-1 flex overflow-hidden relative z-10 h-[calc(100vh-73px)]">
           
-          {/* EDITOR SUB-HEADER */}
-          {activeQuestion?.type !== 'mcq' && (
-            <div className="px-4 py-2 flex items-center justify-between border-b border-white/5 bg-card">
-              <span className="text-[10px] font-mono font-bold text-muted flex items-center gap-1.5 uppercase select-none">
-                <Terminal className="w-3.5 h-3.5 sys-text-body" strokeWidth={1.5} /> Compiler Workspace Node
-              </span>
-              <div className="flex items-center gap-2 select-none">
+          {/* LEFT COLUMN: Sidebar & Telemetry */}
+          <aside className="w-80 flex-shrink-0 flex flex-col border-r border-[rgba(255,255,255,0.06)] bg-[#09090B] overflow-y-auto">
+            
+            {/* PROGRESS HEADER */}
+            <div className="p-6 border-b border-[rgba(255,255,255,0.06)] bg-[#111216]/50">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xs font-semibold text-[#8A9099] uppercase tracking-wider">
+                  {activePart === 'mcq' ? 'Multiple Choice' : 'Coding Problems'}
+                </h3>
+                <span className="text-xs font-bold text-[#F5F5F5] bg-[#15171B] px-2 py-1 rounded-md border border-[rgba(255,255,255,0.06)]">
+                  {selectedQIndex + 1} / {filteredQuestions.length}
+                </span>
+              </div>
+              <div className="w-full h-1.5 bg-[#15171B] rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-[#5B8CFF] rounded-full transition-all duration-500 ease-out" 
+                  style={{ width: `${((selectedQIndex + 1) / filteredQuestions.length) * 100}%` }}
+                />
+              </div>
+            </div>
+
+            {/* QUESTION NAVIGATOR PILLS */}
+            <div className="p-6 flex-1 flex flex-col">
+              <h4 className="text-[10px] font-semibold text-[#6E7683] uppercase tracking-widest mb-4">Question Navigator</h4>
+              
+              <div className="grid grid-cols-5 gap-2 mb-8">
+                {filteredQuestions.map((q, idx) => {
+                  const isAnswered = currentSession?.submissions?.[q.id]?.code !== undefined
+                  const isMarked = reviewMarked[q.id]
+                  const isActive = selectedQIndex === idx
+                  
+                  let btnStyle = 'bg-[#111216] border-[rgba(255,255,255,0.06)] text-[#8A9099] hover:bg-[rgba(255,255,255,0.04)] hover:text-[#F5F5F5]'
+                  if (isActive) btnStyle = 'bg-[#F5F5F5] border-transparent text-[#09090B] shadow-[0_0_15px_rgba(255,255,255,0.1)]'
+                  else if (isMarked) btnStyle = 'bg-amber-500/10 border-amber-500/30 text-amber-500 hover:bg-amber-500/20'
+                  else if (isAnswered) btnStyle = 'bg-[#5B8CFF]/10 border-[#5B8CFF]/30 text-[#5B8CFF] hover:bg-[#5B8CFF]/20'
+
+                  return (
+                    <button
+                      key={q.id}
+                      onClick={() => setSelectedQIndex(idx)}
+                      className={`w-10 h-10 rounded-xl border flex items-center justify-center text-xs font-semibold transition-all duration-200 ${btnStyle}`}
+                    >
+                      {idx + 1}
+                    </button>
+                  )
+                })}
+              </div>
+              
+              {/* LEGEND */}
+              <div className="space-y-3 text-xs text-[#8A9099]">
+                <div className="flex items-center gap-3"><div className="w-2.5 h-2.5 rounded-full bg-[#F5F5F5]"></div> <span className="font-medium">Current</span></div>
+                <div className="flex items-center gap-3"><div className="w-2.5 h-2.5 rounded-full bg-[#5B8CFF]"></div> <span className="font-medium">Answered</span></div>
+                <div className="flex items-center gap-3"><div className="w-2.5 h-2.5 rounded-full bg-amber-500"></div> <span className="font-medium">Review</span></div>
+                <div className="flex items-center gap-3"><div className="w-2.5 h-2.5 rounded-full border border-[rgba(255,255,255,0.2)] bg-[#111216]"></div> <span className="font-medium">Unanswered</span></div>
+              </div>
+            </div>
+
+            {/* PROCTORING & TELEMETRY SECTION */}
+            <div className="p-6 border-t border-[rgba(255,255,255,0.06)] space-y-4 bg-[#111216]/30">
+              
+              {/* Premium Proctor Camera Card */}
+              <div className="bg-[#15171B] border border-[rgba(255,255,255,0.06)] p-3 rounded-[20px] shadow-sm relative overflow-hidden group">
+                {isAnomalyActive && (
+                  <div className="absolute top-4 right-4 z-30 bg-red-500 text-white font-semibold text-[10px] px-2 py-1 rounded-md flex items-center shadow-lg animate-pulse">
+                    <EyeOff className="w-3 h-3 mr-1.5" strokeWidth={2} /> {anomalyType}
+                  </div>
+                )}
+                
+                <div className="w-full h-32 relative overflow-hidden bg-[#09090B] rounded-[12px] border border-[rgba(255,255,255,0.03)]">
+                  <div id="candidate-video-container" className="absolute inset-0 w-full h-full z-[100]">
+                    {localStream && <StreamVideo stream={localStream} />}
+                    <video id="candidate-video" className="hidden" playsInline muted autoPlay />
+                  </div>
+                  <canvas ref={canvasRef} width="160" height="120" className="hidden" />
+                  
+                  {/* Minimal crosshairs */}
+                  <div className="absolute inset-0 z-20 pointer-events-none opacity-20">
+                    <div className="absolute top-3 left-3 w-3 h-3 border-t border-l border-white" />
+                    <div className="absolute top-3 right-3 w-3 h-3 border-t border-r border-white" />
+                    <div className="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-white" />
+                    <div className="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-white" />
+                  </div>
+                </div>
+                
+                <div className="mt-3 flex items-center justify-between px-1">
+                   <div className="flex items-center gap-1.5 text-[10px] font-medium text-emerald-400">
+                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div> Active
+                   </div>
+                   <span className="text-[10px] text-[#6E7683] font-medium uppercase tracking-wider">Feed Monitored</span>
+                </div>
+              </div>
+
+              {/* Telemetry Console */}
+              <div className="bg-[#111216] border border-[rgba(255,255,255,0.06)] rounded-2xl overflow-hidden shadow-sm flex flex-col h-40">
+                <div className="bg-[#15171B] border-b border-[rgba(255,255,255,0.06)] px-4 py-2.5 flex items-center gap-2">
+                  <Terminal className="w-3.5 h-3.5 text-[#8A9099]" />
+                  <span className="text-[10px] uppercase font-semibold text-[#8A9099] tracking-wider">Telemetry Log</span>
+                </div>
+                <div className="p-3 font-mono text-[10px] space-y-2 overflow-y-auto flex-1">
+                  {proctorLogs.slice(-30).map((log, idx) => {
+                    const isAlert = log.includes('ALERT')
+                    const isSystem = log.includes('[SYSTEM]')
+                    return (
+                      <div key={idx} className={`leading-relaxed break-words ${
+                        isAlert ? 'text-red-400 bg-red-500/10 px-1.5 py-0.5 rounded' : 
+                        isSystem ? 'text-[#8A9099]' : 'text-[#B8BDC7]'
+                      }`}>
+                        <span className="opacity-50 mr-2 text-[9px]">{new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute:'2-digit', second:'2-digit' })}</span>
+                        {log}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+              
+            </div>
+          </aside>
+
+          {/* RIGHT COLUMN: Code Workspace & Terminal or MCQ View */}
+          <section className="flex-1 flex flex-col h-full bg-[#09090B] relative">
+            
+            {activeQuestion?.type !== 'mcq' && (
+              <div className="px-6 py-3 flex items-center justify-between border-b border-[rgba(255,255,255,0.06)] bg-[#111216]">
+                <span className="text-xs font-semibold text-[#8A9099] flex items-center gap-2 uppercase tracking-wide">
+                  <Terminal className="w-4 h-4 text-[#5B8CFF]" strokeWidth={2} /> Compiler Node
+                </span>
                 <select 
                   value={language} 
                   onChange={(e) => setLanguage(e.target.value)} 
-                  className="border border-white/5 bg-background text-foreground rounded text-xs px-2 py-1 font-semibold outline-none cursor-pointer"
+                  className="bg-[#15171B] border border-[rgba(255,255,255,0.06)] text-[#F5F5F5] rounded-lg text-xs px-3 py-1.5 font-medium outline-none focus:border-[#5B8CFF]/50 transition-colors cursor-pointer"
                 >
                   {assessment.allowed_languages.includes('python') && settings.allowedLangs.includes('python') && <option value="python">Python 3.10</option>}
                   {assessment.allowed_languages.includes('javascript') && settings.allowedLangs.includes('javascript') && <option value="javascript">JavaScript (ES6)</option>}
                   {assessment.allowed_languages.includes('java') && settings.allowedLangs.includes('java') && <option value="java">Java (JDK 17)</option>}
                 </select>
               </div>
-            </div>
-          )}
-
-          {/* MONACO CODE EDITOR OR MCQ CONTAINER */}
-          <div className="flex-1 min-h-0 bg-[#1e1e1e] relative overflow-y-auto">
-            {activeQuestion ? (
-              activeQuestion.type === 'mcq' ? (
-                <div className="flex flex-col h-full">
-                  <div className="flex-1 p-8 max-w-4xl mx-auto w-full space-y-6 overflow-y-auto pb-24">
-                    
-                    <div className="flex items-center gap-4 mb-4 border-b border-white/5/50 pb-4 flex-wrap">
-                      <h2 className="text-xl font-extrabold text-foreground font-sans">Question {selectedQIndex + 1}</h2>
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-background border border-white/5 text-muted font-bold uppercase tracking-wider">
-                        DIFFICULTY: {activeQuestion.difficulty}
-                      </span>
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#34D399]/10 border border-[#34D399]/30 text-[#34D399] font-bold uppercase tracking-wider">
-                        MARKS: +{activeQuestion.mcq_marks ?? 1}
-                      </span>
-                      {(activeQuestion.mcq_negative_marks ?? 0) > 0 && (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#F87171]/10 border border-[#F87171]/30 text-[#F87171] font-bold uppercase tracking-wider">
-                          NEGATIVE: -{activeQuestion.mcq_negative_marks}
-                        </span>
-                      )}
-                    </div>
-
-                    <h1 className="text-[17px] font-extrabold tracking-tight mt-2.5 mb-4 flex items-center gap-2 text-white">
-                      <CornerDownRight className="w-4 h-4 text-[#5B8CFF]" strokeWidth={2} /> <Latex>{activeQuestion.title || ''}</Latex>
-                    </h1>
-                    
-                    <div className="text-[15px] leading-relaxed sys-text-primary font-sans whitespace-pre-wrap mb-8">
-                      <Latex>{activeQuestion.description || ''}</Latex>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-4 mt-8">
-                      {activeQuestion.mcq_options?.map((opt, idx) => {
-                        const selectedVal = currentSession?.mcq_submissions?.[activeQuestion.id]
-                        const isSelected = selectedVal === opt || selectedVal === String(idx)
-                        return (
-                          <button
-                            key={idx}
-                            onClick={() => handleMcqSelect(idx)}
-                            className={`group w-full flex items-center text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer ${
-                              isSelected 
-                                ? 'bg-[#5B8CFF]/[0.03] border-[#5B8CFF]/50 shadow-[0_0_15px_rgba(91,140,255,0.05)]' 
-                                : 'bg-[#17181C] hover:bg-[#1C1E23] border-white/[0.04] hover:border-white/[0.08]'
-                            }`}
-                          >
-                            <div className={`flex shrink-0 items-center justify-center w-7 h-7 rounded-full mr-4 font-bold font-mono text-[10px] border transition-all duration-200 ${
-                              isSelected 
-                                ? 'bg-[#5B8CFF] text-white border-[#5B8CFF]' 
-                                : 'bg-transparent text-[#8E93A5] border-white/10 group-hover:border-white/20 group-hover:text-white'
-                            }`}>
-                              {String.fromCharCode(65 + idx)}
-                            </div>
-                            <span className={`text-[15px] font-sans leading-relaxed ${isSelected ? 'text-[#E2E8F0] font-medium' : 'text-[#94A3B8] group-hover:text-[#CBD5E1]'}`}>
-                              <Latex>{opt || ''}</Latex>
-                            </span>
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </div>
-
-                  {/* BOTTOM ACTION BAR FOR MCQ */}
-                  <div className="h-20 bg-card border-t border-white/5 flex items-center justify-between px-8 absolute bottom-0 left-0 right-0 z-20 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
-                    <div className="flex items-center gap-3">
-                      <Button 
-                        onClick={handleClearResponse}
-                        variant="outline"
-                        className="h-10 px-5 text-xs font-mono font-bold bg-background sys-text-body border-white/5 hover:sys-card hover:text-white uppercase tracking-widest"
-                      >
-                        Clear Response
-                      </Button>
-                      <Button 
-                        onClick={() => setReviewMarked(prev => ({ ...prev, [activeQuestion.id]: !prev[activeQuestion.id] }))}
-                        variant="outline"
-                        className={`h-10 px-5 text-xs font-mono font-bold uppercase tracking-widest transition ${reviewMarked[activeQuestion.id] ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30' : 'bg-background sys-text-body border-white/5 hover:sys-card hover:text-white'}`}
-                      >
-                        {reviewMarked[activeQuestion.id] ? 'Unmark Review' : 'Mark for Review'}
-                      </Button>
-                    </div>
-                    
-                    <div className="flex items-center gap-3">
-                      <Button 
-                        onClick={() => setSelectedQIndex(p => p - 1)}
-                        disabled={selectedQIndex === 0}
-                        variant="outline"
-                        className="h-10 px-5 text-xs font-mono font-bold bg-background sys-text-body border-white/5 hover:sys-card hover:text-white uppercase tracking-widest disabled:opacity-30"
-                      >
-                        Previous
-                      </Button>
-                      <Button 
-                        onClick={handleSaveAndNext}
-                        disabled={selectedQIndex === filteredQuestions.length - 1}
-                        className="h-10 px-6 text-xs font-mono font-bold bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white uppercase tracking-widest shadow-lg"
-                      >
-                        Save & Next <ChevronRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <Editor 
-                  height="100%" 
-                  language={language === 'java' ? 'java' : language === 'javascript' ? 'javascript' : 'python'} 
-                  theme="vs-dark"
-                  value={getActiveCode()} 
-                  onChange={handleCodeChange}
-                  options={{ 
-                    fontSize: 13, 
-                    minimap: { enabled: false }, 
-                    automaticLayout: true,
-                    fontFamily: 'Consolas, monaco, monospace',
-                    lineNumbers: 'on',
-                    cursorBlinking: 'smooth',
-                    tabSize: 4,
-                    insertSpaces: true
-                  }} 
-                />
-              )
-            ) : (
-              <div className="h-full flex items-center justify-center text-xs font-mono sys-text-body bg-black">
-                Load a problem set to begin typing code...
-              </div>
             )}
-          </div>
 
-          {/* SPLIT CONSOLE PANEL */}
-          {activeQuestion?.type !== 'mcq' && (
-            <div className="h-64 flex flex-col border-t border-white/5 bg-card">
-              {/* Control Bar */}
-              <div className="px-4 py-2 flex items-center justify-between text-xs border-b border-white/5 bg-card/40 select-none">
-                <div className="flex items-center gap-4">
-                  <button 
-                    onClick={() => setTerminalTab('console')}
-                    className={`flex items-center uppercase font-mono tracking-wider font-bold text-[9px] pb-1 border-b-2 transition ${terminalTab === 'console' ? 'text-[#14B8A6] border-[#14B8A6]' : 'sys-text-body border-transparent hover:sys-text-body'}`}
-                  >
-                    <Terminal className="w-3.5 h-3.5 mr-2" strokeWidth={1.5} /> Console Output
-                  </button>
-                  <button 
-                    onClick={() => setTerminalTab('testcases')}
-                    className={`flex items-center uppercase font-mono tracking-wider font-bold text-[9px] pb-1 border-b-2 transition ${terminalTab === 'testcases' ? 'text-[#14B8A6] border-[#14B8A6]' : 'sys-text-body border-transparent hover:sys-text-body'}`}
-                  >
-                    Custom Test Case Input
-                  </button>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    onClick={handleResetCode} 
-                    variant="outline" 
-                    size="sm"
-                    className="h-6 text-[9px] font-bold font-mono border border-white/5 bg-background hover:sys-card px-2.5 rounded text-muted hover:text-foreground"
-                  >
-                    <RefreshCw className="w-3 h-3 mr-1" strokeWidth={1.5} /> RESET TEMPLATE
-                  </Button>
-                  <Button
-                    onClick={() => setConsoleOutput('Execution console reports cleared.')} 
-                  variant="outline" 
-                  size="sm"
-                  className="h-6 text-[9px] font-bold font-mono border border-white/5 bg-background hover:sys-card px-2.5 rounded text-muted hover:text-foreground"
-                >
-                  <Trash2 className="w-3.5 h-3.5 mr-1" strokeWidth={1.5} /> CLEAR OUTPUT
-                </Button>
-                <Button 
-                  onClick={handleRunCode} 
-                  disabled={isRunning || isSubmitting} 
-                  className="sys-card hover:sys-card text-[#14B8A6] border border-[#14B8A6]/35 font-bold h-6 px-3 text-[9px] font-mono tracking-wider active:scale-95 transition rounded-xl cursor-pointer"
-                >
-                  {isRunning ? 'RUNNING...' : 'RUN CODE'}
-                </Button>
-                <Button 
-                  onClick={handleSubmitQuestion} 
-                  disabled={isRunning || isSubmitting} 
-                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white font-extrabold h-6 px-3.5 text-[9px] font-mono tracking-wider active:scale-95 transition rounded-xl cursor-pointer"
-                >
-                  {isSubmitting ? 'EVALUATING...' : 'SUBMIT CODE'}
-                </Button>
-              </div>
-            </div>
+            {/* MAIN CONTENT AREA */}
+            <div className="flex-1 min-h-0 relative overflow-y-auto bg-[#09090B]">
+              {activeQuestion ? (
+                activeQuestion.type === 'mcq' ? (
+                  <div className="flex flex-col h-full">
+                    
+                    {/* MCQ QUESTION BODY */}
+                    <div className="flex-1 p-10 max-w-4xl mx-auto w-full overflow-y-auto pb-32">
+                      
+                      <div className="flex items-center gap-3 mb-8 flex-wrap">
+                        <span className="px-3 py-1 rounded-md text-[10px] font-semibold bg-[#111216] border border-[rgba(255,255,255,0.06)] text-[#8A9099] uppercase tracking-wider">
+                          Difficulty: <span className={activeQuestion.difficulty === 'Hard' ? 'text-red-400' : activeQuestion.difficulty === 'Medium' ? 'text-amber-400' : 'text-emerald-400'}>{activeQuestion.difficulty}</span>
+                        </span>
+                        <span className="px-3 py-1 rounded-md text-[10px] font-semibold bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 uppercase tracking-wider">
+                          +{activeQuestion.mcq_marks ?? 1} Marks
+                        </span>
+                        {(activeQuestion.mcq_negative_marks ?? 0) > 0 && (
+                          <span className="px-3 py-1 rounded-md text-[10px] font-semibold bg-red-500/10 border border-red-500/20 text-red-400 uppercase tracking-wider">
+                            -{activeQuestion.mcq_negative_marks} Penalty
+                          </span>
+                        )}
+                      </div>
 
-            {/* PRE-OUTPUT DIAGNOSTICS & VERDICTS */}
-            <div className="flex-1 flex overflow-hidden">
-              
-              {terminalTab === 'testcases' && (
-                <div className="w-64 border-r border-white/5 p-3 bg-[#0B0B0D]/80 flex flex-col">
-                  <span className="text-[9px] font-mono sys-text-body uppercase mb-2 font-bold tracking-widest">Custom STDIN Input</span>
-                  <textarea 
-                    value={customInput}
-                    onChange={(e) => setCustomInput(e.target.value)}
-                    className="flex-1 sys-bg border border-transparent rounded p-2 text-[10px] font-mono sys-text-primary focus:outline-none focus:border-[#5B8CFF]/50 resize-none"
-                    placeholder="Enter custom input for 'Run Code' here..."
-                  />
+                      <h1 className="text-2xl font-bold text-[#F5F5F5] mb-6 leading-tight">
+                        <Latex>{activeQuestion.title || ''}</Latex>
+                      </h1>
+                      
+                      <div className="text-base leading-relaxed text-[#B8BDC7] mb-12">
+                        <Latex>{activeQuestion.description || ''}</Latex>
+                      </div>
+
+                      {/* OPTIONS */}
+                      <div className="grid grid-cols-1 gap-4">
+                        {activeQuestion.mcq_options?.map((opt, idx) => {
+                          const selectedVal = currentSession?.mcq_submissions?.[activeQuestion.id]
+                          const isSelected = selectedVal === opt || selectedVal === String(idx)
+                          return (
+                            <button
+                              key={idx}
+                              onClick={() => handleMcqSelect(idx)}
+                              className={`group w-full flex items-center text-left p-5 rounded-[16px] border transition-all duration-200 cursor-pointer ${
+                                isSelected 
+                                  ? 'bg-[#5B8CFF]/[0.04] border-[#5B8CFF]/60 shadow-[0_4px_24px_rgba(91,140,255,0.08)]' 
+                                  : 'bg-[#111216] hover:bg-[#15171B] border-[rgba(255,255,255,0.06)] hover:border-[rgba(255,255,255,0.12)]'
+                              }`}
+                            >
+                              <div className={`flex shrink-0 items-center justify-center w-8 h-8 rounded-full mr-5 font-semibold text-xs border transition-all duration-200 ${
+                                isSelected 
+                                  ? 'bg-[#5B8CFF] text-white border-[#5B8CFF] shadow-[0_0_12px_rgba(91,140,255,0.4)]' 
+                                  : 'bg-[#15171B] text-[#8A9099] border-[rgba(255,255,255,0.06)] group-hover:border-[rgba(255,255,255,0.15)] group-hover:text-[#F5F5F5]'
+                              }`}>
+                                {String.fromCharCode(65 + idx)}
+                              </div>
+                              <span className={`text-[15px] font-medium leading-relaxed ${isSelected ? 'text-[#F5F5F5]' : 'text-[#B8BDC7] group-hover:text-[#F5F5F5]'}`}>
+                                <Latex>{opt || ''}</Latex>
+                              </span>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
+
+                    {/* BOTTOM ACTION BAR */}
+                    <div className="h-24 bg-[#09090B]/90 backdrop-blur-md border-t border-[rgba(255,255,255,0.06)] flex items-center justify-between px-10 absolute bottom-0 left-0 right-0 z-20">
+                      <div className="flex items-center gap-4">
+                        <Button 
+                          onClick={handleClearResponse}
+                          variant="ghost"
+                          className="h-11 px-6 rounded-xl text-xs font-semibold text-[#8A9099] hover:bg-[#111216] hover:text-[#F5F5F5] transition-colors"
+                        >
+                          Clear Response
+                        </Button>
+                        <Button 
+                          onClick={() => setReviewMarked(prev => ({ ...prev, [activeQuestion.id]: !prev[activeQuestion.id] }))}
+                          className={`h-11 px-6 rounded-xl text-xs font-semibold transition-all ${
+                            reviewMarked[activeQuestion.id] 
+                              ? 'bg-amber-500/10 text-amber-500 border border-amber-500/30 hover:bg-amber-500/20' 
+                              : 'bg-[#111216] text-[#B8BDC7] border border-[rgba(255,255,255,0.06)] hover:bg-[#15171B] hover:text-[#F5F5F5]'
+                          }`}
+                        >
+                          {reviewMarked[activeQuestion.id] ? 'Unmark Review' : 'Mark for Review'}
+                        </Button>
+                      </div>
+                      
+                      <div className="flex items-center gap-4">
+                        <Button 
+                          onClick={() => setSelectedQIndex(p => p - 1)}
+                          disabled={selectedQIndex === 0}
+                          className="h-11 px-8 rounded-xl text-xs font-semibold bg-[#111216] text-[#B8BDC7] border border-[rgba(255,255,255,0.06)] hover:bg-[#15171B] hover:text-[#F5F5F5] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                        >
+                          Previous
+                        </Button>
+                        <Button 
+                          onClick={handleSaveAndNext}
+                          disabled={selectedQIndex === filteredQuestions.length - 1}
+                          className="h-11 px-8 rounded-xl text-xs font-bold bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center"
+                        >
+                          Save & Next <ChevronRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex h-full w-full">
+                    {/* ... Coding UI will remain conceptually similar but with dark theme colors if needed. Wait, coding UI needs to be preserved exactly as requested? "The current interface is to be discarded entirely... DO NOT modify any business logic... Keep every feature and wiring exactly the same." I'll update the colors slightly to match the global theme. */}
+                    <div className="w-1/2 h-full border-r border-[rgba(255,255,255,0.06)] bg-[#09090B] flex flex-col">
+                      <div className="p-6 overflow-y-auto flex-1 space-y-6">
+                        <div>
+                           <span className="px-3 py-1 rounded-md text-[10px] font-semibold bg-[#111216] border border-[rgba(255,255,255,0.06)] text-emerald-400 uppercase tracking-wider mb-4 inline-block">
+                             Difficulty: {activeQuestion.difficulty}
+                           </span>
+                           <h1 className="text-xl font-bold text-[#F5F5F5] leading-tight">
+                             <Latex>{activeQuestion.title || ''}</Latex>
+                           </h1>
+                        </div>
+                        <div className="text-sm leading-relaxed text-[#B8BDC7] whitespace-pre-wrap">
+                          {activeQuestion.description}
+                        </div>
+                        {activeQuestion.tags && activeQuestion.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-2 pt-2">
+                            {activeQuestion.tags.map((tag, idx) => (
+                              <span key={idx} className="bg-[#111216] text-[#8A9099] border border-[rgba(255,255,255,0.06)] text-[10px] px-2 py-1 rounded-md font-medium">
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        <div className="p-4 rounded-xl border border-[rgba(255,255,255,0.06)] bg-[#111216]/50">
+                          <h4 className="text-[10px] font-semibold text-[#8A9099] uppercase tracking-widest mb-2">Constraints</h4>
+                          <pre className="text-xs leading-relaxed font-mono whitespace-pre-wrap text-[#B8BDC7]">{activeQuestion.constraints}</pre>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="p-4 rounded-xl border border-[rgba(255,255,255,0.06)] bg-[#111216]/50">
+                            <h4 className="text-[10px] font-semibold text-[#8A9099] uppercase tracking-wider mb-2">Input Format</h4>
+                            <p className="text-xs text-[#B8BDC7]">{activeQuestion.input_format}</p>
+                          </div>
+                          <div className="p-4 rounded-xl border border-[rgba(255,255,255,0.06)] bg-[#111216]/50">
+                            <h4 className="text-[10px] font-semibold text-[#8A9099] uppercase tracking-wider mb-2">Output Format</h4>
+                            <p className="text-xs text-[#B8BDC7]">{activeQuestion.output_format}</p>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2 flex flex-col">
+                            <span className="text-[10px] font-semibold text-[#8A9099] uppercase tracking-wider px-1">Sample Input</span>
+                            <pre className="bg-[#111216] p-4 rounded-xl border border-[rgba(255,255,255,0.06)] text-xs font-mono text-[#B8BDC7] min-h-[80px] whitespace-pre-wrap">{activeQuestion.sample_input}</pre>
+                          </div>
+                          <div className="space-y-2 flex flex-col">
+                            <span className="text-[10px] font-semibold text-[#8A9099] uppercase tracking-wider px-1">Sample Output</span>
+                            <pre className="bg-[#111216] p-4 rounded-xl border border-[rgba(255,255,255,0.06)] text-xs font-mono text-[#F5F5F5] min-h-[80px] whitespace-pre-wrap">{activeQuestion.sample_output}</pre>
+                          </div>
+                        </div>
+                        {activeQuestion.explanation && (
+                          <div className="text-xs text-[#B8BDC7] leading-relaxed italic bg-[#5B8CFF]/5 border border-[#5B8CFF]/20 p-4 rounded-xl">
+                            <strong className="text-[#5B8CFF] font-semibold not-italic">Explanation:</strong> <br/> {activeQuestion.explanation}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <div className="w-1/2 h-full flex flex-col bg-[#09090B]">
+                      <Editor 
+                        height="100%" 
+                        language={language === 'java' ? 'java' : language === 'javascript' ? 'javascript' : 'python'} 
+                        theme="vs-dark"
+                        value={getActiveCode()} 
+                        onChange={handleCodeChange}
+                        options={{ 
+                          fontSize: 14, 
+                          minimap: { enabled: false }, 
+                          automaticLayout: true,
+                          fontFamily: 'Consolas, monaco, monospace',
+                          lineNumbers: 'on',
+                          cursorBlinking: 'smooth',
+                          tabSize: 4,
+                          insertSpaces: true,
+                          padding: { top: 16 }
+                        }} 
+                      />
+                    </div>
+                  </div>
+                )
+              ) : (
+                <div className="h-full flex items-center justify-center text-sm font-medium text-[#8A9099] bg-[#09090B]">
+                  No questions linked to assessment lobby.
                 </div>
               )}
+            </div>
 
-              <pre className="flex-1 p-4 font-mono text-[10px] sys-text-body overflow-y-auto whitespace-pre-wrap leading-relaxed select-text bg-black/10">
-                {consoleOutput}
-              </pre>
-
-              {/* Case Verdict Sidebar */}
-              {testResults && (
-                <div className="w-64 border-l border-white/5 p-3 bg-[#050507]/60 overflow-y-auto max-h-full space-y-2 select-none">
-                  <div className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest border-b border-white/5 pb-1 flex items-center justify-between">
-                    <span>{testResults.isSubmit ? 'Final Verdict' : 'Run Verdict'}</span>
-                    <span className={`px-1.5 py-0.5 rounded text-[8px] font-extrabold ${
-                      testResults.verdict === 'Accepted' ? 'sys-card border border-transparent text-white' : 'sys-bg border border-white/5 sys-text-body animate-pulse'
-                    }`}>{testResults.verdict}</span>
+            {/* SPLIT CONSOLE PANEL (Coding Only) */}
+            {activeQuestion?.type !== 'mcq' && activeQuestion && (
+              <div className="h-72 flex flex-col border-t border-[rgba(255,255,255,0.06)] bg-[#09090B] relative z-20 shadow-[0_-10px_30px_rgba(0,0,0,0.2)]">
+                <div className="px-6 py-3 flex items-center justify-between text-xs border-b border-[rgba(255,255,255,0.06)] bg-[#111216] select-none">
+                  <div className="flex items-center gap-6">
+                    <button 
+                      onClick={() => setTerminalTab('console')}
+                      className={`flex items-center uppercase font-semibold tracking-wider text-[11px] pb-1 border-b-2 transition-all ${terminalTab === 'console' ? 'text-emerald-400 border-emerald-400' : 'text-[#8A9099] border-transparent hover:text-[#B8BDC7]'}`}
+                    >
+                      <Terminal className="w-4 h-4 mr-2" strokeWidth={2} /> Console
+                    </button>
+                    <button 
+                      onClick={() => setTerminalTab('testcases')}
+                      className={`flex items-center uppercase font-semibold tracking-wider text-[11px] pb-1 border-b-2 transition-all ${terminalTab === 'testcases' ? 'text-emerald-400 border-emerald-400' : 'text-[#8A9099] border-transparent hover:text-[#B8BDC7]'}`}
+                    >
+                      Custom Input
+                    </button>
                   </div>
+                  <div className="flex items-center gap-3">
+                    <Button
+                      onClick={handleResetCode} 
+                      variant="ghost" 
+                      className="h-8 text-[11px] font-semibold text-[#8A9099] hover:bg-[#15171B] hover:text-[#F5F5F5] rounded-lg transition-colors px-3"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5 mr-2" /> Reset
+                    </Button>
+                    <Button
+                      onClick={() => setConsoleOutput('Execution console reports cleared.')} 
+                      variant="ghost" 
+                      className="h-8 text-[11px] font-semibold text-[#8A9099] hover:bg-[#15171B] hover:text-[#F5F5F5] rounded-lg transition-colors px-3"
+                    >
+                      <Trash2 className="w-3.5 h-3.5 mr-2" /> Clear
+                    </Button>
+                    <Button 
+                      onClick={handleRunCode} 
+                      disabled={isRunning || isSubmitting} 
+                      className="bg-[#111216] hover:bg-[#15171B] text-emerald-400 border border-[rgba(255,255,255,0.06)] hover:border-emerald-500/30 font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50"
+                    >
+                      {isRunning ? 'Running...' : 'Run Code'}
+                    </Button>
+                    <Button 
+                      onClick={handleSubmitQuestion} 
+                      disabled={isRunning || isSubmitting} 
+                      className="bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50"
+                    >
+                      {isSubmitting ? 'Evaluating...' : 'Submit Code'}
+                    </Button>
+                  </div>
+                </div>
 
-                  {testResults.isSubmit && (
-                    <div className="text-[10px] sys-text-body space-y-0.5 border-t border-white/5 pt-1.5">
-                      <div>Score Obtained: <span className="text-white font-bold font-mono">{testResults.score}%</span></div>
-                      <div>Passed Cases: <span className="text-white font-bold font-mono">{testResults.passedCount} / {testResults.totalCount}</span></div>
+                <div className="flex-1 flex overflow-hidden bg-[#09090B]">
+                  
+                  {terminalTab === 'testcases' && (
+                    <div className="w-80 border-r border-[rgba(255,255,255,0.06)] p-4 bg-[#111216]/50 flex flex-col">
+                      <span className="text-[10px] font-semibold text-[#8A9099] uppercase mb-3 tracking-widest">Custom STDIN Input</span>
+                      <textarea 
+                        value={customInput}
+                        onChange={(e) => setCustomInput(e.target.value)}
+                        className="flex-1 bg-[#09090B] border border-[rgba(255,255,255,0.06)] rounded-xl p-3 text-xs font-mono text-[#F5F5F5] focus:outline-none focus:border-[#5B8CFF]/50 resize-none transition-colors"
+                        placeholder="Enter custom input for 'Run Code' here..."
+                      />
                     </div>
                   )}
 
-                  <div className="space-y-1.5 pt-1.5 border-t border-white/5">
-                    {testResults.cases?.map((c: any, index: number) => (
-                      <div key={index} className="p-2 bg-background border border-white/5 rounded text-[9px] flex flex-col space-y-1 font-mono">
-                        <div className="flex justify-between items-center">
-                          <span className="sys-text-body font-bold">Case #{index + 1}</span>
-                          <span className={`p-3 rounded-xl border text-[10px] ${
-                            c.passed ? 'sys-card text-white border-transparent' : 'bg-[#1A1C20] shadow-inner shadow-black/20 sys-text-body border-white/[0.03]'
-                          }`}>
-                            {c.verdict}
-                          </span>
-                        </div>
-                        <div className="sys-text-body truncate max-w-full">Input: {c.input?.replace(/\n/g, ' ')}</div>
-                        <div className="sys-text-body truncate max-w-full">Expected: {c.expected}</div>
-                        <div className="sys-text-body truncate max-w-full font-bold">Actual: {c.actual || '(None)'}</div>
+                  <pre className="flex-1 p-6 font-mono text-[11px] text-[#B8BDC7] overflow-y-auto whitespace-pre-wrap leading-relaxed select-text bg-[#09090B]">
+                    {consoleOutput}
+                  </pre>
+
+                  {testResults && (
+                    <div className="w-80 border-l border-[rgba(255,255,255,0.06)] p-4 bg-[#111216]/50 overflow-y-auto h-full space-y-4 select-none">
+                      <div className="text-xs font-semibold text-[#8A9099] uppercase tracking-widest border-b border-[rgba(255,255,255,0.06)] pb-2 flex items-center justify-between">
+                        <span>{testResults.isSubmit ? 'Final Verdict' : 'Run Verdict'}</span>
+                        <span className={`px-2 py-1 rounded-md text-[10px] font-bold ${
+                          testResults.verdict === 'Accepted' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                        }`}>{testResults.verdict}</span>
                       </div>
-                    ))}
-                  </div>
+
+                      {testResults.isSubmit && (
+                        <div className="text-xs text-[#B8BDC7] space-y-1.5 border-b border-[rgba(255,255,255,0.06)] pb-4">
+                          <div className="flex justify-between">Score: <span className="text-white font-bold font-mono">{testResults.score}%</span></div>
+                          <div className="flex justify-between">Passed Cases: <span className="text-white font-bold font-mono">{testResults.passedCount} / {testResults.totalCount}</span></div>
+                        </div>
+                      )}
+
+                      <div className="space-y-3">
+                        {testResults.cases?.map((c: any, index: number) => (
+                          <div key={index} className="p-3 bg-[#09090B] border border-[rgba(255,255,255,0.06)] rounded-xl text-[10px] flex flex-col space-y-1.5 font-mono">
+                            <div className="flex justify-between items-center mb-1">
+                              <span className="text-[#8A9099] font-bold tracking-wider">CASE #{index + 1}</span>
+                              <span className={`px-2 py-1 rounded-md font-semibold ${
+                                c.passed ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'
+                              }`}>
+                                {c.verdict}
+                              </span>
+                            </div>
+                            <div className="text-[#B8BDC7] truncate max-w-full">Input: <span className="text-[#F5F5F5]">{c.input?.replace(/\n/g, ' ')}</span></div>
+                            <div className="text-[#B8BDC7] truncate max-w-full">Expected: <span className="text-[#F5F5F5]">{c.expected}</span></div>
+                            <div className="text-[#B8BDC7] truncate max-w-full font-bold">Actual: <span className={c.passed ? "text-emerald-400" : "text-red-400"}>{c.actual || '(None)'}</span></div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
               </div>
-            </div>
-          )}
-        </section>
- 
-      </main>
-      )}
+            )}
+          </section>
+        </main>
+        )}
       </div>
  
       {/* WARNING POPUP SCREEN */}
       {showWarningModal && (
-        <div className="fixed inset-0 bg-black/90  flex items-center justify-center z-[9000] p-4">
-          <Card className="w-full max-w-md bg-card border border-white/5 p-6 text-center shadow-none relative rounded-2xl">
-            <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#EF4444]" />
-            <AlertTriangle className="w-12 h-12 text-[#EF4444] mx-auto mb-4 animate-bounce" strokeWidth={1.5} />
-            <h3 className="text-base font-bold text-foreground tracking-tight uppercase font-mono">Workspace Violation Alert</h3>
-            <p className="text-xs text-muted mt-2.5 leading-relaxed">
+        <div className="fixed inset-0 bg-[#09090B]/95 backdrop-blur-md flex items-center justify-center z-[9000] p-4">
+          <Card className="w-full max-w-md bg-[#111216] border border-red-500/30 p-8 text-center shadow-[0_0_50px_rgba(239,68,68,0.15)] relative rounded-[24px]">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-red-500 rounded-t-[24px]" />
+            <AlertTriangle className="w-14 h-14 text-red-500 mx-auto mb-6 animate-pulse" strokeWidth={1.5} />
+            <h3 className="text-xl font-bold text-[#F5F5F5] tracking-tight mb-2">Workspace Violation Alert</h3>
+            <p className="text-sm text-[#B8BDC7] leading-relaxed">
               {warningModalText}
             </p>
-            <div className="mt-6 flex flex-col gap-2">
+            <div className="mt-8 flex flex-col gap-3">
               <Button 
                 onClick={enterFullscreen} 
-                className="w-full bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white font-extrabold text-xs h-10 rounded-xl cursor-pointer"
+                className="w-full bg-red-500 hover:bg-red-400 text-white font-bold h-12 rounded-xl transition-all shadow-lg shadow-red-500/20"
               >
                 Re-enter Secure Fullscreen Mode
               </Button>
-              <p className="text-[10px] sys-text-body font-mono mt-2 select-none">
+              <p className="text-[11px] text-[#8A9099] font-medium mt-2 select-none">
                 Multiple infractions will negatively affect your overall assessment score metrics.
               </p>
             </div>
