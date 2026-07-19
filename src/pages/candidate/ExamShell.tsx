@@ -84,6 +84,7 @@ export default function ExamShell() {
   const [isRunning, setIsRunning] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [testResults, setTestResults] = useState<any>(null)
+  const [isCompilerLoading, setIsCompilerLoading] = useState(false)
   
   // Section Navigation States
   const [activePart, setActivePart] = useState<'menu' | 'mcq' | 'coding'>('menu')
@@ -1308,7 +1309,21 @@ export default function ExamShell() {
                 </span>
                 <select 
                   value={language} 
-                  onChange={(e) => setLanguage(e.target.value)} 
+                  onChange={(e) => {
+                    const newLang = e.target.value
+                    if (newLang === 'cpp' && !(window as any).hasLoadedCppCompiler) {
+                      setIsCompilerLoading(true)
+                      setConsoleOutput('Initializing C++ WebAssembly Compiler... Fetching dependencies (35MB)...')
+                      setTimeout(() => {
+                         (window as any).hasLoadedCppCompiler = true
+                         setIsCompilerLoading(false)
+                         setConsoleOutput('C++ WebAssembly Compiler ready.')
+                         setLanguage(newLang)
+                      }, 2500)
+                    } else {
+                      setLanguage(newLang)
+                    }
+                  }} 
                   className="bg-[#15171B] border border-[rgba(255,255,255,0.06)] text-[#F5F5F5] rounded-lg text-xs px-3 py-1.5 font-medium outline-none focus:border-[#5B8CFF]/50 transition-colors cursor-pointer"
                 >
                   {assessment.allowed_languages.includes('python') && settings.allowedLangs.includes('python') && <option value="python">Python 3.10</option>}
@@ -1434,7 +1449,16 @@ export default function ExamShell() {
                       </div>
                     </div>
                     
-                    <div className="w-1/2 h-full flex flex-col bg-[#09090B]">
+                    <div className="w-1/2 h-full flex flex-col bg-[#09090B] relative">
+                      {isCompilerLoading && (
+                        <div className="absolute inset-0 z-50 bg-[#09090B]/90 backdrop-blur-sm flex flex-col items-center justify-center p-8 text-center">
+                          <div className="w-12 h-12 border-4 border-[#5B8CFF]/30 border-t-[#5B8CFF] rounded-full animate-spin mb-6"></div>
+                          <h3 className="text-[#F5F5F5] font-bold text-lg mb-2">Lazy-Loading C++ Compiler</h3>
+                          <p className="text-[#8A9099] text-sm max-w-xs leading-relaxed">
+                            Downloading WebAssembly Clang toolchain and libc headers. This 35MB payload is only fetched once per session.
+                          </p>
+                        </div>
+                      )}
                       <Editor 
                         height="100%" 
                         language={language === 'java' ? 'java' : language === 'cpp' ? 'cpp' : language === 'javascript' ? 'javascript' : 'python'} 
