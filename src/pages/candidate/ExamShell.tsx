@@ -57,7 +57,8 @@ const StreamVideo = ({ stream }: { stream: MediaStream | null }) => {
 const codeTemplates: Record<string, string> = {
   python: `def solve():\n    # Read input from standard input\n    # Write your solution here\n    # For Example:\n    # nums = list(map(int, input().split(',')))\n    # target = int(input())\n    # print(two_sum(nums, target))\n    pass\n\nif __name__ == '__main__':\n    solve()`,
   javascript: `function solve() {\n    // Write your solution here\n    // Use console.log() to output results\n}\n\nsolve();`,
-  java: `import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // Write your solution here\n    }\n}`
+  java: `import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // Write your solution here\n    }\n}`,
+  cpp: `#include <iostream>\nusing namespace std;\n\nint main() {\n    // Write your solution here\n    return 0;\n}`
 }
 
 export default function ExamShell() {
@@ -129,6 +130,7 @@ export default function ExamShell() {
     setSelectedQIndex(0)
     setTestResults(null)
     setConsoleOutput('Sandbox compilation terminal ready. Awaiting local code execution...')
+    enterFullscreen()
   }
 
   const handleSubmitPart = async () => {
@@ -140,6 +142,7 @@ export default function ExamShell() {
     }
 
     if (window.confirm(`Submit Part: ${activePart.toUpperCase()}? You will not be able to return to this section.`)) {
+      enterFullscreen()
       setLoading(true)
       const nextParts = [...(currentSession.completedParts || []), activePart as 'mcq' | 'coding']
       const updatedSession = { ...currentSession, completedParts: nextParts }
@@ -222,7 +225,8 @@ export default function ExamShell() {
           initialCodeMap[q.id] = {
             python: codeTemplates.python,
             javascript: codeTemplates.javascript,
-            java: codeTemplates.java
+            java: codeTemplates.java,
+            cpp: codeTemplates.cpp
           }
 
           if (existing?.submissions?.[q.id]) {
@@ -761,10 +765,10 @@ export default function ExamShell() {
     setShowWarningModal(true)
   }
 
-  const enterFullscreen = () => {
+  function enterFullscreen() {
     const elem = document.documentElement as any
     if (elem.requestFullscreen) {
-      elem.requestFullscreen()
+      elem.requestFullscreen().catch(() => {})
     }
     setShowWarningModal(false)
   }
@@ -966,6 +970,7 @@ export default function ExamShell() {
 
   const handleFinishAssessment = async () => {
     if (window.confirm('Acknowledge and submit assessment? Check test case verdicts before finalizing.')) {
+      enterFullscreen()
       await executeSubmissionPipeline()
     }
   }
@@ -1296,6 +1301,7 @@ export default function ExamShell() {
                   {assessment.allowed_languages.includes('python') && settings.allowedLangs.includes('python') && <option value="python">Python 3.10</option>}
                   {assessment.allowed_languages.includes('javascript') && settings.allowedLangs.includes('javascript') && <option value="javascript">JavaScript (ES6)</option>}
                   {assessment.allowed_languages.includes('java') && settings.allowedLangs.includes('java') && <option value="java">Java (JDK 17)</option>}
+                  {assessment.allowed_languages.includes('cpp') && settings.allowedLangs.includes('cpp') && <option value="cpp">C++ (GCC)</option>}
                 </select>
               </div>
             )}
@@ -1418,7 +1424,7 @@ export default function ExamShell() {
                     <div className="w-1/2 h-full flex flex-col bg-[#09090B]">
                       <Editor 
                         height="100%" 
-                        language={language === 'java' ? 'java' : language === 'javascript' ? 'javascript' : 'python'} 
+                        language={language === 'java' ? 'java' : language === 'cpp' ? 'cpp' : language === 'javascript' ? 'javascript' : 'python'} 
                         theme="vs-dark"
                         value={getActiveCode()} 
                         onChange={handleCodeChange}
@@ -1483,6 +1489,13 @@ export default function ExamShell() {
                       className="bg-[#111216] hover:bg-[#15171B] text-emerald-400 border border-[rgba(255,255,255,0.06)] hover:border-emerald-500/30 font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50"
                     >
                       {isRunning ? 'Running...' : 'Run Code'}
+                    </Button>
+                    <Button 
+                      onClick={handleSubmitQuestion} 
+                      disabled={isRunning || isSubmitting} 
+                      className="bg-[#111216] hover:bg-[#15171B] text-[#5B8CFF] border border-[#5B8CFF]/30 hover:border-[#5B8CFF] font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50"
+                    >
+                      {isSubmitting ? 'Evaluating...' : 'Check Test Cases'}
                     </Button>
                     <Button 
                       onClick={handleSubmitQuestion} 

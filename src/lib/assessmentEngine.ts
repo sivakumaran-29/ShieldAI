@@ -565,6 +565,7 @@ export const fetchCandidateSessions = async (assessmentId?: string, studentId?: 
           violation_logs: Array.isArray(row.violation_logs) ? row.violation_logs : [],
           submissions: details.submissions || {},
           mcq_submissions: details.mcq_submissions || {},
+          completedParts: details.completedParts || [],
           startedAt: details.startedAt || '',
           submittedAt: details.submittedAt || '',
           updated_at: row.updated_at
@@ -615,6 +616,7 @@ export const saveCandidateSession = async (session: CandidateSession): Promise<b
           },
           submissions: session.submissions,
           mcq_submissions: session.mcq_submissions,
+          completedParts: session.completedParts,
           finalScore: session.score,
           startedAt: session.startedAt,
           submittedAt: session.submittedAt
