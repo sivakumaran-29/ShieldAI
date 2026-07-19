@@ -204,8 +204,8 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
 
         <div className="overflow-x-auto pb-4">
           <div className="border border-divider rounded-2xl overflow-hidden bg-panel">
-            <table className="w-full text-left text-xs block lg:table">
-              <thead className="hidden lg:table-header-group">
+            <table className="w-full text-left text-xs min-w-[800px] w-full">
+              <thead className="table-header-group">
                 <tr className="bg-panel backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider border-b border-divider select-none">
                   <th className="py-4 px-5">Rank</th>
                   <th className="py-4 px-5">Candidate Profile</th>
@@ -216,7 +216,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                   <th className="py-4 px-5 text-right">Details</th>
                 </tr>
               </thead>
-            <tbody className="block lg:table-row-group divide-y lg:divide-divider">
+            <tbody className="table-row-group divide-y lg:divide-divider">
               {filteredRanks.map(s => {
                 const isPassed = s.score >= passThreshold
                 const isComp = s.status === 'submitted'
@@ -224,25 +224,25 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                 return (
                   <tr 
                     key={s.id} 
-                    className="hover:bg-hover transition duration-150 group/row block lg:table-row p-4 lg:p-0 mb-4 lg:mb-0 border border-divider lg:border-transparent rounded-2xl lg:rounded-none bg-panel lg:bg-transparent"
+                    className="hover:bg-hover transition duration-150 group/row table-row p-4 p-0 mb-4 mb-0 border border-divider  rounded-2xl  bg-panel "
                   >
-                    <td className="py-2 lg:py-4 px-1 lg:px-5 font-mono font-bold text-primary flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell border-b border-divider lg:border-none">
-                      <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Rank</span>
+                    <td className="py-2 py-4 px-1 px-5 font-mono font-bold text-primary flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
+                      
                       <span>#{s.rank}</span>
                     </td>
-                    <td className="py-2 lg:py-4 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell border-b border-divider lg:border-none">
-                      <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Profile</span>
+                    <td className="py-2 py-4 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
+                      
                       <div className="flex flex-col sm:text-right lg:text-left">
                         <span className="font-semibold text-primary font-heading truncate max-w-[160px]">{s.name}</span>
                         <span className="text-[11px] sys-text-body font-sans mt-0.5">{s.email}</span>
                       </div>
                     </td>
-                    <td className="py-2 lg:py-4 px-1 lg:px-5 font-mono text-xs font-semibold sys-text-body uppercase flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell border-b border-divider lg:border-none">
-                      <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Roll Number</span>
+                    <td className="py-2 py-4 px-1 px-5 font-mono text-xs font-semibold sys-text-body uppercase flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
+                      
                       <span>{s.roll_number || 'N/A'}</span>
                     </td>
-                    <td className="py-2 lg:py-4 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell border-b border-divider lg:border-none">
-                      <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Marks</span>
+                    <td className="py-2 py-4 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
+                      
                       {isComp ? (
                         <div className="flex items-center gap-1.5">
                           <span className={`font-mono font-bold text-sm ${isPassed ? 'text-[#34D399]' : 'text-[#F87171]'}`}>{s.score}%</span>
@@ -254,8 +254,8 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                         <span className="sys-text-body font-sans font-semibold">Unattempted</span>
                       )}
                     </td>
-                    <td className="py-2 lg:py-4 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell border-b border-divider lg:border-none">
-                      <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Integrity</span>
+                    <td className="py-2 py-4 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
+                      
                       <div className="flex items-center gap-2">
                         <span className={`font-mono font-bold ${s.integrity_score < 75 ? 'text-[#F87171]' : 'text-primary'}`}>
                           {s.integrity_score}%
@@ -263,8 +263,8 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                         <span className="text-[8px] sys-text-body font-mono font-semibold">({s.violationsCount} warnings)</span>
                       </div>
                     </td>
-                    <td className="py-2 lg:py-3.5 px-1 lg:px-4 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell border-b border-divider lg:border-none">
-                      <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Timeline</span>
+                    <td className="py-2 py-3.5 px-1 lg:px-4 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
+                      
                       <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider inline-block ${
                         s.status === 'submitted' ? 'bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/20' : 
                         s.status === 'testing' ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border border-[#5B8CFF]/20 animate-pulse' :
@@ -273,7 +273,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                         {s.status}
                       </span>
                     </td>
-                    <td className="py-3 lg:py-4 px-1 lg:px-5 flex justify-end lg:table-cell">
+                    <td className="py-3 py-4 px-1 px-5 flex justify-end table-cell">
                       <Button 
                         onClick={() => setSelectedSession(s)}
                         variant="ghost" 

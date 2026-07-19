@@ -178,8 +178,8 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
             
             <div className="overflow-x-auto pb-4">
               <div className="border border-divider rounded-2xl overflow-hidden bg-panel">
-                <table className="w-full text-left text-xs block lg:table">
-                  <thead className="hidden lg:table-header-group">
+                <table className="w-full text-left text-xs min-w-[800px] w-full">
+                  <thead className="table-header-group">
                     <tr className="bg-panel backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider border-b border-divider">
                       <th className="py-4 px-5">Evaluation Title</th>
                       <th className="py-4 px-5">Duration</th>
@@ -188,27 +188,27 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                       <th className="py-4 px-5 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="block lg:table-row-group divide-y lg:divide-divider">
+                  <tbody className="table-row-group divide-y lg:divide-divider">
                   {assessments.map((a) => (
                     <tr 
                       key={a.id} 
                       onClick={() => onSelectInspector?.(a)}
-                      className="hover:bg-hover cursor-pointer transition duration-200 group/row block lg:table-row p-4 lg:p-0 mb-4 lg:mb-0 border border-divider lg:border-transparent rounded-2xl lg:rounded-none bg-panel lg:bg-transparent"
+                      className="hover:bg-hover cursor-pointer transition duration-200 group/row table-row p-4 p-0 mb-4 mb-0 border border-divider  rounded-2xl  bg-panel "
                     >
-                      <td className="py-2 lg:py-4 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell font-semibold text-primary font-heading truncate border-b border-divider lg:border-none">
-                        <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Evaluation Title</span>
+                      <td className="py-2 py-4 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell font-semibold text-primary font-heading truncate border-b border-divider ">
+                        
                         <span>{a.title}</span>
                       </td>
-                      <td className="py-2 lg:py-4 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell sys-text-body font-sans border-b border-divider lg:border-none">
-                        <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Duration</span>
+                      <td className="py-2 py-4 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell sys-text-body font-sans border-b border-divider ">
+                        
                         <span>{a.duration} mins</span>
                       </td>
-                      <td className="py-2 lg:py-4 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell sys-text-body capitalize font-sans font-medium border-b border-divider lg:border-none">
-                        <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Languages</span>
+                      <td className="py-2 py-4 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell sys-text-body capitalize font-sans font-medium border-b border-divider ">
+                        
                         <span>{a.allowed_languages.join(', ')}</span>
                       </td>
-                      <td className="py-2 lg:py-4 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell border-b border-divider lg:border-none">
-                        <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Status</span>
+                      <td className="py-2 py-4 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
+                        
                         <span className={`px-2.5 py-1 rounded-md text-[9px] font-mono font-bold uppercase tracking-wider inline-flex items-center gap-1.5 ${
                           a.status === 'Published' 
                             ? 'bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/20 shadow-[0_0_10px_rgba(52,211,153,0.1)]' 
@@ -224,8 +224,8 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                           {a.status}
                         </span>
                       </td>
-                      <td className="py-3 lg:py-4 px-1 lg:px-5 flex justify-end lg:table-cell" onClick={e => e.stopPropagation()}>
-                        <div className="flex justify-end gap-1.5 w-full lg:w-auto">
+                      <td className="py-3 py-4 px-1 px-5 flex justify-end table-cell" onClick={e => e.stopPropagation()}>
+                        <div className="flex justify-end gap-1.5 w-full w-auto">
                           <Button 
                             onClick={() => onSelectAssessment(a)}
                             variant="ghost" 

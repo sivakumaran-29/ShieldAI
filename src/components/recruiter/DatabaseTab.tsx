@@ -340,23 +340,23 @@ export default function DatabaseTab() {
                             </div>
 
                             {isBatchExpanded && (
-                              <div className="border-t border-divider pb-2"><div className="overflow-x-auto px-4 pt-4"><table className="w-full text-left text-xs border-collapse block lg:table">
-                                  <thead className="hidden lg:table-header-group">
+                              <div className="border-t border-divider pb-2"><div className="overflow-x-auto px-4 pt-4"><table className="w-full text-left text-xs border-collapse min-w-[800px] w-full">
+                                  <thead className="table-header-group">
                                     <tr className="bg-panel backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider"><th className="py-3 px-5 rounded-l-2xl border-y border-l border-divider">Roll Number</th><th className="py-3 px-5 border-y border-divider">Email Address</th><th className="py-3 px-5 rounded-r-2xl border-y border-r border-divider text-right">Actions</th></tr>
                                   </thead>
-                                  <tbody className="block lg:table-row-group divide-y lg:divide-divider"><tr className="hidden lg:table-row h-2"></tr>
+                                  <tbody className="table-row-group divide-y lg:divide-divider"><tr className="table-row h-2"></tr>
                                     {batchUsers.map(user => (
-                                      <tr key={user.id} className="hover:bg-hover transition-colors duration-200 group/row block lg:table-row p-4 lg:p-0 mb-4 lg:mb-0 border border-divider lg:border-transparent rounded-2xl lg:rounded-none bg-panel lg:bg-transparent">
-                                        <td className="py-2 lg:py-3 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell font-semibold font-heading text-primary max-w-xs truncate border-b border-divider lg:border-none">
-                                          <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Roll Number</span>
+                                      <tr key={user.id} className="hover:bg-hover transition-colors duration-200 group/row table-row p-4 p-0 mb-4 mb-0 border border-divider  rounded-2xl  bg-panel ">
+                                        <td className="py-2 py-3 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell font-semibold font-heading text-primary max-w-xs truncate border-b border-divider ">
+                                          
                                           <span>{user.name}</span>
                                         </td>
-                                        <td className="py-2 lg:py-3 px-1 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between lg:table-cell sys-text-body font-sans border-b border-divider lg:border-none">
-                                          <span className="lg:hidden text-[10px] uppercase font-bold text-tertiary mb-1 sm:mb-0">Email Address</span>
+                                        <td className="py-2 py-3 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell sys-text-body font-sans border-b border-divider ">
+                                          
                                           <span>{user.email}</span>
                                         </td>
-                                        <td className="py-3 lg:py-2 px-1 lg:px-5 flex justify-end lg:table-cell">
-                                          <div className="flex justify-end gap-1.5 w-full lg:w-auto">
+                                        <td className="py-3 lg:py-2 px-1 px-5 flex justify-end table-cell">
+                                          <div className="flex justify-end gap-1.5 w-full w-auto">
                                             <Button 
                                               onClick={(e) => handleDeleteUser(e, user.id, user.name)}
                                               variant="ghost" 
