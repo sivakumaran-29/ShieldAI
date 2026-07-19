@@ -156,6 +156,15 @@ export default function RecruiterDashboard() {
             
             {!(isCollapsed && !isMobileSidebarOpen) && <ThemeToggle />}
           </div>
+          {/* Collapsible toggle button */}
+          <button 
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="hidden md:flex w-full items-center justify-center p-2 border border-divider bg-input/20 hover:bg-input sys-text-body hover:text-primary rounded-xl cursor-pointer transition focus:outline-none"
+            title="Toggle Sidebar"
+          >
+            {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
+          </button>
+
 
           {/* Spotlight command key launcher shortcut */}
           {!(isCollapsed && !isMobileSidebarOpen) && (
@@ -265,14 +274,6 @@ export default function RecruiterDashboard() {
               <LogOut className="w-3.5 h-3.5" strokeWidth={1.5} />
               {!(isCollapsed && !isMobileSidebarOpen) && <span className="ml-1.5">Sign Out</span>}
             </Button>
-
-            {/* Collapsible toggle button */}
-            <button 
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              className="hidden md:block p-2 border border-divider bg-input/20 hover:bg-input sys-text-body hover:text-primary rounded-xl cursor-pointer transition focus:outline-none"
-            >
-              {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
-            </button>
           </div>
         </div>
       </aside>
