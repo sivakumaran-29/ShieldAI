@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Shield, LayoutDashboard, BarChart2, Users, Database,
   FileText, Settings, LogOut, ChevronLeft, ChevronRight,
-  Search, User, Sparkles, Command, Library, X, RefreshCw
+  Search, User, Sparkles, Command, Library, X, RefreshCw, Menu
 } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { Button } from '@/components/ui/button'
@@ -26,6 +26,7 @@ export default function RecruiterDashboard() {
   // Layout states
   const [activeSection, setActiveSection] = useState<AdminSection>('overview')
   const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [assessmentsList, setAssessmentsList] = useState<Assessment[]>([])
   const [selectedAssessment, setSelectedAssessment] = useState<Assessment | null>(null)
   const [loading, setLoading] = useState(true)
@@ -122,11 +123,19 @@ export default function RecruiterDashboard() {
       {/* 2. cinematic matte noise overlay */}
       <div className="grain-overlay" />
 
+      {/* Mobile Sidebar Overlay */}
+      {isMobileSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden" 
+          onClick={() => setIsMobileSidebarOpen(false)} 
+        />
+      )}
+
       {/* ================= LEFT SIDEBAR (COLLAPSIBLE OS DOCK) ================= */}
       <aside 
-        className={`h-screen bg-[#000000]/40 backdrop-blur-3xl border-r border-white/5 flex flex-col justify-between p-5 shrink-0 z-30 select-none transition-all duration-300 transition-spring ${
-          isCollapsed ? 'w-20' : 'w-64'
-        }`}
+        className={`fixed inset-y-0 left-0 z-50 h-screen bg-[#000000]/80 md:bg-[#000000]/40 backdrop-blur-3xl border-r border-white/5 flex flex-col justify-between p-5 shrink-0 select-none transition-all duration-300 md:relative md:translate-x-0 ${
+          isMobileSidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full w-64'
+        } ${isCollapsed ? 'md:w-20' : 'md:w-64'}`}
       >
         <div className="space-y-6">
           
@@ -136,7 +145,7 @@ export default function RecruiterDashboard() {
               <div className="p-2 bg-background border border-white/5 rounded-xl shrink-0">
                 <Shield className="w-5 h-5 text-[#5B8CFF]" strokeWidth={1.5} />
               </div>
-              {!isCollapsed && (
+              {!(isCollapsed && !isMobileSidebarOpen) && (
                 <div className="flex flex-col">
                   <span className="font-heading font-extrabold text-sm tracking-tight text-white">ShieldAI</span>
                   <span className="text-[8px] font-mono sys-text-body uppercase tracking-widest leading-none mt-0.5">V2 Enterprise</span>
@@ -144,13 +153,13 @@ export default function RecruiterDashboard() {
               )}
             </div>
             
-            {!isCollapsed && <ThemeToggle />}
+            {!(isCollapsed && !isMobileSidebarOpen) && <ThemeToggle />}
           </div>
 
           {/* Spotlight command key launcher shortcut */}
-          {!isCollapsed && (
+          {!(isCollapsed && !isMobileSidebarOpen) && (
             <div 
-              onClick={() => setShowPalette(true)}
+              onClick={() => { setShowPalette(true); setIsMobileSidebarOpen(false); }}
               className="flex bg-[#1A1C20] border border-white/5 rounded-xl px-3 py-2 items-center gap-2 hover:border-[#5B8CFF]/30 cursor-pointer transition select-none"
             >
               <Search className="w-3.5 h-3.5 sys-text-body" strokeWidth={1.5} />
@@ -159,10 +168,10 @@ export default function RecruiterDashboard() {
             </div>
           )}
 
-          {isCollapsed && (
+          {(isCollapsed && !isMobileSidebarOpen) && (
             <div className="flex justify-center">
               <button 
-                onClick={() => setShowPalette(true)}
+                onClick={() => { setShowPalette(true); setIsMobileSidebarOpen(false); }}
                 className="p-2 rounded-xl bg-[#1A1C20] border border-white/5 sys-text-body hover:text-white transition"
               >
                 <Command className="w-4 h-4" strokeWidth={1.5} />
@@ -182,25 +191,25 @@ export default function RecruiterDashboard() {
               return (
                 <button 
                   key={item.id}
-                  onClick={() => setActiveSection(item.id)}
+                  onClick={() => { setActiveSection(item.id); setIsMobileSidebarOpen(false); }}
                   className={`flex items-center gap-3 px-3 py-2.5 text-xs font-medium rounded-xl border transition-all duration-300 cursor-pointer ${
                     isActive 
                       ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border-[#5B8CFF]/20 font-semibold' 
                       : 'sys-text-body hover:text-white border-transparent hover:bg-[#1A1C20] backdrop-blur-[16px]/20'
-                  } ${isCollapsed ? 'justify-center' : ''}`}
+                  } ${(isCollapsed && !isMobileSidebarOpen) ? 'justify-center' : ''}`}
                   title={item.label}
                 >
                   <IconComp className="w-4.5 h-4.5 shrink-0" strokeWidth={1.5} />
-                  {!isCollapsed && <span>{item.label}</span>}
+                  {!(isCollapsed && !isMobileSidebarOpen) && <span>{item.label}</span>}
                 </button>
               )
             })}
 
             {/* AI Generator navigation link (if active & assessment selected) */}
-            {selectedAssessment && !isCollapsed && (activeSection === 'questions' || activeSection === 'ai-generate') && (
+            {selectedAssessment && !(isCollapsed && !isMobileSidebarOpen) && (activeSection === 'questions' || activeSection === 'ai-generate') && (
               <div className="pl-4 mt-1 border-l border-white/5 flex flex-col gap-1">
                 <button 
-                  onClick={() => setActiveSection('questions')}
+                  onClick={() => { setActiveSection('questions'); setIsMobileSidebarOpen(false); }}
                   className={`flex items-center gap-2 py-1.5 px-3 text-[11px] rounded-lg transition ${
                     activeSection === 'questions' ? 'text-[#5B8CFF] font-semibold' : 'sys-text-body hover:sys-text-primary'
                   }`}
@@ -209,7 +218,7 @@ export default function RecruiterDashboard() {
                   <span>Questions Bank</span>
                 </button>
                 <button 
-                  onClick={() => setActiveSection('ai-generate')}
+                  onClick={() => { setActiveSection('ai-generate'); setIsMobileSidebarOpen(false); }}
                   className={`flex items-center gap-2 py-1.5 px-3 text-[11px] rounded-lg transition ${
                     activeSection === 'ai-generate' ? 'text-[#5B8CFF] font-semibold' : 'sys-text-body hover:sys-text-primary'
                   }`}
@@ -224,18 +233,18 @@ export default function RecruiterDashboard() {
 
         {/* Footer Profile & Dock Toggle */}
         <div className="space-y-4 pt-4 border-t border-white/5">
-          {isCollapsed && (
+          {(isCollapsed && !isMobileSidebarOpen) && (
             <div className="flex justify-center pb-2">
               <ThemeToggle />
             </div>
           )}
 
           {/* User profile details */}
-          <div className={`flex items-center gap-3 px-1 ${isCollapsed ? 'justify-center' : ''}`}>
+          <div className={`flex items-center gap-3 px-1 ${(isCollapsed && !isMobileSidebarOpen) ? 'justify-center' : ''}`}>
             <div className="p-2 bg-[#0B0B0D]/80 backdrop-blur-[16px]/40 border border-white/5 rounded-xl shrink-0">
               <User className="w-4 h-4 sys-text-body" strokeWidth={1.5} />
             </div>
-            {!isCollapsed && (
+            {!(isCollapsed && !isMobileSidebarOpen) && (
               <div className="flex flex-col min-w-0">
                 <span className="text-xs font-semibold text-white truncate font-heading">{user?.name || 'Recruiter'}</span>
                 <span className="text-[9.5px] sys-text-body font-mono truncate">{user?.email}</span>
@@ -248,18 +257,18 @@ export default function RecruiterDashboard() {
               onClick={logout} 
               variant="outline" 
               className={`border-white/5 bg-[#1A1C20]/20 !shadow-none hover:!bg-[#1A1C20] hover:!shadow-none sys-text-body hover:text-white text-xs h-9 justify-center cursor-pointer transition rounded-xl flex-1 ${
-                isCollapsed ? 'p-0' : ''
+                (isCollapsed && !isMobileSidebarOpen) ? 'p-0' : ''
               }`}
               title="Sign Out"
             >
               <LogOut className="w-3.5 h-3.5" strokeWidth={1.5} />
-              {!isCollapsed && <span className="ml-1.5">Sign Out</span>}
+              {!(isCollapsed && !isMobileSidebarOpen) && <span className="ml-1.5">Sign Out</span>}
             </Button>
 
             {/* Collapsible toggle button */}
             <button 
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="p-2 border border-white/5 bg-[#1A1C20]/20 hover:bg-[#1A1C20] sys-text-body hover:text-white rounded-xl cursor-pointer transition focus:outline-none"
+              className="hidden md:block p-2 border border-white/5 bg-[#1A1C20]/20 hover:bg-[#1A1C20] sys-text-body hover:text-white rounded-xl cursor-pointer transition focus:outline-none"
             >
               {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
             </button>
@@ -271,11 +280,14 @@ export default function RecruiterDashboard() {
       <div className="flex-1 flex flex-col h-screen overflow-hidden relative z-10">
         
         {/* TOP BAR FLOATING COMMAND WORKSPACE */}
-        <header className="h-16 border-b border-white/5 bg-[#0B0B0D]/80 backdrop-blur-[16px] flex items-center justify-between px-8 z-25 ">
+        <header className="h-16 border-b border-white/5 bg-[#0B0B0D]/80 backdrop-blur-[16px] flex items-center justify-between px-4 md:px-8 z-25 ">
           {/* Breadcrumbs trail */}
-          <div className="flex items-center gap-2 text-[10px] font-heading font-semibold uppercase tracking-widest select-none text-white/60">
-            <span>SHIELD_OS</span>
-            <span>/</span>
+          <div className="flex items-center gap-1 md:gap-2 text-[10px] font-heading font-semibold uppercase tracking-widest select-none text-white/60">
+            <Button variant="ghost" size="icon" onClick={() => setIsMobileSidebarOpen(true)} className="md:hidden mr-2 -ml-2 h-8 w-8 text-white hover:bg-white/10">
+              <Menu className="w-4 h-4" />
+            </Button>
+            <span className="hidden sm:inline">SHIELD_OS</span>
+            <span className="hidden sm:inline">/</span>
             <span className="text-[#5B8CFF]">{activeSection}</span>
             {selectedAssessment && (activeSection === 'questions' || activeSection === 'ai-generate') && (
               <>
@@ -301,8 +313,8 @@ export default function RecruiterDashboard() {
         </header>
 
         {/* WORKSPACE CONTENT AREA */}
-        <main className="flex-1 overflow-y-auto bg-transparent p-8 md:p-12 relative pb-28">
-          <div className="max-w-5xl w-full mx-auto space-y-10 animate-fade-in">
+        <main className="flex-1 overflow-y-auto bg-transparent p-4 md:p-8 lg:p-12 relative pb-28 custom-scrollbar">
+          <div className="max-w-5xl w-full mx-auto space-y-6 md:space-y-10 animate-fade-in">
             
             {activeSection === 'overview' && (
               <AssessmentTab 

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Editor from '@monaco-editor/react'
 import { 
-  Terminal, Activity, EyeOff, AlertTriangle, RefreshCw, Trash2, Clock, ChevronRight, Lock
+  Terminal, Activity, EyeOff, AlertTriangle, RefreshCw, Trash2, Clock, ChevronRight, Lock, Menu
 } from 'lucide-react'
 import ThemeToggle from '../../components/ThemeToggle'
 import { AmbientGlow } from '../../components/AmbientGlow'
@@ -93,6 +93,7 @@ export default function ExamShell() {
   const [compilerShowExtensionPrompt, setCompilerShowExtensionPrompt] = useState(false)
   const compilerIntervalRef = useRef<any>(null)
   const compilerTotalTimeRef = useRef<number>(0)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   
   // Section Navigation States
   const [activePart, setActivePart] = useState<'menu' | 'mcq' | 'coding'>('menu')
@@ -1105,13 +1106,18 @@ export default function ExamShell() {
       
       <div className="flex-1 flex flex-col z-10 relative h-full">
         {/* PREMIUM TOP BAR */}
-        <header className="px-8 py-4 flex items-center justify-between sticky top-0 z-50 border-b border-[rgba(255,255,255,0.06)] bg-[#09090B]/80 backdrop-blur-xl">
-          <div className="flex items-center space-x-4 select-none">
-            <div className="px-3 py-1.5 rounded-full bg-[#111216] border border-[rgba(255,255,255,0.06)] text-[#F5F5F5] flex items-center gap-2 font-medium text-xs shadow-sm">
-              <Lock className="w-3.5 h-3.5 text-emerald-400" strokeWidth={2} /> 
-              <span>Protected Environment</span>
+        <header className="px-4 lg:px-8 py-3 lg:py-4 flex items-center justify-between sticky top-0 z-50 border-b border-[rgba(255,255,255,0.06)] bg-[#09090B]/80 backdrop-blur-xl">
+          <div className="flex items-center space-x-2 md:space-x-4 select-none">
+            {activePart !== 'menu' && (
+              <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="lg:hidden w-8 h-8 rounded-lg">
+                <Menu className="w-4 h-4 text-[#B8BDC7]" />
+              </Button>
+            )}
+            <div className="px-2 md:px-3 py-1.5 rounded-full bg-[#111216] border border-[rgba(255,255,255,0.06)] text-[#F5F5F5] flex items-center gap-2 font-medium text-[10px] md:text-xs shadow-sm">
+              <Lock className="w-3 md:w-3.5 h-3 md:h-3.5 text-emerald-400" strokeWidth={2} /> 
+              <span className="hidden sm:inline">Protected Environment</span>
             </div>
-            <span className="font-semibold text-sm tracking-wide text-[#B8BDC7] hidden md:inline-block">
+            <span className="font-semibold text-[10px] md:text-sm tracking-wide text-[#B8BDC7] hidden md:inline-block">
               {assessment.title}
             </span>
           </div>
@@ -1122,9 +1128,9 @@ export default function ExamShell() {
             </div>
           )}
 
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-1 md:space-x-3">
             {/* INTEGRITY SCALE */}
-            <div className={`flex items-center space-x-2 px-3 py-1.5 rounded-full border ${
+            <div className={`hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full border ${
               integrityScore > 75 
                 ? 'bg-[#111216] border-[rgba(255,255,255,0.06)] text-[#B8BDC7]' 
                 : 'bg-red-500/10 border-red-500/20 text-red-400 animate-pulse'
@@ -1161,14 +1167,14 @@ export default function ExamShell() {
             {activePart === 'menu' ? (
               <Button 
                 onClick={handleFinishAssessment} 
-                className="bg-[#F5F5F5] hover:bg-white text-[#09090B] font-bold px-6 h-9 rounded-full text-xs shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all ml-2"
+                className="bg-[#F5F5F5] hover:bg-white text-[#09090B] font-bold px-4 md:px-6 h-8 md:h-9 rounded-full text-[10px] md:text-xs shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all ml-1 md:ml-2"
               >
                 Submit Exam
               </Button>
             ) : (
               <Button 
                 onClick={handleSubmitPart} 
-                className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 font-semibold px-6 h-9 rounded-full text-xs transition-all ml-2"
+                className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 font-semibold px-4 md:px-6 h-8 md:h-9 rounded-full text-[10px] md:text-xs transition-all ml-1 md:ml-2"
               >
                 {isSingleTypeExam ? 'Final Submit' : 'Submit Section'}
               </Button>
@@ -1238,8 +1244,16 @@ export default function ExamShell() {
         <>
         <main className="flex-1 flex overflow-hidden min-h-0 relative z-10">
           
+          {/* Mobile Sidebar Overlay */}
+          {isSidebarOpen && (
+            <div 
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 lg:hidden" 
+              onClick={() => setIsSidebarOpen(false)} 
+            />
+          )}
+
           {/* LEFT COLUMN: Sidebar & Telemetry */}
-          <aside className="w-80 flex-shrink-0 flex flex-col border-r border-[rgba(255,255,255,0.06)] bg-[#09090B] overflow-y-auto">
+          <aside className={`absolute lg:relative z-40 inset-y-0 left-0 w-[280px] lg:w-80 flex-shrink-0 flex flex-col border-r border-[rgba(255,255,255,0.06)] bg-[#09090B] overflow-y-auto transform transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
             
             {/* PROGRESS HEADER */}
             <div className="p-6 border-b border-[rgba(255,255,255,0.06)] bg-[#111216]/50">
@@ -1447,9 +1461,9 @@ export default function ExamShell() {
                       </div>
                     </div>
                 ) : (
-                  <div className="flex h-full w-full min-h-0">
-                    {/* ... Coding UI will remain conceptually similar but with dark theme colors if needed. Wait, coding UI needs to be preserved exactly as requested? "The current interface is to be discarded entirely... DO NOT modify any business logic... Keep every feature and wiring exactly the same." I'll update the colors slightly to match the global theme. */}
-                    <div className="w-1/2 h-full border-r border-[rgba(255,255,255,0.06)] bg-[#09090B] flex flex-col">
+                  <div className="flex flex-col lg:flex-row h-full w-full min-h-0 overflow-y-auto lg:overflow-hidden">
+                    {/* ... Coding UI will remain conceptually similar but with dark theme colors if needed. */}
+                    <div className="w-full lg:w-1/2 h-[50vh] lg:h-full border-b lg:border-b-0 lg:border-r border-[rgba(255,255,255,0.06)] bg-[#09090B] flex flex-col">
                       <div className="p-6 overflow-y-auto flex-1 space-y-6">
                         <div>
                            <span className="px-3 py-1 rounded-md text-[10px] font-semibold bg-[#111216] border border-[rgba(255,255,255,0.06)] text-emerald-400 uppercase tracking-wider mb-4 inline-block">
@@ -1503,7 +1517,7 @@ export default function ExamShell() {
                       </div>
                     </div>
                     
-                    <div className="w-1/2 h-full flex flex-col bg-[#09090B] relative">
+                    <div className="w-full lg:w-1/2 h-1/2 lg:h-full flex flex-col bg-[#09090B] relative">
                       {isCompilerLoading && (
                         <div className="absolute inset-0 z-50 bg-[#09090B]/90 backdrop-blur-sm flex flex-col items-center justify-center p-8 text-center">
                           {!compilerShowExtensionPrompt ? (

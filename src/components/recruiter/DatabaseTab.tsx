@@ -404,7 +404,7 @@ export default function DatabaseTab() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-[9px] font-mono sys-text-body uppercase">Start Roll No</label>
                   <input 

@@ -452,7 +452,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="p-3 sys-bg rounded-xl border border-white/5">
                         <span className="text-[8px] font-mono sys-text-body uppercase">Constraints</span>
                         {editingDraftId === q.id ? (

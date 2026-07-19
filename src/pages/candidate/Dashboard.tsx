@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { 
   Shield, Clock, HelpCircle, Play, LogOut, 
   AlertCircle, LayoutGrid, CheckCircle2, User, Mail, Hash, BookOpen, Lock, ChevronRight, RefreshCw,
-  Home, History, Calendar, Activity, Check, CircleDot, Search
+  Home, History, Calendar, Activity, Check, CircleDot, Search, Menu
 } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { Button } from '@/components/ui/button'
@@ -22,6 +22,7 @@ export default function CandidateDashboard() {
   const [selectedAssessment, setSelectedAssessment] = useState<Assessment | null>(null)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'overview' | 'lobby' | 'history'>('overview')
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   // Details form
   const email = user?.email || ''
@@ -293,8 +294,16 @@ export default function CandidateDashboard() {
       {/* 2. Moving Grain Noise Overlay */}
       <div className="grain-overlay opacity-30" />
 
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden" 
+          onClick={() => setIsSidebarOpen(false)} 
+        />
+      )}
+
       {/* ================= LEFT SIDEBAR ================= */}
-      <aside className="w-64 h-screen bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border-r border-white/5 flex flex-col justify-between p-6 shrink-0 z-30 select-none shadow-2xl">
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 h-screen bg-[#09090B] border-r border-white/5 flex flex-col justify-between p-6 shrink-0 select-none shadow-2xl transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="space-y-8">
           
           {/* Header Brand & Theme Toggle */}
@@ -326,7 +335,7 @@ export default function CandidateDashboard() {
           {/* Navigation Links */}
           <nav className="flex flex-col gap-2">
             <button 
-              onClick={() => setActiveTab('overview')}
+              onClick={() => { setActiveTab('overview'); setIsSidebarOpen(false); }}
               className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'overview' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 border border-transparent'}`}
             >
               <div className="flex items-center gap-2.5">
@@ -337,7 +346,7 @@ export default function CandidateDashboard() {
             </button>
 
             <button 
-              onClick={() => setActiveTab('lobby')}
+              onClick={() => { setActiveTab('lobby'); setIsSidebarOpen(false); }}
               className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'lobby' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 border border-transparent'}`}
             >
               <div className="flex items-center gap-2.5">
@@ -348,7 +357,7 @@ export default function CandidateDashboard() {
             </button>
 
             <button 
-              onClick={() => setActiveTab('history')}
+              onClick={() => { setActiveTab('history'); setIsSidebarOpen(false); }}
               className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'history' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/80 border border-transparent'}`}
             >
               <div className="flex items-center gap-2.5">
@@ -383,11 +392,27 @@ export default function CandidateDashboard() {
       </aside>
 
       {/* ================= RIGHT MAIN CONTENT AREA ================= */}
-      <main className="flex-1 h-screen overflow-y-auto bg-transparent p-8 md:p-12 z-10 relative custom-scrollbar">
+      <main className="flex-1 h-screen overflow-y-auto bg-transparent p-4 md:p-8 lg:p-12 z-10 relative custom-scrollbar">
+        {/* Mobile Header Toggle */}
+        <div className="md:hidden flex items-center justify-between mb-6 sys-bg p-3 rounded-2xl border border-white/5">
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(true)} className="w-8 h-8 rounded-lg sys-text-body hover:text-white">
+              <Menu className="w-5 h-5" />
+            </Button>
+            <span className="font-bold text-sm tracking-wide text-white font-heading">ShieldAI</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button onClick={handleSync} disabled={isSyncing} variant="ghost" size="icon" className="w-8 h-8 rounded-lg sys-text-body">
+              <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-[#5B8CFF]' : ''}`} />
+            </Button>
+            <ThemeToggle />
+          </div>
+        </div>
+
         <div className="max-w-6xl w-full mx-auto animate-fade-in pb-12">
           
           {/* Section Breadcrumbs */}
-          <div className="flex items-center justify-between select-none mb-8">
+          <div className="hidden md:flex items-center justify-between select-none mb-8">
             <div className="flex items-center gap-2 text-[9px] font-mono sys-text-body uppercase tracking-widest">
               <span>CANDIDATE PANEL</span>
               <span>/</span>
@@ -407,7 +432,7 @@ export default function CandidateDashboard() {
           {activeTab === 'overview' && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
               {/* Hero Section */}
-              <div className="p-8 rounded-3xl sys-bg border border-transparent  shadow-2xl relative overflow-hidden group">
+              <div className="p-6 md:p-8 rounded-3xl sys-bg border border-transparent shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-[#5B8CFF]/10 rounded-full blur-[80px] -mr-16 -mt-16 transition-opacity group-hover:opacity-100 opacity-50" />
                 <div className="relative z-10">
                   <h1 className="text-3xl font-heading font-extrabold text-white mb-2 tracking-tight">
@@ -577,7 +602,7 @@ export default function CandidateDashboard() {
                   <Card className="sys-bg border-transparent rounded-3xl shadow-2xl relative overflow-hidden ">
                     <div className="absolute top-0 left-0 right-0 h-1 sys-bg" />
                     
-                    <CardHeader className="pb-5 border-b border-transparent select-none pt-8 px-8">
+                    <CardHeader className="pb-5 border-b border-transparent select-none pt-6 px-6 md:pt-8 md:px-8">
                       <CardTitle className="text-lg font-bold text-white flex items-center gap-3 font-heading">
                         <BookOpen className="w-5 h-5 text-[#5B8CFF]" strokeWidth={2} /> Assessment Preparation
                       </CardTitle>
@@ -586,7 +611,7 @@ export default function CandidateDashboard() {
                       </CardDescription>
                     </CardHeader>
                     
-                    <CardContent className="p-8 space-y-8">
+                    <CardContent className="p-6 md:p-8 space-y-6 md:space-y-8">
                       
                       {errorMsg && (
                         <div className="text-xs sys-text-primary bg-[#F87171]/10 p-4 rounded-xl border border-[#F87171]/20 flex items-center space-x-3 animate-in fade-in zoom-in-95 duration-300">
@@ -736,7 +761,7 @@ export default function CandidateDashboard() {
                         <Button 
                           onClick={handleLaunchAssessment}
                           disabled={isSubmitting || !timeCheck.valid}
-                          className={`h-12 px-8 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 flex items-center gap-2.5 select-none shadow-lg ${
+                          className={`w-full md:w-auto h-12 px-6 md:px-8 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 flex items-center justify-center gap-2.5 select-none shadow-lg ${
                             timeCheck.valid 
                               ? 'sys-bg hover:from-blue-500 hover:to-[#5B8CFF] text-white font-extrabold cursor-pointer active:scale-95 hover:shadow-[0_0_20px_rgba(91,140,255,0.4)]' 
                               : 'sys-card sys-text-body border border-transparent cursor-not-allowed shadow-none'
