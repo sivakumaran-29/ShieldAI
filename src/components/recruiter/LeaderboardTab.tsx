@@ -214,7 +214,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                   <th className="py-4 px-5">Compiler Marks</th>
                   <th className="py-4 px-5">Integrity Auditing</th>
                   <th className="py-4 px-5">Timeline status</th>
-                  <th className="py-4 px-5 text-right">Details</th>
+                  <th className="py-4 px-5 text-center">Details</th>
                 </tr>
               </thead>
             <tbody className="table-row-group divide-y lg:divide-divider">
@@ -227,22 +227,22 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                     key={s.id} 
                     className="hover:bg-hover transition duration-150 group/row table-row p-4 p-0 mb-4 mb-0 border border-divider  rounded-2xl  bg-panel "
                   >
-                    <td className="py-2 py-4 px-1 px-5 font-mono font-bold text-primary flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
+                    <td className="py-4 px-5 font-mono font-bold text-primary table-cell border-b border-divider align-middle">
                       
                       <span>#{s.rank}</span>
                     </td>
-                    <td className="py-2 py-4 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
+                    <td className="py-4 px-5 table-cell border-b border-divider align-middle">
                       
                       <div className="flex flex-col sm:text-right lg:text-left">
                         <span className="font-semibold text-primary font-heading truncate max-w-[160px]">{s.name}</span>
                         <span className="text-[11px] sys-text-body font-sans mt-0.5">{s.email}</span>
                       </div>
                     </td>
-                    <td className="py-2 py-4 px-1 px-5 font-mono text-xs font-semibold sys-text-body uppercase flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
+                    <td className="py-4 px-5 font-mono text-xs font-semibold sys-text-body uppercase table-cell border-b border-divider align-middle">
                       
                       <span>{s.roll_number || 'N/A'}</span>
                     </td>
-                    <td className="py-2 py-4 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
+                    <td className="py-4 px-5 table-cell border-b border-divider align-middle">
                       
                       {isComp ? (
                         <div className="flex items-center gap-1.5">
@@ -255,7 +255,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                         <span className="sys-text-body font-sans font-semibold">Unattempted</span>
                       )}
                     </td>
-                    <td className="py-2 py-4 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
+                    <td className="py-4 px-5 table-cell border-b border-divider align-middle">
                       
                       <div className="flex items-center gap-2">
                         <span className={`font-mono font-bold ${s.integrity_score < 75 ? 'text-[#F87171]' : 'text-primary'}`}>
@@ -264,7 +264,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                         <span className="text-[8px] sys-text-body font-mono font-semibold">({s.violationsCount} warnings)</span>
                       </div>
                     </td>
-                    <td className="py-2 py-3.5 px-1 lg:px-4 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
+                    <td className="py-4 px-5 table-cell border-b border-divider align-middle">
                       
                       <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider inline-block ${
                         s.status === 'submitted' ? 'bg-[#34D399]/10 text-[#34D399] border border-[#34D399]/20' : 
@@ -274,7 +274,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                         {s.status}
                       </span>
                     </td>
-                    <td className="py-3 py-4 px-1 px-5 flex justify-end table-cell">
+                    <td className="py-4 px-5 text-center table-cell align-middle whitespace-nowrap">
                       <Button 
                         onClick={() => setSelectedSession(s)}
                         variant="ghost" 

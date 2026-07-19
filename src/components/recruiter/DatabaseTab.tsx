@@ -286,7 +286,7 @@ export default function DatabaseTab() {
                 <Card key={dept} className={`bg-card backdrop-blur-[24px] border-divider rounded-[24px] overflow-hidden shadow-2xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,255,255,0.03)] hover:border-border-strong ${isDeptExpanded ? 'col-span-1 md:col-span-2 lg:col-span-4' : ''}`}>
                   <div 
                     onClick={() => toggleDept(dept)}
-                    className="p-5 bg-transparent hover:bg-hover cursor-pointer flex items-center justify-between transition-colors duration-300 group min-w-0"
+                    className="p-5 bg-transparent hover:bg-hover cursor-pointer flex items-center justify-between transition-colors duration-300 group min-w-0 relative overflow-hidden"
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       {isDeptExpanded ? <ChevronDown className="w-4 h-4 sys-text-body shrink-0" /> : <ChevronRight className="w-4 h-4 sys-text-body shrink-0" />}
@@ -305,10 +305,10 @@ export default function DatabaseTab() {
                       onClick={(e) => handleDeleteDept(e, dept)}
                       variant="ghost" 
                       size="sm"
-                      className="h-7 px-3 bg-[#F87171]/5 hover:bg-[#F87171]/15 text-[#F87171]/80 hover:text-[#F87171] rounded-lg cursor-pointer transition opacity-0 group-hover:opacity-100"
+                      className="absolute right-4 h-7 px-3 bg-[#F87171]/5 hover:bg-[#F87171]/15 text-[#F87171]/80 hover:text-[#F87171] rounded-lg cursor-pointer transition opacity-0 group-hover:opacity-100 backdrop-blur-md"
                     >
                       <Trash2 className="w-3.5 h-3.5 mr-1.5" />
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider">Delete Dept</span>
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider hidden sm:inline-block">Delete Dept</span>
                     </Button>
                   </div>
 
