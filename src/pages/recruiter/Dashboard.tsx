@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Shield, LayoutDashboard, BarChart2, Users, Database,
   FileText, Settings, LogOut, ChevronLeft, ChevronRight,
   Search, User, Sparkles, Command, Library, X, RefreshCw, Menu
@@ -369,8 +370,8 @@ export default function RecruiterDashboard() {
 
 
       {/* ================= FLOATING COMMAND PALETTE WORKSPACE (⌘K) ================= */}
-      {showPalette && (
-        <div className="fixed inset-0 bg-black/80  z-[9999] flex items-start justify-center pt-24 p-4">
+      {showPalette && createPortal(
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-start justify-center pt-24 p-4">
           <div className="w-full max-w-xl command-dialog rounded-2xl p-4 shadow-2xl space-y-4 animate-fade-in relative">
             <div className="absolute top-0 left-0 right-0 h-[2px] sys-bg rounded-t-2xl" />
             
@@ -441,7 +442,8 @@ export default function RecruiterDashboard() {
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
 
