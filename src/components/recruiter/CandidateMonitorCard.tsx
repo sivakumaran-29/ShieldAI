@@ -44,8 +44,12 @@ export default function CandidateMonitorCard({ s, isCritical }: CandidateMonitor
         pcRef.current = pc
 
         pc.ontrack = (event) => {
-          if (videoRef.current && event.streams[0]) {
-            videoRef.current.srcObject = event.streams[0]
+          if (videoRef.current) {
+            if (event.streams && event.streams[0]) {
+              videoRef.current.srcObject = event.streams[0]
+            } else {
+              videoRef.current.srcObject = new MediaStream([event.track])
+            }
             videoRef.current.play().catch(e => console.warn('Play failed', e))
             setConnectionStatus('connected')
           }
@@ -56,7 +60,7 @@ export default function CandidateMonitorCard({ s, isCritical }: CandidateMonitor
             channel.send({
               type: 'broadcast',
               event: 'ice-candidate',
-              payload: event.candidate
+              payload: { candidate: event.candidate, sender: 'recruiter' }
             })
           }
         }
@@ -91,9 +95,10 @@ export default function CandidateMonitorCard({ s, isCritical }: CandidateMonitor
         initConnection(payload)
       })
       .on('broadcast', { event: 'ice-candidate' }, async ({ payload }) => {
+        if (payload.sender === 'recruiter') return // Ignore our own candidates
         if (pcRef.current) {
           try {
-            await pcRef.current.addIceCandidate(new RTCIceCandidate(payload))
+            await pcRef.current.addIceCandidate(new RTCIceCandidate(payload.candidate || payload))
           } catch (err) {
             console.error('[WebRTC Recruiter] Add ICE candidate error:', err)
           }

@@ -756,7 +756,7 @@ export default function ExamShell() {
             channel.send({
               type: 'broadcast',
               event: 'ice-candidate',
-              payload: event.candidate
+              payload: { candidate: event.candidate, sender: 'candidate' }
             })
           }
         }
@@ -789,9 +789,10 @@ export default function ExamShell() {
         }
       })
       .on('broadcast', { event: 'ice-candidate' }, async ({ payload }) => {
+        if (payload.sender === 'candidate') return // Ignore our own candidates
         if (pc) {
           try {
-            await pc.addIceCandidate(new RTCIceCandidate(payload))
+            await pc.addIceCandidate(new RTCIceCandidate(payload.candidate || payload))
           } catch (err) {
             console.error('[WebRTC] Failed adding remote candidate:', err)
           }
