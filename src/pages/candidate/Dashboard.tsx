@@ -23,6 +23,7 @@ export default function CandidateDashboard() {
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'overview' | 'lobby' | 'history' | 'results'>('overview')
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [publishedResults, setPublishedResults] = useState<{ assessment: Assessment, session: CandidateSession }[]>([])
 
   // Details form
   const email = user?.email || ''
@@ -60,6 +61,17 @@ export default function CandidateDashboard() {
         // Fetch past sessions for history
         const mySessions = await fetchCandidateSessions(undefined, user?.id)
         setPastSessions(mySessions.sort((a, b) => new Date(b.startedAt || 0).getTime() - new Date(a.startedAt || 0).getTime()))
+
+        // Find published results for this candidate
+        const results = list
+          .filter(a => a.results_published)
+          .map(a => {
+            const session = mySessions.find(s => s.assessment_id === a.id)
+            return session ? { assessment: a, session } : null
+          })
+          .filter(Boolean) as { assessment: Assessment, session: CandidateSession }[]
+        
+        setPublishedResults(results)
 
         // Check if there is a pending assessment ID cached
         const pendingId = localStorage.getItem('pending_exam_id')
@@ -359,7 +371,12 @@ export default function CandidateDashboard() {
               className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'results' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-panel backdrop-blur-[16px]/80 border border-transparent'}`}
             >
               <div className="flex items-center gap-2.5">
-                <CheckCircle2 className="w-4 h-4" strokeWidth={1.5} />
+                <div className="relative">
+                  <CheckCircle2 className="w-4 h-4" strokeWidth={1.5} />
+                  {publishedResults.length > 0 && (
+                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#F87171] rounded-full animate-pulse border border-black" />
+                  )}
+                </div>
                 <span>Results</span>
               </div>
               {activeTab === 'results' && <ChevronRight className="w-3 h-3" strokeWidth={1.5} />}
@@ -823,16 +840,84 @@ export default function CandidateDashboard() {
 
           {/* ================= RESULTS TAB ================= */}
           {activeTab === 'results' && (
-            <div className="flex flex-col items-center justify-center h-[500px] animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="p-10 bg-panel backdrop-blur-[16px] border border-divider rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] text-center max-w-md w-full">
-                <div className="w-16 h-16 rounded-full bg-[#5B8CFF]/10 text-[#5B8CFF] flex items-center justify-center mx-auto mb-6">
-                  <CheckCircle2 className="w-8 h-8" strokeWidth={1.5} />
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-[#5B8CFF]/10 text-[#5B8CFF] rounded-xl">
+                  <CheckCircle2 className="w-5 h-5" strokeWidth={1.5} />
                 </div>
-                <h2 className="text-2xl font-bold font-heading text-primary mb-3">Results Center</h2>
-                <p className="text-sm sys-text-body leading-relaxed">
-                  Your assessment marks and detailed evaluation reports will be published here once they are finalized by the instructors.
-                </p>
+                <div>
+                  <h2 className="text-2xl font-bold font-heading text-primary">Results Center</h2>
+                  <p className="text-xs sys-text-body">View your published assessment marks and integrity metrics.</p>
+                </div>
               </div>
+
+              {publishedResults.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 bg-panel backdrop-blur-[16px] border border-divider rounded-3xl text-center">
+                  <BookOpen className="w-12 h-12 text-divider mb-4" strokeWidth={1} />
+                  <h3 className="text-lg font-bold text-primary font-heading mb-2">No Published Results</h3>
+                  <p className="text-xs sys-text-body max-w-sm">
+                    Your assessment marks will appear here once they are finalized and published by the instructor.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {publishedResults.map(({ assessment, session }) => {
+                    const total = session.score || 0
+                    let codingScore = 0
+                    if (session.submissions) {
+                      Object.values(session.submissions).forEach((sub: any) => {
+                         if (sub.score) codingScore += sub.score
+                      })
+                    }
+                    const mcqScore = Math.max(0, total - codingScore)
+                    const isPass = total >= assessment.passing_score
+
+                    return (
+                      <div key={assessment.id} className="bg-panel backdrop-blur-[16px] border border-divider rounded-2xl overflow-hidden shadow-xl hover:border-[#5B8CFF]/30 transition-colors">
+                        <div className="p-5 border-b border-divider bg-surface/30">
+                          <h3 className="font-bold text-primary font-heading mb-1">{assessment.title}</h3>
+                          <div className="flex items-center gap-4 text-[10px] font-mono sys-text-body uppercase tracking-wider">
+                            <span>Completed: {new Date(session.submittedAt || '').toLocaleDateString()}</span>
+                            <span className={isPass ? 'text-[#34D399]' : 'text-[#F87171]'}>
+                              {isPass ? 'PASS' : 'FAIL'} (Req: {assessment.passing_score}%)
+                            </span>
+                          </div>
+                        </div>
+                        <div className="p-5">
+                          <div className="grid grid-cols-2 gap-4 mb-5">
+                            <div className="p-4 bg-background border border-divider rounded-xl text-center">
+                              <span className="block text-[10px] sys-text-body font-mono uppercase tracking-widest mb-2">MCQ Score</span>
+                              <span className="text-2xl font-bold font-number text-primary">{mcqScore}</span>
+                            </div>
+                            <div className="p-4 bg-background border border-divider rounded-xl text-center">
+                              <span className="block text-[10px] sys-text-body font-mono uppercase tracking-widest mb-2">Coding Score</span>
+                              <span className="text-2xl font-bold font-number text-primary">{codingScore}</span>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between p-4 bg-surface rounded-xl border border-divider">
+                            <div>
+                              <span className="block text-[10px] sys-text-body font-mono uppercase tracking-widest mb-1">Total Marks</span>
+                              <span className={`text-2xl font-bold font-number ${isPass ? 'text-[#34D399]' : 'text-[#F87171]'}`}>
+                                {total}%
+                              </span>
+                            </div>
+                            <div className="text-right border-l border-divider pl-4">
+                              <span className="block text-[10px] sys-text-body font-mono uppercase tracking-widest mb-1">Integrity Score</span>
+                              <div className="flex items-center gap-1.5 justify-end">
+                                {session.integrity_score < 75 && <AlertCircle className="w-3.5 h-3.5 text-[#F87171]" />}
+                                <span className={`text-lg font-bold font-number ${session.integrity_score < 75 ? 'text-[#F87171]' : 'text-primary'}`}>
+                                  {session.integrity_score}%
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
             </div>
           )}
 

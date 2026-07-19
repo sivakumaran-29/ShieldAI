@@ -48,6 +48,7 @@ export interface Assessment {
   allowed_languages: string[]
   status: 'Draft' | 'Published' | 'Closed'
   target_batch?: string
+  results_published?: boolean
   created_at: string
   created_by: string
 }
@@ -245,6 +246,7 @@ export const saveAssessment = async (assessment: Assessment): Promise<boolean> =
         allowed_languages: assessment.allowed_languages,
         status: assessment.status,
         target_batch: assessment.target_batch,
+        results_published: assessment.results_published,
         created_at: assessment.created_at,
         created_by: assessment.created_by
       })
