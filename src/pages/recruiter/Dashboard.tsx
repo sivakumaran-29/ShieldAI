@@ -17,9 +17,8 @@ import MonitorTab from '../../components/recruiter/MonitorTab'
 import AIGenerationTab from '../../components/recruiter/AIGenerationTab'
 import ReportsSettingsTab from '../../components/recruiter/ReportsSettingsTab'
 import DatabaseTab from '../../components/recruiter/DatabaseTab'
-import PublishResultTab from '../../components/recruiter/PublishResultTab'
 
-type AdminSection = 'overview' | 'analytics' | 'users' | 'database' | 'roles' | 'permissions' | 'reports' | 'settings' | 'logs' | 'ai-generate' | 'questions' | 'publish-results'
+type AdminSection = 'overview' | 'analytics' | 'users' | 'database' | 'roles' | 'permissions' | 'reports' | 'settings' | 'logs' | 'ai-generate' | 'questions'
 
 export default function RecruiterDashboard() {
   const { user, logout } = useAuthStore()
@@ -107,7 +106,6 @@ export default function RecruiterDashboard() {
     { id: 'users' as const, label: 'Users & Proctors', icon: Users },
     { id: 'database' as const, label: 'Database', icon: Database },
     { id: 'reports' as const, label: 'Reports Console', icon: FileText },
-    { id: 'publish-results' as const, label: 'Publish Results', icon: Library },
     { id: 'settings' as const, label: 'Platform Settings', icon: Settings },
   ]
 
@@ -362,13 +360,6 @@ export default function RecruiterDashboard() {
 
             {activeSection === 'database' && (
               <DatabaseTab />
-            )}
-
-            {activeSection === 'publish-results' && (
-              <PublishResultTab 
-                assessments={assessmentsList} 
-                onRefresh={loadAssessments} 
-              />
             )}
 
           </div>
