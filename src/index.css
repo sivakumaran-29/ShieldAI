@@ -23,11 +23,11 @@
 
   html.light {
     /* Light Mode Overrides */
-    --color-bg-base: #F2F3F5; /* Slightly greyer background */
-    --color-bg-surface: #EBEBEB; /* Grey boxes */
-    --color-bg-panel: rgba(235, 235, 235, 0.95);
-    --color-bg-panel-solid: #E0E0E0;
-    --color-bg-card: rgba(235, 235, 235, 0.9);
+    --color-bg-base: #F0F2F5; /* Greyer background */
+    --color-bg-surface: #E4E6EB; /* Greyer boxes */
+    --color-bg-panel: rgba(228, 230, 235, 0.98);
+    --color-bg-panel-solid: #E4E6EB;
+    --color-bg-card: rgba(228, 230, 235, 0.95);
     --color-bg-input: #FFFFFF;
     --color-bg-hover: rgba(0, 0, 0, 0.08);
     
@@ -35,8 +35,8 @@
     --color-border-strong: rgba(0, 0, 0, 0.25);
     
     --color-text-primary: #000000;
-    --color-text-secondary: #000000;
-    --color-text-tertiary: #111111;
+    --color-text-secondary: #111111;
+    --color-text-tertiary: #333333;
     --color-text-inverted: #FFFFFF;
   }
 

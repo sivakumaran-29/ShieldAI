@@ -27,7 +27,7 @@ export default function CandidateDashboard() {
   // Details form
   const email = user?.email || ''
   const name = email ? email.split('@')[0] : 'student'
-  const [rollNumber, setRollNumber] = useState('')
+  const [rollNumber, setRollNumber] = useState(email ? email.split('@')[0].toUpperCase() : '')
   const [readInstructions, setReadInstructions] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -76,15 +76,7 @@ export default function CandidateDashboard() {
           setSelectedAssessment(activeList[0])
         }
 
-        // Prepopulate student Roll Number if cached from past attempts
-        const cachedRoll = localStorage.getItem('candidate_roll')
-        if (cachedRoll) setRollNumber(cachedRoll)
-
-        // Extract Roll number from student email prefix
-        if (user?.email && !cachedRoll) {
-          const emailPrefix = user.email.split('@')[0]
-          setRollNumber(emailPrefix.toUpperCase())
-        }
+        // No cached roll overriding required, we hardcode it from email prefix above.
       } catch (err) {
         console.error('Failed to load candidate dashboard assessments:', err)
       } finally {
@@ -490,10 +482,7 @@ export default function CandidateDashboard() {
                               <p className="text-xs sys-text-body mt-1">ID: {s.assessment_id.slice(0,8).toUpperCase()} • {new Date(s.startedAt || 0).toLocaleString()}</p>
                               {s.status === 'submitted' && (
                                 <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-panel border border-divider text-[10.5px] font-mono shadow-sm">
-                                  <span className="sys-text-body uppercase tracking-wider">Score:</span>
-                                  <span className="text-primary font-bold">{s.score} pts</span>
-                                  <span className="mx-1.5 sys-text-body">|</span>
-                                  <span className="sys-text-body uppercase tracking-wider">Trust:</span>
+                                  <span className="sys-text-body uppercase tracking-wider">Trust Score:</span>
                                   <span className="text-[#5B8CFF] font-bold">{s.integrity_score}%</span>
                                 </div>
                               )}
@@ -559,7 +548,7 @@ export default function CandidateDashboard() {
                   <LayoutGrid className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Available Assessments
                 </div>
 
-                <div className="space-y-4 overflow-y-auto pr-2 custom-scrollbar flex-1 pb-10">
+                <div className="space-y-4 overflow-y-auto p-1 pr-2 custom-scrollbar flex-1 pb-10">
                   {assessments.map((a) => {
                     const isActive = selectedAssessment?.id === a.id
                     const windowCheck = isAssessmentTimeWindowValid(a)
@@ -613,7 +602,7 @@ export default function CandidateDashboard() {
               {/* Details & Setup Form */}
               <section className="lg:col-span-8 flex flex-col h-full overflow-hidden">
                 {selectedAssessment ? (
-                  <Card className="bg-panel backdrop-blur-[16px] border-divider rounded-3xl shadow-[0_8px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_40px_rgba(0,0,0,0.4)] relative flex flex-col h-full overflow-hidden">
+                  <Card className="bg-panel backdrop-blur-[16px] border border-divider rounded-[24px] shadow-lg relative flex flex-col h-full overflow-hidden isolate">
                     <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#5B8CFF] to-[#3B66CC]" />
                     
                     <CardHeader className="pb-6 border-b border-divider shrink-0 select-none pt-8 px-6 md:pt-10 md:px-10">
