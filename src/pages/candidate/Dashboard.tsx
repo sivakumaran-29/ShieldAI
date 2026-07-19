@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { 
   Shield, Clock, HelpCircle, Play, LogOut, 
   AlertCircle, LayoutGrid, CheckCircle2, User, Mail, Hash, BookOpen, Lock, ChevronRight, RefreshCw,
-  Home, History, Calendar, Activity, Check, CircleDot, Search, Menu
+  Home, History, Activity, Check, CircleDot, Search, Menu
 } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { Button } from '@/components/ui/button'
@@ -272,11 +272,6 @@ export default function CandidateDashboard() {
   const isRollDisabled = !!user?.email || !!localStorage.getItem('candidate_roll')
   const timeCheck = selectedAssessment ? isAssessmentTimeWindowValid(selectedAssessment) : { valid: false, message: '' }
 
-  // Metrics calculation
-  const completedExams = pastSessions.filter(s => s.status === 'submitted').length;
-  const activeExams = assessments.length;
-  const avgIntegrity = completedExams > 0 ? Math.round(pastSessions.filter(s => s.status === 'submitted').reduce((acc, s) => acc + (s.integrity_score || 0), 0) / completedExams) : 100;
-  
   return (
     <div className="min-h-screen bg-background text-foreground flex font-sans antialiased overflow-hidden relative">
       
@@ -455,9 +450,9 @@ export default function CandidateDashboard() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              <div className="grid grid-cols-1 gap-8 items-start">
                 {/* Recent Activity */}
-                <div className="lg:col-span-8 space-y-4">
+                <div className="space-y-4">
                   <div className="flex items-center gap-2 px-1 text-[10px] font-bold sys-text-body font-mono tracking-widest uppercase select-none">
                     <Activity className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Recent Activity
                   </div>
@@ -497,43 +492,6 @@ export default function CandidateDashboard() {
                     )}
                   </div>
                 </div>
-
-                {/* Metrics Stack */}
-                <div className="lg:col-span-4 flex flex-col gap-4">
-                  <div className="flex items-center gap-2 px-1 text-[10px] font-bold sys-text-body font-mono tracking-widest uppercase select-none">
-                    <Activity className="w-4 h-4 sys-text-body opacity-0" strokeWidth={1.5} /> Overview Metrics
-                  </div>
-
-                  <div className="p-4 rounded-xl bg-background border border-divider flex items-center justify-between hover:-translate-y-1 hover:shadow-sm hover:border-[#5B8CFF]/30 transition-all duration-300 group">
-                    <div>
-                      <span className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-widest block mb-1">Completed</span>
-                      <div className="text-2xl font-heading font-bold text-primary">{completedExams} <span className="text-[10px] sys-text-body font-normal">Exams</span></div>
-                    </div>
-                    <div className="p-2.5 rounded-lg bg-panel border border-divider text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors shadow-sm">
-                      <CheckCircle2 className="w-4 h-4" strokeWidth={1.5} />
-                    </div>
-                  </div>
-
-                  <div className="p-4 rounded-xl bg-background border border-divider flex items-center justify-between hover:-translate-y-1 hover:shadow-sm hover:border-[#5B8CFF]/30 transition-all duration-300 group">
-                    <div>
-                      <span className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-widest block mb-1">Integrity Avg</span>
-                      <div className="text-2xl font-heading font-bold text-primary">{avgIntegrity}<span className="text-[10px] sys-text-body font-normal">%</span></div>
-                    </div>
-                    <div className="p-2.5 rounded-lg bg-panel border border-divider text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors shadow-sm">
-                      <Shield className="w-4 h-4" strokeWidth={1.5} />
-                    </div>
-                  </div>
-
-                  <div className="p-4 rounded-xl bg-background border border-divider flex items-center justify-between hover:-translate-y-1 hover:shadow-sm hover:border-[#5B8CFF]/30 transition-all duration-300 group">
-                    <div>
-                      <span className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-widest block mb-1">Available</span>
-                      <div className="text-2xl font-heading font-bold text-primary">{activeExams} <span className="text-[10px] sys-text-body font-normal">Pending</span></div>
-                    </div>
-                    <div className="p-2.5 rounded-lg bg-panel border border-divider text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors shadow-sm">
-                      <Calendar className="w-4 h-4" strokeWidth={1.5} />
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           )}
@@ -548,7 +506,7 @@ export default function CandidateDashboard() {
                   <LayoutGrid className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Available Assessments
                 </div>
 
-                <div className="space-y-4 overflow-y-auto p-1 pr-2 custom-scrollbar flex-1 pb-10">
+                <div className="space-y-4 overflow-y-auto pt-2 px-1 pr-2 custom-scrollbar flex-1 pb-10">
                   {assessments.map((a) => {
                     const isActive = selectedAssessment?.id === a.id
                     const windowCheck = isAssessmentTimeWindowValid(a)
@@ -600,9 +558,9 @@ export default function CandidateDashboard() {
               </section>
 
               {/* Details & Setup Form */}
-              <section className="lg:col-span-8 flex flex-col h-full overflow-hidden">
+              <section className="lg:col-span-8 flex flex-col h-full overflow-hidden pb-4">
                 {selectedAssessment ? (
-                  <Card className="bg-panel backdrop-blur-[16px] border border-divider rounded-[24px] shadow-lg relative flex flex-col h-full overflow-hidden isolate">
+                  <Card className="bg-panel backdrop-blur-[16px] border border-divider rounded-[24px] shadow-lg relative flex flex-col h-full overflow-hidden">
                     <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#5B8CFF] to-[#3B66CC]" />
                     
                     <CardHeader className="pb-6 border-b border-divider shrink-0 select-none pt-8 px-6 md:pt-10 md:px-10">
@@ -811,17 +769,22 @@ export default function CandidateDashboard() {
                       <tr>
                         <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Assessment</th>
                         <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Date</th>
+                        <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Time</th>
                         <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Status</th>
-                        <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Score</th>
                         <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Integrity</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-divider">
                       {pastSessions.length > 0 ? (
-                        pastSessions.map(session => (
+                        pastSessions.map(session => {
+                          const assessmentName = assessments.find(a => a.id === session.assessment_id)?.title || 'Unknown Assessment'
+                          const integrityColor = session.integrity_score >= 75 ? 'bg-green-500' : session.integrity_score >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+                          
+                          return (
                           <tr key={session.id} className="hover:bg-panel transition-colors duration-300">
-                            <td className="px-6 py-4 font-heading font-semibold sys-text-primary">{session.assessment_id.slice(0, 12)}...</td>
+                            <td className="px-6 py-4 font-heading font-semibold sys-text-primary">{assessmentName}</td>
                             <td className="px-6 py-4 text-xs sys-text-body">{new Date(session.startedAt || 0).toLocaleDateString()}</td>
+                            <td className="px-6 py-4 text-xs sys-text-body">{session.updated_at ? new Date(session.updated_at).toLocaleTimeString() : new Date(session.startedAt || 0).toLocaleTimeString()}</td>
                             <td className="px-6 py-4">
                               <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
                                 session.status === 'submitted' 
@@ -831,12 +794,11 @@ export default function CandidateDashboard() {
                                 {session.status === 'submitted' ? 'Submitted' : 'Abandoned'}
                               </span>
                             </td>
-                            <td className="px-6 py-4 font-mono font-bold text-primary">{session.score || 0}</td>
                             <td className="px-6 py-4">
                               <div className="flex items-center gap-2">
-                                <div className="w-16 h-1.5 sys-card rounded-full overflow-hidden">
+                                <div className="w-16 h-1.5 sys-card p-0 rounded-full overflow-hidden border-transparent">
                                   <div 
-                                    className={`h-full rounded-full ${session.integrity_score >= 80 ? 'bg-[#5B8CFF]' : session.integrity_score >= 50 ? 'bg-panel backdrop-blur-[16px]' : 'bg-panel backdrop-blur-[16px]'}`}
+                                    className={`h-full rounded-full ${integrityColor}`}
                                     style={{ width: `${session.integrity_score || 0}%` }}
                                   />
                                 </div>
@@ -844,7 +806,7 @@ export default function CandidateDashboard() {
                               </div>
                             </td>
                           </tr>
-                        ))
+                        )})
                       ) : (
                         <tr>
                           <td colSpan={6} className="px-6 py-12 text-center sys-text-body text-xs font-mono">
