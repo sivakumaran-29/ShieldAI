@@ -92,6 +92,7 @@ export default function ExamShell() {
   const [compilerDownloadedMB, setCompilerDownloadedMB] = useState(0)
   const [compilerShowExtensionPrompt, setCompilerShowExtensionPrompt] = useState(false)
   const compilerIntervalRef = useRef<any>(null)
+  const compilerTotalTimeRef = useRef<number>(0)
   
   // Section Navigation States
   const [activePart, setActivePart] = useState<'menu' | 'mcq' | 'coding'>('menu')
@@ -127,8 +128,8 @@ export default function ExamShell() {
     
     const startProgress = compilerProgress
     const startMB = compilerDownloadedMB
-    const targetSimProgress = startProgress === 0 ? (Math.floor(Math.random() * 10) + 85) : 100;
-    const targetSimMB = (targetSimProgress / 100) * 35;
+    const totalSimulatedTime = compilerTotalTimeRef.current || 15000;
+    const timeForRemaining = totalSimulatedTime * ((100 - startProgress) / 100);
     
     const startTime = Date.now()
     
@@ -139,8 +140,9 @@ export default function ExamShell() {
       
       setCompilerCountdown(currentRemaining)
       
-      const currentSimProgress = Math.min(100, startProgress + ((targetSimProgress - startProgress) * (elapsedMs / (remainingTime * 1000))))
-      const currentSimMB = Math.min(35, startMB + ((targetSimMB - startMB) * (elapsedMs / (remainingTime * 1000))))
+      const progressGained = timeForRemaining > 0 ? (elapsedMs / timeForRemaining) * (100 - startProgress) : 0;
+      const currentSimProgress = Math.min(100, startProgress + progressGained);
+      const currentSimMB = (currentSimProgress / 100) * 35;
       
       setCompilerProgress(Math.floor(currentSimProgress))
       setCompilerDownloadedMB(Number(currentSimMB.toFixed(1)))
@@ -1370,6 +1372,7 @@ export default function ExamShell() {
                     if ((newLang === 'cpp' || newLang === 'c') && !(window as any).hasLoadedCppCompiler) {
                       setCompilerProgress(0)
                       setCompilerDownloadedMB(0)
+                      compilerTotalTimeRef.current = Math.floor(Math.random() * 20000) + 5000;
                       triggerCompilerDownload(newLang, 20)
                     } else {
                       setLanguage(newLang)
