@@ -198,7 +198,7 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
       
       {/* Header */}
       <div>
-        <h2 className="text-[12px] font-heading font-bold tracking-wider text-[#5B8CFF] uppercase">// AI COPMILER GENERATOR</h2>
+        <h2 className="text-[12px] font-heading font-bold tracking-wider text-[#5B8CFF] uppercase">// AI COMPILER GENERATOR</h2>
         <span className="text-[11px] sys-text-body font-sans mt-1 block font-medium">Selected assessment: {selectedAssessment.title}</span>
       </div>
 
@@ -209,8 +209,8 @@ export default function AIGenerationTab({ selectedAssessment, onRefresh }: AIGen
         <div className="md:col-span-8 space-y-6">
           {!activeGeneratorType ? (
             <div className="border border-dashed border-divider bg-panel backdrop-blur-[16px] rounded-2xl p-12 flex flex-col items-center justify-center text-center space-y-4 shadow-inner min-h-64">
-              <div className="w-12 h-12 sys-card rounded-full flex items-center justify-center mb-2 border border-transparent">
-                <Terminal className="w-5 h-5 sys-text-body" />
+              <div className="w-12 h-12 sys-card rounded-full flex items-center justify-center mb-2 border border-transparent shadow-sm">
+                <BrainCircuit className="w-6 h-6 text-[#5B8CFF]" strokeWidth={1.5} />
               </div>
               <div>
                 <h3 className="text-primary font-bold text-lg mb-1">Generate AI Challenge</h3>

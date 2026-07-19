@@ -357,7 +357,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                 </div>
 
                 {/* Telemetry warning timeline logs */}
-                <div className="bg-black/80 border border-divider rounded-xl p-4 font-mono text-[9px] sys-text-body space-y-2 select-text overflow-y-auto h-64">
+                <div className="bg-panel border border-divider rounded-xl p-4 font-mono text-[9px] sys-text-body space-y-2 select-text overflow-y-auto h-64">
                   <span className="text-[8px] uppercase font-bold sys-text-body tracking-widest block select-none border-b border-divider pb-1.5 mb-2 flex items-center gap-1.5">
                     <Activity className="w-3.5 h-3.5 text-[#F87171]" /> REAL-TIME AUDIT LOGS
                   </span>
@@ -399,7 +399,7 @@ export default function LeaderboardTab({ assessments }: LeaderboardTabProps) {
                       {/* Code Block display */}
                       <div className="space-y-1">
                         <span className="text-[8px] font-mono sys-text-body uppercase select-none">Submitted Code ({sub.language})</span>
-                        <pre className="p-3 bg-black rounded-lg border border-divider text-[9.5px] font-mono sys-text-primary overflow-x-auto select-text leading-relaxed whitespace-pre">
+                        <pre className="p-3 bg-surface rounded-lg border border-divider text-[9.5px] font-mono sys-text-primary overflow-x-auto select-text leading-relaxed whitespace-pre">
                           {sub.code}
                         </pre>
                       </div>
