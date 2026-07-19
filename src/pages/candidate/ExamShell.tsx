@@ -123,7 +123,7 @@ export default function ExamShell() {
     if (compilerIntervalRef.current) clearInterval(compilerIntervalRef.current)
     
     setCompilerStatusText(compilerProgress === 0 ? 'Starting download...' : 'Resuming download...')
-    setConsoleOutput(compilerProgress === 0 ? `Initializing ${targetLang === 'cpp' ? 'C++' : 'C'} WebAssembly Compiler... Fetching dependencies (35MB)...` : `Resuming compiler download...`)
+    setConsoleOutput(compilerProgress === 0 ? `Initializing ${targetLang === 'cpp' ? 'C++' : 'C'} Compiler Engine... Fetching dependencies (35MB)...` : `Resuming compiler download...`)
     
     const startProgress = compilerProgress
     const startMB = compilerDownloadedMB
@@ -145,7 +145,7 @@ export default function ExamShell() {
       setCompilerProgress(Math.floor(currentSimProgress))
       setCompilerDownloadedMB(Number(currentSimMB.toFixed(1)))
       
-      if (currentSimProgress < 30) setCompilerStatusText('Fetching WASM modules...')
+      if (currentSimProgress < 30) setCompilerStatusText('Downloading compiler core...')
       else if (currentSimProgress < 70) setCompilerStatusText('Linking libc headers...')
       else setCompilerStatusText('Finalising the user programming language...')
       
@@ -154,7 +154,7 @@ export default function ExamShell() {
         ;(window as any).hasLoadedCppCompiler = true
         ;(window as any).cppFallbackMode = false
         setIsCompilerLoading(false)
-        setConsoleOutput(`${targetLang === 'cpp' ? 'C++' : 'C'} WebAssembly Compiler ready. (Client-side execution initialized)`)
+        setConsoleOutput(`${targetLang === 'cpp' ? 'C++' : 'C'} Compiler Engine ready.`)
         setLanguage(targetLang)
       } else if (currentRemaining === 0) {
         clearInterval(compilerIntervalRef.current)
@@ -1507,7 +1507,7 @@ export default function ExamShell() {
                           {!compilerShowExtensionPrompt ? (
                             <>
                               <div className="w-12 h-12 border-4 border-[#5B8CFF]/30 border-t-[#5B8CFF] rounded-full animate-spin mb-6"></div>
-                              <h3 className="text-[#F5F5F5] font-bold text-lg mb-2">Lazy-Loading {isCompilerLoading === 'cpp' ? 'C++' : 'C'} Compiler</h3>
+                              <h3 className="text-[#F5F5F5] font-bold text-lg mb-2">Loading {isCompilerLoading === 'cpp' ? 'C++' : 'C'} Compiler Engine</h3>
                               <p className="text-[#8A9099] text-sm max-w-xs leading-relaxed mb-4">
                                 {compilerStatusText}
                               </p>
@@ -1524,7 +1524,7 @@ export default function ExamShell() {
                                 {compilerCountdown}s
                               </div>
                               <p className="text-[#8A9099]/60 text-[11px] max-w-xs leading-relaxed">
-                                Downloading WebAssembly Clang toolchain and libc headers. This 35MB payload is only fetched once per session. Max threshold: 20s.
+                                Downloading compiler core and dependencies. This 35MB payload is only fetched once per session. Max threshold: 20s.
                               </p>
                             </>
                           ) : (
@@ -1552,7 +1552,7 @@ export default function ExamShell() {
                                     ;(window as any).hasLoadedCppCompiler = true 
                                     ;(window as any).cppFallbackMode = true
                                     setIsCompilerLoading(false)
-                                    setConsoleOutput(`${isCompilerLoading === 'cpp' ? 'C++' : 'C'} WebAssembly payload aborted. Falling back to Piston API (Server-side).`)
+                                    setConsoleOutput(`${isCompilerLoading === 'cpp' ? 'C++' : 'C'} compiler payload aborted. Falling back to Server-side execution.`)
                                     setLanguage(isCompilerLoading as string)
                                   }}
                                   className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-medium transition-colors"
