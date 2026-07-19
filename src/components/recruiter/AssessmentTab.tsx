@@ -146,7 +146,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
         {!isEditing && (
           <Button 
             onClick={handleOpenCreateForm} 
-            className="bg-[#0070F3] hover:bg-[#005bb5] text-white text-xs h-10 px-5 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,112,243,0.4)]"
+            className="bg-[#0070F3] hover:bg-[#005bb5] text-white text-xs h-10 px-2 lg:px-5 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,112,243,0.4)]"
           >
             <Plus className="w-4 h-4" strokeWidth={1.5} /> Create Assessment
           </Button>
@@ -176,16 +176,16 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
           <div className="bento-card p-6 space-y-4">
             <span className="text-[11px] font-heading font-semibold sys-text-body uppercase tracking-wider block mb-4">Active Assessment Tracks</span>
             
-            <div className="overflow-x-auto pb-4">
-              <div className="border border-divider rounded-2xl overflow-hidden bg-panel min-w-max">
-                <table className="w-full text-left text-xs min-w-[800px]">
+            <div className="overflow-hidden pb-4">
+              <div className="border border-divider rounded-2xl overflow-hidden bg-panel w-full">
+                <table className="w-full text-left text-xs table-fixed">
                   <thead className="table-header-group">
-                    <tr className="bg-panel backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider border-b border-divider">
-                      <th className="py-4 px-5">Evaluation Title</th>
-                      <th className="py-4 px-5">Duration</th>
-                      <th className="py-4 px-5">Allowed Languages</th>
-                      <th className="py-4 px-5">Status</th>
-                      <th className="py-4 px-5 text-right">Actions</th>
+                    <tr className="bg-panel backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[8px] md:text-[10px] uppercase tracking-wider border-b border-divider">
+                      <th className="py-2 lg:py-4 px-2 lg:px-5">Evaluation Title</th>
+                      <th className="py-2 lg:py-4 px-2 lg:px-5">Duration</th>
+                      <th className="py-2 lg:py-4 px-2 lg:px-5">Allowed Languages</th>
+                      <th className="py-2 lg:py-4 px-2 lg:px-5">Status</th>
+                      <th className="py-2 lg:py-4 px-2 lg:px-5 text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="table-row-group divide-y lg:divide-divider">
@@ -195,19 +195,19 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                       onClick={() => onSelectInspector?.(a)}
                       className="hover:bg-hover cursor-pointer transition duration-200 group/row table-row p-4 p-0 mb-4 mb-0 border border-divider  rounded-2xl  bg-panel "
                     >
-                      <td className="py-2 py-4 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell font-semibold text-primary font-heading truncate border-b border-divider ">
+                      <td className="py-2 py-2 lg:py-4 px-1 px-2 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell font-semibold text-primary font-heading truncate border-b border-divider ">
                         
                         <span>{a.title}</span>
                       </td>
-                      <td className="py-2 py-4 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell sys-text-body font-sans border-b border-divider ">
+                      <td className="py-2 py-2 lg:py-4 px-1 px-2 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell sys-text-body font-sans border-b border-divider ">
                         
                         <span>{a.duration} mins</span>
                       </td>
-                      <td className="py-2 py-4 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell sys-text-body capitalize font-sans font-medium border-b border-divider ">
+                      <td className="py-2 py-2 lg:py-4 px-1 px-2 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell sys-text-body capitalize font-sans font-medium border-b border-divider ">
                         
                         <span>{a.allowed_languages.join(', ')}</span>
                       </td>
-                      <td className="py-2 py-4 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
+                      <td className="py-2 py-2 lg:py-4 px-1 px-2 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
                         
                         <span className={`px-2.5 py-1 rounded-md text-[9px] font-mono font-bold uppercase tracking-wider inline-flex items-center gap-1.5 ${
                           a.status === 'Published' 
@@ -224,7 +224,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                           {a.status}
                         </span>
                       </td>
-                      <td className="py-3 py-4 px-1 px-5 flex justify-end table-cell" onClick={e => e.stopPropagation()}>
+                      <td className="py-2 lg:py-3 py-2 lg:py-4 px-1 px-2 lg:px-5 flex justify-end table-cell" onClick={e => e.stopPropagation()}>
                         <div className="flex justify-end gap-1.5 w-full w-auto">
                           <Button 
                             onClick={() => onSelectAssessment(a)}

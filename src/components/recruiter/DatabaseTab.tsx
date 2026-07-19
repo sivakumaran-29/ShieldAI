@@ -245,7 +245,7 @@ export default function DatabaseTab() {
 
         <Button 
           onClick={() => setIsCreating(true)}
-          className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white text-xs h-9 px-4 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-md"
+          className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white text-xs h-9 px-2 lg:px-4 rounded-xl font-bold cursor-pointer transition flex items-center gap-1.5 shadow-md"
         >
           <Plus className="w-4 h-4" strokeWidth={1.5} /> Inject Batch
         </Button>
@@ -346,22 +346,22 @@ export default function DatabaseTab() {
                             </div>
 
                             {isBatchExpanded && (
-                              <div className="border-t border-divider pb-2"><div className="overflow-x-auto px-4 pt-4"><table className="w-full text-left text-xs border-collapse min-w-[800px] w-full">
+                              <div className="border-t border-divider pb-2"><div className="overflow-hidden px-2 lg:px-4 pt-4"><table className="w-full text-left text-xs border-collapse table-fixed">
                                   <thead className="table-header-group">
-                                    <tr className="bg-panel backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[10px] uppercase tracking-wider"><th className="py-3 px-5 rounded-l-2xl border-y border-l border-divider">Roll Number</th><th className="py-3 px-5 border-y border-divider">Email Address</th><th className="py-3 px-5 rounded-r-2xl border-y border-r border-divider text-right">Actions</th></tr>
+                                    <tr className="bg-panel backdrop-blur-[16px] sys-text-body font-sans font-semibold text-[8px] md:text-[10px] uppercase tracking-wider"><th className="py-2 lg:py-3 px-2 lg:px-5 rounded-l-2xl border-y border-l border-divider">Roll Number</th><th className="py-2 lg:py-3 px-2 lg:px-5 border-y border-divider">Email Address</th><th className="py-2 lg:py-3 px-2 lg:px-5 rounded-r-2xl border-y border-r border-divider text-right">Actions</th></tr>
                                   </thead>
                                   <tbody className="table-row-group divide-y lg:divide-divider"><tr className="table-row h-2"></tr>
                                     {batchUsers.map(user => (
                                       <tr key={user.id} className="hover:bg-hover transition-colors duration-200 group/row table-row p-4 p-0 mb-4 mb-0 border border-divider  rounded-2xl  bg-panel ">
-                                        <td className="py-2 py-3 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell font-semibold font-heading text-primary max-w-xs truncate border-b border-divider ">
+                                        <td className="py-2 py-2 lg:py-3 px-1 px-2 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell font-semibold font-heading text-primary max-w-xs truncate border-b border-divider ">
                                           
                                           <span>{user.name}</span>
                                         </td>
-                                        <td className="py-2 py-3 px-1 px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell sys-text-body font-sans border-b border-divider ">
+                                        <td className="py-2 py-2 lg:py-3 px-1 px-2 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell sys-text-body font-sans border-b border-divider ">
                                           
                                           <span>{user.email}</span>
                                         </td>
-                                        <td className="py-3 lg:py-2 px-1 px-5 flex justify-end table-cell">
+                                        <td className="py-2 lg:py-3 lg:py-2 px-1 px-2 lg:px-5 flex justify-end table-cell">
                                           <div className="flex justify-end gap-1.5 w-full w-auto">
                                             <Button 
                                               onClick={(e) => handleDeleteUser(e, user.id, user.name)}
@@ -467,14 +467,14 @@ export default function DatabaseTab() {
                   type="button" 
                   onClick={() => setIsCreating(false)}
                   disabled={createLoading}
-                  className="bg-transparent hover:sys-card sys-text-body text-xs h-9 px-4 rounded-xl cursor-pointer"
+                  className="bg-transparent hover:sys-card sys-text-body text-xs h-9 px-2 lg:px-4 rounded-xl cursor-pointer"
                 >
                   Cancel
                 </Button>
                 <Button 
                   type="submit" 
                   disabled={createLoading}
-                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white text-xs h-9 px-5 rounded-xl font-bold cursor-pointer transition shadow-md flex items-center gap-2"
+                  className="bg-[#3f6ad5] hover:bg-[#3254a8] hover:shadow-[0_0_15px_rgba(63,106,213,0.6)] active:shadow-[0_0_8px_rgba(63,106,213,0.4)] text-white text-xs h-9 px-2 lg:px-5 rounded-xl font-bold cursor-pointer transition shadow-md flex items-center gap-2"
                 >
                   {createLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   {createLoading ? 'Injecting...' : 'Confirm Injection'}

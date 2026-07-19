@@ -181,20 +181,20 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
           <div className="space-y-4">
             <span className="text-[9px] font-mono font-bold sys-text-body uppercase tracking-widest block select-none">// SYSTEM ACCESS CAPABILITY MATRIX</span>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-xs select-none min-w-[800px] w-full">
+            <div className="overflow-hidden">
+              <table className="w-full text-left border-collapse text-xs select-none table-fixed">
                 <thead className="table-header-group">
                   <tr className="border-b border-divider sys-text-body font-mono text-[9px] uppercase tracking-wider">
-                    <th className="py-3 px-4">Permission Node</th>
+                    <th className="py-2 lg:py-3 px-2 lg:px-4">Permission Node</th>
                     {roles.map(r => (
-                      <th key={r.key} className="py-3 px-4 text-center">{r.name}</th>
+                      <th key={r.key} className="py-2 lg:py-3 px-2 lg:px-4 text-center">{r.name}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="table-row-group divide-y lg:divide-divider">
                   {PERMISSION_DEFINITIONS.map(p => (
                     <tr key={p.key} className="hover:bg-hover transition duration-150 table-row p-4 p-0 mb-4 mb-0 bg-panel  rounded-2xl  border border-divider ">
-                      <td className="py-2 py-3.5 px-1 lg:px-4 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
+                      <td className="py-2 py-2 lg:py-3.5 px-1 lg:px-2 lg:px-4 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
                         
                         <div className="flex flex-col sm:text-right lg:text-left">
                           <span className="font-bold text-primary">{p.name}</span>
@@ -204,7 +204,7 @@ export default function RolesPermissionsTab({ defaultSection }: RolesPermissions
                       {roles.map(r => {
                         const hasPerm = r.permissions.includes(p.key)
                         return (
-                          <td key={r.key} className="py-2 py-3.5 px-1 lg:px-4 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider  last:border-none">
+                          <td key={r.key} className="py-2 py-2 lg:py-3.5 px-1 lg:px-2 lg:px-4 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider  last:border-none">
                             
                             <button 
                               onClick={() => handleTogglePermission(r.key, p.key)}
