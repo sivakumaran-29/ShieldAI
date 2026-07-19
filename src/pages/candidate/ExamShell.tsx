@@ -86,6 +86,8 @@ export default function ExamShell() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [testResults, setTestResults] = useState<any>(null)
   const [isCompilerLoading, setIsCompilerLoading] = useState<string | false>(false)
+  const [compilerCountdown, setCompilerCountdown] = useState<number>(20)
+  const [compilerStatusText, setCompilerStatusText] = useState('Starting...')
   
   // Section Navigation States
   const [activePart, setActivePart] = useState<'menu' | 'mcq' | 'coding'>('menu')
@@ -1315,13 +1317,43 @@ export default function ExamShell() {
                     const newLang = e.target.value
                     if ((newLang === 'cpp' || newLang === 'c') && !(window as any).hasLoadedCppCompiler) {
                       setIsCompilerLoading(newLang)
+                      setCompilerCountdown(20)
+                      setCompilerStatusText('Starting download...')
                       setConsoleOutput(`Initializing ${newLang === 'cpp' ? 'C++' : 'C'} WebAssembly Compiler... Fetching dependencies (35MB)...`)
-                      setTimeout(() => {
-                         (window as any).hasLoadedCppCompiler = true
-                         setIsCompilerLoading(false)
-                         setConsoleOutput(`${newLang === 'cpp' ? 'C++' : 'C'} WebAssembly Compiler ready.`)
-                         setLanguage(newLang)
-                      }, 2500)
+                      
+                      // Simulate a download that takes between 5 and 25 seconds
+                      const simulatedDownloadTime = Math.floor(Math.random() * 20000) + 5000;
+                      const startTime = Date.now();
+                      
+                      const interval = setInterval(() => {
+                        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                        const remaining = Math.max(0, 20 - elapsed);
+                        setCompilerCountdown(remaining);
+                        
+                        if (elapsed < 5) {
+                          setCompilerStatusText('Fetching WASM modules...')
+                        } else if (elapsed < 10) {
+                          setCompilerStatusText('Linking libc headers...')
+                        } else {
+                          setCompilerStatusText('Finalising the user programming language...')
+                        }
+                        
+                        if (Date.now() - startTime >= simulatedDownloadTime && remaining > 0) {
+                          clearInterval(interval)
+                          ;(window as any).hasLoadedCppCompiler = true
+                          ;(window as any).cppFallbackMode = false
+                          setIsCompilerLoading(false)
+                          setConsoleOutput(`${newLang === 'cpp' ? 'C++' : 'C'} WebAssembly Compiler ready. (Client-side execution initialized)`)
+                          setLanguage(newLang)
+                        } else if (remaining === 0) {
+                          clearInterval(interval)
+                          ;(window as any).hasLoadedCppCompiler = true 
+                          ;(window as any).cppFallbackMode = true
+                          setIsCompilerLoading(false)
+                          setConsoleOutput(`${newLang === 'cpp' ? 'C++' : 'C'} WebAssembly payload timed out (>20s). Falling back to Piston API (Server-side).`)
+                          setLanguage(newLang)
+                        }
+                      }, 1000)
                     } else {
                       setLanguage(newLang)
                     }
@@ -1457,8 +1489,14 @@ export default function ExamShell() {
                         <div className="absolute inset-0 z-50 bg-[#09090B]/90 backdrop-blur-sm flex flex-col items-center justify-center p-8 text-center">
                           <div className="w-12 h-12 border-4 border-[#5B8CFF]/30 border-t-[#5B8CFF] rounded-full animate-spin mb-6"></div>
                           <h3 className="text-[#F5F5F5] font-bold text-lg mb-2">Lazy-Loading {isCompilerLoading === 'cpp' ? 'C++' : 'C'} Compiler</h3>
-                          <p className="text-[#8A9099] text-sm max-w-xs leading-relaxed">
-                            Downloading WebAssembly Clang toolchain and libc headers. This 35MB payload is only fetched once per session.
+                          <p className="text-[#8A9099] text-sm max-w-xs leading-relaxed mb-4">
+                            {compilerStatusText}
+                          </p>
+                          <div className="text-[#5B8CFF] font-mono font-bold text-3xl mb-4">
+                            {compilerCountdown}s
+                          </div>
+                          <p className="text-[#8A9099]/60 text-[11px] max-w-xs leading-relaxed">
+                            Downloading WebAssembly Clang toolchain and libc headers. This 35MB payload is only fetched once per session. Max threshold: 20s.
                           </p>
                         </div>
                       )}
