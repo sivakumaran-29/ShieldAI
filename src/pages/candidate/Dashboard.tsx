@@ -21,7 +21,7 @@ export default function CandidateDashboard() {
   const [pastSessions, setPastSessions] = useState<CandidateSession[]>([])
   const [selectedAssessment, setSelectedAssessment] = useState<Assessment | null>(null)
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<'overview' | 'lobby' | 'history'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'lobby' | 'history' | 'results'>('overview')
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   // Details form
@@ -366,6 +366,17 @@ export default function CandidateDashboard() {
               </div>
               {activeTab === 'history' && <ChevronRight className="w-3 h-3" strokeWidth={1.5} />}
             </button>
+
+            <button 
+              onClick={() => { setActiveTab('results'); setIsSidebarOpen(false); }}
+              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xl transition-all duration-300 ${activeTab === 'results' ? 'bg-[#5B8CFF]/15 text-[#5B8CFF] border border-[#5B8CFF]/30 shadow-[0_0_15px_rgba(91,140,255,0.1)]' : 'sys-text-body hover:sys-text-primary hover:hover:bg-panel backdrop-blur-[16px]/80 border border-transparent'}`}
+            >
+              <div className="flex items-center gap-2.5">
+                <CheckCircle2 className="w-4 h-4" strokeWidth={1.5} />
+                <span>Results</span>
+              </div>
+              {activeTab === 'results' && <ChevronRight className="w-3 h-3" strokeWidth={1.5} />}
+            </button>
           </nav>
         </div>
 
@@ -417,7 +428,7 @@ export default function CandidateDashboard() {
               <span>CANDIDATE PANEL</span>
               <span>/</span>
               <span className="text-[#5B8CFF] font-bold">
-                {activeTab === 'overview' ? 'DASHBOARD' : activeTab === 'lobby' ? 'LOBBY' : 'HISTORY'}
+                {activeTab === 'overview' ? 'DASHBOARD' : activeTab === 'lobby' ? 'LOBBY' : activeTab === 'history' ? 'HISTORY' : 'RESULTS'}
               </span>
               {activeTab === 'lobby' && selectedAssessment && (
                 <>
@@ -436,12 +447,12 @@ export default function CandidateDashboard() {
                 <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#5B8CFF]/20 via-[#5B8CFF]/5 to-transparent rounded-full blur-[80px] -mr-20 -mt-20 opacity-70 group-hover:opacity-100 transition-opacity duration-700" />
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-[#5B8CFF]/10 to-transparent rounded-full blur-[60px] -ml-20 -mb-20 opacity-50" />
                 <div className="relative z-10 flex flex-col justify-center min-h-[120px]">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-background border border-divider mb-6 shadow-sm w-fit">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-divider/40 border border-divider mb-6 shadow-sm w-fit">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#5B8CFF] opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-[#5B8CFF]"></span>
                     </span>
-                    <span className="text-[10px] font-mono font-bold tracking-widest uppercase sys-text-body">Secure Session Active</span>
+                    <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-secondary">Secure Session Active</span>
                   </div>
                   <h1 className="text-4xl md:text-5xl font-heading font-extrabold text-primary mb-4 tracking-tight">
                     Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5B8CFF] to-[#3B66CC]">{name.charAt(0).toUpperCase() + name.slice(1)}</span>
@@ -452,92 +463,87 @@ export default function CandidateDashboard() {
                 </div>
               </div>
 
-              {/* Metrics Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="p-6 md:p-8 rounded-2xl bg-panel backdrop-blur-[16px] border border-divider flex flex-col gap-5 hover:-translate-y-1.5 hover:shadow-[0_10px_40px_rgba(91,140,255,0.08)] hover:border-[#5B8CFF]/30 transition-all duration-300 group">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono font-bold sys-text-body uppercase tracking-widest">Completed</span>
-                    <div className="p-2.5 rounded-xl bg-background border border-divider text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors shadow-sm">
-                      <CheckCircle2 className="w-4.5 h-4.5" strokeWidth={1.5} />
-                    </div>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                {/* Recent Activity */}
+                <div className="lg:col-span-8 space-y-4">
+                  <div className="flex items-center gap-2 px-1 text-[10px] font-bold sys-text-body font-mono tracking-widest uppercase select-none">
+                    <Activity className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Recent Activity
                   </div>
-                  <div>
-                    <div className="text-4xl font-heading font-bold text-primary mb-1">{completedExams}</div>
-                    <div className="text-[13px] sys-text-body">Total Exams Taken</div>
-                  </div>
-                </div>
-
-                <div className="p-6 md:p-8 rounded-2xl bg-panel backdrop-blur-[16px] border border-divider flex flex-col gap-5 hover:-translate-y-1.5 hover:shadow-[0_10px_40px_rgba(91,140,255,0.08)] hover:border-[#5B8CFF]/30 transition-all duration-300 group">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono font-bold sys-text-body uppercase tracking-widest">Integrity Avg</span>
-                    <div className="p-2.5 rounded-xl bg-background border border-divider text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors shadow-sm">
-                      <Shield className="w-4.5 h-4.5" strokeWidth={1.5} />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-4xl font-heading font-bold text-primary flex items-baseline gap-1 mb-1">
-                      {avgIntegrity} <span className="text-lg sys-text-body font-medium">%</span>
-                    </div>
-                    <div className="text-[13px] sys-text-body">Average Trust Score</div>
-                  </div>
-                </div>
-
-                <div className="p-6 md:p-8 rounded-2xl bg-panel backdrop-blur-[16px] border border-divider flex flex-col gap-5 hover:-translate-y-1.5 hover:shadow-[0_10px_40px_rgba(91,140,255,0.08)] hover:border-[#5B8CFF]/30 transition-all duration-300 group">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono font-bold sys-text-body uppercase tracking-widest">Available</span>
-                    <div className="p-2.5 rounded-xl bg-background border border-divider text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors shadow-sm">
-                      <Calendar className="w-4.5 h-4.5" strokeWidth={1.5} />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-4xl font-heading font-bold text-primary mb-1">{activeExams}</div>
-                    <div className="text-[13px] sys-text-body">Pending Assessments</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Recent Activity */}
-              <div className="space-y-4 pt-4">
-                <div className="flex items-center gap-2 px-1 text-[10px] font-bold sys-text-body font-mono tracking-widest uppercase select-none">
-                  <Activity className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Recent Activity
-                </div>
-                
-                <div className="bg-panel backdrop-blur-[16px] border border-divider rounded-2xl p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)]">
-                  {pastSessions.length > 0 ? (
-                    <div className="space-y-6">
-                      {pastSessions.slice(0, 3).map((s, idx) => (
-                        <div key={s.id} className="flex gap-5 relative group">
-                          {idx !== pastSessions.slice(0, 3).length - 1 && (
-                            <div className="absolute top-8 bottom-0 left-[19px] w-[2px] bg-gradient-to-b from-divider to-transparent" />
-                          )}
-                          <div className="w-10 h-10 rounded-full bg-background border border-divider flex items-center justify-center shrink-0 z-10 shadow-sm group-hover:scale-110 group-hover:border-[#5B8CFF]/50 transition-all duration-300">
-                            {s.status === 'submitted' ? (
-                              <Check className="w-5 h-5 text-[#5B8CFF]" strokeWidth={2} />
-                            ) : (
-                              <CircleDot className="w-5 h-5 text-[#5B8CFF]" strokeWidth={2} />
+                  
+                  <div className="bg-background border border-divider rounded-2xl p-6 md:p-8 shadow-sm">
+                    {pastSessions.length > 0 ? (
+                      <div className="space-y-6">
+                        {pastSessions.slice(0, 3).map((s, idx) => (
+                          <div key={s.id} className="flex gap-5 relative group">
+                            {idx !== pastSessions.slice(0, 3).length - 1 && (
+                              <div className="absolute top-8 bottom-0 left-[19px] w-[2px] bg-gradient-to-b from-divider to-transparent" />
                             )}
+                            <div className="w-10 h-10 rounded-full bg-panel border border-divider flex items-center justify-center shrink-0 z-10 shadow-sm group-hover:scale-110 group-hover:border-[#5B8CFF]/50 transition-all duration-300">
+                              {s.status === 'submitted' ? (
+                                <Check className="w-5 h-5 text-[#5B8CFF]" strokeWidth={2} />
+                              ) : (
+                                <CircleDot className="w-5 h-5 text-[#5B8CFF]" strokeWidth={2} />
+                              )}
+                            </div>
+                            <div className="flex-1 pb-2">
+                              <h4 className="text-sm font-semibold sys-text-primary">{s.status === 'submitted' ? 'Completed Assessment' : 'Started Assessment'}</h4>
+                              <p className="text-xs sys-text-body mt-1">ID: {s.assessment_id.slice(0,8).toUpperCase()} • {new Date(s.startedAt || 0).toLocaleString()}</p>
+                              {s.status === 'submitted' && (
+                                <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-panel border border-divider text-[10.5px] font-mono shadow-sm">
+                                  <span className="sys-text-body uppercase tracking-wider">Score:</span>
+                                  <span className="text-primary font-bold">{s.score} pts</span>
+                                  <span className="mx-1.5 sys-text-body">|</span>
+                                  <span className="sys-text-body uppercase tracking-wider">Trust:</span>
+                                  <span className="text-[#5B8CFF] font-bold">{s.integrity_score}%</span>
+                                </div>
+                              )}
+                            </div>
                           </div>
-                          <div className="flex-1 pb-2">
-                            <h4 className="text-sm font-semibold sys-text-primary">{s.status === 'submitted' ? 'Completed Assessment' : 'Started Assessment'}</h4>
-                            <p className="text-xs sys-text-body mt-1">ID: {s.assessment_id.slice(0,8).toUpperCase()} • {new Date(s.startedAt || 0).toLocaleString()}</p>
-                            {s.status === 'submitted' && (
-                              <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-background border border-divider text-[10.5px] font-mono shadow-sm">
-                                <span className="sys-text-body uppercase tracking-wider">Score:</span>
-                                <span className="text-primary font-bold">{s.score} pts</span>
-                                <span className="mx-1.5 sys-text-body">|</span>
-                                <span className="sys-text-body uppercase tracking-wider">Trust:</span>
-                                <span className="text-[#5B8CFF] font-bold">{s.integrity_score}%</span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="py-8 text-center sys-text-body text-xs font-mono">
+                        No recent activity found.
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Metrics Stack */}
+                <div className="lg:col-span-4 flex flex-col gap-4">
+                  <div className="flex items-center gap-2 px-1 text-[10px] font-bold sys-text-body font-mono tracking-widest uppercase select-none">
+                    <Activity className="w-4 h-4 sys-text-body opacity-0" strokeWidth={1.5} /> Overview Metrics
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-background border border-divider flex items-center justify-between hover:-translate-y-1 hover:shadow-sm hover:border-[#5B8CFF]/30 transition-all duration-300 group">
+                    <div>
+                      <span className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-widest block mb-1">Completed</span>
+                      <div className="text-2xl font-heading font-bold text-primary">{completedExams} <span className="text-[10px] sys-text-body font-normal">Exams</span></div>
                     </div>
-                  ) : (
-                    <div className="py-8 text-center sys-text-body text-xs font-mono">
-                      No recent activity found.
+                    <div className="p-2.5 rounded-lg bg-panel border border-divider text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors shadow-sm">
+                      <CheckCircle2 className="w-4 h-4" strokeWidth={1.5} />
                     </div>
-                  )}
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-background border border-divider flex items-center justify-between hover:-translate-y-1 hover:shadow-sm hover:border-[#5B8CFF]/30 transition-all duration-300 group">
+                    <div>
+                      <span className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-widest block mb-1">Integrity Avg</span>
+                      <div className="text-2xl font-heading font-bold text-primary">{avgIntegrity}<span className="text-[10px] sys-text-body font-normal">%</span></div>
+                    </div>
+                    <div className="p-2.5 rounded-lg bg-panel border border-divider text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors shadow-sm">
+                      <Shield className="w-4 h-4" strokeWidth={1.5} />
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-background border border-divider flex items-center justify-between hover:-translate-y-1 hover:shadow-sm hover:border-[#5B8CFF]/30 transition-all duration-300 group">
+                    <div>
+                      <span className="text-[10px] font-mono font-bold sys-text-body uppercase tracking-widest block mb-1">Available</span>
+                      <div className="text-2xl font-heading font-bold text-primary">{activeExams} <span className="text-[10px] sys-text-body font-normal">Pending</span></div>
+                    </div>
+                    <div className="p-2.5 rounded-lg bg-panel border border-divider text-[#5B8CFF] group-hover:bg-[#5B8CFF]/10 transition-colors shadow-sm">
+                      <Calendar className="w-4 h-4" strokeWidth={1.5} />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -545,15 +551,15 @@ export default function CandidateDashboard() {
 
           {/* ================= LOBBY TAB ================= */}
           {activeTab === 'lobby' && (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 h-[calc(100vh-160px)] animate-in fade-in slide-in-from-bottom-4 duration-500">
               
               {/* Available Assessments */}
-              <section className="lg:col-span-4 space-y-4">
-                <div className="flex items-center gap-2 px-1 text-[10px] font-bold sys-text-body font-mono tracking-widest uppercase select-none">
+              <section className="lg:col-span-4 flex flex-col h-full overflow-hidden">
+                <div className="flex items-center gap-2 px-1 mb-4 shrink-0 text-[10px] font-bold sys-text-body font-mono tracking-widest uppercase select-none">
                   <LayoutGrid className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Available Assessments
                 </div>
 
-                <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                <div className="space-y-4 overflow-y-auto pr-2 custom-scrollbar flex-1 pb-10">
                   {assessments.map((a) => {
                     const isActive = selectedAssessment?.id === a.id
                     const windowCheck = isAssessmentTimeWindowValid(a)
@@ -605,12 +611,12 @@ export default function CandidateDashboard() {
               </section>
 
               {/* Details & Setup Form */}
-              <section className="lg:col-span-8">
+              <section className="lg:col-span-8 flex flex-col h-full overflow-hidden">
                 {selectedAssessment ? (
-                  <Card className="bg-panel backdrop-blur-[16px] border-divider rounded-3xl shadow-[0_8px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_40px_rgba(0,0,0,0.4)] relative overflow-hidden">
+                  <Card className="bg-panel backdrop-blur-[16px] border-divider rounded-3xl shadow-[0_8px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_40px_rgba(0,0,0,0.4)] relative flex flex-col h-full overflow-hidden">
                     <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#5B8CFF] to-[#3B66CC]" />
                     
-                    <CardHeader className="pb-6 border-b border-divider select-none pt-8 px-6 md:pt-10 md:px-10">
+                    <CardHeader className="pb-6 border-b border-divider shrink-0 select-none pt-8 px-6 md:pt-10 md:px-10">
                       <CardTitle className="text-xl font-bold text-primary flex items-center gap-3 font-heading">
                         <BookOpen className="w-5 h-5 text-[#5B8CFF]" strokeWidth={2} /> Assessment Preparation
                       </CardTitle>
@@ -619,7 +625,7 @@ export default function CandidateDashboard() {
                       </CardDescription>
                     </CardHeader>
                     
-                    <CardContent className="p-6 md:p-8 space-y-6 md:space-y-8">
+                    <CardContent className="p-6 md:p-8 space-y-6 md:space-y-8 flex-1 overflow-y-auto custom-scrollbar pb-10">
                       
                       {errorMsg && (
                         <div className="text-xs sys-text-primary bg-[#F87171]/10 p-4 rounded-xl border border-[#F87171]/20 flex items-center space-x-3 animate-in fade-in zoom-in-95 duration-300">
@@ -809,12 +815,11 @@ export default function CandidateDashboard() {
                 <History className="w-4 h-4 sys-text-body" strokeWidth={1.5} /> Past Records & Submissions
               </div>
               
-              <div className="bg-panel backdrop-blur-[16px] border border-divider rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)]">
+              <div className="bg-background border border-divider rounded-2xl overflow-hidden shadow-sm">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-sm whitespace-nowrap">
-                    <thead className="bg-background/50 border-b border-divider">
+                    <thead className="bg-panel/50 border-b border-divider">
                       <tr>
-                        <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Session ID</th>
                         <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Assessment</th>
                         <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Date</th>
                         <th className="px-6 py-4 font-mono text-[10.5px] uppercase sys-text-body tracking-wider font-semibold">Status</th>
@@ -825,8 +830,7 @@ export default function CandidateDashboard() {
                     <tbody className="divide-y divide-divider">
                       {pastSessions.length > 0 ? (
                         pastSessions.map(session => (
-                          <tr key={session.id} className="hover:bg-background/50 transition-colors duration-300">
-                            <td className="px-6 py-4 font-mono text-xs sys-text-body">{session.id.slice(0, 8)}</td>
+                          <tr key={session.id} className="hover:bg-panel transition-colors duration-300">
                             <td className="px-6 py-4 font-heading font-semibold sys-text-primary">{session.assessment_id.slice(0, 12)}...</td>
                             <td className="px-6 py-4 text-xs sys-text-body">{new Date(session.startedAt || 0).toLocaleDateString()}</td>
                             <td className="px-6 py-4">
@@ -866,9 +870,23 @@ export default function CandidateDashboard() {
             </div>
           )}
 
+          {/* ================= RESULTS TAB ================= */}
+          {activeTab === 'results' && (
+            <div className="flex flex-col items-center justify-center h-[500px] animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="p-10 bg-panel backdrop-blur-[16px] border border-divider rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] text-center max-w-md w-full">
+                <div className="w-16 h-16 rounded-full bg-[#5B8CFF]/10 text-[#5B8CFF] flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle2 className="w-8 h-8" strokeWidth={1.5} />
+                </div>
+                <h2 className="text-2xl font-bold font-heading text-primary mb-3">Results Center</h2>
+                <p className="text-sm sys-text-body leading-relaxed">
+                  Your assessment marks and detailed evaluation reports will be published here once they are finalized by the instructors.
+                </p>
+              </div>
+            </div>
+          )}
+
         </div>
       </main>
-
     </div>
   )
 }
