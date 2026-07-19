@@ -55,13 +55,13 @@
 
   /* 2. CARD & SURFACE SYSTEM */
   .sys-card {
-    @apply bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 rounded-[24px] p-6 transition-all duration-300 shadow-sm;
+    @apply bg-[#0B0B0D]/80 backdrop-blur-[16px] border border-white/5 rounded-[24px] p-6 transition-all duration-300 shadow-sm;
   }
   .sys-card-interactive {
-    @apply bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 rounded-[24px] p-6 transition-all duration-300 shadow-sm cursor-pointer hover:border-white/10 hover:bg-[rgba(28,28,30,0.9)] hover:-translate-y-0.5 active:scale-[0.99];
+    @apply bg-[#0B0B0D]/80 backdrop-blur-[16px] border border-white/5 rounded-[24px] p-6 transition-all duration-300 shadow-sm cursor-pointer hover:border-white/10 hover:bg-[#101114]/90 hover:-translate-y-0.5 active:scale-[0.99];
   }
   .sys-panel {
-    @apply bg-[rgba(0,0,0,0.4)] backdrop-blur-[24px] border border-white/5 rounded-[28px];
+    @apply bg-[#08080A]/80 backdrop-blur-[24px] border border-white/5 rounded-[28px];
   }
   .sys-bg {
     @apply bg-[#000000];
@@ -69,7 +69,7 @@
 
   /* 3. INPUT SYSTEM */
   .sys-input-group {
-    @apply bg-[rgba(28,28,30,0.72)] border border-white/5 rounded-[20px] p-4 flex flex-col focus-within:border-[#5B8CFF] focus-within:ring-1 focus-within:ring-[#5B8CFF] transition-all;
+    @apply bg-[#1A1C20] border border-white/[0.03] shadow-inner shadow-black/40 rounded-[20px] p-4 flex flex-col focus-within:border-[#5B8CFF] focus-within:ring-1 focus-within:ring-[#5B8CFF] transition-all;
   }
   .sys-input {
     @apply w-full bg-transparent border-0 p-0 text-[15px] text-white focus:outline-none focus:ring-0 placeholder:text-[#A1A1AA] font-medium;
@@ -80,10 +80,10 @@
     @apply bg-[#f5f5f7] hover:bg-white text-black font-semibold h-[52px] px-6 rounded-[20px] cursor-pointer transition-all duration-300 disabled:opacity-50 text-[14px] shadow-lg hover:shadow-xl active:scale-[0.98] select-none inline-flex items-center justify-center gap-2;
   }
   .sys-btn-secondary {
-    @apply bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] hover:bg-[rgba(28,28,30,0.9)] border border-white/5 text-white font-medium h-[52px] px-6 rounded-[20px] cursor-pointer transition-all duration-300 disabled:opacity-50 text-[14px] active:scale-[0.98] select-none inline-flex items-center justify-center gap-2;
+    @apply bg-[#1A1C20] backdrop-blur-[16px] hover:bg-[#23252a] border border-white/[0.03] text-white font-medium h-[52px] px-6 rounded-[20px] cursor-pointer transition-all duration-300 disabled:opacity-50 text-[14px] active:scale-[0.98] shadow-inner shadow-black/20 select-none inline-flex items-center justify-center gap-2;
   }
   .sys-btn-icon {
-    @apply p-2 bg-[rgba(28,28,30,0.72)] rounded-[18px] border border-white/5 hover:bg-[rgba(28,28,30,0.9)] transition-all cursor-pointer text-[#86868b] hover:text-white active:scale-[0.95];
+    @apply p-2 bg-[#1A1C20] rounded-[18px] border border-white/[0.03] shadow-inner shadow-black/20 hover:bg-[#23252a] transition-all cursor-pointer text-[#86868b] hover:text-white active:scale-[0.95];
   }
 
   /* 5. BADGE SYSTEM */
@@ -96,7 +96,7 @@
     @apply w-full text-left text-sm text-[#f5f5f7];
   }
   .sys-table-header {
-    @apply text-[10px] font-semibold tracking-widest uppercase text-[#86868b] border-b border-white/5 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px];
+    @apply text-[10px] font-semibold tracking-widest uppercase text-[#86868b] border-b border-white/5 bg-[#0B0B0D]/80 backdrop-blur-[16px];
   }
   .sys-table-row {
     @apply border-b border-white/5 hover:bg-white/[0.03] transition-colors;

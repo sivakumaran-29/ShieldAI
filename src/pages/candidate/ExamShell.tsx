@@ -1315,7 +1315,7 @@ export default function ExamShell() {
             </Card>
 
             {/* Telemetry timeline logs */}
-            <Card className="bg-black border-white/5 flex flex-col shadow-none overflow-hidden h-28 rounded-xl">
+            <Card className="bg-[#0B0B0D] border-white/5 flex flex-col shadow-none overflow-hidden h-28 rounded-xl">
               <div className="bg-background border-b border-white/5 px-2.5 py-1.5 text-[8.5px] uppercase font-bold sys-text-body tracking-wider">
                 Telemetry Log
               </div>
@@ -1387,14 +1387,12 @@ export default function ExamShell() {
                           <button
                             key={idx}
                             onClick={() => handleMcqSelect(idx)}
-                            className={`flex items-center text-left p-4 rounded-xl border transition-all duration-200 ${
-                              isSelected 
-                                ? 'bg-[#5B8CFF]/10 border-[#5B8CFF] shadow-[0_0_15px_rgba(91,140,255,0.15)]' 
-                                : 'sys-card border-white/5 hover:border-transparent hover:sys-card'
+                            className={`w-full flex items-center text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer ${
+                              isSelected ? 'bg-[#5B8CFF] text-white' : 'bg-[#1A1C20] shadow-inner shadow-black/20 sys-text-body border-white/[0.03]'
                             }`}
                           >
                             <div className={`flex items-center justify-center w-8 h-8 rounded-lg mr-4 font-bold font-mono text-[10px] ${
-                              isSelected ? 'bg-[#5B8CFF] text-white' : 'bg-black sys-text-body border border-white/5'
+                              isSelected ? 'bg-white text-[#5B8CFF]' : 'bg-black sys-text-body border border-white/5'
                             }`}>
                               {String.fromCharCode(65 + idx)}
                             </div>
@@ -1528,7 +1526,7 @@ export default function ExamShell() {
             <div className="flex-1 flex overflow-hidden">
               
               {terminalTab === 'testcases' && (
-                <div className="w-64 border-r border-white/5 p-3 bg-black flex flex-col">
+                <div className="w-64 border-r border-white/5 p-3 bg-[#0B0B0D]/80 flex flex-col">
                   <span className="text-[9px] font-mono sys-text-body uppercase mb-2 font-bold tracking-widest">Custom STDIN Input</span>
                   <textarea 
                     value={customInput}
@@ -1565,8 +1563,8 @@ export default function ExamShell() {
                       <div key={index} className="p-2 bg-background border border-white/5 rounded text-[9px] flex flex-col space-y-1 font-mono">
                         <div className="flex justify-between items-center">
                           <span className="sys-text-body font-bold">Case #{index + 1}</span>
-                          <span className={`px-1 rounded text-[8px] font-bold ${
-                            c.passed ? 'sys-card text-white border border-transparent' : 'bg-black sys-text-body border border-white/5'
+                          <span className={`p-3 rounded-xl border text-[10px] ${
+                            c.passed ? 'sys-card text-white border-transparent' : 'bg-[#1A1C20] shadow-inner shadow-black/20 sys-text-body border-white/[0.03]'
                           }`}>
                             {c.verdict}
                           </span>

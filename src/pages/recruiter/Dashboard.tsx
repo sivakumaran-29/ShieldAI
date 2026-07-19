@@ -151,11 +151,11 @@ export default function RecruiterDashboard() {
           {!isCollapsed && (
             <div 
               onClick={() => setShowPalette(true)}
-              className="flex sys-bg/40 border border-white/5 rounded-xl px-3 py-2 items-center gap-2 hover:border-[#5B8CFF]/30 cursor-pointer transition select-none"
+              className="flex bg-[#1A1C20] border border-white/5 rounded-xl px-3 py-2 items-center gap-2 hover:border-[#5B8CFF]/30 cursor-pointer transition select-none"
             >
               <Search className="w-3.5 h-3.5 sys-text-body" strokeWidth={1.5} />
               <span className="text-[11px] sys-text-body font-medium flex-1">Command Search...</span>
-              <span className="text-[8px] font-mono sys-text-body bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] border border-white/5 px-1.5 py-0.2 rounded">⌘K</span>
+              <span className="text-[8px] font-mono sys-text-body bg-[#0B0B0D] shadow-inner shadow-black/20 backdrop-blur-[16px] border border-white/[0.03] px-1.5 py-0.2 rounded">⌘K</span>
             </div>
           )}
 
@@ -163,7 +163,7 @@ export default function RecruiterDashboard() {
             <div className="flex justify-center">
               <button 
                 onClick={() => setShowPalette(true)}
-                className="p-2 rounded-xl sys-bg/40 border border-white/5 sys-text-body hover:text-white transition"
+                className="p-2 rounded-xl bg-[#1A1C20] border border-white/5 sys-text-body hover:text-white transition"
               >
                 <Command className="w-4 h-4" strokeWidth={1.5} />
               </button>
@@ -186,7 +186,7 @@ export default function RecruiterDashboard() {
                   className={`flex items-center gap-3 px-3 py-2.5 text-xs font-medium rounded-xl border transition-all duration-300 cursor-pointer ${
                     isActive 
                       ? 'bg-[#5B8CFF]/10 text-[#5B8CFF] border-[#5B8CFF]/20 font-semibold' 
-                      : 'sys-text-body hover:text-white border-transparent hover:bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/20'
+                      : 'sys-text-body hover:text-white border-transparent hover:bg-[#1A1C20] backdrop-blur-[16px]/20'
                   } ${isCollapsed ? 'justify-center' : ''}`}
                   title={item.label}
                 >
@@ -232,7 +232,7 @@ export default function RecruiterDashboard() {
 
           {/* User profile details */}
           <div className={`flex items-center gap-3 px-1 ${isCollapsed ? 'justify-center' : ''}`}>
-            <div className="p-2 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px]/40 border border-white/5 rounded-xl shrink-0">
+            <div className="p-2 bg-[#0B0B0D]/80 backdrop-blur-[16px]/40 border border-white/5 rounded-xl shrink-0">
               <User className="w-4 h-4 sys-text-body" strokeWidth={1.5} />
             </div>
             {!isCollapsed && (
@@ -247,7 +247,7 @@ export default function RecruiterDashboard() {
             <Button 
               onClick={logout} 
               variant="outline" 
-              className={`border-white/5 sys-bg/20 !shadow-none hover:!bg-[rgba(28,28,30,0.72)] hover:!shadow-none sys-text-body hover:text-white text-xs h-9 justify-center cursor-pointer transition rounded-xl flex-1 ${
+              className={`border-white/5 bg-[#1A1C20]/20 !shadow-none hover:!bg-[#1A1C20] hover:!shadow-none sys-text-body hover:text-white text-xs h-9 justify-center cursor-pointer transition rounded-xl flex-1 ${
                 isCollapsed ? 'p-0' : ''
               }`}
               title="Sign Out"
@@ -259,7 +259,7 @@ export default function RecruiterDashboard() {
             {/* Collapsible toggle button */}
             <button 
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="p-2 border border-white/5 sys-bg/20 hover:sys-card sys-text-body hover:text-white rounded-xl cursor-pointer transition focus:outline-none"
+              className="p-2 border border-white/5 bg-[#1A1C20]/20 hover:bg-[#1A1C20] sys-text-body hover:text-white rounded-xl cursor-pointer transition focus:outline-none"
             >
               {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
             </button>
@@ -271,7 +271,7 @@ export default function RecruiterDashboard() {
       <div className="flex-1 flex flex-col h-screen overflow-hidden relative z-10">
         
         {/* TOP BAR FLOATING COMMAND WORKSPACE */}
-        <header className="h-16 border-b border-white/5 bg-[rgba(28,28,30,0.72)] backdrop-blur-[16px] flex items-center justify-between px-8 z-25 ">
+        <header className="h-16 border-b border-white/5 bg-[#0B0B0D]/80 backdrop-blur-[16px] flex items-center justify-between px-8 z-25 ">
           {/* Breadcrumbs trail */}
           <div className="flex items-center gap-2 text-[10px] font-heading font-semibold uppercase tracking-widest select-none text-white/60">
             <span>SHIELD_OS</span>
