@@ -67,7 +67,7 @@ export default function Login() {
   }
 
   return (
-    <div className="w-screen h-screen flex font-sans antialiased overflow-hidden bg-background text-[#f5f5f7]">
+    <div className="fixed inset-0 w-full h-[100dvh] flex font-sans antialiased overflow-hidden bg-background text-[#f5f5f7]">
       
       {/* Subtle Apple-style Glow in background */}
       <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#5B8CFF]/10 rounded-full blur-[150px] pointer-events-none" />
@@ -76,7 +76,7 @@ export default function Login() {
       <div className="flex w-full h-full relative z-10">
         
         {/* LEFT PANEL: Branding & Visuals (Apple style clean typography) */}
-        <div className="hidden lg:flex w-1/2 flex-col justify-between p-12 lg:p-20 border-r border-[#ffffff0a] bg-background/40 backdrop-blur-3xl">
+        <div className="hidden lg:flex w-1/2 flex-col justify-between p-12 lg:p-20 bg-background/40 backdrop-blur-3xl">
           
           <div className="flex items-center space-x-3 select-none">
             <div className="p-2 bg-[#1c1c1e] rounded-xl border border-[#38383a]">
