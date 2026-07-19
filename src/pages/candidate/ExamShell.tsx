@@ -1194,7 +1194,7 @@ export default function ExamShell() {
                 <div className={`p-8 border rounded-[20px] flex flex-col items-center text-center transition-all duration-300 ${
                   currentSession?.completedParts?.includes('mcq') 
                     ? 'bg-surface/50 border-transparent opacity-50' 
-                    : 'bg-[#15171B] border-divider hover:border-[#5B8CFF]/30 hover:bg-[#1B1D22] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5B8CFF]/5'
+                    : 'bg-card border-divider hover:border-[#5B8CFF]/30 hover:bg-hover hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5B8CFF]/5'
                 }`}>
                   <div className="w-14 h-14 bg-surface rounded-2xl flex items-center justify-center mb-6 border border-divider shadow-sm">
                     <span className="font-bold text-emerald-400 text-lg">P1</span>
@@ -1214,7 +1214,7 @@ export default function ExamShell() {
                 <div className={`p-8 border rounded-[20px] flex flex-col items-center text-center transition-all duration-300 ${
                   currentSession?.completedParts?.includes('coding') 
                     ? 'bg-surface/50 border-transparent opacity-50' 
-                    : 'bg-[#15171B] border-divider hover:border-[#5B8CFF]/30 hover:bg-[#1B1D22] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5B8CFF]/5'
+                    : 'bg-card border-divider hover:border-[#5B8CFF]/30 hover:bg-hover hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5B8CFF]/5'
                 }`}>
                   <div className="w-14 h-14 bg-surface rounded-2xl flex items-center justify-center mb-6 border border-divider shadow-sm">
                     <span className="font-bold text-[#5B8CFF] text-lg">P2</span>
@@ -1261,11 +1261,11 @@ export default function ExamShell() {
                 <h3 className="text-xs font-semibold text-tertiary uppercase tracking-wider">
                   {activePart === 'mcq' ? 'Multiple Choice' : 'Coding Problems'}
                 </h3>
-                <span className="text-xs font-bold text-primary bg-[#15171B] px-2 py-1 rounded-md border border-divider">
+                <span className="text-xs font-bold text-primary bg-panel px-2 py-1 rounded-md border border-divider">
                   {selectedQIndex + 1} / {filteredQuestions.length}
                 </span>
               </div>
-              <div className="w-full h-1.5 bg-[#15171B] rounded-full overflow-hidden">
+              <div className="w-full h-1.5 bg-divider rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-[#5B8CFF] rounded-full transition-all duration-500 ease-out" 
                   style={{ width: `${((selectedQIndex + 1) / filteredQuestions.length) * 100}%` }}
@@ -1313,7 +1313,7 @@ export default function ExamShell() {
             <div className="p-6 border-t border-divider space-y-4 bg-surface/30">
               
               {/* Premium Proctor Camera Card */}
-              <div className="bg-[#15171B] border border-divider p-3 rounded-[20px] shadow-sm relative overflow-hidden group">
+              <div className="bg-panel border border-divider p-3 rounded-[20px] shadow-sm relative overflow-hidden group">
                 {isAnomalyActive && (
                   <div className="absolute top-4 right-4 z-30 bg-red-500 text-primary font-semibold text-[10px] px-2 py-1 rounded-md flex items-center shadow-lg animate-pulse">
                     <EyeOff className="w-3 h-3 mr-1.5" strokeWidth={2} /> {anomalyType}
@@ -1346,7 +1346,7 @@ export default function ExamShell() {
 
               {/* Telemetry Console */}
               <div className="bg-surface border border-divider rounded-2xl overflow-hidden shadow-sm flex flex-col h-40">
-                <div className="bg-[#15171B] border-b border-divider px-4 py-2.5 flex items-center gap-2">
+                <div className="bg-panel-solid border-b border-divider px-4 py-2.5 flex items-center gap-2">
                   <Terminal className="w-3.5 h-3.5 text-tertiary" />
                   <span className="text-[10px] uppercase font-semibold text-tertiary tracking-wider">Telemetry Log</span>
                 </div>
@@ -1391,7 +1391,7 @@ export default function ExamShell() {
                       setLanguage(newLang)
                     }
                   }} 
-                  className="bg-[#15171B] border border-divider text-primary rounded-lg text-xs px-3 py-1.5 font-medium outline-none focus:border-[#5B8CFF]/50 transition-colors cursor-pointer"
+                  className="bg-input border border-divider text-primary rounded-lg text-xs px-3 py-1.5 font-medium outline-none focus:border-[#5B8CFF]/50 transition-colors cursor-pointer"
                 >
                   {assessment.allowed_languages.includes('python') && settings.allowedLangs.includes('python') && <option value="python">Python 3.10</option>}
                   {assessment.allowed_languages.includes('javascript') && settings.allowedLangs.includes('javascript') && <option value="javascript">JavaScript (ES6)</option>}
@@ -1447,8 +1447,8 @@ export default function ExamShell() {
                             >
                               <div className={`flex shrink-0 items-center justify-center w-8 h-8 rounded-full mr-5 font-semibold text-xs border transition-all duration-200 ${
                                 isSelected 
-                                  ? 'bg-[#5B8CFF] text-primary border-[#5B8CFF] shadow-[0_0_12px_rgba(91,140,255,0.4)]' 
-                                  : 'bg-[#15171B] text-tertiary border-divider group-hover:border-[rgba(255,255,255,0.15)] group-hover:text-primary'
+                                  ? 'bg-[#5B8CFF] text-white border-[#5B8CFF] shadow-[0_0_12px_rgba(91,140,255,0.4)]' 
+                                  : 'bg-input text-tertiary border-divider group-hover:border-[rgba(255,255,255,0.15)] group-hover:text-primary'
                               }`}>
                                 {String.fromCharCode(65 + idx)}
                               </div>
