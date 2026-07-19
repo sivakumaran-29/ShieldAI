@@ -19,7 +19,7 @@ export const useSettingsStore = create<SettingsStore>((set) => ({
   integrityThreshold: 75,
   requireCamera: true,
   requireTabFocus: true,
-  allowedLangs: ['python', 'javascript'],
+  allowedLangs: ['python', 'javascript', 'java', 'cpp'],
   maxExecutionTime: 2500,
   maxMemoryLimit: 256,
   

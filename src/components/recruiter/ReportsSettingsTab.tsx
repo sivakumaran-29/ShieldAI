@@ -692,7 +692,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                     <span className="text-[9px] font-mono sys-text-body uppercase tracking-widest block mb-2">ALLOWED COMPILER RUNTIMES</span>
                     
                     <div className="space-y-3">
-                      {['python', 'javascript', 'java'].map(lang => (
+                      {['python', 'javascript', 'java', 'cpp'].map(lang => (
                         <label key={lang} className="flex items-center justify-between p-3 sys-bg/40 border border-white/5 rounded-xl cursor-pointer select-none">
                           <span className="text-xs uppercase font-mono font-bold sys-text-primary">{lang}</span>
                           <input 

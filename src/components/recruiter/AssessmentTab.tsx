@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import { Assessment, saveAssessment, deleteAssessment, duplicateAssessment } from '../../lib/assessmentEngine'
 import { fetchActiveBatches } from '../../lib/batchHelper'
+import { useSettingsStore } from '../../store/settingsStore'
 
 
 interface AssessmentTabProps {
@@ -17,6 +18,7 @@ interface AssessmentTabProps {
 }
 
 export default function AssessmentTab({ assessments, onRefresh, onSelectAssessment, onSelectInspector }: AssessmentTabProps) {
+  const settings = useSettingsStore()
   const [isEditing, setIsEditing] = useState(false)
   const [editId, setEditId] = useState<string | null>(null)
   const [title, setTitle] = useState('')
@@ -369,7 +371,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                 <div className="flex flex-col gap-2">
                   <label className="text-[9px] font-mono sys-text-body uppercase tracking-wider">Allowed Languages</label>
                   <div className="flex gap-4">
-                    {['python', 'javascript', 'java'].map(lang => (
+                    {settings.allowedLangs.map(lang => (
                       <label key={lang} className="flex items-center gap-2 cursor-pointer select-none">
                         <input 
                           type="checkbox" 
@@ -377,7 +379,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                           onChange={() => toggleLanguage(lang)}
                           className="w-4 h-4 rounded border-white/5 text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer"
                         />
-                        <span className="text-xs uppercase sys-text-body font-mono">{lang === 'javascript' ? 'JS (ES6)' : lang}</span>
+                        <span className="text-xs uppercase sys-text-body font-mono">{lang === 'javascript' ? 'JS (ES6)' : lang === 'cpp' ? 'C++' : lang}</span>
                       </label>
                     ))}
                   </div>

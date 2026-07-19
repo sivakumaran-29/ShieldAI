@@ -809,9 +809,7 @@ export default function ExamShell() {
   // ==========================================
   const handleResetCode = () => {
     if (!activeQuestion) return
-    if (window.confirm('Reset code editor to initial solution template? Current drafts will be cleared.')) {
-      handleCodeChange(codeTemplates[language])
-    }
+    handleCodeChange(codeTemplates[language] || '')
   }
 
   const handleRunCode = async () => {
@@ -875,20 +873,25 @@ export default function ExamShell() {
     })
   }
 
-  const handleSubmitQuestion = async () => {
+  const handleCheckTestCases = () => executeQuestionEvaluation(false)
+  const handleSubmitQuestion = () => executeQuestionEvaluation(true)
+
+  const executeQuestionEvaluation = async (isFinalSubmit: boolean) => {
     if (!activeQuestion) return
     setIsSubmitting(true)
     setTerminalTab('testcases')
-    setConsoleOutput('Executing final evaluation against all test cases (hidden + public)...')
+    setConsoleOutput(isFinalSubmit ? 'Executing final evaluation against all test cases (hidden + public)...' : 'Checking public test cases...')
     setTestResults(null)
 
     const codeToSubmit = getActiveCode()
 
     try {
+      const targetCases = isFinalSubmit ? activeQuestion.test_cases : activeQuestion.test_cases.filter(t => t.is_public)
+      
       const response = await evaluateCodeSnippet(
         codeToSubmit,
         language,
-        activeQuestion.test_cases,
+        targetCases,
         settings.maxExecutionTime,
         settings.maxMemoryLimit
       )
@@ -916,9 +919,9 @@ export default function ExamShell() {
       const avgMem = Math.round(response.cases.reduce((acc, c) => acc + c.memoryUsageKb, 0) / response.cases.length)
 
       setConsoleOutput(
-        `Final Verdict: ${response.verdict}\n` +
+        `Verdict: ${response.verdict}\n` +
         `Passed Cases: ${passedCount} / ${response.cases.length}\n` +
-        `Target Score obtained: ${scoreObtained}%\n` +
+        (isFinalSubmit ? `Target Score obtained: ${scoreObtained}%\n` : '') +
         `Average Time: ${avgTime}ms | Memory Usage: ${avgMem}KB\n` +
         `Compiler Details: ${response.compileMessage || 'None'}`
       )
@@ -927,32 +930,42 @@ export default function ExamShell() {
         verdict: response.verdict,
         compileMessage: response.compileMessage,
         cases: response.cases,
-        isSubmit: true,
+        isSubmit: isFinalSubmit,
         passedCount,
         totalCount: response.cases.length,
         score: scoreObtained
       })
 
-      setCurrentSession(prev => {
-        if (!prev) return null
-        const nextSubmissions = {
-          ...(prev.submissions || {}),
-          [activeQuestion.id]: {
-            code: codeToSubmit,
-            language: language,
-            status: response.verdict,
-            cases_passed: passedCount,
-            total_cases: response.cases.length,
-            score: scoreObtained,
-            execution_time: avgTime,
-            memory_usage: avgMem
+      if (isFinalSubmit) {
+        setCurrentSession(prev => {
+          if (!prev) return null
+          const nextSubmissions = {
+            ...(prev.submissions || {}),
+            [activeQuestion.id]: {
+              code: codeToSubmit,
+              language: language,
+              status: response.verdict,
+              cases_passed: passedCount,
+              total_cases: activeQuestion.test_cases.length,
+              score: scoreObtained,
+              execution_time: avgTime,
+              memory_usage: avgMem
+            }
           }
-        }
-        return {
-          ...prev,
-          submissions: nextSubmissions
-        }
-      })
+          return {
+            ...prev,
+            submissions: nextSubmissions
+          }
+        })
+
+        // Auto Advance logic
+        setTimeout(() => {
+          setSelectedQIndex(prev => {
+             if (prev < filteredQuestions.length - 1) return prev + 1
+             return prev
+          })
+        }, 1200)
+      }
     } catch (err: any) {
       setConsoleOutput(`Compiler evaluation error: ${err.message || 'System crash.'}`)
     } finally {
@@ -1429,6 +1442,7 @@ export default function ExamShell() {
                         value={getActiveCode()} 
                         onChange={handleCodeChange}
                         options={{ 
+                          readOnly: !!currentSession?.submissions?.[activeQuestion.id],
                           fontSize: 14, 
                           minimap: { enabled: false }, 
                           automaticLayout: true,
@@ -1471,8 +1485,9 @@ export default function ExamShell() {
                   <div className="flex items-center gap-3">
                     <Button
                       onClick={handleResetCode} 
+                      disabled={!!currentSession?.submissions?.[activeQuestion.id]}
                       variant="ghost" 
-                      className="h-8 text-[11px] font-semibold text-[#8A9099] hover:bg-[#15171B] hover:text-[#F5F5F5] rounded-lg transition-colors px-3"
+                      className="h-8 text-[11px] font-semibold text-[#8A9099] hover:bg-[#15171B] hover:text-[#F5F5F5] rounded-lg transition-colors px-3 disabled:opacity-50 disabled:pointer-events-none"
                     >
                       <RefreshCw className="w-3.5 h-3.5 mr-2" /> Reset
                     </Button>
@@ -1485,24 +1500,24 @@ export default function ExamShell() {
                     </Button>
                     <Button 
                       onClick={handleRunCode} 
-                      disabled={isRunning || isSubmitting} 
-                      className="bg-[#111216] hover:bg-[#15171B] text-emerald-400 border border-[rgba(255,255,255,0.06)] hover:border-emerald-500/30 font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50"
+                      disabled={isRunning || isSubmitting || !!currentSession?.submissions?.[activeQuestion.id]} 
+                      className="bg-[#111216] hover:bg-[#15171B] text-emerald-400 border border-[rgba(255,255,255,0.06)] hover:border-emerald-500/30 font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50 disabled:pointer-events-none"
                     >
                       {isRunning ? 'Running...' : 'Run Code'}
                     </Button>
                     <Button 
-                      onClick={handleSubmitQuestion} 
-                      disabled={isRunning || isSubmitting} 
-                      className="bg-[#111216] hover:bg-[#15171B] text-[#5B8CFF] border border-[#5B8CFF]/30 hover:border-[#5B8CFF] font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50"
+                      onClick={handleCheckTestCases} 
+                      disabled={isRunning || isSubmitting || !!currentSession?.submissions?.[activeQuestion.id]} 
+                      className="bg-[#111216] hover:bg-[#15171B] text-[#5B8CFF] border border-[#5B8CFF]/30 hover:border-[#5B8CFF] font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50 disabled:pointer-events-none"
                     >
                       {isSubmitting ? 'Evaluating...' : 'Check Test Cases'}
                     </Button>
                     <Button 
                       onClick={handleSubmitQuestion} 
-                      disabled={isRunning || isSubmitting} 
-                      className="bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50"
+                      disabled={isRunning || isSubmitting || !!currentSession?.submissions?.[activeQuestion.id]} 
+                      className="bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] font-bold h-8 px-5 text-[11px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50 disabled:pointer-events-none"
                     >
-                      {isSubmitting ? 'Evaluating...' : 'Submit Code'}
+                      {!!currentSession?.submissions?.[activeQuestion.id] ? 'Submitted' : isSubmitting ? 'Evaluating...' : 'Submit Code'}
                     </Button>
                   </div>
                 </div>
