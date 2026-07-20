@@ -694,7 +694,7 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                     <div className="space-y-3">
                       {['python', 'javascript', 'java', 'cpp', 'c'].map(lang => (
                         <label key={lang} className="flex items-center justify-between p-3 sys-bg/40 border border-divider rounded-xl cursor-pointer select-none">
-                          <span className="text-xs uppercase font-mono font-bold sys-text-primary">{lang}</span>
+                          <span className="text-xs uppercase font-mono font-bold sys-text-primary">{lang === 'cpp' ? 'C++' : lang}</span>
                           <input 
                             type="checkbox" 
                             checked={allowedLangs.includes(lang)}

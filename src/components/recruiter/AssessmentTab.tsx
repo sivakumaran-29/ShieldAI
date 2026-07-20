@@ -205,7 +205,7 @@ export default function AssessmentTab({ assessments, onRefresh, onSelectAssessme
                       </td>
                       <td className="py-2 py-2 lg:py-4 px-1 px-2 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell sys-text-body capitalize font-sans font-medium border-b border-divider ">
                         
-                        <span>{a.allowed_languages.join(', ')}</span>
+                        <span>{a.allowed_languages.map(l => l === 'cpp' ? 'C++' : l).join(', ')}</span>
                       </td>
                       <td className="py-2 py-2 lg:py-4 px-1 px-2 lg:px-5 flex flex-col sm:flex-row sm:items-center justify-between table-cell border-b border-divider ">
                         

@@ -421,6 +421,27 @@ export default function RecruiterDashboard() {
                   <span>Open Users & Proctor feeds</span>
                   <span className="text-[9px] font-mono sys-text-body sys-card px-1.5 py-0.5 rounded">G U</span>
                 </button>
+                <button 
+                  onClick={() => { setActiveSection('database'); setShowPalette(false); }}
+                  className="w-full text-left px-3 py-2 rounded-xl sys-text-body hover:text-primary hover:sys-bg/40 flex justify-between items-center"
+                >
+                  <span>Open Database</span>
+                  <span className="text-[9px] font-mono sys-text-body sys-card px-1.5 py-0.5 rounded">G D</span>
+                </button>
+                <button 
+                  onClick={() => { setActiveSection('reports'); setShowPalette(false); }}
+                  className="w-full text-left px-3 py-2 rounded-xl sys-text-body hover:text-primary hover:sys-bg/40 flex justify-between items-center"
+                >
+                  <span>Open Reports Console</span>
+                  <span className="text-[9px] font-mono sys-text-body sys-card px-1.5 py-0.5 rounded">G R</span>
+                </button>
+                <button 
+                  onClick={() => { setActiveSection('settings'); setShowPalette(false); }}
+                  className="w-full text-left px-3 py-2 rounded-xl sys-text-body hover:text-primary hover:sys-bg/40 flex justify-between items-center"
+                >
+                  <span>Open Platform Settings</span>
+                  <span className="text-[9px] font-mono sys-text-body sys-card px-1.5 py-0.5 rounded">G S</span>
+                </button>
               </div>
 
               {filteredPaletteAssessments.length > 0 && (
