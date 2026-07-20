@@ -79,6 +79,7 @@ export interface CandidateSession {
   submissions?: Record<string, QuestionSubmission> // question_id -> submission
   mcq_submissions?: Record<string, string> // question_id -> exact option text
   completedParts?: ('mcq' | 'coding')[] // Tracks which parts the candidate has locked/submitted
+  behavioral_metrics?: Record<string, { time_spent: number, keystrokes: number, pastes: number, large_blocks: number }>
   startedAt?: string
   submittedAt?: string
   updated_at: string
@@ -619,6 +620,7 @@ export const saveCandidateSession = async (session: CandidateSession): Promise<b
           submissions: session.submissions,
           mcq_submissions: session.mcq_submissions,
           completedParts: session.completedParts,
+          behavioralMetrics: session.behavioral_metrics,
           finalScore: session.score,
           startedAt: session.startedAt,
           submittedAt: session.submittedAt

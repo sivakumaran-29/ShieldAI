@@ -26,6 +26,9 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
   const [integrityThreshold, setIntegrityThreshold] = useState(settings.integrityThreshold)
   const [proctorCamera, setProctorCamera] = useState(settings.requireCamera)
   const [proctorTabs, setProctorTabs] = useState(settings.requireTabFocus)
+  const [enableAdvancedAI, setEnableAdvancedAI] = useState(settings.enableAdvancedAI ?? true)
+  const [enableOfflineSync, setEnableOfflineSync] = useState(settings.enableOfflineSync ?? true)
+  const [enableBehavioralTracking, setEnableBehavioralTracking] = useState(settings.enableBehavioralTracking ?? true)
   const [allowedLangs, setAllowedLangs] = useState(settings.allowedLangs)
   const [maxExecutionTime, setMaxExecutionTime] = useState(settings.maxExecutionTime)
   const [maxMemoryLimit, setMaxMemoryLimit] = useState(settings.maxMemoryLimit)
@@ -82,6 +85,9 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
       integrityThreshold,
       requireCamera: proctorCamera,
       requireTabFocus: proctorTabs,
+      enableAdvancedAI,
+      enableOfflineSync,
+      enableBehavioralTracking,
       allowedLangs,
       maxExecutionTime,
       maxMemoryLimit
@@ -679,6 +685,45 @@ export default function ReportsSettingsTab({ defaultSection, assessments }: Repo
                           type="checkbox" 
                           checked={proctorTabs} 
                           onChange={e => setProctorTabs(e.target.checked)}
+                          className="w-4 h-4 rounded border-divider text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer" 
+                        />
+                      </label>
+
+                      <label className="flex items-center justify-between p-3.5 sys-bg/40 border border-divider rounded-xl cursor-pointer select-none">
+                        <div className="space-y-0.5 pr-4">
+                          <span className="text-xs font-bold sys-text-primary block">Advanced Local AI Proctoring</span>
+                          <span className="text-[10px] sys-text-body font-sans">Use TF.js for Gaze Tracking and Face Presence checks.</span>
+                        </div>
+                        <input 
+                          type="checkbox" 
+                          checked={enableAdvancedAI} 
+                          onChange={e => setEnableAdvancedAI(e.target.checked)}
+                          className="w-4 h-4 rounded border-divider text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer" 
+                        />
+                      </label>
+
+                      <label className="flex items-center justify-between p-3.5 sys-bg/40 border border-divider rounded-xl cursor-pointer select-none">
+                        <div className="space-y-0.5 pr-4">
+                          <span className="text-xs font-bold sys-text-primary block">Offline Exam Resilience</span>
+                          <span className="text-[10px] sys-text-body font-sans">Locally cache candidate progress and sync upon reconnection.</span>
+                        </div>
+                        <input 
+                          type="checkbox" 
+                          checked={enableOfflineSync} 
+                          onChange={e => setEnableOfflineSync(e.target.checked)}
+                          className="w-4 h-4 rounded border-divider text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer" 
+                        />
+                      </label>
+
+                      <label className="flex items-center justify-between p-3.5 sys-bg/40 border border-divider rounded-xl cursor-pointer select-none">
+                        <div className="space-y-0.5 pr-4">
+                          <span className="text-xs font-bold sys-text-primary block">Behavioral Analytics Capture</span>
+                          <span className="text-[10px] sys-text-body font-sans">Monitor keystroke dynamics, copy/paste frequency, and time-per-question.</span>
+                        </div>
+                        <input 
+                          type="checkbox" 
+                          checked={enableBehavioralTracking} 
+                          onChange={e => setEnableBehavioralTracking(e.target.checked)}
                           className="w-4 h-4 rounded border-divider text-[#5B8CFF] focus:ring-0 sys-bg cursor-pointer" 
                         />
                       </label>

@@ -19,6 +19,8 @@ import { useSettingsStore } from '../../store/settingsStore'
 import Latex from 'react-latex-next'
 import * as tf from '@tensorflow/tfjs'
 import * as cocoSsd from '@tensorflow-models/coco-ssd'
+import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection'
+import { saveSessionOffline, syncAllOfflineSessions } from '../../lib/offlineSync'
 
 const StreamVideo = ({ stream }: { stream: MediaStream | null }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -67,6 +69,7 @@ const codeTemplates: Record<string, string> = {
 export default function ExamShell() {
   const navigate = useNavigate()
   const { user } = useAuthStore()
+  const settings = useSettingsStore()
 
   // Video/Proctoring Refs
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -120,6 +123,8 @@ export default function ExamShell() {
   const [anomalyType, setAnomalyType] = useState('')
   const [proctorBlocked, setProctorBlocked] = useState(false)
   const aiModelRef = useRef<cocoSsd.ObjectDetection | null>(null)
+  const faceLandmarkerRef = useRef<faceLandmarksDetection.FaceLandmarksDetector | null>(null)
+  const behavioralMetricsRef = useRef<Record<string, { time_spent: number, keystrokes: number, pastes: number, large_blocks: number }>>({})
 
   // Load AI Model
   useEffect(() => {
@@ -127,12 +132,21 @@ export default function ExamShell() {
       try {
         await tf.ready()
         aiModelRef.current = await cocoSsd.load()
+        if (settings.enableAdvancedAI) {
+          const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh
+          const detectorConfig = {
+            runtime: 'tfjs',
+            maxFaces: 1,
+            refineLandmarks: true
+          }
+          faceLandmarkerRef.current = await faceLandmarksDetection.createDetector(model, detectorConfig as any)
+        }
       } catch (err) {
-        console.error('Failed to load TFJS COCO-SSD', err)
+        console.error('Failed to load TFJS models', err)
       }
     }
     loadModel()
-  }, [])
+  }, [settings.enableAdvancedAI])
 
   const triggerCompilerDownload = (targetLang: string, remainingTime: number) => {
     setIsCompilerLoading(targetLang)
@@ -187,9 +201,6 @@ export default function ExamShell() {
   const [localStream, setLocalStream] = useState<MediaStream | null>(null)
   const [isWebRTCSocketOpen, setIsWebRTCSocketOpen] = useState(false)
   
-  // Platform Settings
-  const settings = useSettingsStore()
-
   const hasMcqGlobal = questions.some(q => q.type === 'mcq')
   const hasCodingGlobal = questions.some(q => q.type !== 'mcq')
   const isSingleTypeExam = (hasMcqGlobal && !hasCodingGlobal) || (!hasMcqGlobal && hasCodingGlobal)
@@ -638,6 +649,19 @@ export default function ExamShell() {
                 }
               }).catch(() => {})
             }
+
+            // Gaze & Face Presence check
+            if (settings.enableAdvancedAI && faceLandmarkerRef.current) {
+              faceLandmarkerRef.current.estimateFaces(video).then(faces => {
+                if (faces.length === 0) {
+                  logViolation('[AI PROCTOR] No face detected. Face Presence failed.')
+                  setIntegrityScore(prev => Math.max(0, prev - 3))
+                } else if (faces.length > 1) {
+                  logViolation('[AI PROCTOR] Multiple faces detected. Identity breach.')
+                  setIntegrityScore(prev => Math.max(0, prev - 5))
+                }
+              }).catch(() => {})
+            }
           }
 
           try {
@@ -711,6 +735,15 @@ export default function ExamShell() {
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (settings.enableBehavioralTracking && activeQuestion && activePart !== 'menu') {
+        if (!behavioralMetricsRef.current[activeQuestion.id]) {
+          behavioralMetricsRef.current[activeQuestion.id] = { time_spent: 0, keystrokes: 0, pastes: 0, large_blocks: 0 }
+        }
+        if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Enter') {
+          behavioralMetricsRef.current[activeQuestion.id].keystrokes++
+        }
+      }
+
       if (
         e.key === 'F12' || 
         (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
@@ -738,6 +771,17 @@ export default function ExamShell() {
     }
 
     const handlePaste = (e: ClipboardEvent) => {
+      if (settings.enableBehavioralTracking && activeQuestion && activePart !== 'menu') {
+        if (!behavioralMetricsRef.current[activeQuestion.id]) {
+          behavioralMetricsRef.current[activeQuestion.id] = { time_spent: 0, keystrokes: 0, pastes: 0, large_blocks: 0 }
+        }
+        behavioralMetricsRef.current[activeQuestion.id].pastes++
+        const pastedText = e.clipboardData?.getData('text') || ''
+        if (pastedText.length > 50) {
+          behavioralMetricsRef.current[activeQuestion.id].large_blocks++
+        }
+      }
+
       e.preventDefault()
       logViolation('Paste attempt intercepted.')
       triggerWarningModal('Restricted: Paste operations are disabled in this editor.')
@@ -770,7 +814,63 @@ export default function ExamShell() {
       document.removeEventListener('paste', handlePaste)
       document.removeEventListener('contextmenu', handleContextMenu)
     }
-  }, [loading, activePart])
+  }, [loading, activePart, activeQuestion, settings])
+
+  // ==========================================
+  // BEHAVIORAL: TIME TRACKING & OFFLINE SYNC
+  // ==========================================
+  useEffect(() => {
+    if (loading || !currentSession || activePart === 'menu' || !activeQuestion) return
+
+    // Time Tracking for active question
+    const intervalId = setInterval(() => {
+      if (settings.enableBehavioralTracking) {
+        if (!behavioralMetricsRef.current[activeQuestion.id]) {
+          behavioralMetricsRef.current[activeQuestion.id] = { time_spent: 0, keystrokes: 0, pastes: 0, large_blocks: 0 }
+        }
+        behavioralMetricsRef.current[activeQuestion.id].time_spent += 1 // 1 second
+      }
+    }, 1000)
+
+    return () => clearInterval(intervalId)
+  }, [loading, activePart, activeQuestion?.id, settings])
+
+  useEffect(() => {
+    if (loading || !currentSession) return
+
+    let saveInterval: any
+
+    if (settings.enableOfflineSync) {
+      // Sync on reconnect
+      const handleOnline = async () => {
+        console.log('[SYSTEM] Network reconnected. Flushing offline queues.')
+        setTimerAlert('Online. Syncing offline data...')
+        await syncAllOfflineSessions()
+        setTimeout(() => setTimerAlert(''), 3000)
+      }
+      
+      const handleOffline = () => {
+        setTimerAlert('Network offline. Progress is auto-saving locally.')
+      }
+
+      window.addEventListener('online', handleOnline)
+      window.addEventListener('offline', handleOffline)
+
+      // Auto-save session to IndexedDB every 10s
+      saveInterval = setInterval(() => {
+        try {
+          const snapshot = buildSessionSnapshot()
+          saveSessionOffline(snapshot)
+        } catch (err) {}
+      }, 10000)
+
+      return () => {
+        window.removeEventListener('online', handleOnline)
+        window.removeEventListener('offline', handleOffline)
+        clearInterval(saveInterval)
+      }
+    }
+  }, [loading, currentSession, settings])
 
   // ==========================================
   // WEBRTC LAZY-LOADING POLLER

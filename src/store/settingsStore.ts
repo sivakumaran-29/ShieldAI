@@ -9,6 +9,9 @@ export interface PlatformSettings {
   allowedLangs: string[]
   maxExecutionTime: number
   maxMemoryLimit: number
+  enableAdvancedAI: boolean
+  enableOfflineSync: boolean
+  enableBehavioralTracking: boolean
 }
 
 interface SettingsStore extends PlatformSettings {
@@ -22,6 +25,9 @@ export const useSettingsStore = create<SettingsStore>()(
   integrityThreshold: 75,
   requireCamera: true,
   requireTabFocus: true,
+  enableAdvancedAI: true,
+  enableOfflineSync: true,
+  enableBehavioralTracking: true,
   allowedLangs: ['python', 'javascript', 'java', 'cpp', 'c'],
   maxExecutionTime: 2500,
   maxMemoryLimit: 256,
