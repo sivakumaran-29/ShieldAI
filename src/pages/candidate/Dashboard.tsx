@@ -18,6 +18,7 @@ export default function CandidateDashboard() {
 
   // State elements
   const [assessments, setAssessments] = useState<Assessment[]>([])
+  const [allAssessments, setAllAssessments] = useState<Assessment[]>([])
   const [pastSessions, setPastSessions] = useState<CandidateSession[]>([])
   const [selectedAssessment, setSelectedAssessment] = useState<Assessment | null>(null)
   const [loading, setLoading] = useState(true)
@@ -40,6 +41,7 @@ export default function CandidateDashboard() {
     async function loadData() {
       try {
         const list = await fetchAssessments()
+        setAllAssessments(list)
         const candidateBatch = user?.batch || 'CSE_C'
         const candidateDept = candidateBatch.split('_')[0]
 
@@ -99,10 +101,26 @@ export default function CandidateDashboard() {
     loadData()
   }, [user, email])
 
+  // Sync selectedAssessment when activeTab changes
+  useEffect(() => {
+    if (activeTab === 'standard_lobby') {
+      const standardExams = assessments.filter(a => a.exam_mode !== 'kiosk')
+      if (standardExams.length > 0 && selectedAssessment?.exam_mode === 'kiosk') {
+        setSelectedAssessment(standardExams[0])
+      }
+    } else if (activeTab === 'safe_lobby') {
+      const safeExams = assessments.filter(a => a.exam_mode === 'kiosk')
+      if (safeExams.length > 0 && selectedAssessment?.exam_mode !== 'kiosk') {
+        setSelectedAssessment(safeExams[0])
+      }
+    }
+  }, [activeTab, assessments, selectedAssessment?.exam_mode])
+
   const handleSync = async () => {
     try {
       setIsSyncing(true)
       const list = await fetchAssessments()
+      setAllAssessments(list)
       const candidateBatch = user?.batch || 'CSE_C'
       const candidateDept = candidateBatch.split('_')[0]
 
@@ -866,7 +884,7 @@ export default function CandidateDashboard() {
                     <tbody className="divide-y divide-divider">
                       {pastSessions.length > 0 ? (
                         pastSessions.map(session => {
-                          const assessmentName = assessments.find(a => a.id === session.assessment_id)?.title || 'Unknown Assessment'
+                          const assessmentName = allAssessments.find(a => a.id === session.assessment_id)?.title || 'Unknown Assessment'
                           const integrityColor = session.integrity_score >= 75 ? 'bg-green-500' : session.integrity_score >= 50 ? 'bg-yellow-500' : 'bg-red-500'
                           
                           return (
