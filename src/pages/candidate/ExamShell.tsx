@@ -183,6 +183,7 @@ export default function ExamShell() {
   }
   const [showWarningModal, setShowWarningModal] = useState(false)
   const [warningModalText, setWarningModalText] = useState('')
+  const [showSubmitModal, setShowSubmitModal] = useState<'part' | 'final' | false>(false)
   const [localStream, setLocalStream] = useState<MediaStream | null>(null)
   const [isWebRTCSocketOpen, setIsWebRTCSocketOpen] = useState(false)
   
@@ -217,16 +218,7 @@ export default function ExamShell() {
       return
     }
 
-    if (window.confirm(`Submit Part: ${activePart.toUpperCase()}? You will not be able to return to this section.`)) {
-      enterFullscreen()
-      setLoading(true)
-      const nextParts = [...(currentSession.completedParts || []), activePart as 'mcq' | 'coding']
-      const updatedSession = { ...currentSession, completedParts: nextParts }
-      await saveCandidateSession(updatedSession)
-      setCurrentSession(updatedSession)
-      setActivePart('menu')
-      setLoading(false)
-    }
+    setShowSubmitModal('part')
   }
 
 
@@ -698,19 +690,21 @@ export default function ExamShell() {
     if (loading) return
 
     const handleVisibilityChange = () => {
-      if (document.hidden) {
+      if (document.hidden && activePart !== 'menu') {
         logViolation('Tab switched - Browser lost layout visibility.')
         triggerWarningModal('Focus Alert: Leaving the assessment interface is a violation. The system logs these activities for recruiter review.')
       }
     }
 
     const handleWindowBlur = () => {
-      logViolation('Window focus lost - User engaged tools outside environment.')
-      triggerWarningModal('Warning: Browser window focus lost. Keep your cursor inside the coding workspace.')
+      if (activePart !== 'menu') {
+        logViolation('Window focus lost - User engaged tools outside environment.')
+        triggerWarningModal('Warning: Browser window focus lost. Keep your cursor inside the coding workspace.')
+      }
     }
 
     const handleFullscreenChange = () => {
-      if (!document.fullscreenElement) {
+      if (!document.fullscreenElement && activePart !== 'menu') {
         logViolation('Minimized or Fullscreen mode terminated.')
         triggerWarningModal('Attention Required: Enter Fullscreen mode again to maintain compliance.')
       }
@@ -776,7 +770,7 @@ export default function ExamShell() {
       document.removeEventListener('paste', handlePaste)
       document.removeEventListener('contextmenu', handleContextMenu)
     }
-  }, [loading])
+  }, [loading, activePart])
 
   // ==========================================
   // WEBRTC LAZY-LOADING POLLER
@@ -1132,10 +1126,24 @@ export default function ExamShell() {
   }
 
   const handleFinishAssessment = async () => {
-    if (window.confirm('Acknowledge and submit assessment? Check test case verdicts before finalizing.')) {
+    setShowSubmitModal('final')
+  }
+
+  const confirmSubmit = async () => {
+    if (showSubmitModal === 'part') {
+      enterFullscreen()
+      setLoading(true)
+      const nextParts = [...(currentSession!.completedParts || []), activePart as 'mcq' | 'coding']
+      const updatedSession = { ...currentSession!, completedParts: nextParts }
+      await saveCandidateSession(updatedSession)
+      setCurrentSession(updatedSession)
+      setActivePart('menu')
+      setLoading(false)
+    } else if (showSubmitModal === 'final') {
       enterFullscreen()
       await executeSubmissionPipeline()
     }
+    setShowSubmitModal(false)
   }
 
   const executeSubmissionPipeline = async () => {
@@ -1881,9 +1889,30 @@ export default function ExamShell() {
         </>
         )}
       </div>
+        {/* SUBMIT MODAL */}
+        {showSubmitModal && (
+          <div className="fixed inset-0 bg-background/95 backdrop-blur-md flex items-center justify-center z-[9000] p-4">
+            <Card className="w-full max-w-md bg-surface border border-divider p-8 text-center shadow-[0_0_50px_rgba(0,0,0,0.15)] relative rounded-[24px]">
+              <h3 className="text-xl font-bold text-primary tracking-tight mb-2">Confirm Submission</h3>
+              <p className="text-sm text-tertiary mb-8">
+                {showSubmitModal === 'part' 
+                  ? `Submit Part: ${activePart.toUpperCase()}? You will not be able to return to this section.`
+                  : 'Acknowledge and submit assessment? Check test case verdicts before finalizing.'}
+              </p>
+              <div className="flex gap-4 justify-center">
+                <Button variant="ghost" onClick={() => setShowSubmitModal(false)} className="text-tertiary hover:text-primary hover:bg-hover">
+                  Cancel
+                </Button>
+                <Button onClick={confirmSubmit} className="bg-emerald-500 hover:bg-emerald-400 text-[#09090B] font-semibold px-8">
+                  Confirm
+                </Button>
+              </div>
+            </Card>
+          </div>
+        )}
  
       {/* WARNING POPUP SCREEN */}
-      {showWarningModal && (
+      {showWarningModal && activePart !== 'menu' && (
         <div className="fixed inset-0 bg-background/95 backdrop-blur-md flex items-center justify-center z-[9000] p-4">
           <Card className="w-full max-w-md bg-surface border border-red-500/30 p-8 text-center shadow-[0_0_50px_rgba(239,68,68,0.15)] relative rounded-[24px]">
             <div className="absolute top-0 left-0 right-0 h-1 bg-red-500 rounded-t-[24px]" />
