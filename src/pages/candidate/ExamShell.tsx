@@ -17,6 +17,8 @@ import { getIceServers } from '../../lib/webrtcConfig'
 import { supabase } from '../../lib/supabaseClient'
 import { useSettingsStore } from '../../store/settingsStore'
 import Latex from 'react-latex-next'
+import * as tf from '@tensorflow/tfjs'
+import * as cocoSsd from '@tensorflow-models/coco-ssd'
 
 const StreamVideo = ({ stream }: { stream: MediaStream | null }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -116,6 +118,21 @@ export default function ExamShell() {
   ])
   const [isAnomalyActive, setIsAnomalyActive] = useState(false)
   const [anomalyType, setAnomalyType] = useState('')
+  const [proctorBlocked, setProctorBlocked] = useState(false)
+  const aiModelRef = useRef<cocoSsd.ObjectDetection | null>(null)
+
+  // Load AI Model
+  useEffect(() => {
+    async function loadModel() {
+      try {
+        await tf.ready()
+        aiModelRef.current = await cocoSsd.load()
+      } catch (err) {
+        console.error('Failed to load TFJS COCO-SSD', err)
+      }
+    }
+    loadModel()
+  }, [])
 
   const triggerCompilerDownload = (targetLang: string, remainingTime: number) => {
     setIsCompilerLoading(targetLang)
@@ -371,6 +388,7 @@ export default function ExamShell() {
     if (activeQuestion.type === 'mcq') {
       return currentSession?.mcq_submissions?.[activeQuestion.id] || ''
     }
+
     return codeMap[activeQuestion.id]?.[language] || codeTemplates[language] || ''
   }
 
@@ -556,73 +574,110 @@ export default function ExamShell() {
       try {
         console.log('✔ Camera Permission Granted (Attempting getUserMedia)')
         streamInstance = await navigator.mediaDevices.getUserMedia({
-          video: { width: 320, height: 240, frameRate: 10 }
+          video: { width: 320, height: 240, frameRate: 10 },
+          audio: true
         })
         console.log('✔ MediaStream Created')
         console.log('✔ MediaStream Active', streamInstance.active)
         
         localStreamRef.current = streamInstance
         setLocalStream(streamInstance)
+        setProctorBlocked(false)
+
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+        const analyser = audioContext.createAnalyser()
+        const source = audioContext.createMediaStreamSource(streamInstance)
+        source.connect(analyser)
+        analyser.fftSize = 256
+        const bufferLength = analyser.frequencyBinCount
+        const dataArray = new Uint8Array(bufferLength)
+        let lastAiTick = Date.now()
+
+        function processFrame() {
+          const canvas = canvasRef.current
+          if (!canvas || !localStreamRef.current) {
+            animationFrameId = requestAnimationFrame(processFrame)
+            return
+          }
+          
+          const track = localStreamRef.current.getVideoTracks()[0]
+          if (!track || track.readyState !== 'live') {
+            animationFrameId = requestAnimationFrame(processFrame)
+            return
+          }
+
+          const video = document.getElementById('candidate-video') as HTMLVideoElement
+          if (!video || video.paused || video.ended) {
+            animationFrameId = requestAnimationFrame(processFrame)
+            return
+          }
+
+          const ctx = canvas.getContext('2d', { willReadFrequently: true })
+          if (!ctx) return
+
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+
+          if (Date.now() - lastAiTick > 3000) {
+            lastAiTick = Date.now()
+            
+            // Audio check
+            analyser.getByteFrequencyData(dataArray)
+            let sum = 0
+            for (let i = 0; i < bufferLength; i++) sum += dataArray[i]
+            const avgVol = sum / bufferLength
+            if (avgVol > 40) {
+              logViolation('[AI PROCTOR] Speaking detected (microphone volume high).')
+              setIntegrityScore(prev => Math.max(0, prev - 2))
+            }
+
+            // Vision check
+            if (aiModelRef.current) {
+              aiModelRef.current.detect(video).then(predictions => {
+                const peopleCount = predictions.filter(p => p.class === 'person').length
+                const hasPhone = predictions.some(p => p.class === 'cell phone')
+                
+                if (peopleCount > 1) {
+                  logViolation('[AI PROCTOR] Multiple persons detected in frame.')
+                  setIntegrityScore(prev => Math.max(0, prev - 2))
+                }
+                if (hasPhone) {
+                  logViolation('[AI PROCTOR] Mobile device detected.')
+                  setIntegrityScore(prev => Math.max(0, prev - 2))
+                }
+              }).catch(() => {})
+            }
+          }
+
+          try {
+            const currentFrame = ctx.getImageData(0, 0, canvas.width, canvas.height)
+            if (lastFrameDataRef.current) {
+              const prev = lastFrameDataRef.current.data
+              const curr = currentFrame.data
+              let diffSum = 0
+              for (let i = 0; i < curr.length; i += 32) {
+                diffSum += Math.abs(curr[i] - prev[i]) + Math.abs(curr[i+1] - prev[i+1]) + Math.abs(curr[i+2] - prev[i+2])
+              }
+              const norm = diffSum / (canvas.width * canvas.height)
+              if (norm > 45) { 
+                setIsAnomalyActive(true)
+                setAnomalyType('Suspicious Behavioral Vector')
+                logViolation('High motion variance detected. Candidate must remain centered.')
+              } else {
+                setIsAnomalyActive(false)
+              }
+            }
+            lastFrameDataRef.current = currentFrame
+          } catch {
+          }
+
+          animationFrameId = requestAnimationFrame(processFrame)
+        }
         
-        // Let the isolated StreamVideo handle the DOM binding
         processFrame()
       } catch (err) {
-        logViolation('[SYSTEM] Camera media streams blocked or unavailable.')
+        logViolation('[SYSTEM] Camera/Mic access denied. Assessment blocked.')
+        setProctorBlocked(true)
       }
-    }
-
-    function processFrame() {
-      const canvas = canvasRef.current
-      if (!canvas || !localStreamRef.current) {
-        animationFrameId = requestAnimationFrame(processFrame)
-        return
-      }
-      
-      const track = localStreamRef.current.getVideoTracks()[0]
-      if (!track || track.readyState !== 'live') {
-        animationFrameId = requestAnimationFrame(processFrame)
-        return
-      }
-
-      // We need a hidden video element just to feed the canvas if we don't have direct access
-      const video = document.getElementById('candidate-video') as HTMLVideoElement
-      if (!video || video.paused || video.ended) {
-        animationFrameId = requestAnimationFrame(processFrame)
-        return
-      }
-
-      const ctx = canvas.getContext('2d', { willReadFrequently: true })
-      if (!ctx) return
-
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
-
-      try {
-        const currentFrame = ctx.getImageData(0, 0, canvas.width, canvas.height)
-        if (lastFrameDataRef.current) {
-          const prev = lastFrameDataRef.current.data
-          const curr = currentFrame.data
-          let diffSum = 0
-
-          // sampling loop
-          for (let i = 0; i < curr.length; i += 32) {
-            diffSum += Math.abs(curr[i] - prev[i]) + Math.abs(curr[i+1] - prev[i+1]) + Math.abs(curr[i+2] - prev[i+2])
-          }
-
-          const norm = diffSum / (canvas.width * canvas.height)
-          if (norm > 45) { // High movement threshold
-            setIsAnomalyActive(true)
-            setAnomalyType('Suspicious Behavioral Vector')
-            logViolation('High motion variance detected. Candidate must remain centered.')
-          } else {
-            setIsAnomalyActive(false)
-          }
-        }
-        lastFrameDataRef.current = currentFrame
-      } catch {
-        // ignore cross origin failures
-      }
-
-      animationFrameId = requestAnimationFrame(processFrame)
     }
 
     startCameraProctor()
@@ -1128,6 +1183,20 @@ export default function ExamShell() {
         <div className="flex flex-col items-center gap-3 relative z-10">
           <RefreshCw className="w-6 h-6 animate-spin sys-text-body" />
           <span>Synchronizing Assessment Environment...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (proctorBlocked) {
+    return (
+      <div className="min-h-screen sys-bg flex items-center justify-center text-primary relative p-6">
+        <AmbientGlow />
+        <div className="max-w-md w-full bg-panel border border-red-500/30 rounded-2xl p-8 relative z-10 text-center shadow-2xl">
+          <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <h2 className="font-heading font-bold text-xl mb-2">Proctoring Initialization Failed</h2>
+          <p className="sys-text-body text-sm mb-6">Camera and Microphone access are strictly required to start this assessment. Please allow permissions in your browser and refresh the page.</p>
+          <Button onClick={() => window.location.reload()} className="w-full bg-[#5B8CFF] hover:bg-[#4076e0] text-white">Retry Permissions</Button>
         </div>
       </div>
     )
