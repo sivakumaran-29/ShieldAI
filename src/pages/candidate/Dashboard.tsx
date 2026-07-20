@@ -105,13 +105,21 @@ export default function CandidateDashboard() {
   useEffect(() => {
     if (activeTab === 'standard_lobby') {
       const standardExams = assessments.filter(a => a.exam_mode !== 'kiosk')
-      if (standardExams.length > 0 && selectedAssessment?.exam_mode === 'kiosk') {
-        setSelectedAssessment(standardExams[0])
+      if (standardExams.length > 0) {
+        if (selectedAssessment?.exam_mode === 'kiosk' || !selectedAssessment) {
+          setSelectedAssessment(standardExams[0])
+        }
+      } else {
+        setSelectedAssessment(null)
       }
     } else if (activeTab === 'safe_lobby') {
       const safeExams = assessments.filter(a => a.exam_mode === 'kiosk')
-      if (safeExams.length > 0 && selectedAssessment?.exam_mode !== 'kiosk') {
-        setSelectedAssessment(safeExams[0])
+      if (safeExams.length > 0) {
+        if (selectedAssessment?.exam_mode !== 'kiosk' || !selectedAssessment) {
+          setSelectedAssessment(safeExams[0])
+        }
+      } else {
+        setSelectedAssessment(null)
       }
     }
   }, [activeTab, assessments, selectedAssessment?.exam_mode])
@@ -854,7 +862,9 @@ export default function CandidateDashboard() {
                 ) : (
                   <div className="h-[400px] flex flex-col gap-4 items-center justify-center border border-transparent rounded-3xl sys-bg/40  sys-text-body text-xs font-mono select-none">
                     <Search className="w-8 h-8 sys-text-body mb-2" strokeWidth={1} />
-                    Please select an assessment path from the left lobby list.
+                    {(activeTab === 'standard_lobby' && assessments.filter(a => a.exam_mode !== 'kiosk').length === 0) || (activeTab === 'safe_lobby' && assessments.filter(a => a.exam_mode === 'kiosk').length === 0)
+                      ? "No assessment available"
+                      : "Please select an assessment path from the left lobby list."}
                   </div>
                 )}
               </section>
