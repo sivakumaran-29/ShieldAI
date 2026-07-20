@@ -204,3 +204,5 @@
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-tertiary);
 }
+.anti-lens-protections { -webkit-touch-callout: none !important; }
+.anti-lens-protections * { -webkit-touch-callout: none !important; }

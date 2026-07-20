@@ -1311,11 +1311,20 @@ export default function ExamShell() {
   }
 
   return (
-    <div className="h-screen w-full flex flex-col font-sans antialiased overflow-hidden bg-background text-primary relative select-none">
+    <div className="h-screen w-full flex flex-col font-sans antialiased overflow-hidden bg-background text-primary relative select-none anti-lens-protections">
       
       {/* Ambient Background Layer */}
       <AmbientGlow />
       <div className="grain-overlay opacity-30" />
+      
+      {/* Dynamic Watermark for Screenshot Deterrence */}
+      <div className="absolute inset-0 pointer-events-none z-[9999] overflow-hidden opacity-[0.03] select-none flex flex-wrap justify-center items-center">
+        {Array.from({ length: 150 }).map((_, i) => (
+          <span key={i} className="text-xl font-mono font-bold whitespace-nowrap transform -rotate-45 m-4 text-white">
+            {user?.email || user?.id} - {new Date().toISOString().split('T')[0]}
+          </span>
+        ))}
+      </div>
       
       <div className="flex-1 flex flex-col z-10 relative h-full">
         {/* PREMIUM TOP BAR */}
