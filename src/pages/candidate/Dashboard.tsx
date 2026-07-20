@@ -557,7 +557,29 @@ export default function CandidateDashboard() {
 
           {/* ================= LOBBY TAB ================= */}
           {(activeTab === 'standard_lobby' || activeTab === 'safe_lobby') && (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 h-[calc(100vh-160px)] animate-in fade-in slide-in-from-bottom-4 duration-500">
+            (() => {
+              const activeExams = activeTab === 'standard_lobby' 
+                ? assessments.filter(a => a.exam_mode !== 'kiosk') 
+                : assessments.filter(a => a.exam_mode === 'kiosk')
+
+              if (activeExams.length === 0) {
+                return (
+                  <div className="h-[calc(100vh-160px)] flex flex-col gap-6 items-center justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 text-center select-none">
+                    <div className="w-20 h-20 bg-surface/50 rounded-[24px] flex items-center justify-center border border-divider shadow-sm mb-2">
+                      <Search className="w-10 h-10 text-tertiary" strokeWidth={1} />
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-2xl font-heading font-bold text-primary tracking-tight">No Assessments Available</h3>
+                      <p className="text-sm sys-text-body max-w-sm mx-auto leading-relaxed">
+                        There are currently no published assessments available in this category. Please check back later or switch lobbies.
+                      </p>
+                    </div>
+                  </div>
+                )
+              }
+
+              return (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 h-[calc(100vh-160px)] animate-in fade-in slide-in-from-bottom-4 duration-500">
               
               {/* Available Assessments */}
               <section className="lg:col-span-4 flex flex-col h-full overflow-hidden">
@@ -663,12 +685,6 @@ export default function CandidateDashboard() {
                     </div>
                   )}
 
-                  {((activeTab === 'standard_lobby' && assessments.filter(a => a.exam_mode !== 'kiosk').length === 0) || 
-                    (activeTab === 'safe_lobby' && assessments.filter(a => a.exam_mode === 'kiosk').length === 0)) && (
-                    <div className="p-8 text-center sys-bg/40 border border-transparent  rounded-2xl text-xs sys-text-body font-mono select-none">
-                      NO ASSESSMENTS AVAILABLE IN THIS CATEGORY.
-                    </div>
-                  )}
                 </div>
               </section>
 
@@ -862,14 +878,14 @@ export default function CandidateDashboard() {
                 ) : (
                   <div className="h-[400px] flex flex-col gap-4 items-center justify-center border border-transparent rounded-3xl sys-bg/40  sys-text-body text-xs font-mono select-none">
                     <Search className="w-8 h-8 sys-text-body mb-2" strokeWidth={1} />
-                    {(activeTab === 'standard_lobby' && assessments.filter(a => a.exam_mode !== 'kiosk').length === 0) || (activeTab === 'safe_lobby' && assessments.filter(a => a.exam_mode === 'kiosk').length === 0)
-                      ? "No assessment available"
-                      : "Please select an assessment path from the left lobby list."}
+                    Please select an assessment path from the left lobby list.
                   </div>
                 )}
               </section>
 
-            </div>
+                </div>
+              )
+            })()
           )}
 
           {/* ================= HISTORY TAB ================= */}
