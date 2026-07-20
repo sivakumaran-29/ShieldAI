@@ -206,3 +206,6 @@
 }
 .anti-lens-protections { -webkit-touch-callout: none !important; }
 .anti-lens-protections * { -webkit-touch-callout: none !important; }
+
+.screenshot-blackout { background-color: #000 !important; }
+.screenshot-blackout * { opacity: 0 !important; pointer-events: none !important; }

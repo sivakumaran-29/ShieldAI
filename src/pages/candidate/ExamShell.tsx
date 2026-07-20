@@ -83,6 +83,19 @@ export default function ExamShell() {
   const [currentSession, setCurrentSession] = useState<CandidateSession | null>(null)
   const [loading, setLoading] = useState(true)
 
+  // Anti-Screenshot Blackout fallback (Blur detection)
+  useEffect(() => {
+    const handleBlur = () => document.body.classList.add('screenshot-blackout')
+    const handleFocus = () => document.body.classList.remove('screenshot-blackout')
+    window.addEventListener('blur', handleBlur)
+    window.addEventListener('focus', handleFocus)
+    return () => {
+      window.removeEventListener('blur', handleBlur)
+      window.removeEventListener('focus', handleFocus)
+      document.body.classList.remove('screenshot-blackout')
+    }
+  }, [])
+
   // Editor states
   const [language, setLanguage] = useState('python')
   const [codeMap, setCodeMap] = useState<Record<string, Record<string, string>>>({}) // Maps qId -> { lang -> code }
@@ -1352,13 +1365,13 @@ export default function ExamShell() {
 
           <div className="flex items-center space-x-1 md:space-x-3">
             {/* INTEGRITY SCALE */}
-            <div className={`hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full border ${
+            <div className={`flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-1.5 rounded-full border ${
               integrityScore > 75 
                 ? 'bg-surface border-divider text-secondary' 
                 : 'bg-red-500/10 border-red-500/20 text-red-400 animate-pulse'
             }`}>
               <Activity className="w-3.5 h-3.5" strokeWidth={2} />
-              <span className="text-xs font-semibold">Integrity: {integrityScore}%</span>
+              <span className="text-[10px] sm:text-xs font-semibold"><span className="hidden sm:inline">Integrity: </span>{integrityScore}%</span>
             </div>
 
             {/* TIMER */}
@@ -1954,41 +1967,41 @@ export default function ExamShell() {
             
             {/* PERSISTENT BOTTOM ACTION BAR (MCQ Only) */}
             {activeQuestion && activeQuestion.type === 'mcq' && (
-              <div className="flex-none h-24 bg-background border-t border-divider flex items-center justify-between px-10 z-20 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
-                <div className="flex items-center gap-4">
+              <div className="flex-none min-h-[6rem] py-4 bg-background border-t border-divider flex flex-col md:flex-row gap-4 items-center justify-between px-4 md:px-10 z-20 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+                <div className="flex items-center justify-center md:justify-start gap-2 sm:gap-4 w-full md:w-auto">
                   <Button 
                     onClick={handleClearResponse}
                     variant="ghost"
-                    className="h-11 px-6 rounded-xl text-xs font-semibold text-tertiary hover:bg-surface hover:text-primary transition-colors"
+                    className="h-10 sm:h-11 px-4 sm:px-6 rounded-xl text-[10px] sm:text-xs font-semibold text-tertiary hover:bg-surface hover:text-primary transition-colors flex-1 md:flex-none"
                   >
-                    Clear Response
+                    Clear
                   </Button>
                   <Button 
                     onClick={() => setReviewMarked(prev => ({ ...prev, [activeQuestion.id]: !prev[activeQuestion.id] }))}
-                    className={`h-11 px-6 rounded-xl text-xs font-semibold transition-all ${
+                    className={`h-10 sm:h-11 px-4 sm:px-6 rounded-xl text-[10px] sm:text-xs font-semibold transition-all flex-1 md:flex-none ${
                       reviewMarked[activeQuestion.id] 
                         ? 'bg-amber-500/10 text-amber-500 border border-amber-500/30 hover:bg-amber-500/20' 
                         : 'bg-surface text-secondary border border-divider hover:bg-hover hover:text-primary'
                     }`}
                   >
-                    {reviewMarked[activeQuestion.id] ? 'Unmark Review' : 'Mark for Review'}
+                    {reviewMarked[activeQuestion.id] ? 'Unmark' : 'Review'}
                   </Button>
                 </div>
                 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center justify-center md:justify-end gap-2 sm:gap-4 w-full md:w-auto">
                   <Button 
                     onClick={() => setSelectedQIndex(p => p - 1)}
                     disabled={selectedQIndex === 0}
-                    className="h-11 px-8 rounded-xl text-xs font-semibold bg-surface text-secondary border border-divider hover:bg-hover hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="h-10 sm:h-11 px-4 sm:px-8 rounded-xl text-[10px] sm:text-xs font-semibold bg-surface text-secondary border border-divider hover:bg-hover hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex-1 md:flex-none"
                   >
                     Previous
                   </Button>
                   <Button 
                     onClick={handleSaveAndNext}
                     disabled={selectedQIndex === filteredQuestions.length - 1}
-                    className="h-11 px-8 rounded-xl text-xs font-bold bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center"
+                    className="h-10 sm:h-11 px-4 sm:px-8 rounded-xl text-[10px] sm:text-xs font-bold bg-[#3f6ad5] hover:bg-[#5B8CFF] text-white shadow-[0_4px_14px_rgba(63,106,213,0.3)] hover:shadow-[0_6px_20px_rgba(91,140,255,0.4)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center flex-1 md:flex-none"
                   >
-                    Save & Next <ChevronRight className="w-4 h-4 ml-2" />
+                    Save & Next <ChevronRight className="w-4 h-4 ml-1 sm:ml-2" />
                   </Button>
                 </div>
               </div>
